@@ -3,227 +3,211 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Portfolio Cá Nhân — MSSV: 044206000003</title>
+  <title>Trần Hữu Thành — Portfolio Cá Nhân | MSSV: 044206000003</title>
 
-  <!-- Nhúng Google Fonts: Plus Jakarta Sans (Tiêu đề) và Inter (Nội dung) -->
+  <!-- Google Fonts: Plus Jakarta Sans (Tiêu đề) và Inter (Nội dung) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
 
-  <!-- Liên kết file CSS bằng đường dẫn tương đối ./ theo đúng Quy ước -->
+  <!-- Liên kết file CSS bằng đường dẫn tương đối ./ -->
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
 
-  <!-- ================= 1. THANH ĐIỀU HƯỚNG (HEADER) ================= -->
-  <header class="header">
-    <div class="container header-content">
-      <!-- Nút quay về trang chủ nhóm -->
-      <a href="../../index.html" class="back-btn">← Trang chủ nhóm</a>
+  <!-- ================= BỐ CỤC CHIA ĐÔI MÀN HÌNH (SPLIT-SCREEN) ================= -->
+  <div class="container page-layout">
 
-      <!-- Menu điều hướng chính -->
-      <nav class="navbar">
-        <a href="#gioi-thieu">Giới thiệu</a>
-        <a href="#ky-nang">Kỹ năng</a>
-        <a href="#du-an">Dự án</a>
-        <a href="#muc-tieu">Mục tiêu</a>
-        <a href="#lien-he">Liên hệ</a>
+    <!-- 1. CỘT TRÁI CỐ ĐỊNH (STICKY SIDEBAR - ĐỨNG YÊN KHI CUỘN) -->
+    <aside class="sidebar">
+      <div class="sidebar-top">
+        <a href="../../index.html" class="back-btn">← Trang chủ nhóm</a>
+        <button id="themeBtn" class="theme-btn">☀️ Đổi nền</button>
+      </div>
+
+      <div class="profile-box">
+        <img src="./images/tht2.jpg" alt="Chân dung Trần Hữu Thành" class="avatar-img" />
+        <span class="tag-badge">MSSV: 044206000003</span>
+        <h1 class="profile-name">Trần Hữu Thành</h1>
+        <p class="profile-role">Sinh viên CNTT • ĐH GTVT TP.HCM (UTH)</p>
+      </div>
+
+      <!-- Menu dọc điều hướng nhanh -->
+      <nav class="side-nav">
+        <a href="#gioi-thieu" class="nav-item">01. Câu chuyện của mình</a>
+        <a href="#ky-nang" class="nav-item">02. Kỹ năng &amp; Thế mạnh</a>
+        <a href="#du-an" class="nav-item">03. Dự án đã tham gia</a>
+        <a href="#lien-he" class="nav-item">04. Liên hệ &amp; Kết nối</a>
       </nav>
 
-      <!-- Nút đổi giao diện Sáng / Tối bằng JS -->
-      <button id="themeBtn" class="theme-btn">☀️ Đổi nền</button>
-    </div>
-  </header>
-
-  <!-- ================= 2. NỘI DUNG CHÍNH (MAIN) ================= -->
-  <main class="container">
-
-    <!-- PHẦN 1: GIỚI THIỆU BẢN THÂN (HERO) -->
-    <section id="gioi-thieu" class="hero-section">
-      <div class="hero-text">
-        <span class="tag-badge">MSSV: 044206000003 • Lớp Lập Trình Web</span>
-        <h1>Xin chào, mình là <span class="highlight">Trần Hữu Thành</span></h1>
-        <p class="subtitle">
-          Sinh viên ngành Công nghệ Thông tin. 
-        </p>
-        <div class="hero-buttons">
-          <a href="#du-an" class="btn btn-primary">Xem dự án của mình</a>
-          <a href="#lien-he" class="btn btn-outline">Liên hệ ngay</a>
-        </div>
+      <!-- Thông tin liên hệ nhanh ở đáy cột trái -->
+      <div class="sidebar-footer">
+        <p><strong>Email:</strong> tomshel216@gmail.com</p>
+        <p><strong>GitHub:</strong> <a href="https://github.com/turniphead-code02" target="_blank">turniphead-code02</a></p>
       </div>
+    </aside>
 
-      <!-- Khung ảnh đại diện và thông tin tóm tắt -->
-      <div class="profile-card">
-        <img src="./images/tht2.jpg" alt="Ảnh đại diện cá nhân" class="avatar-img" />
-        <div class="profile-info">
-          <h3>Thông tin sinh viên</h3>
-          <ul>
-            <li><strong>Họ tên / Ký hiệu:</strong> Trần Hữu Thành / THT</li>
-            <li><strong>Mã số SV:</strong> 044206000003</li>
-            <li><strong>Môn học:</strong> Lập Trình Web</li>
-            <li><strong>Email:</strong> tomshel216@gmail.com</li>
-          </ul>
-        </div>
-      </div>
-    </section>
+    <!-- 2. CỘT PHẢI CUỘN MƯỢT (MAIN CONTENT) -->
+    <main class="main-content">
 
-    <!-- PHẦN 2: KỸ NĂNG (SKILLS) - Có nút lọc bằng JavaScript -->
-    <section id="ky-nang" class="section">
-      <div class="section-header">
-        <h2>Kỹ năng &amp; Công nghệ</h2>
-        <p>Các ngôn ngữ lập trình và công cụ mình đã học và thực hành.</p>
-      </div>
-
-      <!-- Các nút lọc kỹ năng (Xử lý sự kiện click trong script.js) -->
-      <div class="filter-group">
-        <button class="filter-btn active" data-type="all">Tất cả</button>
-        <button class="filter-btn" data-type="web">Lập trình Web</button>
-        <button class="filter-btn" data-type="programming">Ngôn ngữ &amp; CSDL</button>
-        <button class="filter-btn" data-type="tools">Công cụ</button>
-      </div>
-
-      <!-- Lưới hiển thị các thẻ kỹ năng (CSS Grid) -->
-      <div class="grid-3">
-        <div class="card skill-item" data-type="web">
-          <h3>HTML5 &amp; CSS3</h3>
-          <p>Xây dựng cấu trúc trang web ngữ nghĩa, dàn trang với Flexbox, CSS Grid và thiết kế Responsive.</p>
-          <span class="level-tag">Khá tốt</span>
-        </div>
-
-        <div class="card skill-item" data-type="web">
-          <h3>JavaScript (DOM &amp; Events)</h3>
-          <p>Xử lý sự kiện người dùng, thao tác phần tử DOM, kiểm tra dữ liệu biểu mẫu.</p>
-          <span class="level-tag">Cơ bản vững</span>
-        </div>
-
-        <div class="card skill-item" data-type="programming">
-          <h3>C++ &amp; Java (OOP)</h3>
-          <p>Nền tảng tư duy lập trình cấu trúc, lập trình hướng đối tượng và cấu trúc dữ liệu giải thuật.</p>
-          <span class="level-tag">Khá tốt</span>
-        </div>
-
-        <div class="card skill-item" data-type="programming">
-          <h3>Cơ sở dữ liệu SQL</h3>
-          <p>Thiết kế bảng dữ liệu chuẩn hóa 3NF, viết truy vấn SQL trên PostgreSQL và SQL Server.</p>
-          <span class="level-tag">Khá tốt</span>
-        </div>
-
-        <div class="card skill-item" data-type="tools">
-          <h3>Git &amp; GitHub</h3>
-          <p>Quản lý mã nguồn, làm việc nhóm qua các branch, xử lý commit và tạo Pull Request.</p>
-          <span class="level-tag">Thành thạo</span>
-        </div>
-
-        <div class="card skill-item" data-type="tools">
-          <h3>Figma &amp; VS Code</h3>
-          <p>Đọc bản thiết kế giao diện UI/UX trên Figma và sử dụng thành thạo công cụ lập trình VS Code.</p>
-          <span class="level-tag">Thành thạo</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- PHẦN 3: DỰ ÁN HỌC TẬP (PROJECTS) -->
-    <section id="du-an" class="section">
-      <div class="section-header">
-        <h2>Dự án Học tập</h2>
-        <p>Các đồ án và bài tập thực hành tiêu biểu tại trường.</p>
-      </div>
-
-      <div class="grid-3">
-        <div class="card">
-          <span class="card-badge">Đồ án Lập Trình Web</span>
-          <h3>Cổng Thông Tin Việc Làm</h3>
-          <p>Xây dựng hệ thống kết nối ứng viên và nhà tuyển dụng. Phụ trách thiết kế cơ sở dữ liệu, đặc tả kỹ thuật và giao diện người dùng.</p>
-          <a href="https://github.com/turniphead-code02/Project_LTW" target="_blank" class="card-link">Xem trên GitHub →</a>
-        </div>
-
-        <div class="card">
-          <span class="card-badge">Công nghệ Phần mềm</span>
-          <h3>Hệ thống Quản lý Dự án</h3>
-          <p>Phân tích yêu cầu nghiệp vụ, thiết kế sơ đồ Use Case, ERD và xây dựng chức năng quản lý theo quy trình Agile.</p>
-          <a href="https://github.com/turniphead-code02/Project_CNPM" target="_blank" class="card-link">Xem trên GitHub →</a>
-        </div>
-
-        <div class="card">
-          <span class="card-badge">Mini ERP</span>
-          <h3>Hệ thống Quản lý phát thải</h3>
-          <p>Thiết kế và xây dựng hệ thống quản lý phát thải cho doanh nghiệp, tích hợp dữ liệu và báo cáo.</p>
-          <a href="https://github.com/turniphead-code02/GreenShift" target="_blank" class="card-link">Xem trên GitHub →</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- PHẦN 4: MỤC TIÊU & SỞ THÍCH -->
-    <section id="muc-tieu" class="section">
-      <div class="section-header">
-        <h2>Mục tiêu &amp; Sở thích</h2>
-        <p>Định hướng phát triển bản thân trong thời gian tới.</p>
-      </div>
-
-      <div class="grid-2">
-        <div class="card">
-          <h3> Mục tiêu học tập</h3>
-          <p>
-            Nắm vững kiến thức nền tảng HTML, CSS, JavaScript, Backend,.. để hoàn thành tốt đồ án môn Lập Trình Web, hướng tới trở thành lập trình viên Fullstack chuyên nghiệp, AI và Data Science trong tương lai.
+      <!-- MỤC 01: GIỚI THIỆU BẢN THÂN & ĐỊNH HƯỚNG (Gần gũi, chân thật) -->
+      <section id="gioi-thieu" class="content-section">
+        <div class="intro-banner card">
+          <span class="section-tag">01 / ĐÔI NÉT VỀ MÌNH</span>
+          <h2>
+            Học hỏi mỗi ngày, làm việc có trách nhiệm và <span class="highlight">tận hưởng hành trình.</span>
+          </h2>
+          <p class="intro-text">
+            Chào bạn! Mình là <strong>Trần Hữu Thành</strong>, hiện đang theo học ngành Công nghệ Thông tin tại Trường Đại học Giao thông vận tải TP.HCM. Với mình, lập trình không chỉ là những dòng code khô khan mà là cách biến một ý tưởng trên giấy thành sản phẩm hữu ích, nhìn thấy được và chạm vào được.
           </p>
         </div>
 
+        <div class="grid-2">
+          <div class="card">
+            <span class="card-badge">Định hướng tương lai</span>
+            <h3>Đi từng bước vững chắc</h3>
+            <p>
+              Hiện tại mình tập trung trau dồi nền tảng phát triển Web từ giao diện đến dữ liệu. Xa hơn, mình muốn mở rộng sang mảng Fullstack, AI và Data Science để có thể tự tay xây dựng những sản phẩm hoàn chỉnh.
+            </p>
+          </div>
+
+          <div class="card">
+            <span class="card-badge">Ngoài giờ học</span>
+            <h3>Âm nhạc, Thể thao &amp; Bạn bè</h3>
+            <p>
+              Khi rời màn hình máy tính, mình thích nghe nhạc để thư giãn đầu óc, rèn luyện thể thao để giữ năng lượng tích cực và cùng anh em trong nhóm ngồi lại bàn bạc, tháo gỡ từng bài toán khó.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- MỤC 02: KỸ NĂNG & THẾ MẠNH (Cân bằng giữa Chuyên môn, Tư duy & Kỹ năng mềm) -->
+      <section id="ky-nang" class="content-section">
+        <div class="section-header">
+          <span class="section-tag">02 / KỸ NĂNG &amp; THẾ MẠNH</span>
+          <h2>Những điều mình đang tích lũy</h2>
+        </div>
+
+        <!-- Nút lọc nhóm kỹ năng (Xử lý trong script.js) -->
+        <div class="filter-group">
+          <button class="filter-btn active" data-type="all">Tất cả</button>
+          <button class="filter-btn" data-type="tech">Chuyên môn IT</button>
+          <button class="filter-btn" data-type="mindset">Tư duy &amp; Công việc</button>
+          <button class="filter-btn" data-type="soft">Kỹ năng mềm</button>
+        </div>
+
+        <div class="grid-2">
+          <div class="card skill-item" data-type="tech">
+            <span class="card-badge">Phát triển Web</span>
+            <h3>Xây dựng Giao diện &amp; Tương tác</h3>
+            <p>Sử dụng HTML, CSS và JavaScript để chuyển hóa ý tưởng thành trang web gọn gàng, dễ nhìn và thân thiện trên cả máy tính lẫn điện thoại.</p>
+          </div>
+
+          <div class="card skill-item" data-type="tech">
+            <span class="card-badge">Nền tảng Lập trình</span>
+            <h3>Tư duy Logic &amp; Cơ sở dữ liệu</h3>
+            <p>Rèn luyện tư duy lập trình qua C++, Java và cách tổ chức bảng biểu, truy vấn dữ liệu có hệ thống với SQL (PostgreSQL, SQL Server).</p>
+          </div>
+
+          <div class="card skill-item" data-type="mindset">
+            <span class="card-badge">Cách tiếp cận bài toán</span>
+            <h3>Lên kế hoạch trước khi bắt tay làm</h3>
+            <p>Thói quen phác thảo cấu trúc tổng thể, thống nhất quy ước chung và chia nhỏ công việc thành từng bước rõ ràng trước khi viết code.</p>
+          </div>
+
+          <div class="card skill-item" data-type="mindset">
+            <span class="card-badge">Thích nghi &amp; Tự học</span>
+            <h3>Chủ động tìm tòi cái mới</h3>
+            <p>Biết cách tra cứu tài liệu, tận dụng các công cụ hỗ trợ hiện đại (Git, Figma, AI) và kiên nhẫn tìm nguyên nhân để xử lý khi gặp lỗi.</p>
+          </div>
+
+          <div class="card skill-item" data-type="soft">
+            <span class="card-badge">Tinh thần đồng đội</span>
+            <h3>Phối hợp &amp; Làm việc nhóm</h3>
+            <p>Biết lắng nghe góc nhìn của các thành viên, chủ động kết nối công việc chung qua GitHub để cả nhóm đi cùng nhau đúng tiến độ.</p>
+          </div>
+
+          <div class="card skill-item" data-type="soft">
+            <span class="card-badge">Thái độ cá nhân</span>
+            <h3>Kỷ luật &amp; Cân bằng cuộc sống</h3>
+            <p>Giữ sự tập trung và trách nhiệm với phần việc đã nhận, đồng thời duy trì nhịp sống lành mạnh giữa việc học trên giảng đường và thể thao.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- MỤC 03: DỰ ÁN HỌC TẬP -->
+      <section id="du-an" class="content-section">
+        <div class="section-header">
+          <span class="section-tag">03 / DẤU ẤN HỌC TẬP</span>
+          <h2>Các dự án đã tham gia</h2>
+        </div>
+
+        <div class="project-list">
+          <div class="card project-row">
+            <div class="project-info">
+              <span class="card-badge">Đồ án Lập Trình Web</span>
+              <h3>Cổng Thông Tin Việc Làm (Job Portal)</h3>
+              <p>Dự án nhóm xây dựng nền tảng kết nối ứng viên và nhà tuyển dụng. Mình cùng nhóm lên đặc tả hệ thống, thiết kế cơ sở dữ liệu và phát triển giao diện.</p>
+            </div>
+            <a href="https://github.com/turniphead-code02/Project_LTW" target="_blank" class="btn btn-outline">GitHub →</a>
+          </div>
+
+          <div class="card project-row">
+            <div class="project-info">
+              <span class="card-badge">Công nghệ Phần mềm</span>
+              <h3>Hệ thống Quản lý Dự án (Project_CNPM)</h3>
+              <p>Tìm hiểu quy trình làm phần mềm thực tế: từ khâu lấy yêu cầu, vẽ sơ đồ Use Case, ERD đến phối hợp nhóm theo mô hình Agile.</p>
+            </div>
+            <a href="https://github.com/turniphead-code02/Project_CNPM" target="_blank" class="btn btn-outline">GitHub →</a>
+          </div>
+
+          <div class="card project-row">
+            <div class="project-info">
+              <span class="card-badge">Dự án nhóm</span>
+              <h3>Hệ thống Quản lý Phát thải (GreenShift)</h3>
+              <p>Xây dựng ứng dụng theo dõi và tổng hợp báo cáo dữ liệu phát thải cho doanh nghiệp theo hướng trực quan, dễ tra cứu.</p>
+            </div>
+            <a href="https://github.com/turniphead-code02/GreenShift" target="_blank" class="btn btn-outline">GitHub →</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- MỤC 04: LIÊN HỆ -->
+      <section id="lien-he" class="content-section">
+        <div class="section-header">
+          <span class="section-tag">04 / KẾT NỐI VỚI MÌNH</span>
+          <h2>Để lại lời nhắn cho Thành</h2>
+        </div>
+
         <div class="card">
-          <h3> Sở thích cá nhân</h3>
-          <p>
-            Tìm hiểu các xu hướng hiện đại, đọc tài liệu công nghệ mới, làm việc nhóm xây dựng sản phẩm, nghe nhạc và rèn luyện thể thao.
-          </p>
+          <form id="contactForm" class="contact-form">
+            <div class="grid-2 form-row">
+              <div class="form-group">
+                <label for="fullName">Họ và tên của bạn</label>
+                <input type="text" id="fullName" placeholder="Nhập họ và tên..." />
+              </div>
+
+              <div class="form-group">
+                <label for="email">Địa chỉ Email</label>
+                <input type="email" id="email" placeholder="Nhập địa chỉ email..." />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="message">Nội dung chia sẻ</label>
+              <textarea id="message" rows="4" placeholder="Bạn muốn nhắn điều gì với mình..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Gửi lời nhắn</button>
+            <p id="formNotice" class="form-notice"></p>
+          </form>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- PHẦN 5: BIỂU MẪU LIÊN HỆ (CONTACT FORM) -->
-    <section id="lien-he" class="section">
-      <div class="contact-wrapper card">
-        <div class="contact-left">
-          <h2>Liên hệ với mình</h2>
-          <p>Nếu bạn có câu hỏi hoặc muốn trao đổi về bài tập nhóm, hãy để lại lời nhắn bên cạnh nhé!</p>
-          <ul class="contact-list">
-            <li><strong>Email:</strong> tomshel216@gmail.com</li>
-            <li><strong>GitHub:</strong> <a href="https://github.com/turniphead-code02" target="_blank">github.com/turniphead-code02</a></li>
-          </ul>
-        </div>
+    </main>
+  </div>
 
-        <!-- Form kiểm tra dữ liệu bằng JavaScript -->
-        <form id="contactForm" class="contact-form">
-          <div class="form-group">
-            <label for="fullName">Họ và tên của bạn</label>
-            <input type="text" id="fullName" placeholder="Nhập họ tên..." />
-          </div>
-
-          <div class="form-group">
-            <label for="email">Địa chỉ Email</label>
-            <input type="email" id="email" placeholder="Nhập email..." />
-          </div>
-
-          <div class="form-group">
-            <label for="message">Lời nhắn</label>
-            <textarea id="message" rows="4" placeholder="Nhập nội dung..."></textarea>
-          </div>
-
-          <button type="submit" class="btn btn-primary">Gửi lời nhắn</button>
-          <!-- Dòng thông báo kết quả khi bấm Gửi -->
-          <p id="formNotice" class="form-notice"></p>
-        </form>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ================= 3. CHÂN TRANG (FOOTER) ================= -->
-  <footer class="footer">
-    <div class="container footer-content">
-      <p>&copy; 2026 Portfolio Cá Nhân — MSSV: 044206000003 (THT)</p>
-      <a href="../../index.html" class="back-btn">← Quay lại Trang chủ nhóm</a>
-    </div>
-  </footer>
-
-  <!-- Liên kết file JavaScript bằng đường dẫn tương đối ./ -->
+  <!-- Liên kết file JavaScript -->
   <script src="./script.js"></script>
 </body>
 </html>
