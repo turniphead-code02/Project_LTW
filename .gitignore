@@ -10,6 +10,7 @@ Thumbs.db
 # IDE & Editor Settings
 .vscode/
 .idea/
+.vs/
 *.sublime-project
 *.sublime-workspace
 *.swp
