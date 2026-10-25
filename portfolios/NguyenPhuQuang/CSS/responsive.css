@@ -1,0 +1,631 @@
+
+/* =========================================
+   RESPONSIVE CHUNG CHO TOÀN BỘ PROJECT
+   index.html     -> Trang bìa
+   portfolio.html -> Portfolio cũ
+========================================= */
+
+/* =========================================
+   1. DESKTOP - 1536px
+========================================= */
+@media (max-width: 1536px) {
+
+    /* PORTFOLIO CŨ */
+    .container {
+        max-width: 1440px;
+    }
+}
+
+
+/* =========================================
+   2. DESKTOP NHỎ - 1440px
+========================================= */
+@media (max-width: 1440px) {
+
+    /* PORTFOLIO CŨ */
+    .container {
+        max-width: 1028px;
+    }
+
+    .softSkills_badge {
+        position: static !important;
+        transform: none !important;
+    }
+
+    .softSkills__book_icons {
+        display: none;
+    }
+
+    /* TRANG BÌA */
+    .hero-content,
+    .personal-info {
+        width: 58%;
+    }
+}
+
+
+/* =========================================
+   3. LAPTOP NHỎ - 1280px
+========================================= */
+@media (max-width: 1280px) {
+
+    /* PORTFOLIO CŨ */
+    .container {
+        max-width: 1024px;
+    }
+
+    section {
+        margin-top: 80px;
+    }
+
+    .header__container {
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+    }
+
+    .header__column--left,
+    .header__column--right {
+        max-width: 100%;
+    }
+
+    /* TRANG BÌA */
+    .hero-content,
+    .personal-info {
+        width: 65%;
+    }
+
+    .hero-content h1 {
+        font-size: clamp(44px, 6vw, 76px);
+    }
+
+    .nav-links {
+        gap: 14px;
+    }
+}
+
+
+/* =========================================
+   4. TABLET - 1024px
+========================================= */
+@media (max-width: 1024px) {
+
+    /* PORTFOLIO CŨ */
+    .container {
+        width: 100%;
+        max-width: 900px;
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+
+    .header__column--left,
+    .header__column--right {
+        width: 100%;
+    }
+
+    /* TRANG BÌA */
+    .cover {
+        background-position: 40% center;
+    }
+
+    .hero-content {
+        width: 100%;
+        max-width: 650px;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+    }
+
+    .description {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .hero-buttons {
+        justify-content: center;
+    }
+
+    .personal-info {
+        width: 100%;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .overview {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .overview-card:last-child {
+        grid-column: 1 / -1;
+    }
+}
+
+
+/* =========================================
+   5. TABLET NHỎ - 768px
+========================================= */
+@media (max-width: 768px) {
+
+    /* PORTFOLIO CŨ */
+    .container {
+        max-width: 640px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .aboutMe__section > img {
+        display: none;
+    }
+
+    .skills__grid_container {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto;
+    }
+
+    .skills__grid_item {
+        grid-column: auto !important;
+        grid-row: auto !important;
+        min-width: 0;
+    }
+
+    /* TRANG BÌA */
+    .cover {
+        background-position: 38% center;
+    }
+
+    .hero-content h1 {
+        font-size: clamp(40px, 7vw, 60px);
+    }
+
+    .personal-info {
+        padding: 12px;
+    }
+}
+
+
+/* =========================================
+   6. PHONE - 640px
+========================================= */
+@media (max-width: 640px) {
+
+    /* PORTFOLIO CŨ */
+    :root {
+        font-size: 14px;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 100%;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .header__column--left {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .header__badge_container {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .aboutMe__container {
+        width: 94%;
+    }
+
+    .skills__grid_container {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .softSkills_badge {
+        position: static !important;
+        transform: none !important;
+    }
+
+    /* TRANG BÌA */
+    .cover {
+        min-height: 100svh;
+        padding: 90px 16px 24px;
+        background-position: 35% center;
+    }
+
+    /* Menu thu gọn */
+    .menu-toggle {
+        display: block;
+    }
+
+    .navbar {
+        left: 16px;
+        right: 16px;
+    }
+
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 55px;
+        left: 0;
+        right: 0;
+        z-index: 20;
+
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+
+        padding: 12px;
+        border-radius: 16px;
+        background: rgba(8, 20, 35, 0.96);
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .nav-links a {
+        padding: 12px;
+        text-align: center;
+    }
+
+    /* Nội dung đè lên ảnh */
+    .hero-content {
+        width: 100%;
+        max-width: 100%;
+        margin: auto 0 24px;
+        padding-top: 120px;
+        text-align: center;
+    }
+
+    .hero-content h1 {
+        font-size: clamp(34px, 10vw, 48px);
+    }
+
+    .hero-content h2 {
+        font-size: 17px;
+    }
+
+    .description {
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .hero-buttons a {
+        width: 100%;
+        max-width: 280px;
+    }
+
+    /* 4 thông tin -> 2 cột */
+    .personal-info {
+        width: 100%;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .personal-info > div:nth-child(2) {
+        border-right: none;
+    }
+
+    .personal-info > div:nth-child(-n+2) {
+        border-bottom: 1px solid #ffffff33;
+    }
+
+    /* 3 thẻ -> 1 cột */
+    .overview {
+        grid-template-columns: minmax(0, 1fr);
+        padding: 16px;
+    }
+
+    .overview-card {
+        min-height: 150px;
+    }
+
+    .overview-card:last-child {
+        grid-column: auto;
+    }
+}
+
+
+/* =========================================
+   7. PHONE RẤT NHỎ - 380px
+========================================= */
+@media (max-width: 380px) {
+
+    .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .hero-content h1 {
+        font-size: 34px;
+    }
+
+    .description {
+        font-size: 13px;
+    }
+
+    .personal-info strong {
+        font-size: 14px;
+    }
+}
+
+/* ==========================================
+   RESPONSIVE CHO TRANG BÌA MỚI
+   Chỉ áp dụng khi body có class cover-page
+========================================== */
+
+/* DESKTOP NHỎ */
+@media (max-width: 1440px) {
+
+    .cover-page .hero-content,
+    .cover-page .personal-info {
+        width: 58%;
+    }
+
+    .cover-page .nav-links {
+        gap: 2px;
+    }
+}
+
+/* LAPTOP NHỎ */
+@media (max-width: 1280px) {
+
+    .cover-page .hero-content,
+    .cover-page .personal-info {
+        width: 65%;
+    }
+
+    .cover-page .hero-content h1 {
+        font-size: clamp(46px, 6vw, 76px);
+    }
+
+    .cover-page .nav-links a {
+        padding: 10px 12px;
+    }
+}
+
+/* TABLET */
+@media (max-width: 1024px) {
+
+    .cover-page .cover {
+        background-image:
+            linear-gradient(
+                to bottom,
+                rgba(4, 12, 24, 0.15) 0%,
+                rgba(4, 12, 24, 0.4) 40%,
+                rgba(4, 12, 24, 0.9) 100%
+            ),
+            url("../assets/cover.jpg");
+
+        background-position: 40% center;
+    }
+
+    .cover-page .hero-content {
+        width: 100%;
+        max-width: 650px;
+        margin: auto auto 30px;
+        padding-top: 160px;
+        text-align: center;
+    }
+
+    .cover-page .hero-line {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .cover-page .hero-description {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .cover-page .hero-buttons {
+        justify-content: center;
+    }
+
+    .cover-page .personal-info {
+        width: 100%;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .cover-page .overview {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .cover-page .overview-card:last-child {
+        grid-column: 1 / -1;
+    }
+}
+
+/* TABLET NHỎ */
+@media (max-width: 768px) {
+
+    .cover-page .navbar {
+        left: 4%;
+        right: 4%;
+    }
+
+    .cover-page .nav-links {
+        gap: 0;
+        padding: 8px;
+    }
+
+    .cover-page .nav-links a {
+        padding: 10px;
+        font-size: 12px;
+    }
+
+    .cover-page .cover {
+        background-position: 38% center;
+    }
+
+    .cover-page .hero-content h1 {
+        font-size: clamp(42px, 7vw, 58px);
+    }
+
+    .cover-page .hero-description {
+        font-size: 15px;
+    }
+
+    .cover-page .info-item strong {
+        font-size: 15px;
+    }
+}
+
+/* PHONE */
+@media (max-width: 640px) {
+
+    .cover-page .cover {
+        min-height: 850px;
+        min-height: 100svh;
+        padding: 85px 16px 24px;
+
+        background-image:
+            linear-gradient(
+                to bottom,
+                rgba(4, 12, 24, 0.15) 0%,
+                rgba(4, 12, 24, 0.25) 25%,
+                rgba(4, 12, 24, 0.82) 70%,
+                rgba(4, 12, 24, 0.96) 100%
+            ),
+            url("../assets/cover.jpg");
+
+        background-position: 35% center;
+    }
+
+    /* MENU */
+    .cover-page .navbar {
+        top: 16px;
+        left: 16px;
+        right: 16px;
+    }
+
+    .cover-page .menu-toggle {
+        display: block;
+    }
+
+    .cover-page .nav-links {
+        display: none;
+        position: absolute;
+        top: 55px;
+        left: 0;
+        right: 0;
+        z-index: 20;
+
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+
+        padding: 12px;
+        border-radius: 16px;
+        background: rgba(8, 20, 35, 0.97);
+    }
+
+    .cover-page .nav-links.active {
+        display: flex;
+    }
+
+    .cover-page .nav-links a {
+        padding: 13px;
+        font-size: 14px;
+        text-align: center;
+    }
+
+    /* CHỮ TRÊN ẢNH */
+    .cover-page .hero-content {
+        width: 100%;
+        max-width: 100%;
+        margin: auto 0 24px;
+        padding-top: 150px;
+        text-align: center;
+    }
+
+    .cover-page .greeting {
+        font-size: 12px;
+        letter-spacing: 3px;
+    }
+
+    .cover-page .hero-content h1 {
+        font-size: clamp(34px, 10vw, 48px);
+        letter-spacing: -1px;
+    }
+
+    .cover-page .hero-content h2 {
+        font-size: 17px;
+    }
+
+    .cover-page .hero-description {
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .cover-page .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .cover-page .hero-buttons .btn {
+        width: 100%;
+        max-width: 280px;
+    }
+
+    /* THÔNG TIN 2 CỘT */
+    .cover-page .personal-info {
+        width: 100%;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        padding: 10px;
+    }
+
+    .cover-page .info-item {
+        padding: 12px 6px;
+    }
+
+    .cover-page .info-item:nth-child(2) {
+        border-right: none;
+    }
+
+    .cover-page .info-item:nth-child(-n+2) {
+        border-bottom: 1px solid #ffffff33;
+    }
+
+    /* 3 THẺ XẾP DỌC */
+    .cover-page .overview {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
+        padding: 16px;
+    }
+
+    .cover-page .overview-card {
+        min-height: 190px;
+        padding: 24px;
+    }
+
+    .cover-page .overview-card:last-child {
+        grid-column: auto;
+    }
+}
+
+/* PHONE RẤT NHỎ */
+@media (max-width: 380px) {
+
+    .cover-page .cover {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .cover-page .hero-content h1 {
+        font-size: 34px;
+    }
+
+    .cover-page .hero-description {
+        font-size: 13px;
+    }
+
+    .cover-page .info-item strong {
+        font-size: 14px;
+    }
+}
