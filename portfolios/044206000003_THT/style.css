@@ -1,32 +1,35 @@
 /* ==========================================================================
-   FILE CSS PORTFOLIO CÁ NHÂN — TRẦN HỮU THÀNH (MSSV: 044206000003)
-   Phong cách: Split-Screen (Cột Trái Cố Định — Cột Phải Cuộn Mượt)
-   Kiến thức cốt lõi: CSS Grid 2 cột, position: sticky, Flexbox, Biến CSS (:root)
+   PERSONAL PORTFOLIO CSS — TRAN HUU THANH (ID: 044206000003)
+   Style: Executive Split-Screen + Ambient Animated Background + Frosted Glass
    ========================================================================== */
 
-/* 1. Khai báo biến màu sắc (Mặc định: Giao diện Tối sang trọng) */
+/* 1. Color Variables (Default: Luxury Dark Theme) */
 :root {
-  --bg-color: #0b1120;        /* Nền chính xanh đen sâu */
-  --card-bg: #151f32;         /* Nền các khối thẻ Card */
-  --text-main: #f8fafc;       /* Chữ chính trắng sáng */
-  --text-sub: #94a3b8;        /* Chữ phụ xám dịu */
-  --gold: #eab308;            /* Màu vàng kim điểm nhấn */
-  --gold-light: #fde047;      /* Màu vàng sáng nổi bật */
-  --border-color: #26354d;    /* Màu viền mảnh */
+  --bg-color: #070b14;                      /* Deep Obsidian Navy */
+  --card-bg: rgba(19, 28, 46, 0.72);        /* Frosted Glass Surface */
+  --input-bg: rgba(11, 17, 32, 0.78);       /* Input Field Surface */
+  --text-main: #f8fafc;                     /* Crisp White Text */
+  --text-sub: #94a3b8;                      /* Muted Slate Text */
+  --gold: #eab308;                          /* Primary Gold Accent */
+  --gold-light: #fde047;                    /* Bright Gold Highlight */
+  --border-color: rgba(255, 255, 255, 0.1); /* Specular Glass Border */
+  --grid-line: rgba(255, 255, 255, 0.035);  /* Subtle Background Grid */
 }
 
-/* Chế độ nền Sáng khi bấm nút Đổi nền */
+/* Light Mode Variables */
 body.light-mode {
-  --bg-color: #f1f5f9;
-  --card-bg: #ffffff;
+  --bg-color: #f4f6fb;
+  --card-bg: rgba(255, 255, 255, 0.78);
+  --input-bg: rgba(241, 245, 249, 0.9);
   --text-main: #0f172a;
   --text-sub: #475569;
   --gold: #b45309;
   --gold-light: #d97706;
-  --border-color: #cbd5e1;
+  --border-color: rgba(15, 23, 42, 0.1);
+  --grid-line: rgba(15, 23, 42, 0.04);
 }
 
-/* 2. Thiết lập cơ bản */
+/* 2. Reset & Base Styles */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -40,10 +43,10 @@ html {
 body {
   font-family: 'Inter', sans-serif;
   background-color: var(--bg-color);
-  background-image: radial-gradient(circle at 15% 15%, rgba(234, 179, 8, 0.12), transparent 45%);
   color: var(--text-main);
   line-height: 1.65;
-  transition: background-color 0.3s, color 0.3s;
+  transition: background-color 0.35s, color 0.35s;
+  overflow-x: hidden;
 }
 
 h1, h2, h3 {
@@ -57,28 +60,220 @@ a {
 }
 
 .container {
-  max-width: 1180px;
+  max-width: 1160px;
   margin: 0 auto;
   padding: 36px 24px;
 }
 
-/* ================= 3. BỐ CỤC CHIA ĐÔI MÀN HÌNH (SPLIT-SCREEN) ================= */
+/* ================= 3. AMBIENT ANIMATED BACKGROUND ================= */
+.bg-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  /* Lớp lưới kỹ thuật mảnh tạo chiều sâu không gian */
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* Các quầng sáng cực quang trôi lơ lửng phía sau nền */
+.bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(95px);
+  animation: floatOrb 14s infinite alternate ease-in-out;
+}
+
+.orb-gold {
+  width: 460px;
+  height: 460px;
+  background: rgba(234, 179, 8, 0.22);
+  top: -100px;
+  left: -80px;
+}
+
+.orb-blue {
+  width: 500px;
+  height: 500px;
+  background: rgba(56, 189, 248, 0.16);
+  bottom: -120px;
+  right: -100px;
+  animation-delay: -5s;
+}
+
+/* --- HIỆU ỨNG 1: SAO BĂNG XẸT NGANG BẦU TRỜI ĐÊM (SHOOTING STARS) --- */
+.shooting-star {
+  position: absolute;
+  width: 140px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold-light), rgba(253, 224, 71, 0.4), transparent);
+  border-radius: 99px;
+  transform: rotate(-35deg);
+  opacity: 0;
+  animation: shootStar 6s infinite ease-in-out;
+}
+
+/* Đầu ngôi sao băng phát sáng lấp lánh */
+.shooting-star::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: -2px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 12px 4px var(--gold-light);
+}
+
+/* Vị trí và nhịp xuất hiện lệch nhau của 4 ngôi sao băng */
+.star-1 { top: 8%;  right: 5%;  animation-duration: 5.5s; animation-delay: 0.5s; }
+.star-2 { top: 22%; right: 28%; animation-duration: 7s;   animation-delay: 2.5s; }
+.star-3 { top: 45%; right: 8%;  animation-duration: 6.2s; animation-delay: 4.2s; }
+.star-4 { top: 14%; right: 52%; animation-duration: 8s;   animation-delay: 1.8s; }
+
+/* --- HIỆU ỨNG 2: ĐOM ĐÓM ÁNH VÀNG BAY LƠ LỬNG (GOLDEN FIREFLIES) --- */
+.firefly {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--gold-light);
+  box-shadow: 0 0 14px 4px var(--gold);
+  opacity: 0;
+  animation: flyFirefly 9s infinite ease-in-out;
+}
+
+/* Phân bố các đốm đom đóm khắp màn hình với nhịp bay khác nhau */
+.f-1 { left: 10%; bottom: 12%; animation-duration: 8s;  animation-delay: 0s; }
+.f-2 { left: 24%; bottom: 25%; animation-duration: 11s; animation-delay: 2s; }
+.f-3 { left: 42%; bottom: 8%;  animation-duration: 9s;  animation-delay: 4s; }
+.f-4 { left: 60%; bottom: 18%; animation-duration: 12s; animation-delay: 1s; }
+.f-5 { left: 76%; bottom: 10%; animation-duration: 8.5s;animation-delay: 3.5s; }
+.f-6 { left: 88%; bottom: 28%; animation-duration: 10s; animation-delay: 5s; }
+.f-7 { left: 33%; bottom: 45%; animation-duration: 9.5s;animation-delay: 1.5s; }
+.f-8 { left: 82%; bottom: 52%; animation-duration: 11s; animation-delay: 2.8s; }
+
+/* ================= 4. CSS ANIMATIONS (@keyframes) ================= */
+
+/* Quỹ đạo bay chéo của Sao băng */
+@keyframes shootStar {
+  0% {
+    transform: rotate(-35deg) translateX(0);
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  28% {
+    transform: rotate(-35deg) translateX(-520px);
+    opacity: 0;
+  }
+  100% {
+    transform: rotate(-35deg) translateX(-520px);
+    opacity: 0;
+  }
+}
+
+/* Chuyển động bay lên và nhấp nháy phát sáng của Đom đóm vàng */
+@keyframes flyFirefly {
+  0% {
+    transform: translateY(0) translateX(0) scale(0.6);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.9;
+  }
+  65% {
+    transform: translateY(-90px) translateX(28px) scale(1.15);
+    opacity: 0.75;
+  }
+  100% {
+    transform: translateY(-170px) translateX(-20px) scale(0.5);
+    opacity: 0;
+  }
+}
+
+/* Chuyển động trôi bồng bềnh của các quầng sáng nền */
+@keyframes floatOrb {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    transform: translate(60px, 45px) scale(1.12);
+  }
+}
+
+/* Hiệu ứng trượt nhẹ từ dưới lên khi mở trang */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Ánh sáng vàng nhịp thở quanh khung ảnh đại diện */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 22px 4px rgba(234, 179, 8, 0.25);
+  }
+}
+
+/* Con trỏ nhấp nháy cho chữ gõ tự động */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.fade-in {
+  animation: fadeUp 0.7s ease forwards;
+}
+
+.fade-up {
+  opacity: 0;
+  animation: fadeUp 0.7s ease forwards;
+}
+
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.25s; }
+.delay-3 { animation-delay: 0.4s; }
+.delay-4 { animation-delay: 0.55s; }
+
+.cursor {
+  color: var(--gold-light);
+  font-weight: 700;
+  animation: blink 0.9s infinite;
+}
+
+/* ================= 5. SPLIT-SCREEN LAYOUT ================= */
 .page-layout {
   display: grid;
-  grid-template-columns: 350px 1fr; /* Cột trái rộng 350px, cột phải chiếm phần còn lại */
+  grid-template-columns: 340px 1fr;
   gap: 44px;
   align-items: start;
 }
 
-/* ================= 4. CỘT TRÁI CỐ ĐỊNH (STICKY SIDEBAR) ================= */
+/* ================= 6. STICKY LEFT SIDEBAR (Kính mờ Frosted Glass) ================= */
 .sidebar {
-  position: sticky; /* Giữ cột trái đứng yên khi cuộn trang */
+  position: sticky;
   top: 32px;
   background-color: var(--card-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border-color);
   border-radius: 22px;
   padding: 24px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
 }
 
 .sidebar-top {
@@ -90,28 +285,36 @@ a {
 
 .back-btn,
 .theme-btn {
-  padding: 7px 13px;
+  padding: 7px 14px;
   border: 1px solid var(--border-color);
   border-radius: 99px;
-  background-color: var(--bg-color);
+  background-color: var(--input-bg);
   color: var(--text-main);
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  transition: 0.25s;
+  transition: all 0.25s ease;
 }
 
 .back-btn:hover,
 .theme-btn:hover {
   border-color: var(--gold);
   color: var(--gold-light);
+  transform: translateY(-2px);
 }
 
-/* Ảnh chân dung và Tên trong cột trái */
 .profile-box {
   text-align: center;
   padding-bottom: 20px;
   border-bottom: 1px solid var(--border-color);
+}
+
+.avatar-ring {
+  overflow: hidden;
+  border-radius: 16px;
+  border: 2px solid var(--gold);
+  margin-bottom: 16px;
+  animation: pulseGlow 3.5s infinite ease-in-out;
 }
 
 .avatar-img {
@@ -119,9 +322,12 @@ a {
   height: 250px;
   object-fit: cover;
   object-position: center 20%;
-  border-radius: 16px;
-  border: 2px solid var(--gold);
-  margin-bottom: 16px;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.avatar-ring:hover .avatar-img {
+  transform: scale(1.05);
 }
 
 .tag-badge {
@@ -137,22 +343,23 @@ a {
 }
 
 .profile-name {
-  font-size: 26px;
+  font-size: 25px;
   font-weight: 800;
   margin-bottom: 4px;
 }
 
 .profile-role {
   color: var(--text-sub);
-  font-size: 14px;
+  font-size: 13.5px;
+  min-height: 22px;
 }
 
-/* Menu dọc điều hướng trong cột trái */
+/* Vertical Menu */
 .side-nav {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 20px 0;
+  gap: 6px;
+  padding: 18px 0;
   border-bottom: 1px solid var(--border-color);
 }
 
@@ -162,23 +369,23 @@ a {
   color: var(--text-sub);
   font-weight: 600;
   font-size: 14px;
-  transition: 0.2s;
+  transition: all 0.25s ease;
 }
 
 .nav-item:hover {
-  background-color: var(--bg-color);
+  background-color: var(--input-bg);
   color: var(--gold-light);
-  padding-left: 20px;
+  transform: translateX(6px);
 }
 
 .sidebar-footer {
-  padding-top: 18px;
+  padding-top: 16px;
   font-size: 13px;
   color: var(--text-sub);
 }
 
 .sidebar-footer p {
-  margin-bottom: 6px;
+  margin-bottom: 5px;
 }
 
 .sidebar-footer a {
@@ -186,11 +393,11 @@ a {
   font-weight: 600;
 }
 
-/* ================= 5. CỘT PHẢI CUỘN NỘI DUNG (MAIN CONTENT) ================= */
+/* ================= 7. RIGHT MAIN CONTENT ================= */
 .main-content {
   display: flex;
   flex-direction: column;
-  gap: 56px;
+  gap: 52px;
 }
 
 .content-section {
@@ -198,58 +405,60 @@ a {
 }
 
 .section-header {
-  margin-bottom: 24px;
+  margin-bottom: 22px;
 }
 
 .section-tag {
   display: inline-block;
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   color: var(--gold);
   margin-bottom: 6px;
 }
 
 .section-header h2 {
-  font-size: 28px;
+  font-size: 26px;
 }
 
-/* Thẻ Card dùng chung */
+/* Cards with Frosted Glass & smooth hover lift */
 .card {
   background-color: var(--card-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border-color);
   border-radius: 18px;
-  padding: 28px;
-  transition: transform 0.25s, border-color 0.25s;
+  padding: 26px;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
   border-color: var(--gold);
-  transform: translateY(-3px);
+  transform: translateY(-5px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.26);
 }
 
-/* Khối lời chào mở đầu cột phải */
 .intro-banner {
   margin-bottom: 20px;
-  background-image: linear-gradient(135deg, var(--card-bg), rgba(234, 179, 8, 0.08));
+  background-image: linear-gradient(135deg, var(--card-bg), rgba(234, 179, 8, 0.1));
 }
 
 .intro-banner h2 {
   font-size: 32px;
-  margin: 8px 0 14px;
+  margin: 8px 0 12px;
 }
 
 .highlight {
-  color: var(--gold-light);
+  background: linear-gradient(90deg, var(--gold-light), var(--gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .intro-text {
   color: var(--text-sub);
-  font-size: 16px;
-  margin-bottom: 0;
+  font-size: 15.5px;
 }
 
-/* Lưới 2 cột cho Kỹ năng và Định hướng */
 .grid-2 {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -258,15 +467,16 @@ a {
 
 .card-badge {
   display: inline-block;
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.06em;
   color: var(--gold-light);
   margin-bottom: 8px;
 }
 
 .card h3 {
-  font-size: 19px;
+  font-size: 18.5px;
   margin-bottom: 8px;
 }
 
@@ -275,12 +485,12 @@ a {
   font-size: 14.5px;
 }
 
-/* Thanh nút lọc kỹ năng */
+/* Filter Buttons */
 .filter-group {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-bottom: 22px;
+  margin-bottom: 20px;
 }
 
 .filter-btn {
@@ -288,25 +498,27 @@ a {
   border-radius: 99px;
   border: 1px solid var(--border-color);
   background-color: var(--card-bg);
+  backdrop-filter: blur(12px);
   color: var(--text-sub);
   font-weight: 600;
-  font-size: 13.5px;
+  font-size: 13px;
   cursor: pointer;
-  transition: 0.2s;
+  transition: all 0.25s ease;
 }
 
 .filter-btn.active,
 .filter-btn:hover {
   border-color: var(--gold);
   color: var(--gold-light);
-  background-color: rgba(234, 179, 8, 0.12);
+  background-color: rgba(234, 179, 8, 0.15);
+  transform: translateY(-2px);
 }
 
-/* Danh sách Dự án xếp ngang gọn gàng */
+/* Project Rows */
 .project-list {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px;
 }
 
 .project-row {
@@ -316,17 +528,17 @@ a {
   gap: 24px;
 }
 
-/* Nút bấm dùng chung */
+/* Buttons */
 .btn {
   display: inline-block;
   padding: 11px 22px;
   border-radius: 99px;
   font-weight: 700;
-  font-size: 14px;
+  font-size: 13.5px;
   cursor: pointer;
   border: 1px solid transparent;
   white-space: nowrap;
-  transition: 0.25s;
+  transition: all 0.25s ease;
 }
 
 .btn-primary {
@@ -336,72 +548,89 @@ a {
 
 .btn-primary:hover {
   background-color: var(--gold-light);
+  transform: translateY(-2px);
 }
 
 .btn-outline {
   border-color: var(--border-color);
-  background-color: var(--bg-color);
+  background-color: var(--input-bg);
   color: var(--text-main);
 }
 
 .btn-outline:hover {
   border-color: var(--gold);
   color: var(--gold-light);
+  transform: translateX(3px);
 }
 
-/* Biểu mẫu liên hệ */
-.form-row {
-  margin-bottom: 16px;
+/* Social Media Cards */
+.social-grid {
+  margin-bottom: 20px;
 }
 
-.form-group {
-  margin-bottom: 16px;
+.social-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
 }
 
-.form-row .form-group {
-  margin-bottom: 0;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 6px;
-  font-weight: 600;
-  font-size: 13.5px;
-}
-
-.form-group input,
-.form-group textarea {
-  width: 100%;
-  padding: 12px 14px;
-  border-radius: 10px;
+.social-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background-color: var(--input-bg);
   border: 1px solid var(--border-color);
-  background-color: var(--bg-color);
-  color: var(--text-main);
-  font-family: inherit;
-  font-size: 14.5px;
+  color: var(--gold-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+  transition: all 0.25s ease;
 }
 
-.form-group input:focus,
-.form-group textarea:focus {
-  outline: none;
+.social-card:hover .social-icon {
+  background-color: var(--gold);
+  color: #0b1120;
   border-color: var(--gold);
+  transform: scale(1.08);
 }
 
-.form-notice {
-  margin-top: 12px;
-  font-size: 14px;
-  font-weight: 600;
+.social-info {
+  flex: 1;
 }
 
-/* ================= 6. RESPONSIVE CHO ĐIỆN THOẠI & TABLET ================= */
+.social-info h3 {
+  font-size: 16.5px;
+  margin-bottom: 2px;
+}
+
+.social-info span {
+  font-size: 13px;
+  color: var(--text-sub);
+}
+
+.social-arrow {
+  font-size: 18px;
+  color: var(--text-sub);
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+
+.social-card:hover .social-arrow {
+  color: var(--gold-light);
+  transform: translate(3px, -3px);
+}
+
+/* ================= 8. RESPONSIVE (MOBILE & TABLET) ================= */
 @media (max-width: 860px) {
   .page-layout,
   .grid-2 {
-    grid-template-columns: 1fr; /* Tự động gộp về 1 cột dọc trên màn hình nhỏ */
+    grid-template-columns: 1fr;
   }
 
   .sidebar {
-    position: static; /* Hủy đứng yên khi ở trên điện thoại để cuộn tự nhiên */
+    position: static;
   }
 
   .project-row {

@@ -1,213 +1,259 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Trần Hữu Thành — Portfolio Cá Nhân | MSSV: 044206000003</title>
+  <title>Tran Huu Thanh — Personal Portfolio | ID: 044206000003</title>
 
-  <!-- Google Fonts: Plus Jakarta Sans (Tiêu đề) và Inter (Nội dung) -->
+  <!-- Google Fonts: Plus Jakarta Sans (Headings) & Inter (Body) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
 
-  <!-- Liên kết file CSS bằng đường dẫn tương đối ./ -->
+  <!-- Font Awesome Icons cho mạng xã hội (Facebook, TikTok, GitHub, Email) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+  <!-- Relative path ./style.css -->
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
 
-  <!-- ================= BỐ CỤC CHIA ĐÔI MÀN HÌNH (SPLIT-SCREEN) ================= -->
+  <!-- ================= AMBIENT ANIMATED BACKGROUND (SAO BĂNG & ĐOM ĐÓM VÀNG) ================= -->
+  <div class="bg-canvas">
+    <!-- Quầng sáng nền -->
+    <div class="bg-orb orb-gold"></div>
+    <div class="bg-orb orb-blue"></div>
+
+    <!-- Các vệt Sao băng xẹt ngang bầu trời đêm -->
+    <span class="shooting-star star-1"></span>
+    <span class="shooting-star star-2"></span>
+    <span class="shooting-star star-3"></span>
+    <span class="shooting-star star-4"></span>
+
+    <!-- Các đốm Đom đóm vàng bay lơ lửng -->
+    <span class="firefly f-1"></span>
+    <span class="firefly f-2"></span>
+    <span class="firefly f-3"></span>
+    <span class="firefly f-4"></span>
+    <span class="firefly f-5"></span>
+    <span class="firefly f-6"></span>
+    <span class="firefly f-7"></span>
+    <span class="firefly f-8"></span>
+  </div>
+
+  <!-- ================= SPLIT-SCREEN LAYOUT ================= -->
   <div class="container page-layout">
 
-    <!-- 1. CỘT TRÁI CỐ ĐỊNH (STICKY SIDEBAR - ĐỨNG YÊN KHI CUỘN) -->
-    <aside class="sidebar">
+    <!-- 1. STICKY LEFT SIDEBAR -->
+    <aside class="sidebar fade-in">
       <div class="sidebar-top">
-        <a href="../../index.html" class="back-btn">← Trang chủ nhóm</a>
-        <button id="themeBtn" class="theme-btn">☀️ Đổi nền</button>
+        <a href="../../index.html" class="back-btn">← Team Hub</a>
+        <button id="themeBtn" class="theme-btn">☀️ Theme</button>
       </div>
 
       <div class="profile-box">
-        <img src="./images/tht2.jpg" alt="Chân dung Trần Hữu Thành" class="avatar-img" />
-        <span class="tag-badge">MSSV: 044206000003</span>
-        <h1 class="profile-name">Trần Hữu Thành</h1>
-        <p class="profile-role">Sinh viên CNTT • ĐH GTVT TP.HCM (UTH)</p>
+        <div class="avatar-ring">
+          <img src="./images/tht2.jpg" alt="Tran Huu Thanh" class="avatar-img" />
+        </div>
+        <span class="tag-badge">ID: 044206000003</span>
+        <h1 class="profile-name">Tran Huu Thanh</h1>
+        <!-- Hiệu ứng chữ gõ tự động bằng JS (Typing Effect) -->
+        <p class="profile-role"><span id="typingText"></span><span class="cursor">|</span></p>
       </div>
 
-      <!-- Menu dọc điều hướng nhanh -->
+      <!-- Vertical Navigation -->
       <nav class="side-nav">
-        <a href="#gioi-thieu" class="nav-item">01. Câu chuyện của mình</a>
-        <a href="#ky-nang" class="nav-item">02. Kỹ năng &amp; Thế mạnh</a>
-        <a href="#du-an" class="nav-item">03. Dự án đã tham gia</a>
-        <a href="#lien-he" class="nav-item">04. Liên hệ &amp; Kết nối</a>
+        <a href="#about" class="nav-item">01. About Me</a>
+        <a href="#skills" class="nav-item">02. Core Strengths</a>
+        <a href="#projects" class="nav-item">03. Selected Work</a>
+        <a href="#contact" class="nav-item">04. Get in Touch</a>
       </nav>
 
-      <!-- Thông tin liên hệ nhanh ở đáy cột trái -->
       <div class="sidebar-footer">
         <p><strong>Email:</strong> tomshel216@gmail.com</p>
-        <p><strong>GitHub:</strong> <a href="https://github.com/turniphead-code02" target="_blank">turniphead-code02</a></p>
+        <p><strong>GitHub:</strong> <a href="https://github.com/turniphead-code02" target="_blank">@turniphead-code02</a></p>
       </div>
     </aside>
 
-    <!-- 2. CỘT PHẢI CUỘN MƯỢT (MAIN CONTENT) -->
+    <!-- 2. SCROLLING RIGHT CONTENT -->
     <main class="main-content">
 
-      <!-- MỤC 01: GIỚI THIỆU BẢN THÂN & ĐỊNH HƯỚNG (Gần gũi, chân thật) -->
-      <section id="gioi-thieu" class="content-section">
+      <!-- 01. ABOUT ME -->
+      <section id="about" class="content-section fade-up delay-1">
         <div class="intro-banner card">
-          <span class="section-tag">01 / ĐÔI NÉT VỀ MÌNH</span>
+          <span class="section-tag">01 / ABOUT ME</span>
           <h2>
-            Học hỏi mỗi ngày, làm việc có trách nhiệm và <span class="highlight">tận hưởng hành trình.</span>
+            Turning ideas into <span class="highlight">clean, reliable</span> digital products.
           </h2>
           <p class="intro-text">
-            Chào bạn! Mình là <strong>Trần Hữu Thành</strong>, hiện đang theo học ngành Công nghệ Thông tin tại Trường Đại học Giao thông vận tải TP.HCM. Với mình, lập trình không chỉ là những dòng code khô khan mà là cách biến một ý tưởng trên giấy thành sản phẩm hữu ích, nhìn thấy được và chạm vào được.
+            Hi, I'm <strong>Tran Huu Thanh (THT)</strong> — an IT student at UTH. I enjoy building structured systems, clean web interfaces, and solving practical problems step by step.
           </p>
         </div>
 
         <div class="grid-2">
           <div class="card">
-            <span class="card-badge">Định hướng tương lai</span>
-            <h3>Đi từng bước vững chắc</h3>
-            <p>
-              Hiện tại mình tập trung trau dồi nền tảng phát triển Web từ giao diện đến dữ liệu. Xa hơn, mình muốn mở rộng sang mảng Fullstack, AI và Data Science để có thể tự tay xây dựng những sản phẩm hoàn chỉnh.
-            </p>
+            <span class="card-badge">Vision</span>
+            <h3>Fullstack, AI &amp; Data</h3>
+            <p>Mastering web fundamentals today while steadily expanding into Fullstack Engineering, AI, and Data Science.</p>
           </div>
 
           <div class="card">
-            <span class="card-badge">Ngoài giờ học</span>
-            <h3>Âm nhạc, Thể thao &amp; Bạn bè</h3>
-            <p>
-              Khi rời màn hình máy tính, mình thích nghe nhạc để thư giãn đầu óc, rèn luyện thể thao để giữ năng lượng tích cực và cùng anh em trong nhóm ngồi lại bàn bạc, tháo gỡ từng bài toán khó.
-            </p>
+            <span class="card-badge">Lifestyle</span>
+            <h3>Music, Sports &amp; Teamwork</h3>
+            <p>Staying balanced through sports, good music, and collaborating closely with teammates to build meaningful projects.</p>
           </div>
         </div>
       </section>
 
-      <!-- MỤC 02: KỸ NĂNG & THẾ MẠNH (Cân bằng giữa Chuyên môn, Tư duy & Kỹ năng mềm) -->
-      <section id="ky-nang" class="content-section">
+      <!-- 02. CORE STRENGTHS (Interactive Filter) -->
+      <section id="skills" class="content-section fade-up delay-2">
         <div class="section-header">
-          <span class="section-tag">02 / KỸ NĂNG &amp; THẾ MẠNH</span>
-          <h2>Những điều mình đang tích lũy</h2>
+          <span class="section-tag">02 / CAPABILITIES</span>
+          <h2>Core Strengths</h2>
         </div>
 
-        <!-- Nút lọc nhóm kỹ năng (Xử lý trong script.js) -->
         <div class="filter-group">
-          <button class="filter-btn active" data-type="all">Tất cả</button>
-          <button class="filter-btn" data-type="tech">Chuyên môn IT</button>
-          <button class="filter-btn" data-type="mindset">Tư duy &amp; Công việc</button>
-          <button class="filter-btn" data-type="soft">Kỹ năng mềm</button>
+          <button class="filter-btn active" data-type="all">All</button>
+          <button class="filter-btn" data-type="tech">Tech Stack</button>
+          <button class="filter-btn" data-type="mindset">Mindset</button>
+          <button class="filter-btn" data-type="soft">Teamwork</button>
         </div>
 
         <div class="grid-2">
           <div class="card skill-item" data-type="tech">
-            <span class="card-badge">Phát triển Web</span>
-            <h3>Xây dựng Giao diện &amp; Tương tác</h3>
-            <p>Sử dụng HTML, CSS và JavaScript để chuyển hóa ý tưởng thành trang web gọn gàng, dễ nhìn và thân thiện trên cả máy tính lẫn điện thoại.</p>
+            <span class="card-badge">Web Development</span>
+            <h3>Frontend &amp; UI</h3>
+            <p>Crafting clean, responsive layouts using HTML5, CSS3 (Flexbox/Grid), and interactive JavaScript.</p>
           </div>
 
           <div class="card skill-item" data-type="tech">
-            <span class="card-badge">Nền tảng Lập trình</span>
-            <h3>Tư duy Logic &amp; Cơ sở dữ liệu</h3>
-            <p>Rèn luyện tư duy lập trình qua C++, Java và cách tổ chức bảng biểu, truy vấn dữ liệu có hệ thống với SQL (PostgreSQL, SQL Server).</p>
+            <span class="card-badge">Core &amp; Data</span>
+            <h3>Logic &amp; SQL Databases</h3>
+            <p>Solid OOP foundation in C++ &amp; Java, paired with structured 3NF database design in PostgreSQL &amp; SQL Server.</p>
           </div>
 
           <div class="card skill-item" data-type="mindset">
-            <span class="card-badge">Cách tiếp cận bài toán</span>
-            <h3>Lên kế hoạch trước khi bắt tay làm</h3>
-            <p>Thói quen phác thảo cấu trúc tổng thể, thống nhất quy ước chung và chia nhỏ công việc thành từng bước rõ ràng trước khi viết code.</p>
+            <span class="card-badge">Workflow</span>
+            <h3>System Planning</h3>
+            <p>Structuring architecture, defining clear specifications, and breaking down tasks before writing code.</p>
           </div>
 
           <div class="card skill-item" data-type="mindset">
-            <span class="card-badge">Thích nghi &amp; Tự học</span>
-            <h3>Chủ động tìm tòi cái mới</h3>
-            <p>Biết cách tra cứu tài liệu, tận dụng các công cụ hỗ trợ hiện đại (Git, Figma, AI) và kiên nhẫn tìm nguyên nhân để xử lý khi gặp lỗi.</p>
+            <span class="card-badge">Growth</span>
+            <h3>Fast Self-Learner</h3>
+            <p>Quickly adapting to modern tools (Git, Figma, AI workflows) and debugging issues with patience.</p>
           </div>
 
           <div class="card skill-item" data-type="soft">
-            <span class="card-badge">Tinh thần đồng đội</span>
-            <h3>Phối hợp &amp; Làm việc nhóm</h3>
-            <p>Biết lắng nghe góc nhìn của các thành viên, chủ động kết nối công việc chung qua GitHub để cả nhóm đi cùng nhau đúng tiến độ.</p>
+            <span class="card-badge">Collaboration</span>
+            <h3>Git &amp; Team Synergy</h3>
+            <p>Managing branches, reviewing pull requests, and keeping team deliverables aligned and on schedule.</p>
           </div>
 
           <div class="card skill-item" data-type="soft">
-            <span class="card-badge">Thái độ cá nhân</span>
-            <h3>Kỷ luật &amp; Cân bằng cuộc sống</h3>
-            <p>Giữ sự tập trung và trách nhiệm với phần việc đã nhận, đồng thời duy trì nhịp sống lành mạnh giữa việc học trên giảng đường và thể thao.</p>
+            <span class="card-badge">Discipline</span>
+            <h3>Focus &amp; Consistency</h3>
+            <p>Taking ownership of assigned responsibilities while maintaining a positive, energetic work ethic.</p>
           </div>
         </div>
       </section>
 
-      <!-- MỤC 03: DỰ ÁN HỌC TẬP -->
-      <section id="du-an" class="content-section">
+      <!-- 03. SELECTED WORK -->
+      <section id="projects" class="content-section fade-up delay-3">
         <div class="section-header">
-          <span class="section-tag">03 / DẤU ẤN HỌC TẬP</span>
-          <h2>Các dự án đã tham gia</h2>
+          <span class="section-tag">03 / PORTFOLIO</span>
+          <h2>Selected Work</h2>
         </div>
 
         <div class="project-list">
           <div class="card project-row">
             <div class="project-info">
-              <span class="card-badge">Đồ án Lập Trình Web</span>
-              <h3>Cổng Thông Tin Việc Làm (Job Portal)</h3>
-              <p>Dự án nhóm xây dựng nền tảng kết nối ứng viên và nhà tuyển dụng. Mình cùng nhóm lên đặc tả hệ thống, thiết kế cơ sở dữ liệu và phát triển giao diện.</p>
+              <span class="card-badge">Web Programming</span>
+              <h3>Job Portal Platform</h3>
+              <p>Recruitment platform connecting candidates and employers. Designed 3NF schema, specs, and web UI.</p>
             </div>
             <a href="https://github.com/turniphead-code02/Project_LTW" target="_blank" class="btn btn-outline">GitHub →</a>
           </div>
 
           <div class="card project-row">
             <div class="project-info">
-              <span class="card-badge">Công nghệ Phần mềm</span>
-              <h3>Hệ thống Quản lý Dự án (Project_CNPM)</h3>
-              <p>Tìm hiểu quy trình làm phần mềm thực tế: từ khâu lấy yêu cầu, vẽ sơ đồ Use Case, ERD đến phối hợp nhóm theo mô hình Agile.</p>
+              <span class="card-badge">Software Engineering</span>
+              <h3>Project Management System</h3>
+              <p>Modeled business workflows, Use Cases, ERD, and Agile task tracking for software teams.</p>
             </div>
             <a href="https://github.com/turniphead-code02/Project_CNPM" target="_blank" class="btn btn-outline">GitHub →</a>
           </div>
 
           <div class="card project-row">
             <div class="project-info">
-              <span class="card-badge">Dự án nhóm</span>
-              <h3>Hệ thống Quản lý Phát thải (GreenShift)</h3>
-              <p>Xây dựng ứng dụng theo dõi và tổng hợp báo cáo dữ liệu phát thải cho doanh nghiệp theo hướng trực quan, dễ tra cứu.</p>
+              <span class="card-badge">Mini ERP</span>
+              <h3>GreenShift Emission Tracker</h3>
+              <p>Enterprise emission tracking and reporting dashboard with structured data analytics.</p>
             </div>
             <a href="https://github.com/turniphead-code02/GreenShift" target="_blank" class="btn btn-outline">GitHub →</a>
           </div>
         </div>
       </section>
 
-      <!-- MỤC 04: LIÊN HỆ -->
-      <section id="lien-he" class="content-section">
+      <!-- 04. CONNECT & SOCIAL MEDIA -->
+      <section id="contact" class="content-section fade-up delay-4">
         <div class="section-header">
-          <span class="section-tag">04 / KẾT NỐI VỚI MÌNH</span>
-          <h2>Để lại lời nhắn cho Thành</h2>
+          <span class="section-tag">04 / CONNECT</span>
+          <h2>Let's Connect</h2>
         </div>
 
-        <div class="card">
-          <form id="contactForm" class="contact-form">
-            <div class="grid-2 form-row">
-              <div class="form-group">
-                <label for="fullName">Họ và tên của bạn</label>
-                <input type="text" id="fullName" placeholder="Nhập họ và tên..." />
-              </div>
-
-              <div class="form-group">
-                <label for="email">Địa chỉ Email</label>
-                <input type="email" id="email" placeholder="Nhập địa chỉ email..." />
-              </div>
+        <!-- Lưới 4 thẻ Mạng xã hội dẫn trực tiếp tới trang cá nhân -->
+        <div class="grid-2 social-grid">
+          <a href="https://www.facebook.com/tran.huu.thanh.426383" target="_blank" class="card social-card">
+            <div class="social-icon fb-icon">
+              <i class="fa-brands fa-facebook-f"></i>
             </div>
-
-            <div class="form-group">
-              <label for="message">Nội dung chia sẻ</label>
-              <textarea id="message" rows="4" placeholder="Bạn muốn nhắn điều gì với mình..."></textarea>
+            <div class="social-info">
+              <h3>Facebook</h3>
+              <span>Tran Huu Thanh</span>
             </div>
+            <span class="social-arrow">↗</span>
+          </a>
 
-            <button type="submit" class="btn btn-primary">Gửi lời nhắn</button>
-            <p id="formNotice" class="form-notice"></p>
-          </form>
+          <a href="https://www.tiktok.com/@thtanhn" target="_blank" class="card social-card">
+            <div class="social-icon tiktok-icon">
+              <i class="fa-brands fa-tiktok"></i>
+            </div>
+            <div class="social-info">
+              <h3>TikTok</h3>
+              <span>@thtanhn</span>
+            </div>
+            <span class="social-arrow">↗</span>
+          </a>
+
+          <a href="https://github.com/turniphead-code02" target="_blank" class="card social-card">
+            <div class="social-icon github-icon">
+              <i class="fa-brands fa-github"></i>
+            </div>
+            <div class="social-info">
+              <h3>GitHub</h3>
+              <span>@turniphead-code02</span>
+            </div>
+            <span class="social-arrow">↗</span>
+          </a>
+
+          <a href="mailto:tomshel216@gmail.com" class="card social-card">
+            <div class="social-icon email-icon">
+              <i class="fa-solid fa-envelope"></i>
+            </div>
+            <div class="social-info">
+              <h3>Email</h3>
+              <span>tomshel216@gmail.com</span>
+            </div>
+            <span class="social-arrow">↗</span>
+          </a>
         </div>
       </section>
 
     </main>
   </div>
 
-  <!-- Liên kết file JavaScript -->
+  <!-- Relative path ./script.js -->
   <script src="./script.js"></script>
 </body>
 </html>
