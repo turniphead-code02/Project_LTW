@@ -272,17 +272,6 @@ body.light-mode .masthead-bar {
   transform: translateX(-3px);
 }
 
-.masthead-divider {
-  color: var(--text-muted);
-}
-
-.edition-tag {
-  font-family: var(--font-mono);
-  font-size: 0.74rem;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-}
-
 .masthead-center {
   display: none;
   font-family: var(--font-mono);
@@ -301,28 +290,6 @@ body.light-mode .masthead-bar {
   display: flex;
   align-items: center;
   gap: 20px;
-}
-
-.status-indicator {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.78rem;
-  color: var(--text-secondary);
-}
-
-.status-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background-color: #22c55e;
-  box-shadow: 0 0 8px rgba(34, 197, 94, 0.7);
-  animation: pulseDot 2.4s infinite ease-in-out;
-}
-
-@keyframes pulseDot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.45; transform: scale(0.85); }
 }
 
 .editorial-theme-btn {
@@ -995,11 +962,6 @@ body.light-mode .masthead-bar {
   gap: 20px;
   font-size: 0.82rem;
   color: var(--text-muted);
-}
-
-.colophon-sub {
-  font-size: 0.76rem;
-  margin-top: 4px;
 }
 
 .colophon-back-link {
