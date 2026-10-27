@@ -53,20 +53,21 @@
     .subtitle { color: var(--sub); }
     .members-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 24px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
     }
     .member-card {
       background-color: var(--card);
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 24px;
+      padding: 20px;
       text-decoration: none;
       color: inherit;
       transition: transform 0.25s, border-color 0.25s;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      gap: 16px;
     }
     .member-card:hover {
       transform: translateY(-4px);
@@ -76,46 +77,53 @@
       display: flex;
       align-items: center;
       gap: 14px;
-      margin-bottom: 16px;
     }
     .member-avatar {
-      width: 60px;
-      height: 60px;
+      width: 58px;
+      height: 58px;
       border-radius: 12px;
       object-fit: cover;
       border: 1px solid var(--gold);
       flex-shrink: 0;
     }
+    .member-info {
+      min-width: 0;
+    }
     .member-name {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 19px;
+      font-size: 17px;
+      font-weight: 700;
       margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .member-id {
       font-size: 13px;
       color: var(--gold);
       font-weight: 600;
-    }
-    .member-desc {
-      color: var(--sub);
-      font-size: 14px;
-      margin-bottom: 20px;
+      display: block;
     }
     .member-btn {
       display: inline-block;
       text-align: center;
-      padding: 10px 16px;
+      padding: 9px 14px;
       border-radius: 10px;
       background-color: var(--gold);
       color: #0f172a;
       font-weight: 700;
-      font-size: 14px;
+      font-size: 13px;
       transition: background-color 0.2s;
     }
     .member-card:hover .member-btn {
       background-color: var(--gold-hover);
     }
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
+      .members-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 600px) {
       .members-grid {
         grid-template-columns: 1fr;
       }
@@ -136,102 +144,72 @@
     <section class="members-grid">
       <!-- Thành viên 1: Trần Hữu Thành -->
       <a href="./portfolios/044206000003_THT/index.html" class="member-card">
-        <div>
-          <div class="member-top">
-            <img src="./portfolios/044206000003_THT/images/tht2.jpg" alt="Trần Hữu Thành" class="member-avatar" />
-            <div>
-              <h2 class="member-name">Trần Hữu Thành</h2>
-              <span class="member-id">MSSV: 044206000003</span>
-            </div>
+        <div class="member-top">
+          <img src="./portfolios/044206000003_THT/images/tht2.jpg" alt="Trần Hữu Thành" class="member-avatar" />
+          <div class="member-info">
+            <h2 class="member-name">Trần Hữu Thành</h2>
+            <span class="member-id">MSSV: 044206000003</span>
           </div>
-          <p class="member-desc">
-            Sinh viên ngành CNTT — Phụ trách thiết kế cơ sở dữ liệu, đặc tả kỹ thuật và phát triển giao diện dự án Cổng Thông Tin Việc Làm.
-          </p>
         </div>
         <span class="member-btn">Xem Portfolio Cá Nhân →</span>
       </a>
 
       <!-- Thành viên 2: Nguyễn Lê Gia Hân -->
       <a href="./portfolios/083306010188_NguyenLeGiaHan/PORTFOLIO/index.html" class="member-card">
-        <div>
-          <div class="member-top">
-            <img src="./portfolios/083306010188_NguyenLeGiaHan/PORTFOLIO/assets/avatar.jpg" alt="Nguyễn Lê Gia Hân" class="member-avatar" />
-            <div>
-              <h2 class="member-name">Nguyễn Lê Gia Hân</h2>
-              <span class="member-id">MSSV: 083306010188</span>
-            </div>
+        <div class="member-top">
+          <img src="./portfolios/083306010188_NguyenLeGiaHan/PORTFOLIO/assets/avatar.jpg" alt="Nguyễn Lê Gia Hân" class="member-avatar" />
+          <div class="member-info">
+            <h2 class="member-name">Nguyễn Lê Gia Hân</h2>
+            <span class="member-id">MSSV: 083306010188</span>
           </div>
-          <p class="member-desc">
-            Sinh viên năm 3 ngành CNTT — Trường Đại học Giao thông vận tải TP.HCM. Đam mê thiết kế giao diện web, cơ sở dữ liệu và làm việc nhóm.
-          </p>
         </div>
         <span class="member-btn">Xem Portfolio Cá Nhân →</span>
       </a>
 
       <!-- Thành viên 3: Hồ Trúc Gia Hân -->
       <a href="./portfolios/056306004131_Ho-Truc-Gia-Han/index.html" class="member-card">
-        <div>
-          <div class="member-top">
-            <img src="./portfolios/056306004131_Ho-Truc-Gia-Han/assets/avatar.JPG" alt="Hồ Trúc Gia Hân" class="member-avatar" />
-            <div>
-              <h2 class="member-name">Hồ Trúc Gia Hân</h2>
-              <span class="member-id">MSSV: 056306004131</span>
-            </div>
+        <div class="member-top">
+          <img src="./portfolios/056306004131_Ho-Truc-Gia-Han/assets/avatar.JPG" alt="Hồ Trúc Gia Hân" class="member-avatar" />
+          <div class="member-info">
+            <h2 class="member-name">Hồ Trúc Gia Hân</h2>
+            <span class="member-id">MSSV: 056306004131</span>
           </div>
-          <p class="member-desc">
-            Sinh viên năm 3 ngành CNTT — Trường Đại học Giao thông vận tải TP.HCM. Yêu thích sáng tạo giao diện, khám phá công nghệ và rèn luyện kỹ năng.
-          </p>
         </div>
         <span class="member-btn">Xem Portfolio Cá Nhân →</span>
       </a>
 
       <!-- Thành viên 4: Nguyễn Phú Quang -->
       <a href="./portfolios/NguyenPhuQuang/index.html" class="member-card">
-        <div>
-          <div class="member-top">
-            <img src="./portfolios/NguyenPhuQuang/images/a_ban_than.png" alt="Nguyễn Phú Quang" class="member-avatar" />
-            <div>
-              <h2 class="member-name">Nguyễn Phú Quang</h2>
-              <span class="member-id">Software Developer • UTH</span>
-            </div>
+        <div class="member-top">
+          <img src="./portfolios/NguyenPhuQuang/images/a_ban_than.png" alt="Nguyễn Phú Quang" class="member-avatar" />
+          <div class="member-info">
+            <h2 class="member-name">Nguyễn Phú Quang</h2>
+            <span class="member-id">Software Developer • UTH</span>
           </div>
-          <p class="member-desc">
-            Sinh viên ngành CNTT — Trường Đại học Giao thông vận tải TP.HCM. Định hướng phát triển Fullstack &amp; Backend với C++, Java, JS, React &amp; PostgreSQL.
-          </p>
         </div>
         <span class="member-btn">Xem Portfolio Cá Nhân →</span>
       </a>
 
       <!-- Thành viên 5: Đinh Duy Diện -->
       <a href="./portfolios/051206000952_DinhDuyDien/index.html" class="member-card">
-        <div>
-          <div class="member-top">
-            <img src="./portfolios/051206000952_DinhDuyDien/assets/avatar.webp" alt="Đinh Duy Diện" class="member-avatar" />
-            <div>
-              <h2 class="member-name">Đinh Duy Diện</h2>
-              <span class="member-id">MSSV: 051206000952</span>
-            </div>
+        <div class="member-top">
+          <img src="./portfolios/051206000952_DinhDuyDien/assets/avatar.webp" alt="Đinh Duy Diện" class="member-avatar" />
+          <div class="member-info">
+            <h2 class="member-name">Đinh Duy Diện</h2>
+            <span class="member-id">MSSV: 051206000952</span>
           </div>
-          <p class="member-desc">
-            Sinh viên ngành CNTT — Trường Đại học Giao thông vận tải TP.HCM. Định hướng Web Development, đam mê lập trình và phát triển sản phẩm hữu ích.
-          </p>
         </div>
         <span class="member-btn">Xem Portfolio Cá Nhân →</span>
       </a>
 
       <!-- Thành viên 6: Lê Hoàng Thiên Hương -->
       <a href="./portfolios/042303000056_LeHoangThienHuong/index.html" class="member-card">
-        <div>
-          <div class="member-top">
-            <img src="./portfolios/042303000056_LeHoangThienHuong/assets/avatar.jpg" alt="Lê Hoàng Thiên Hương" class="member-avatar" />
-            <div>
-              <h2 class="member-name">Lê Hoàng Thiên Hương</h2>
-              <span class="member-id">MSSV: 042303000056</span>
-            </div>
+        <div class="member-top">
+          <img src="./portfolios/042303000056_LeHoangThienHuong/assets/avatar.jpg" alt="Lê Hoàng Thiên Hương" class="member-avatar" />
+          <div class="member-info">
+            <h2 class="member-name">Lê Hoàng Thiên Hương</h2>
+            <span class="member-id">MSSV: 042303000056</span>
           </div>
-          <p class="member-desc">
-            Sinh viên ngành CNTT — Trường Đại học Giao thông vận tải TP.HCM. Định hướng phát triển Web &amp; UI/UX Design, nỗ lực học hỏi và sáng tạo không ngừng.
-          </p>
         </div>
         <span class="member-btn">Xem Portfolio Cá Nhân →</span>
       </a>
