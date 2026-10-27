@@ -1,62 +1,131 @@
 /* ==========================================================================
-   PERSONAL PORTFOLIO JAVASCRIPT — TRAN HUU THANH (ID: 044206000003)
-   Gồm 3 chức năng cơ bản, dễ giải thích khi vấn đáp:
-   1. Hiệu ứng gõ chữ tự động (Typing Effect bằng setTimeout)
-   2. Đổi giao diện Sáng / Tối (classList.toggle)
-   3. Lọc thẻ Kỹ năng (querySelectorAll & forEach)
+   TRAN HUU THANH — EDITORIAL PORTFOLIO JAVASCRIPT
+   Aesthetic: Hallmark Editorial Specimen
+   Functionality:
+   1. Dynamic Typographic Ticker / Typewriter
+   2. Archival Light / Dark Mode Toggle with Persistence
+   3. Architectural Taxonomy Filter
+   4. Scroll-Spy Active Index Observer
    ========================================================================== */
 
-// --- CHỨC NĂNG 1: HIỆU ỨNG GÕ CHỮ TỰ ĐỘNG (TYPING ANIMATION) ---
-const typingElement = document.getElementById('typingText');
-const roleText = 'IT Student @ UTH • Fullstack & AI';
-let charIndex = 0;
+document.addEventListener('DOMContentLoaded', () => {
 
-function typeWriter() {
-  if (charIndex < roleText.length) {
-    typingElement.textContent += roleText.charAt(charIndex);
-    charIndex++;
-    setTimeout(typeWriter, 65); // Gõ từng chữ cái mỗi 65ms
+  // --- 1. DYNAMIC TYPOGRAPHIC TYPEWRITER ---
+  const typingElement = document.getElementById('typingText');
+  const disciplines = [
+    'Relational Schema & Database Architecture',
+    'Fullstack Web Interfaces & Semantic UI',
+    'Information Technology Scholar @ UTH',
+    'Applied AI & Systems Engineering'
+  ];
+
+  let phraseIndex = 0;
+  let charIndex = 0;
+  let isDeleting = false;
+  const typeSpeed = 50;
+  const deleteSpeed = 28;
+  const delayBetweenPhrases = 2200;
+
+  function typeTick() {
+    if (!typingElement) return;
+
+    const currentPhrase = disciplines[phraseIndex];
+
+    if (isDeleting) {
+      typingElement.textContent = currentPhrase.substring(0, charIndex - 1);
+      charIndex--;
+    } else {
+      typingElement.textContent = currentPhrase.substring(0, charIndex + 1);
+      charIndex++;
+    }
+
+    let nextSpeed = isDeleting ? deleteSpeed : typeSpeed;
+
+    if (!isDeleting && charIndex === currentPhrase.length) {
+      nextSpeed = delayBetweenPhrases;
+      isDeleting = true;
+    } else if (isDeleting && charIndex === 0) {
+      isDeleting = false;
+      phraseIndex = (phraseIndex + 1) % disciplines.length;
+      nextSpeed = 350;
+    }
+
+    setTimeout(typeTick, nextSpeed);
   }
-}
-typeWriter();
 
-// --- CHỨC NĂNG 2: ĐỔI GIAO DIỆN SÁNG / TỐI ---
-const themeBtn = document.getElementById('themeBtn');
+  typeTick();
 
-themeBtn.addEventListener('click', function () {
-  document.body.classList.toggle('light-mode');
 
-  if (document.body.classList.contains('light-mode')) {
-    themeBtn.textContent = '🌙 Theme';
-  } else {
-    themeBtn.textContent = '☀️ Theme';
+  // --- 2. ARCHIVAL THEME SWITCHER (DARK / LIGHT WITH PERSISTENCE) ---
+  const themeBtn = document.getElementById('themeBtn');
+  const storedTheme = localStorage.getItem('tht_editorial_theme');
+
+  if (storedTheme === 'light') {
+    document.body.classList.add('light-mode');
   }
-});
 
-// --- CHỨC NĂNG 3: LỌC CÁC THẺ KỸ NĂNG THEO NHÓM ---
-const filterButtons = document.querySelectorAll('.filter-btn');
-const skillItems = document.querySelectorAll('.skill-item');
-
-filterButtons.forEach(function (button) {
-  button.addEventListener('click', function () {
-    // Đổi nút đang active
-    filterButtons.forEach(function (btn) {
-      btn.classList.remove('active');
+  if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
+      const isLight = document.body.classList.contains('light-mode');
+      localStorage.setItem('tht_editorial_theme', isLight ? 'light' : 'dark');
     });
-    button.classList.add('active');
+  }
 
-    const selectedType = button.getAttribute('data-type');
 
-    // Ẩn/hiện thẻ kỹ năng kèm hiệu ứng trượt mượt
-    skillItems.forEach(function (item) {
-      const itemType = item.getAttribute('data-type');
+  // --- 3. ARCHITECTURAL TAXONOMY DOMAIN FILTER ---
+  const ribbonButtons = document.querySelectorAll('.ribbon-btn');
+  const taxonomyCards = document.querySelectorAll('.taxonomy-card');
 
-      if (selectedType === 'all' || itemType === selectedType) {
-        item.style.display = 'block';
-        item.style.animation = 'fadeUp 0.4s ease forwards';
-      } else {
-        item.style.display = 'none';
-      }
+  ribbonButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      ribbonButtons.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const targetDomain = btn.getAttribute('data-type');
+
+      taxonomyCards.forEach((card) => {
+        const cardDomain = card.getAttribute('data-type');
+        if (targetDomain === 'all' || cardDomain === targetDomain) {
+          card.style.display = 'flex';
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        } else {
+          card.style.display = 'none';
+        }
+      });
     });
   });
+
+
+  // --- 4. SCROLL-SPY ACTIVE INDEX OBSERVER ---
+  const sections = document.querySelectorAll('.editorial-section');
+  const indexLinks = document.querySelectorAll('.index-link');
+
+  if ('IntersectionObserver' in window && sections.length > 0) {
+    const observerOptions = {
+      root: null,
+      rootMargin: '-20% 0px -70% 0px',
+      threshold: 0
+    };
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const currentId = entry.target.getAttribute('id');
+          indexLinks.forEach((link) => {
+            const linkHref = link.getAttribute('href');
+            if (linkHref === `#${currentId}`) {
+              link.classList.add('active');
+            } else {
+              link.classList.remove('active');
+            }
+          });
+        }
+      });
+    }, observerOptions);
+
+    sections.forEach((sec) => sectionObserver.observe(sec));
+  }
+
 });

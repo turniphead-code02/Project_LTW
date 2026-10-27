@@ -3,257 +3,447 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tran Huu Thanh — Personal Portfolio | ID: 044206000003</title>
+  <title>Tran Huu Thanh — Portfolio | Editorial Edition</title>
 
-  <!-- Google Fonts: Plus Jakarta Sans (Headings) & Inter (Body) -->
+  <!-- Editorial Typography: Newsreader (Luxury Serif), Plus Jakarta Sans (Crisp Sans), Space Mono (Editorial Monospace) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
 
-  <!-- Font Awesome Icons cho mạng xã hội (Facebook, TikTok, GitHub, Email) -->
+  <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 
-  <!-- Relative path ./style.css -->
+  <!-- Stylesheet -->
   <link rel="stylesheet" href="./style.css" />
 </head>
-<body>
+<body class="editorial-body">
 
-  <!-- ================= AMBIENT ANIMATED BACKGROUND (SAO BĂNG & ĐOM ĐÓM VÀNG) ================= -->
-  <div class="bg-canvas">
-    <!-- Quầng sáng nền -->
-    <div class="bg-orb orb-gold"></div>
-    <div class="bg-orb orb-blue"></div>
+  <!-- ================= AMBIENT CELESTIAL BACKGROUND ================= -->
+  <div class="celestial-canvas" aria-hidden="true">
+    <div class="ambient-glow glow-top"></div>
+    <div class="ambient-glow glow-bottom"></div>
 
-    <!-- Các vệt Sao băng xẹt ngang bầu trời đêm -->
-    <span class="shooting-star star-1"></span>
-    <span class="shooting-star star-2"></span>
-    <span class="shooting-star star-3"></span>
-    <span class="shooting-star star-4"></span>
+    <!-- Shooting star traces -->
+    <span class="star-trace trace-1"></span>
+    <span class="star-trace trace-2"></span>
+    <span class="star-trace trace-3"></span>
 
-    <!-- Các đốm Đom đóm vàng bay lơ lửng -->
-    <span class="firefly f-1"></span>
-    <span class="firefly f-2"></span>
-    <span class="firefly f-3"></span>
-    <span class="firefly f-4"></span>
-    <span class="firefly f-5"></span>
-    <span class="firefly f-6"></span>
-    <span class="firefly f-7"></span>
-    <span class="firefly f-8"></span>
+    <!-- Golden floating embers -->
+    <span class="ember e-1"></span>
+    <span class="ember e-2"></span>
+    <span class="ember e-3"></span>
+    <span class="ember e-4"></span>
+    <span class="ember e-5"></span>
+    <span class="ember e-6"></span>
   </div>
 
-  <!-- ================= SPLIT-SCREEN LAYOUT ================= -->
-  <div class="container page-layout">
-
-    <!-- 1. STICKY LEFT SIDEBAR -->
-    <aside class="sidebar fade-in">
-      <div class="sidebar-top">
-        <a href="../../index.html" class="back-btn">← Team Hub</a>
-        <button id="themeBtn" class="theme-btn">☀️ Theme</button>
+  <!-- ================= TOP MASTHEAD UTILITY BAR ================= -->
+  <header class="masthead-bar">
+    <div class="masthead-container">
+      <div class="masthead-left">
+        <a href="../../index.html" class="hub-back-slug">
+          <span class="slug-arrow">←</span>
+          <span class="slug-text">Team Directory</span>
+        </a>
+        <span class="masthead-divider">/</span>
+        <span class="edition-tag">Vol. 2026 · Issue 01</span>
       </div>
 
-      <div class="profile-box">
-        <div class="avatar-ring">
-          <img src="./images/tht2.jpg" alt="Tran Huu Thanh" class="avatar-img" />
+      <div class="masthead-center">
+        <span class="masthead-serial">PROJECT_LTW · JOB PORTAL SPECIFICATION</span>
+      </div>
+
+      <div class="masthead-right">
+        <span class="status-indicator">
+          <span class="status-dot"></span>
+          <span>Open for Summer 2026 Collaborations</span>
+        </span>
+        <button id="themeBtn" class="editorial-theme-btn" type="button" aria-label="Toggle Theme">
+          <span class="theme-icon">◐</span>
+          <span class="theme-label">Theme</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= MAIN EDITORIAL SPREAD ================= -->
+  <div class="editorial-spread">
+
+    <!-- LEFT DOSSIER / STICKY PORTRAIT MASTHEAD -->
+    <aside class="dossier-column">
+      <div class="dossier-sticky">
+
+        <div class="portrait-card">
+          <div class="portrait-frame">
+            <img src="./images/tht2.jpg" alt="Tran Huu Thanh portrait" class="portrait-img" />
+            <div class="portrait-plate">
+              <span class="plate-code">THT-044206000003</span>
+              <span class="plate-geo">UTH · HCM CITY</span>
+            </div>
+          </div>
         </div>
-        <span class="tag-badge">ID: 044206000003</span>
-        <h1 class="profile-name">Tran Huu Thanh</h1>
-        <!-- Hiệu ứng chữ gõ tự động bằng JS (Typing Effect) -->
-        <p class="profile-role"><span id="typingText"></span><span class="cursor">|</span></p>
-      </div>
 
-      <!-- Vertical Navigation -->
-      <nav class="side-nav">
-        <a href="#about" class="nav-item">01. About Me</a>
-        <a href="#skills" class="nav-item">02. Core Strengths</a>
-        <a href="#projects" class="nav-item">03. Selected Work</a>
-        <a href="#contact" class="nav-item">04. Get in Touch</a>
-      </nav>
-
-      <div class="sidebar-footer">
-        <p><strong>Email:</strong> tomshel216@gmail.com</p>
-        <p><strong>GitHub:</strong> <a href="https://github.com/turniphead-code02" target="_blank">@turniphead-code02</a></p>
-      </div>
-    </aside>
-
-    <!-- 2. SCROLLING RIGHT CONTENT -->
-    <main class="main-content">
-
-      <!-- 01. ABOUT ME -->
-      <section id="about" class="content-section fade-up delay-1">
-        <div class="intro-banner card">
-          <span class="section-tag">01 / ABOUT ME</span>
-          <h2>
-            Turning ideas into <span class="highlight">clean, reliable</span> digital products.
-          </h2>
-          <p class="intro-text">
-            Hi, I'm <strong>Tran Huu Thanh (THT)</strong> — an IT student at UTH. I enjoy building structured systems, clean web interfaces, and solving practical problems step by step.
+        <div class="identity-block">
+          <span class="dossier-kicker">Candidate Profile &amp; Dossier</span>
+          <h1 class="dossier-name">Tran Huu Thanh</h1>
+          <p class="dossier-typing">
+            <span class="typing-prefix">Discipline:</span>
+            <span id="typingText" class="typing-output"></span><span class="cursor-pipe">|</span>
           </p>
         </div>
 
-        <div class="grid-2">
-          <div class="card">
-            <span class="card-badge">Vision</span>
-            <h3>Fullstack, AI &amp; Data</h3>
-            <p>Mastering web fundamentals today while steadily expanding into Fullstack Engineering, AI, and Data Science.</p>
-          </div>
+        <!-- Editorial Index Navigation -->
+        <nav class="editorial-index" aria-label="Sections">
+          <a href="#prologue" class="index-link active">
+            <span class="index-num">I.</span>
+            <span class="index-title">Prologue &amp; Thesis</span>
+          </a>
+          <a href="#work" class="index-link">
+            <span class="index-num">II.</span>
+            <span class="index-title">Selected Projects</span>
+          </a>
+          <a href="#competencies" class="index-link">
+            <span class="index-num">III.</span>
+            <span class="index-title">Core Competencies</span>
+          </a>
+          <a href="#connections" class="index-link">
+            <span class="index-num">IV.</span>
+            <span class="index-title">Direct Inquiries</span>
+          </a>
+        </nav>
 
-          <div class="card">
-            <span class="card-badge">Lifestyle</span>
-            <h3>Music, Sports &amp; Teamwork</h3>
-            <p>Staying balanced through sports, good music, and collaborating closely with teammates to build meaningful projects.</p>
+        <div class="dossier-meta-footer">
+          <div class="meta-row">
+            <span class="meta-k">Location</span>
+            <span class="meta-v">Ho Chi Minh City, VN</span>
           </div>
+          <div class="meta-row">
+            <span class="meta-k">Institution</span>
+            <span class="meta-v">Univ. of Transport &amp; Comms (UTH)</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-k">Primary Focus</span>
+            <span class="meta-v">Relational Schema &amp; Web UI</span>
+          </div>
+        </div>
+
+      </div>
+    </aside>
+
+    <!-- RIGHT EDITORIAL CONTENT NARRATIVE -->
+    <main class="narrative-column">
+
+      <!-- SECTION I: PROLOGUE & THESIS -->
+      <section id="prologue" class="editorial-section">
+        <header class="section-kicker-header">
+          <span class="kicker-index">Section I</span>
+          <span class="kicker-line"></span>
+          <span class="kicker-name">Prologue &amp; Engineering Thesis</span>
+        </header>
+
+        <div class="hero-manifesto">
+          <h2 class="editorial-headline">
+            Engineering resilient digital systems through <em>architectural clarity</em>, structured logic, and measured restraint.
+          </h2>
+          <div class="lead-story-grid">
+            <p class="lead-paragraph">
+              I am <strong>Tran Huu Thanh</strong>, an Information Technology scholar at the University of Transport and Communications (UTH). My core work centres on transforming abstract business requirements into strictly normalised database schemas (3NF), robust software architectures, and purposeful web interfaces.
+            </p>
+            <p class="lead-subparagraph">
+              Rather than accumulating surface-level complexity, I prioritise foundational rigor: predictable data flow, clean relational integrity, and minimalist code that remains maintainable as scale expands.
+            </p>
+          </div>
+        </div>
+
+        <!-- Two Pillars of Work -->
+        <div class="pillars-grid">
+          <article class="pillar-card">
+            <div class="pillar-header">
+              <span class="pillar-symbol">✦</span>
+              <span class="pillar-tag">Strategic Direction</span>
+            </div>
+            <h3 class="pillar-title">Fullstack Architecture &amp; Data Intelligence</h3>
+            <p class="pillar-text">
+              Mastering foundational relational modeling (PostgreSQL/SQL Server) and modern web primitives today, while systematically expanding toward scalable fullstack backends, machine intelligence, and predictive data pipelines.
+            </p>
+          </article>
+
+          <article class="pillar-card">
+            <div class="pillar-header">
+              <span class="pillar-symbol">✦</span>
+              <span class="pillar-tag">Operating Philosophy</span>
+            </div>
+            <h3 class="pillar-title">Discipline, Synergy &amp; Work Ethic</h3>
+            <p class="pillar-text">
+              Maintaining intellectual sharpness through athletic endurance and music, combined with an open, collaborative ethos that turns team project sprints into dependable, well-documented outcomes.
+            </p>
+          </article>
         </div>
       </section>
 
-      <!-- 02. CORE STRENGTHS (Interactive Filter) -->
-      <section id="skills" class="content-section fade-up delay-2">
-        <div class="section-header">
-          <span class="section-tag">02 / CAPABILITIES</span>
-          <h2>Core Strengths</h2>
+      <!-- SECTION II: SELECTED PROJECTS (EXHIBITION CATALOGUE) -->
+      <section id="work" class="editorial-section">
+        <header class="section-kicker-header">
+          <span class="kicker-index">Section II</span>
+          <span class="kicker-line"></span>
+          <span class="kicker-name">Selected Projects &amp; Contributions</span>
+        </header>
+
+        <div class="catalogue-intro">
+          <h2 class="section-display-title">Exhibition Catalogue</h2>
+          <p class="section-display-desc">Key engineering deliverables from university research and collaborative software lab modules.</p>
         </div>
 
-        <div class="filter-group">
-          <button class="filter-btn active" data-type="all">All</button>
-          <button class="filter-btn" data-type="tech">Tech Stack</button>
-          <button class="filter-btn" data-type="mindset">Mindset</button>
-          <button class="filter-btn" data-type="soft">Teamwork</button>
-        </div>
+        <div class="catalogue-list">
 
-        <div class="grid-2">
-          <div class="card skill-item" data-type="tech">
-            <span class="card-badge">Web Development</span>
-            <h3>Frontend &amp; UI</h3>
-            <p>Crafting clean, responsive layouts using HTML5, CSS3 (Flexbox/Grid), and interactive JavaScript.</p>
-          </div>
+          <!-- Entry 01: Job Portal -->
+          <article class="catalogue-entry">
+            <div class="catalogue-aside">
+              <span class="entry-index">№ 01</span>
+              <span class="entry-year">2026</span>
+            </div>
+            <div class="catalogue-main">
+              <div class="entry-heading-group">
+                <span class="entry-category">Web Programming &amp; Relational Architecture</span>
+                <h3 class="entry-title">Job Portal Platform</h3>
+              </div>
+              <p class="entry-summary">
+                A dual-sided recruitment infrastructure connecting job seekers with verified employers. Responsible for technical specification authoring, 3NF database schema architecture, candidate workflow diagrams, and team web portal integration.
+              </p>
+              <div class="entry-specs">
+                <span class="spec-pill">PostgreSQL / SQL</span>
+                <span class="spec-pill">HTML5 &amp; Modern CSS</span>
+                <span class="spec-pill">Vanilla JS</span>
+                <span class="spec-pill">ERD &amp; 3NF</span>
+              </div>
+            </div>
+            <div class="catalogue-action">
+              <a href="https://github.com/turniphead-code02/Project_LTW" target="_blank" rel="noopener noreferrer" class="catalogue-cta">
+                <span>View Source</span>
+                <span class="cta-arrow">↗</span>
+              </a>
+            </div>
+          </article>
 
-          <div class="card skill-item" data-type="tech">
-            <span class="card-badge">Core &amp; Data</span>
-            <h3>Logic &amp; SQL Databases</h3>
-            <p>Solid OOP foundation in C++ &amp; Java, paired with structured 3NF database design in PostgreSQL &amp; SQL Server.</p>
-          </div>
+          <!-- Entry 02: Software Engineering Management -->
+          <article class="catalogue-entry">
+            <div class="catalogue-aside">
+              <span class="entry-index">№ 02</span>
+              <span class="entry-year">2025</span>
+            </div>
+            <div class="catalogue-main">
+              <div class="entry-heading-group">
+                <span class="entry-category">Software Engineering &amp; System Design</span>
+                <h3 class="entry-title">Project Management System</h3>
+              </div>
+              <p class="entry-summary">
+                Comprehensive system engineering blueprint modeled after enterprise issue-tracking platforms. Crafted complete UML suite, Use Case workflows, relational entity models, and agile sprint decomposition.
+              </p>
+              <div class="entry-specs">
+                <span class="spec-pill">Software Architecture</span>
+                <span class="spec-pill">UML / Use Cases</span>
+                <span class="spec-pill">Relational Modeling</span>
+                <span class="spec-pill">Agile Workflow</span>
+              </div>
+            </div>
+            <div class="catalogue-action">
+              <a href="https://github.com/turniphead-code02/Project_CNPM" target="_blank" rel="noopener noreferrer" class="catalogue-cta">
+                <span>View Source</span>
+                <span class="cta-arrow">↗</span>
+              </a>
+            </div>
+          </article>
 
-          <div class="card skill-item" data-type="mindset">
-            <span class="card-badge">Workflow</span>
-            <h3>System Planning</h3>
-            <p>Structuring architecture, defining clear specifications, and breaking down tasks before writing code.</p>
-          </div>
+          <!-- Entry 03: GreenShift -->
+          <article class="catalogue-entry">
+            <div class="catalogue-aside">
+              <span class="entry-index">№ 03</span>
+              <span class="entry-year">2025</span>
+            </div>
+            <div class="catalogue-main">
+              <div class="entry-heading-group">
+                <span class="entry-category">Sustainability &amp; Analytical Dashboard</span>
+                <h3 class="entry-title">GreenShift Emission Tracker</h3>
+              </div>
+              <p class="entry-summary">
+                Enterprise carbon calculation and emission telemetry console. Provides structured metric tracking, historical carbon reduction benchmarks, and comparative compliance reporting.
+              </p>
+              <div class="entry-specs">
+                <span class="spec-pill">Data Dashboard</span>
+                <span class="spec-pill">Metric Telemetry</span>
+                <span class="spec-pill">UI Analytics</span>
+                <span class="spec-pill">System Analysis</span>
+              </div>
+            </div>
+            <div class="catalogue-action">
+              <a href="https://github.com/turniphead-code02/GreenShift" target="_blank" rel="noopener noreferrer" class="catalogue-cta">
+                <span>View Source</span>
+                <span class="cta-arrow">↗</span>
+              </a>
+            </div>
+          </article>
 
-          <div class="card skill-item" data-type="mindset">
-            <span class="card-badge">Growth</span>
-            <h3>Fast Self-Learner</h3>
-            <p>Quickly adapting to modern tools (Git, Figma, AI workflows) and debugging issues with patience.</p>
-          </div>
-
-          <div class="card skill-item" data-type="soft">
-            <span class="card-badge">Collaboration</span>
-            <h3>Git &amp; Team Synergy</h3>
-            <p>Managing branches, reviewing pull requests, and keeping team deliverables aligned and on schedule.</p>
-          </div>
-
-          <div class="card skill-item" data-type="soft">
-            <span class="card-badge">Discipline</span>
-            <h3>Focus &amp; Consistency</h3>
-            <p>Taking ownership of assigned responsibilities while maintaining a positive, energetic work ethic.</p>
-          </div>
         </div>
       </section>
 
-      <!-- 03. SELECTED WORK -->
-      <section id="projects" class="content-section fade-up delay-3">
-        <div class="section-header">
-          <span class="section-tag">03 / PORTFOLIO</span>
-          <h2>Selected Work</h2>
+      <!-- SECTION III: CORE COMPETENCIES -->
+      <section id="competencies" class="editorial-section">
+        <header class="section-kicker-header">
+          <span class="kicker-index">Section III</span>
+          <span class="kicker-line"></span>
+          <span class="kicker-name">Core Competencies &amp; Technical Discipline</span>
+        </header>
+
+        <div class="catalogue-intro">
+          <h2 class="section-display-title">Technical Index</h2>
+          <p class="section-display-desc">Taxonomy of capabilities organized by architectural domain.</p>
         </div>
 
-        <div class="project-list">
-          <div class="card project-row">
-            <div class="project-info">
-              <span class="card-badge">Web Programming</span>
-              <h3>Job Portal Platform</h3>
-              <p>Recruitment platform connecting candidates and employers. Designed 3NF schema, specs, and web UI.</p>
-            </div>
-            <a href="https://github.com/turniphead-code02/Project_LTW" target="_blank" class="btn btn-outline">GitHub →</a>
-          </div>
+        <!-- Editorial Filter Ribbon -->
+        <div class="taxonomy-ribbon" role="tablist">
+          <button class="ribbon-btn active" data-type="all">All Domains</button>
+          <button class="ribbon-btn" data-type="database">Data &amp; Systems</button>
+          <button class="ribbon-btn" data-type="web">Web Interface</button>
+          <button class="ribbon-btn" data-type="discipline">Discipline &amp; Method</button>
+        </div>
 
-          <div class="card project-row">
-            <div class="project-info">
-              <span class="card-badge">Software Engineering</span>
-              <h3>Project Management System</h3>
-              <p>Modeled business workflows, Use Cases, ERD, and Agile task tracking for software teams.</p>
-            </div>
-            <a href="https://github.com/turniphead-code02/Project_CNPM" target="_blank" class="btn btn-outline">GitHub →</a>
-          </div>
+        <div class="taxonomy-grid">
 
-          <div class="card project-row">
-            <div class="project-info">
-              <span class="card-badge">Mini ERP</span>
-              <h3>GreenShift Emission Tracker</h3>
-              <p>Enterprise emission tracking and reporting dashboard with structured data analytics.</p>
+          <article class="taxonomy-card" data-type="database">
+            <span class="tax-index">01</span>
+            <div class="tax-content">
+              <span class="tax-category">Data Architecture</span>
+              <h4 class="tax-title">Relational Schema &amp; SQL</h4>
+              <p class="tax-desc">PostgreSQL &amp; SQL Server schema design, foreign key integrity, 3NF normalisation, and complex query structuring.</p>
             </div>
-            <a href="https://github.com/turniphead-code02/GreenShift" target="_blank" class="btn btn-outline">GitHub →</a>
-          </div>
+          </article>
+
+          <article class="taxonomy-card" data-type="web">
+            <span class="tax-index">02</span>
+            <div class="tax-content">
+              <span class="tax-category">Interface Engineering</span>
+              <h4 class="tax-title">Semantic Web &amp; Layout Systems</h4>
+              <p class="tax-desc">Responsive layouts with Flexbox and CSS Grid, accessible semantic markup, and fluid typographic hierarchies.</p>
+            </div>
+          </article>
+
+          <article class="taxonomy-card" data-type="database">
+            <span class="tax-index">03</span>
+            <div class="tax-content">
+              <span class="tax-category">Computational Core</span>
+              <h4 class="tax-title">OOP &amp; Algorithmic Logic</h4>
+              <p class="tax-desc">Solid object-oriented foundation in C++ and Java; disciplined abstraction, data structures, and memory comprehension.</p>
+            </div>
+          </article>
+
+          <article class="taxonomy-card" data-type="web">
+            <span class="tax-index">04</span>
+            <div class="tax-content">
+              <span class="tax-category">Interactivity</span>
+              <h4 class="tax-title">Modern Vanilla JavaScript</h4>
+              <p class="tax-desc">DOM event orchestration, reactive state rendering, asynchronous data handling, and lightweight animation loops.</p>
+            </div>
+          </article>
+
+          <article class="taxonomy-card" data-type="discipline">
+            <span class="tax-index">05</span>
+            <div class="tax-content">
+              <span class="tax-category">Engineering Rigor</span>
+              <h4 class="tax-title">Version Control &amp; Git Hygiene</h4>
+              <p class="tax-desc">Clean branch topologies, structured atomic commits, merge conflict resolution, and collaborative pull requests.</p>
+            </div>
+          </article>
+
+          <article class="taxonomy-card" data-type="discipline">
+            <span class="tax-index">06</span>
+            <div class="tax-content">
+              <span class="tax-category">Execution Philosophy</span>
+              <h4 class="tax-title">Analytical Specification</h4>
+              <p class="tax-desc">Authoring clear technical blueprints, breaking down ambiguous requirements, and delivering on schedule.</p>
+            </div>
+          </article>
+
         </div>
       </section>
 
-      <!-- 04. CONNECT & SOCIAL MEDIA -->
-      <section id="contact" class="content-section fade-up delay-4">
-        <div class="section-header">
-          <span class="section-tag">04 / CONNECT</span>
-          <h2>Let's Connect</h2>
+      <!-- SECTION IV: DIRECT INQUIRIES & CONNECTIONS -->
+      <section id="connections" class="editorial-section">
+        <header class="section-kicker-header">
+          <span class="kicker-index">Section IV</span>
+          <span class="kicker-line"></span>
+          <span class="kicker-name">Direct Inquiries &amp; Channels</span>
+        </header>
+
+        <div class="catalogue-intro">
+          <h2 class="section-display-title">Let's Connect</h2>
+          <p class="section-display-desc">Direct communication channels for academic, project, or professional inquiries.</p>
         </div>
 
-        <!-- Lưới 4 thẻ Mạng xã hội dẫn trực tiếp tới trang cá nhân -->
-        <div class="grid-2 social-grid">
-          <a href="https://www.facebook.com/tran.huu.thanh.426383" target="_blank" class="card social-card">
-            <div class="social-icon fb-icon">
-              <i class="fa-brands fa-facebook-f"></i>
+        <div class="directory-list">
+
+          <a href="https://www.facebook.com/tran.huu.thanh.426383" target="_blank" rel="noopener noreferrer" class="directory-row">
+            <div class="row-channel">
+              <i class="fa-brands fa-facebook-f row-icon"></i>
+              <div>
+                <span class="channel-name">Facebook</span>
+                <span class="channel-handle">Tran Huu Thanh</span>
+              </div>
             </div>
-            <div class="social-info">
-              <h3>Facebook</h3>
-              <span>Tran Huu Thanh</span>
-            </div>
-            <span class="social-arrow">↗</span>
+            <span class="row-arrow">↗</span>
           </a>
 
-          <a href="https://www.tiktok.com/@thtanhn" target="_blank" class="card social-card">
-            <div class="social-icon tiktok-icon">
-              <i class="fa-brands fa-tiktok"></i>
+          <a href="https://www.tiktok.com/@thtanhn" target="_blank" rel="noopener noreferrer" class="directory-row">
+            <div class="row-channel">
+              <i class="fa-brands fa-tiktok row-icon"></i>
+              <div>
+                <span class="channel-name">TikTok</span>
+                <span class="channel-handle">@thtanhn</span>
+              </div>
             </div>
-            <div class="social-info">
-              <h3>TikTok</h3>
-              <span>@thtanhn</span>
-            </div>
-            <span class="social-arrow">↗</span>
+            <span class="row-arrow">↗</span>
           </a>
 
-          <a href="https://github.com/turniphead-code02" target="_blank" class="card social-card">
-            <div class="social-icon github-icon">
-              <i class="fa-brands fa-github"></i>
+          <a href="https://github.com/turniphead-code02" target="_blank" rel="noopener noreferrer" class="directory-row">
+            <div class="row-channel">
+              <i class="fa-brands fa-github row-icon"></i>
+              <div>
+                <span class="channel-name">GitHub</span>
+                <span class="channel-handle">@turniphead-code02</span>
+              </div>
             </div>
-            <div class="social-info">
-              <h3>GitHub</h3>
-              <span>@turniphead-code02</span>
-            </div>
-            <span class="social-arrow">↗</span>
+            <span class="row-arrow">↗</span>
           </a>
 
-          <a href="mailto:tomshel216@gmail.com" class="card social-card">
-            <div class="social-icon email-icon">
-              <i class="fa-solid fa-envelope"></i>
+          <a href="mailto:tomshel216@gmail.com" class="directory-row">
+            <div class="row-channel">
+              <i class="fa-solid fa-envelope row-icon"></i>
+              <div>
+                <span class="channel-name">Direct Email</span>
+                <span class="channel-handle">tomshel216@gmail.com</span>
+              </div>
             </div>
-            <div class="social-info">
-              <h3>Email</h3>
-              <span>tomshel216@gmail.com</span>
-            </div>
-            <span class="social-arrow">↗</span>
+            <span class="row-arrow">↗</span>
           </a>
+
         </div>
+
+        <!-- Colophon / Fine-print -->
+        <footer class="editorial-colophon">
+          <div class="colophon-left">
+            <p>© 2026 Tran Huu Thanh. All editorial and code rights reserved.</p>
+            <p class="colophon-sub">Typeset in Newsreader &amp; Plus Jakarta Sans. Built with semantic restraint.</p>
+          </div>
+          <div class="colophon-right">
+            <a href="../../index.html" class="colophon-back-link">← Return to Team Directory</a>
+          </div>
+        </footer>
+
       </section>
 
     </main>
   </div>
 
-  <!-- Relative path ./script.js -->
+  <!-- JavaScript -->
   <script src="./script.js"></script>
 </body>
 </html>
