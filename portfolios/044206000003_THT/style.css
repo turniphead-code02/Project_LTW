@@ -1,21 +1,15 @@
-/* ==========================================================================
-   PORTFOLIO STYLESHEET — TRẦN HỮU THÀNH (MSSV: 044206000003)
-   Phong cách: Editorial / Magazine Specimen (Chuẩn thẩm mỹ cao cấp Hallmark)
-   Typography: Newsreader (Serif) · Plus Jakarta Sans (Sans) · Space Mono (Mono)
-   Tất cả các phần đều được chú thích bằng Tiếng Việt giúp dễ dàng phản biện vấn đáp
-   ========================================================================== */
 
-/* --------------------------------------------------------------------------
+/*
    PHẦN 1: KHAI BÁO BIẾN CSS TOÀN CỤC (:root)
-   Giải thích: Quản lý tập trung mã màu, font chữ, hiệu ứng chuyển động
-   -------------------------------------------------------------------------- */
+  Quản lý tập trung mã màu, font chữ, hiệu ứng chuyển động
+*/
 :root {
   /* Khai báo 3 họ font chữ chính */
   --font-serif: 'Newsreader', Georgia, 'Times New Roman', serif;
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --font-mono: 'Space Mono', 'SF Mono', Consolas, monospace;
 
-  /* Bảng màu mặc định: Chế độ ban đêm (Night Velvet Obsidian) */
+  /* Bảng màu mặc định: Chế độ ban đêm */
   --bg-primary: #0a0c10;         /* Màu nền tối chính (đen tro sâu) */
   --bg-surface: #12161f;         /* Màu nền bề mặt các khối nội dung */
   --bg-surface-elevated: #181d28;/* Màu nền khối nổi bật */
@@ -37,9 +31,7 @@
   --transition-smooth: all 0.32s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* --------------------------------------------------------------------------
-   BẢNG MÀU CHẾ ĐỘ SÁNG (Light Mode - Giấy mỹ thuật Ý ngà ấm)
-   -------------------------------------------------------------------------- */
+/* BẢNG MÀU CHẾ ĐỘ SÁNG */
 body.light-mode {
   --bg-primary: #fbf9f4;         /* Nền giấy mỹ thuật màu ngà */
   --bg-surface: #ffffff;         /* Bề mặt trắng tinh tế */
@@ -59,17 +51,17 @@ body.light-mode {
   --border-accent: rgba(158, 114, 40, 0.38);
 
   --shadow-editorial: 0 16px 40px -10px rgba(25, 20, 10, 0.08);
-}
+
   --border-medium: rgba(20, 23, 28, 0.18);
   --border-accent: rgba(158, 114, 40, 0.38);
 
   --shadow-editorial: 0 16px 40px -10px rgba(25, 20, 10, 0.08);
 }
 
-/* --------------------------------------------------------------------------
-   PHẦN 2: THIẾT LẬP CƠ BẢN & ĐẶT LẠI LỀ (BASE & RESET)
-   Giải thích: box-sizing: border-box giúp kích thước phần tử tính luôn cả padding
-   -------------------------------------------------------------------------- */
+/* 
+   PHẦN 2: THIẾT LẬP CƠ BẢN & ĐẶT LẠI LỀ
+  box-sizing: border-box giúp kích thước phần tử tính luôn cả padding
+   */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -110,10 +102,10 @@ button {
   background: none;
 }
 
-/* --------------------------------------------------------------------------
-   PHẦN 3: NỀN KHÔNG GIAN ĐỘNG (SAO BĂNG & ĐOM ĐÓM VÀNG)
-   Giải thích: Dùng CSS keyframes và fixed canvas tạo chiều sâu chuyển động
-   -------------------------------------------------------------------------- */
+/* 
+  PHẦN 3: NỀN KHÔNG GIAN ĐỘNG (SAO BĂNG, ĐOM ĐÓM VÀNG)
+  Dùng CSS keyframes và fixed canvas tạo chiều sâu chuyển động
+   */
 .celestial-canvas {
   position: fixed;
   inset: 0;
@@ -207,10 +199,10 @@ button {
   100% { transform: translate(6px, -130px) scale(0.7); opacity: 0; }
 }
 
-/* --------------------------------------------------------------------------
-   PHẦN 4: THANH TIỆN ÍCH ĐẦU TRANG (MASTHEAD BAR)
-   Giải thích: Gắn cố định (sticky) trên cùng, chứa nút quay về nhóm và nút đổi theme
-   -------------------------------------------------------------------------- */
+/*
+  PHẦN 4: THANH TIỆN ÍCH ĐẦU TRANG
+  Gắn cố định (sticky) trên cùng, chứa nút quay về nhóm và nút đổi theme
+*/
 .masthead-bar {
   position: sticky;
   top: 0;
@@ -319,10 +311,10 @@ body.light-mode .masthead-bar {
   transform: rotate(180deg);
 }
 
-/* --------------------------------------------------------------------------
-   PHẦN 5: BỐ CỤC CHÍNH DẠNG TẠP CHÍ (EDITORIAL SPREAD)
-   Giải thích: Chia 2 cột tỷ lệ 340px (cột trái) và 1fr (cột phải)
-   -------------------------------------------------------------------------- */
+/* 
+  PHẦN 5: BỐ CỤC CHÍNH DẠNG TẠP CHÍ
+  Chia 2 cột tỷ lệ 340px (cột trái) và 1fr (cột phải)
+  */
 .editorial-spread {
   position: relative;
   z-index: 1;
@@ -334,10 +326,10 @@ body.light-mode .masthead-bar {
   gap: 60px;
 }
 
-/* --------------------------------------------------------------------------
-   PHẦN 6: CỘT HỒ SƠ & CHÂN DUNG CỐ ĐỊNH (STICKY DOSSIER COLUMN)
-   Giải thích: Giữ cố định ảnh và mục lục khi người dùng cuộn nội dung bên phải
-   -------------------------------------------------------------------------- */
+/*
+  PHẦN 6: CỘT HỒ SƠ VÀ CHÂN DUNG CỐ ĐỊNH
+  Giữ cố định ảnh và mục lục khi người dùng cuộn nội dung bên phải
+  */
 .dossier-column {
   position: relative;
 }
@@ -517,10 +509,10 @@ body.light-mode .masthead-bar {
   text-align: right;
 }
 
-/* --------------------------------------------------------------------------
-   PHẦN 7: CỘT DIỄN GIẢI NỘI DUNG CHÍNH (NARRATIVE CONTENT)
-   Giải thích: Gồm 4 phần I (Mở đầu), II (Dự án), III (Kỹ năng), IV (Liên hệ)
-   -------------------------------------------------------------------------- */
+/*
+  PHẦN 7: CỘT DIỄN GIẢI NỘI DUNG CHÍNH
+  Gồm 4 phần I (Mở đầu), II (Dự án), III (Kỹ năng), IV (Liên hệ)
+  */
 .narrative-column {
   display: flex;
   flex-direction: column;
@@ -889,7 +881,7 @@ body.light-mode .masthead-bar {
   line-height: 1.62;
 }
 
-/* Phần IV: Kênh liên hệ trực tiếp & Mạng xã hội */
+/* Phần IV: Kênh liên hệ trực tiếp và Mạng xã hội */
 .directory-list {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -976,10 +968,10 @@ body.light-mode .masthead-bar {
   text-decoration: underline;
 }
 
-/* --------------------------------------------------------------------------
-   PHẦN 8: GIAO DIỆN TƯƠNG THÍCH MÀN HÌNH (RESPONSIVE MEDIA QUERIES)
-   Giải thích: Chuyển thành 1 cột khi xem trên máy tính bảng hoặc điện thoại di động
-   -------------------------------------------------------------------------- */
+/*
+  PHẦN 8: GIAO DIỆN TƯƠNG THÍCH MÀN HÌNH
+  Chuyển thành 1 cột khi xem trên máy tính bảng hoặc điện thoại di động
+  */
 @media (max-width: 1080px) {
   .editorial-spread {
     grid-template-columns: 290px 1fr;

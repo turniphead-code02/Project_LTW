@@ -1,21 +1,17 @@
-/* ==========================================================================
-   PORTFOLIO JAVASCRIPT — TRẦN HỮU THÀNH (MSSV: 044206000003)
-   Toàn bộ tên biến, tên hàm và chú thích đều được viết bằng Tiếng Việt
-   giúp bạn dễ đọc, dễ hiểu và tự tin trả lời vấn đáp / phản biện trước thầy cô.
-
+/*
    Gồm 4 chức năng chính:
-   1. Hiệu ứng gõ chữ tự động (Typewriter Effect)
+   1. Hiệu ứng gõ chữ tự động 
    2. Nút chuyển đổi giao diện Sáng / Tối (Dark / Light Mode)
    3. Bộ lọc chuyên môn / kỹ năng theo từng mảng (Filter)
-   4. Tự động đánh dấu mục lục khi cuộn trang (Scroll-Spy)
-   ========================================================================== */
+   4. Tự động đánh dấu mục lục khi cuộn trang
+ */
 
 document.addEventListener('DOMContentLoaded', function () {
 
-  // =========================================================================
+
   // CHỨC NĂNG 1: HIỆU ỨNG GÕ CHỮ TỰ ĐỘNG (TYPEWRITER EFFECT)
-  // Giải thích: Lấy từng chữ cái trong chuỗi để ghép vào thẻ HTML theo nhịp thời gian
-  // =========================================================================
+  // Lấy từng chữ cái trong chuỗi để ghép vào thẻ HTML theo nhịp thời gian
+
 
   // Phần tử HTML nơi chữ sẽ hiển thị
   const phanTuHienThiChu = document.getElementById('typingText');
@@ -76,10 +72,10 @@ document.addEventListener('DOMContentLoaded', function () {
   xuLyGoChuTuDong();
 
 
-  // =========================================================================
+
   // CHỨC NĂNG 2: CHUYỂN ĐỔI GIAO DIỆN SÁNG / TỐI (DARK / LIGHT MODE)
-  // Giải thích: Bật/tắt class 'light-mode' ở thẻ body và lưu vào bộ nhớ trình duyệt
-  // =========================================================================
+  // Bật/tắt class 'light-mode' ở thẻ body và lưu vào bộ nhớ trình duyệt
+
 
   const nutDoiGiaoDien = document.getElementById('themeBtn');
 
@@ -102,10 +98,10 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
 
-  // =========================================================================
+
   // CHỨC NĂNG 3: BỘ LỌC KỸ NĂNG / CHUYÊN MÔN THEO MẢNG (FILTER)
-  // Giải thích: Ẩn/hiện các thẻ kỹ năng dựa trên thuộc tính data-type khi bấm nút
-  // =========================================================================
+  // Ẩn/hiện các thẻ kỹ năng dựa trên thuộc tính data-type khi bấm nút
+
 
   const danhSachNutLoc = document.querySelectorAll('.ribbon-btn');
   const danhSachTheKyNang = document.querySelectorAll('.taxonomy-card');
@@ -138,11 +134,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-
-  // =========================================================================
-  // CHỨC NĂNG 4: TỰ ĐỘNG SÁNG MỤC LỤC KHI CUỘN TRANG (SCROLL-SPY)
-  // Giải thích: Theo dõi xem người dùng đang cuộn tới phần nào để làm sáng mục lục bên trái
-  // =========================================================================
+  // CHỨC NĂNG 4: TỰ ĐỘNG SÁNG MỤC LỤC KHI CUỘN TRANG
+  // Theo dõi xem người dùng đang cuộn tới phần nào để làm sáng mục lục bên trái
 
   const danhSachPhanNoiDung = document.querySelectorAll('.editorial-section');
   const danhSachLienKetMucLuc = document.querySelectorAll('.index-link');

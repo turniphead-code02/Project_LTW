@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tran Huu Thanh — Portfolio | Editorial Edition</title>
 
-  <!-- =========================================================================
-       PHẦN 1: TÍCH HỢP FONT CHỮ (GOOGLE FONTS)
-       - Newsreader: Font Serif quang học cao cấp dùng cho tiêu đề chính
-       - Plus Jakarta Sans: Font Sans-serif hiện đại, dễ đọc cho nội dung văn bản
-       - Space Mono: Font Monospace hiển thị thông số và nhãn kỹ thuật
-       ========================================================================= -->
+  <!--
+      PHẦN 1: TÍCH HỢP FONT CHỮ (GOOGLE FONTS)
+      - Newsreader: Font Serif quang học cao cấp dùng cho tiêu đề chính
+      - Plus Jakarta Sans: Font Sans-serif hiện đại, dễ đọc cho nội dung văn bản
+      - Space Mono: Font Monospace hiển thị thông số và nhãn kỹ thuật
+      -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
@@ -23,10 +23,10 @@
 </head>
 <body class="editorial-body">
 
-  <!-- =========================================================================
-       PHẦN 2: NỀN KHÔNG GIAN ĐỘNG (SAO BĂNG & ĐOM ĐÓM VÀNG)
-       - Hoạt cảnh chạy ngầm bằng CSS @keyframes, vị trí fixed cố định, không che chữ
-       ========================================================================= -->
+  <!-- 
+      PHẦN 2: NỀN KHÔNG GIAN ĐỘNG (SAO BĂNG VÀ ĐOM ĐÓM VÀNG)
+      - Hoạt cảnh chạy ngầm bằng CSS @keyframes, vị trí fixed cố định, không che chữ
+      -->
   <div class="celestial-canvas" aria-hidden="true">
     <!-- Quầng sáng ambient tạo chiều sâu nền -->
     <div class="ambient-glow glow-top"></div>
@@ -46,13 +46,13 @@
     <span class="ember e-6"></span>
   </div>
 
-  <!-- =========================================================================
-       PHẦN 3: THANH MASTHEAD ĐẦU TRANG (TIỆN ÍCH TRÊN CÙNG)
-       - Nút quay lại Trang chủ nhóm (Team Directory)
-       - Thông tin ấn bản học thuật
-       - Đèn báo trạng thái hoạt động thực tế
-       - Nút chuyển đổi giao diện Sáng / Tối (Theme Switcher)
-       ========================================================================= -->
+  <!--
+      PHẦN 3: THANH MASTHEAD ĐẦU TRANG (TIỆN ÍCH TRÊN CÙNG)
+      - Nút quay lại Trang chủ nhóm (Team Directory)
+      - Thông tin ấn bản học thuật
+      - Đèn báo trạng thái hoạt động thực tế
+      - Nút chuyển đổi giao diện Sáng / Tối (Theme Switcher)
+      -->
   <header class="masthead-bar">
     <div class="masthead-container">
       <!-- Cụm bên trái: Đường dẫn quay lại danh bạ nhóm -->
@@ -78,16 +78,14 @@
     </div>
   </header>
 
-  <!-- =========================================================================
-       PHẦN 4: BỐ CỤC CHÍNH 2 CỘT DẠNG TẠP CHÍ (EDITORIAL SPREAD)
-       - Cột trái: Cột hồ sơ cố định (Sticky Dossier Column)
-       - Cột phải: Cột nội dung diễn giải (Narrative Column)
-       ========================================================================= -->
+  <!--
+      PHẦN 4: BỐ CỤC CHÍNH 2 CỘT DẠNG TẠP CHÍ
+      - Cột trái: Cột hồ sơ cố định (Sticky Dossier Column)
+      - Cột phải: Cột nội dung diễn giải (Narrative Column)
+      -->
   <div class="editorial-spread">
 
-    <!-- -----------------------------------------------------------------------
-         CỘT TRÁI (ASIDE): CHÂN DUNG, THÔNG TIN VÀ MỤC LỤC TỰ ĐỘNG SÁNG (SCROLL-SPY)
-         ----------------------------------------------------------------------- -->
+    <!--  CỘT TRÁI (ASIDE): CHÂN DUNG, THÔNG TIN VÀ MỤC LỤC TỰ ĐỘNG SÁNG (SCROLL-SPY) -->
     <aside class="dossier-column">
       <div class="dossier-sticky">
 
@@ -147,14 +145,10 @@
       </div>
     </aside>
 
-    <!-- -----------------------------------------------------------------------
-         CỘT PHẢI (MAIN): NỘI DUNG DIỄN GIẢI 4 PHẦN CỦA PORTFOLIO
-         ----------------------------------------------------------------------- -->
+    <!-- CỘT PHẢI (MAIN): NỘI DUNG DIỄN GIẢI 4 PHẦN CỦA PORTFOLIO -->
     <main class="narrative-column">
 
-      <!-- =====================================================================
-           SECTION I: LỜI MỞ ĐẦU & TUYÊN NGÔN KỸ THUẬT (PROLOGUE & THESIS)
-           ===================================================================== -->
+    <!-- SECTION I: LỜI MỞ ĐẦU & TUYÊN NGÔN KỸ THUẬT -->
       <section id="prologue" class="editorial-section">
         <header class="section-kicker-header">
           <span class="kicker-index">Section I</span>
@@ -202,9 +196,7 @@
         </div>
       </section>
 
-      <!-- =====================================================================
-           SECTION II: DANH MỤC DỰ ÁN TIÊU BIỂU (EXHIBITION CATALOGUE)
-           ===================================================================== -->
+      <!-- SECTION II: DANH MỤC DỰ ÁN TIÊU BIỂU (EXHIBITION CATALOGUE) -->
       <section id="work" class="editorial-section">
         <header class="section-kicker-header">
           <span class="kicker-index">Section II</span>
@@ -309,9 +301,7 @@
         </div>
       </section>
 
-      <!-- =====================================================================
-           SECTION III: BẢNG KỸ NĂNG & BỘ LỌC CHUYÊN MÔN (TECHNICAL INDEX)
-           ===================================================================== -->
+      <!--  SECTION III: BẢNG KỸ NĂNG & BỘ LỌC CHUYÊN MÔN (TECHNICAL INDEX) -->
       <section id="competencies" class="editorial-section">
         <header class="section-kicker-header">
           <span class="kicker-index">Section III</span>
@@ -392,9 +382,7 @@
         </div>
       </section>
 
-      <!-- =====================================================================
-           SECTION IV: KÊNH LIÊN HỆ TRỰC TIẾP & BẢN QUYỀN (DIRECT INQUIRIES)
-           ===================================================================== -->
+      <!-- SECTION IV: KÊNH LIÊN HỆ TRỰC TIẾP & BẢN QUYỀN -->
       <section id="connections" class="editorial-section">
         <header class="section-kicker-header">
           <span class="kicker-index">Section IV</span>
