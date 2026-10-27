@@ -66,7 +66,10 @@ body.light-mode {
   --shadow-editorial: 0 16px 40px -10px rgba(25, 20, 10, 0.08);
 }
 
-/* 2. BASE & RESET */
+/* --------------------------------------------------------------------------
+   PHẦN 2: THIẾT LẬP CƠ BẢN & ĐẶT LẠI LỀ (BASE & RESET)
+   Giải thích: box-sizing: border-box giúp kích thước phần tử tính luôn cả padding
+   -------------------------------------------------------------------------- */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -143,7 +146,7 @@ button {
   right: -100px;
 }
 
-/* Shooting Star Traces */
+/* Hiệu ứng vệt Sao băng lướt qua bầu trời đêm */
 .star-trace {
   position: absolute;
   width: 160px;
@@ -177,7 +180,7 @@ button {
   100% { opacity: 0; }
 }
 
-/* Floating Golden Embers */
+/* Hiệu ứng các đốm Đom đóm vàng bay lơ lửng */
 .ember {
   position: absolute;
   width: 4px;
@@ -380,7 +383,7 @@ body.light-mode .masthead-bar {
   gap: 28px;
 }
 
-/* Portrait Presentation */
+/* Khung ảnh chân dung với tem mã lưu trữ */
 .portrait-card {
   position: relative;
 }
@@ -424,7 +427,7 @@ body.light-mode .masthead-bar {
   font-weight: 700;
 }
 
-/* Identity Block */
+/* Khối định danh cá nhân và hiệu ứng chữ gõ tự động */
 .identity-block {
   border-bottom: 1px solid var(--border-hairline);
   padding-bottom: 22px;
@@ -481,7 +484,7 @@ body.light-mode .masthead-bar {
   50% { opacity: 0; }
 }
 
-/* Editorial Index Navigation */
+/* Mục lục đánh số La Mã tự động sáng (Scroll-Spy) */
 .editorial-index {
   display: flex;
   flex-direction: column;
@@ -562,7 +565,7 @@ body.light-mode .masthead-bar {
   scroll-margin-top: 96px;
 }
 
-/* Section Kicker Headers */
+/* Thanh tiêu đề phân cách các phần (Section Kicker Header) */
 .section-kicker-header {
   display: flex;
   align-items: center;
@@ -593,7 +596,7 @@ body.light-mode .masthead-bar {
   letter-spacing: 0.08em;
 }
 
-/* SECTION I: PROLOGUE & THESIS */
+/* Phần I: Lời mở đầu & Tuyên ngôn kỹ thuật */
 .hero-manifesto {
   margin-bottom: 40px;
 }
@@ -639,7 +642,7 @@ body.light-mode .masthead-bar {
   color: var(--text-secondary);
 }
 
-/* Pillars Grid */
+/* Hai trụ cột định hướng phát triển và phương châm làm việc */
 .pillars-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -693,7 +696,7 @@ body.light-mode .masthead-bar {
   line-height: 1.65;
 }
 
-/* SECTION II: EXHIBITION CATALOGUE */
+/* Phần II: Danh mục các dự án tiêu biểu (Exhibition Catalogue) */
 .catalogue-intro {
   margin-bottom: 30px;
 }
@@ -832,7 +835,7 @@ body.light-mode .masthead-bar {
   transform: translate(2px, -2px);
 }
 
-/* SECTION III: CORE COMPETENCIES (TAXONOMY) */
+/* Phần III: Bảng kỹ năng và bộ lọc chuyên môn (Taxonomy Index) */
 .taxonomy-ribbon {
   display: flex;
   gap: 8px;
@@ -919,7 +922,7 @@ body.light-mode .masthead-bar {
   line-height: 1.62;
 }
 
-/* SECTION IV: DIRECT INQUIRIES & CONNECTIONS */
+/* Phần IV: Kênh liên hệ trực tiếp & Mạng xã hội */
 .directory-list {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -982,7 +985,7 @@ body.light-mode .masthead-bar {
   transform: translate(3px, -3px);
 }
 
-/* Editorial Colophon */
+/* Chân trang thông tin bản quyền và liên kết quay về nhóm */
 .editorial-colophon {
   border-top: 1px solid var(--border-hairline);
   padding-top: 28px;

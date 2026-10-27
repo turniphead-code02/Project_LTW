@@ -5,30 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tran Huu Thanh — Portfolio | Editorial Edition</title>
 
-  <!-- Editorial Typography: Newsreader (Luxury Serif), Plus Jakarta Sans (Crisp Sans), Space Mono (Editorial Monospace) -->
+  <!-- =========================================================================
+       PHẦN 1: TÍCH HỢP FONT CHỮ (GOOGLE FONTS)
+       - Newsreader: Font Serif quang học cao cấp dùng cho tiêu đề chính
+       - Plus Jakarta Sans: Font Sans-serif hiện đại, dễ đọc cho nội dung văn bản
+       - Space Mono: Font Monospace hiển thị thông số và nhãn kỹ thuật
+       ========================================================================= -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
 
-  <!-- Font Awesome Icons -->
+  <!-- Thư viện biểu tượng Font Awesome (Facebook, TikTok, GitHub, Email) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 
-  <!-- Stylesheet -->
+  <!-- Tệp định kiểu CSS cục bộ -->
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body class="editorial-body">
 
-  <!-- ================= AMBIENT CELESTIAL BACKGROUND ================= -->
+  <!-- =========================================================================
+       PHẦN 2: NỀN KHÔNG GIAN ĐỘNG (SAO BĂNG & ĐOM ĐÓM VÀNG)
+       - Hoạt cảnh chạy ngầm bằng CSS @keyframes, vị trí fixed cố định, không che chữ
+       ========================================================================= -->
   <div class="celestial-canvas" aria-hidden="true">
+    <!-- Quầng sáng ambient tạo chiều sâu nền -->
     <div class="ambient-glow glow-top"></div>
     <div class="ambient-glow glow-bottom"></div>
 
-    <!-- Shooting star traces -->
+    <!-- 3 vệt Sao băng lướt qua bầu trời đêm -->
     <span class="star-trace trace-1"></span>
     <span class="star-trace trace-2"></span>
     <span class="star-trace trace-3"></span>
 
-    <!-- Golden floating embers -->
+    <!-- 6 đốm Đom đóm vàng bay lơ lửng -->
     <span class="ember e-1"></span>
     <span class="ember e-2"></span>
     <span class="ember e-3"></span>
@@ -37,9 +46,16 @@
     <span class="ember e-6"></span>
   </div>
 
-  <!-- ================= TOP MASTHEAD UTILITY BAR ================= -->
+  <!-- =========================================================================
+       PHẦN 3: THANH MASTHEAD ĐẦU TRANG (TIỆN ÍCH TRÊN CÙNG)
+       - Nút quay lại Trang chủ nhóm (Team Directory)
+       - Thông tin ấn bản học thuật
+       - Đèn báo trạng thái hoạt động thực tế
+       - Nút chuyển đổi giao diện Sáng / Tối (Theme Switcher)
+       ========================================================================= -->
   <header class="masthead-bar">
     <div class="masthead-container">
+      <!-- Cụm bên trái: Đường dẫn quay lại danh bạ nhóm -->
       <div class="masthead-left">
         <a href="../../index.html" class="hub-back-slug">
           <span class="slug-arrow">←</span>
@@ -49,16 +65,18 @@
         <span class="edition-tag">Vol. 2026 · Issue 01</span>
       </div>
 
+      <!-- Cụm ở giữa: Tiêu đề định danh đồ án nhóm -->
       <div class="masthead-center">
         <span class="masthead-serial">PROJECT_LTW · JOB PORTAL SPECIFICATION</span>
       </div>
 
+      <!-- Cụm bên phải: Trạng thái và nút đổi theme -->
       <div class="masthead-right">
         <span class="status-indicator">
           <span class="status-dot"></span>
           <span>Open for Summer 2026 Collaborations</span>
         </span>
-        <button id="themeBtn" class="editorial-theme-btn" type="button" aria-label="Toggle Theme">
+        <button id="themeBtn" class="editorial-theme-btn" type="button" aria-label="Đổi giao diện Sáng / Tối">
           <span class="theme-icon">◐</span>
           <span class="theme-label">Theme</span>
         </button>
@@ -66,16 +84,23 @@
     </div>
   </header>
 
-  <!-- ================= MAIN EDITORIAL SPREAD ================= -->
+  <!-- =========================================================================
+       PHẦN 4: BỐ CỤC CHÍNH 2 CỘT DẠNG TẠP CHÍ (EDITORIAL SPREAD)
+       - Cột trái: Cột hồ sơ cố định (Sticky Dossier Column)
+       - Cột phải: Cột nội dung diễn giải (Narrative Column)
+       ========================================================================= -->
   <div class="editorial-spread">
 
-    <!-- LEFT DOSSIER / STICKY PORTRAIT MASTHEAD -->
+    <!-- -----------------------------------------------------------------------
+         CỘT TRÁI (ASIDE): CHÂN DUNG, THÔNG TIN VÀ MỤC LỤC TỰ ĐỘNG SÁNG (SCROLL-SPY)
+         ----------------------------------------------------------------------- -->
     <aside class="dossier-column">
       <div class="dossier-sticky">
 
+        <!-- Khung ảnh chân dung với tem mã lưu trữ kỹ thuật -->
         <div class="portrait-card">
           <div class="portrait-frame">
-            <img src="./images/tht2.jpg" alt="Tran Huu Thanh portrait" class="portrait-img" />
+            <img src="./images/tht2.jpg" alt="Ảnh chân dung Trần Hữu Thành" class="portrait-img" />
             <div class="portrait-plate">
               <span class="plate-code">THT-044206000003</span>
               <span class="plate-geo">UTH · HCM CITY</span>
@@ -83,6 +108,7 @@
           </div>
         </div>
 
+        <!-- Khối định danh cá nhân kèm hiệu ứng chữ gõ tự động -->
         <div class="identity-block">
           <span class="dossier-kicker">Candidate Profile &amp; Dossier</span>
           <h1 class="dossier-name">Tran Huu Thanh</h1>
@@ -92,8 +118,8 @@
           </p>
         </div>
 
-        <!-- Editorial Index Navigation -->
-        <nav class="editorial-index" aria-label="Sections">
+        <!-- Mục lục đánh số La Mã, tự động sáng theo vị trí cuộn trang (Scroll-Spy) -->
+        <nav class="editorial-index" aria-label="Mục lục các phần">
           <a href="#prologue" class="index-link active">
             <span class="index-num">I.</span>
             <span class="index-title">Prologue &amp; Thesis</span>
@@ -112,6 +138,7 @@
           </a>
         </nav>
 
+        <!-- Bảng thông số tóm tắt của sinh viên (Vị trí, Trường học, Chuyên môn) -->
         <div class="dossier-meta-footer">
           <div class="meta-row">
             <span class="meta-k">Location</span>
@@ -130,10 +157,14 @@
       </div>
     </aside>
 
-    <!-- RIGHT EDITORIAL CONTENT NARRATIVE -->
+    <!-- -----------------------------------------------------------------------
+         CỘT PHẢI (MAIN): NỘI DUNG DIỄN GIẢI 4 PHẦN CỦA PORTFOLIO
+         ----------------------------------------------------------------------- -->
     <main class="narrative-column">
 
-      <!-- SECTION I: PROLOGUE & THESIS -->
+      <!-- =====================================================================
+           SECTION I: LỜI MỞ ĐẦU & TUYÊN NGÔN KỸ THUẬT (PROLOGUE & THESIS)
+           ===================================================================== -->
       <section id="prologue" class="editorial-section">
         <header class="section-kicker-header">
           <span class="kicker-index">Section I</span>
@@ -155,7 +186,7 @@
           </div>
         </div>
 
-        <!-- Two Pillars of Work -->
+        <!-- Hai trụ cột định hướng phát triển và phương châm làm việc -->
         <div class="pillars-grid">
           <article class="pillar-card">
             <div class="pillar-header">
@@ -181,7 +212,9 @@
         </div>
       </section>
 
-      <!-- SECTION II: SELECTED PROJECTS (EXHIBITION CATALOGUE) -->
+      <!-- =====================================================================
+           SECTION II: DANH MỤC DỰ ÁN TIÊU BIỂU (EXHIBITION CATALOGUE)
+           ===================================================================== -->
       <section id="work" class="editorial-section">
         <header class="section-kicker-header">
           <span class="kicker-index">Section II</span>
@@ -196,7 +229,7 @@
 
         <div class="catalogue-list">
 
-          <!-- Entry 01: Job Portal -->
+          <!-- Dự án 01: Cổng thông tin việc làm (Job Portal) -->
           <article class="catalogue-entry">
             <div class="catalogue-aside">
               <span class="entry-index">№ 01</span>
@@ -225,7 +258,7 @@
             </div>
           </article>
 
-          <!-- Entry 02: Software Engineering Management -->
+          <!-- Dự án 02: Hệ thống quản lý dự án (Project Management System) -->
           <article class="catalogue-entry">
             <div class="catalogue-aside">
               <span class="entry-index">№ 02</span>
@@ -254,7 +287,7 @@
             </div>
           </article>
 
-          <!-- Entry 03: GreenShift -->
+          <!-- Dự án 03: Công cụ theo dõi khí thải carbon (GreenShift Tracker) -->
           <article class="catalogue-entry">
             <div class="catalogue-aside">
               <span class="entry-index">№ 03</span>
@@ -286,7 +319,9 @@
         </div>
       </section>
 
-      <!-- SECTION III: CORE COMPETENCIES -->
+      <!-- =====================================================================
+           SECTION III: BẢNG KỸ NĂNG & BỘ LỌC CHUYÊN MÔN (TECHNICAL INDEX)
+           ===================================================================== -->
       <section id="competencies" class="editorial-section">
         <header class="section-kicker-header">
           <span class="kicker-index">Section III</span>
@@ -299,7 +334,7 @@
           <p class="section-display-desc">Taxonomy of capabilities organized by architectural domain.</p>
         </div>
 
-        <!-- Editorial Filter Ribbon -->
+        <!-- Ruy-băng nút lọc chuyên môn (All, Data & Systems, Web Interface, Discipline) -->
         <div class="taxonomy-ribbon" role="tablist">
           <button class="ribbon-btn active" data-type="all">All Domains</button>
           <button class="ribbon-btn" data-type="database">Data &amp; Systems</button>
@@ -307,6 +342,7 @@
           <button class="ribbon-btn" data-type="discipline">Discipline &amp; Method</button>
         </div>
 
+        <!-- Lưới thẻ kỹ năng (sẽ được ẩn/hiện bằng JavaScript thông qua data-type) -->
         <div class="taxonomy-grid">
 
           <article class="taxonomy-card" data-type="database">
@@ -366,7 +402,9 @@
         </div>
       </section>
 
-      <!-- SECTION IV: DIRECT INQUIRIES & CONNECTIONS -->
+      <!-- =====================================================================
+           SECTION IV: KÊNH LIÊN HỆ TRỰC TIẾP & BẢN QUYỀN (DIRECT INQUIRIES)
+           ===================================================================== -->
       <section id="connections" class="editorial-section">
         <header class="section-kicker-header">
           <span class="kicker-index">Section IV</span>
@@ -379,8 +417,10 @@
           <p class="section-display-desc">Direct communication channels for academic, project, or professional inquiries.</p>
         </div>
 
+        <!-- Danh sách 4 liên kết mạng xã hội và email cá nhân -->
         <div class="directory-list">
 
+          <!-- Kênh 1: Facebook cá nhân -->
           <a href="https://www.facebook.com/tran.huu.thanh.426383" target="_blank" rel="noopener noreferrer" class="directory-row">
             <div class="row-channel">
               <i class="fa-brands fa-facebook-f row-icon"></i>
@@ -392,6 +432,7 @@
             <span class="row-arrow">↗</span>
           </a>
 
+          <!-- Kênh 2: TikTok cá nhân -->
           <a href="https://www.tiktok.com/@thtanhn" target="_blank" rel="noopener noreferrer" class="directory-row">
             <div class="row-channel">
               <i class="fa-brands fa-tiktok row-icon"></i>
@@ -403,6 +444,7 @@
             <span class="row-arrow">↗</span>
           </a>
 
+          <!-- Kênh 3: GitHub cá nhân -->
           <a href="https://github.com/turniphead-code02" target="_blank" rel="noopener noreferrer" class="directory-row">
             <div class="row-channel">
               <i class="fa-brands fa-github row-icon"></i>
@@ -414,6 +456,7 @@
             <span class="row-arrow">↗</span>
           </a>
 
+          <!-- Kênh 4: Email trực tiếp -->
           <a href="mailto:tomshel216@gmail.com" class="directory-row">
             <div class="row-channel">
               <i class="fa-solid fa-envelope row-icon"></i>
@@ -427,7 +470,7 @@
 
         </div>
 
-        <!-- Colophon / Fine-print -->
+        <!-- Footer xuất bản (Colophon) và liên kết quay lại trang chủ nhóm -->
         <footer class="editorial-colophon">
           <div class="colophon-left">
             <p>© 2026 Tran Huu Thanh. All editorial and code rights reserved.</p>
@@ -443,7 +486,7 @@
     </main>
   </div>
 
-  <!-- JavaScript -->
+  <!-- Nạp tệp mã JavaScript cục bộ -->
   <script src="./script.js"></script>
 </body>
 </html>
