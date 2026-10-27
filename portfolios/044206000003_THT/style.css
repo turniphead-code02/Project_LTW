@@ -1,30 +1,35 @@
 /* ==========================================================================
-   TRAN HUU THANH — EDITORIAL PORTFOLIO STYLESHEET
-   Aesthetic: Luxury Editorial / Magazine Specimen (Inspired by Hallmark)
+   PORTFOLIO STYLESHEET — TRẦN HỮU THÀNH (MSSV: 044206000003)
+   Phong cách: Editorial / Magazine Specimen (Chuẩn thẩm mỹ cao cấp Hallmark)
    Typography: Newsreader (Serif) · Plus Jakarta Sans (Sans) · Space Mono (Mono)
+   Tất cả các phần đều được chú thích bằng Tiếng Việt giúp dễ dàng phản biện vấn đáp
    ========================================================================== */
 
-/* 1. DESIGN TOKENS */
+/* --------------------------------------------------------------------------
+   PHẦN 1: KHAI BÁO BIẾN CSS TOÀN CỤC (:root)
+   Giải thích: Quản lý tập trung mã màu, font chữ, hiệu ứng chuyển động
+   -------------------------------------------------------------------------- */
 :root {
+  /* Khai báo 3 họ font chữ chính */
   --font-serif: 'Newsreader', Georgia, 'Times New Roman', serif;
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --font-mono: 'Space Mono', 'SF Mono', Consolas, monospace;
 
-  /* Default Theme: Night Velvet Obsidian */
-  --bg-primary: #0a0c10;
-  --bg-surface: #12161f;
-  --bg-surface-elevated: #181d28;
+  /* Bảng màu mặc định: Chế độ ban đêm (Night Velvet Obsidian) */
+  --bg-primary: #0a0c10;         /* Màu nền tối chính (đen tro sâu) */
+  --bg-surface: #12161f;         /* Màu nền bề mặt các khối nội dung */
+  --bg-surface-elevated: #181d28;/* Màu nền khối nổi bật */
   --bg-subtle: rgba(255, 255, 255, 0.035);
 
-  --text-primary: #f6f3ed;       /* Warm archival bone */
-  --text-secondary: #9fa6b2;     /* Editorial slate */
-  --text-muted: #5f6775;         /* Hairline caption text */
+  --text-primary: #f6f3ed;       /* Màu chữ chính: màu xương ấm cổ điển */
+  --text-secondary: #9fa6b2;     /* Màu chữ phụ / mô tả ngắn */
+  --text-muted: #5f6775;         /* Màu chữ chú thích nhỏ / ngày tháng */
 
-  --accent-gold: #cfa85e;        /* Champagne Antique Gold */
+  --accent-gold: #cfa85e;        /* Màu nhấn: Vàng kim sâm-panh sang trọng */
   --accent-gold-soft: rgba(207, 168, 94, 0.12);
   --accent-gold-hover: #dfb96f;
 
-  --border-hairline: rgba(255, 255, 255, 0.08);
+  --border-hairline: rgba(255, 255, 255, 0.08); /* Đường viền mảnh siêu tinh tế */
   --border-medium: rgba(255, 255, 255, 0.16);
   --border-accent: rgba(207, 168, 94, 0.38);
 
@@ -32,22 +37,29 @@
   --transition-smooth: all 0.32s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Light Theme: Archival Italian Paper & Rich Charcoal Ink */
+/* --------------------------------------------------------------------------
+   BẢNG MÀU CHẾ ĐỘ SÁNG (Light Mode - Giấy mỹ thuật Ý ngà ấm)
+   -------------------------------------------------------------------------- */
 body.light-mode {
-  --bg-primary: #fbf9f4;
-  --bg-surface: #ffffff;
+  --bg-primary: #fbf9f4;         /* Nền giấy mỹ thuật màu ngà */
+  --bg-surface: #ffffff;         /* Bề mặt trắng tinh tế */
   --bg-surface-elevated: #f4efe4;
   --bg-subtle: rgba(0, 0, 0, 0.028);
 
-  --text-primary: #17181c;
+  --text-primary: #17181c;       /* Mực in than đen tuyền */
   --text-secondary: #4a515c;
   --text-muted: #7d8492;
 
-  --accent-gold: #9e7228;
+  --accent-gold: #9e7228;        /* Vàng đồng cổ điển */
   --accent-gold-soft: rgba(158, 114, 40, 0.1);
   --accent-gold-hover: #b48533;
 
   --border-hairline: rgba(20, 23, 28, 0.09);
+  --border-medium: rgba(20, 23, 28, 0.18);
+  --border-accent: rgba(158, 114, 40, 0.38);
+
+  --shadow-editorial: 0 16px 40px -10px rgba(25, 20, 10, 0.08);
+}
   --border-medium: rgba(20, 23, 28, 0.18);
   --border-accent: rgba(158, 114, 40, 0.38);
 
@@ -95,7 +107,10 @@ button {
   background: none;
 }
 
-/* 3. AMBIENT CELESTIAL BACKGROUND (ELEVATED SHOOTING STARS & EMBERS) */
+/* --------------------------------------------------------------------------
+   PHẦN 3: NỀN KHÔNG GIAN ĐỘNG (SAO BĂNG & ĐOM ĐÓM VÀNG)
+   Giải thích: Dùng CSS keyframes và fixed canvas tạo chiều sâu chuyển động
+   -------------------------------------------------------------------------- */
 .celestial-canvas {
   position: fixed;
   inset: 0;
@@ -189,7 +204,10 @@ button {
   100% { transform: translate(6px, -130px) scale(0.7); opacity: 0; }
 }
 
-/* 4. TOP MASTHEAD UTILITY BAR */
+/* --------------------------------------------------------------------------
+   PHẦN 4: THANH TIỆN ÍCH ĐẦU TRANG (MASTHEAD BAR)
+   Giải thích: Gắn cố định (sticky) trên cùng, chứa nút quay về nhóm và nút đổi theme
+   -------------------------------------------------------------------------- */
 .masthead-bar {
   position: sticky;
   top: 0;
@@ -331,7 +349,10 @@ body.light-mode .masthead-bar {
   transform: rotate(180deg);
 }
 
-/* 5. MAIN EDITORIAL SPREAD LAYOUT */
+/* --------------------------------------------------------------------------
+   PHẦN 5: BỐ CỤC CHÍNH DẠNG TẠP CHÍ (EDITORIAL SPREAD)
+   Giải thích: Chia 2 cột tỷ lệ 340px (cột trái) và 1fr (cột phải)
+   -------------------------------------------------------------------------- */
 .editorial-spread {
   position: relative;
   z-index: 1;
@@ -343,7 +364,10 @@ body.light-mode .masthead-bar {
   gap: 60px;
 }
 
-/* 6. DOSSIER / STICKY PORTRAIT COLUMN */
+/* --------------------------------------------------------------------------
+   PHẦN 6: CỘT HỒ SƠ & CHÂN DUNG CỐ ĐỊNH (STICKY DOSSIER COLUMN)
+   Giải thích: Giữ cố định ảnh và mục lục khi người dùng cuộn nội dung bên phải
+   -------------------------------------------------------------------------- */
 .dossier-column {
   position: relative;
 }
@@ -523,7 +547,10 @@ body.light-mode .masthead-bar {
   text-align: right;
 }
 
-/* 7. RIGHT EDITORIAL NARRATIVE COLUMN */
+/* --------------------------------------------------------------------------
+   PHẦN 7: CỘT DIỄN GIẢI NỘI DUNG CHÍNH (NARRATIVE CONTENT)
+   Giải thích: Gồm 4 phần I (Mở đầu), II (Dự án), III (Kỹ năng), IV (Liên hệ)
+   -------------------------------------------------------------------------- */
 .narrative-column {
   display: flex;
   flex-direction: column;
@@ -984,7 +1011,10 @@ body.light-mode .masthead-bar {
   text-decoration: underline;
 }
 
-/* 8. RESPONSIVE DESIGN */
+/* --------------------------------------------------------------------------
+   PHẦN 8: GIAO DIỆN TƯƠNG THÍCH MÀN HÌNH (RESPONSIVE MEDIA QUERIES)
+   Giải thích: Chuyển thành 1 cột khi xem trên máy tính bảng hoặc điện thoại di động
+   -------------------------------------------------------------------------- */
 @media (max-width: 1080px) {
   .editorial-spread {
     grid-template-columns: 290px 1fr;
