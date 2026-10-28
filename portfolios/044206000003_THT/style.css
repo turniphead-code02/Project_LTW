@@ -600,6 +600,12 @@ body.light-mode .masthead-bar {
   line-height: 1.72;
   color: var(--text-secondary);
 }
+.lead-subparagraph strong {
+  font-weight: 600;
+  color: var(--accent-gold);
+  font-style: italic;
+}
+
 
 /* Hai trụ cột định hướng phát triển và phương châm làm việc */
 .pillars-grid {
