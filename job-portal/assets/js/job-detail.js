@@ -1,8 +1,25 @@
 /**
  * ==========================================================================
- * JOB DETAIL & APPLICATION MODAL LOGIC (TRANG CHI TIẾT VIỆC LÀM & MODAL NỘP ĐƠN)
- * Tác giả: Hồ Trúc Gia Hân (MSSV: 056306004131) — Nhóm 6 UTH
- * Thiết kế chuẩn: Wireframe 5.3 Bố cục 70/30 & Sticky Box (File QTTK.html)
+ * MODULE 2: CHI TIẾT VIỆC LÀM & MODAL ỨNG TUYỂN (JOB DETAIL & APPLY MODAL)
+ * --------------------------------------------------------------------------
+ * Thành viên đảm nhiệm: HỒ TRÚC GIA HÂN
+ * Mã số sinh viên (MSSV): 056306004131
+ * Nhánh Git phát triển: ho_han (Đã merge vào main)
+ * Học phần: Lập trình Website — GVHD: ThS. Trần Thịnh Mạnh Đức — Nhóm 6 UTH
+ * Thiết kế chuẩn: Wireframe Mục 5.3 Bố cục 70/30 & Sticky Box (File QTTK.html)
+ * 
+ * PHẠM VI CHỨC NĂNG DO HỒ TRÚC GIA HÂN HIỆN THỰC HÓA:
+ *   - Mục 1: Cơ sở dữ liệu chuyên sâu từng tin tuyển dụng (JOBS_DB)
+ *   - Mục 2: Trích xuất ID công việc từ URL (parseUrlParams: ?id=job-01...)
+ *   - Mục 3: Điền dữ liệu chi tiết lên giao diện (hydrateJobDetails)
+ *   - Mục 4: Kiểm tra trạng thái đã nộp hồ sơ hay chưa từ localStorage
+ *   - Mục 5: Điều khiển đóng / mở Cửa sổ Modal nộp hồ sơ (Apply Modal Dialog)
+ *   - Mục 6: Xử lý sự kiện kéo & thả tệp CV định dạng PDF / Word (Drag & Drop)
+ *   - Mục 7: Xử lý gửi đơn ứng tuyển, kiểm tra form và lưu bản chụp (Snapshot)
+ *   - Mục 8: Tính năng Lưu / Bỏ lưu tin tuyển dụng (Bookmark Toggle)
+ *   - Mục 9: Tính năng sao chép liên kết chia sẻ việc làm (Share Job Link)
+ *   - Mục 10: Thuật toán gợi ý các cơ hội việc làm tương tự cùng ngành nghề
+ *   - Mục 11: Khởi tạo dữ liệu và kích hoạt tương tác (Run Hydration)
  * ==========================================================================
  */
 

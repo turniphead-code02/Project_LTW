@@ -1,8 +1,27 @@
 /**
  * ==========================================================================
- * JOB SEARCH & FILTERING LOGIC (LOGIC TRA CỨU & BỘ LỌC ĐA TIÊU CHÍ)
- * Tác giả: Nguyễn Lê Gia Hân (MSSV: 083306010188) — Nhóm 6 UTH
- * Thiết kế chuẩn: Wireframe 5.2 & Quy tắc Responsive 5.7 (File QTTK.html)
+ * MODULE 1: LOGIC TRA CỨU & BỘ LỌC ĐA TIÊU CHÍ (JOB SEARCH & FILTERING LOGIC)
+ * --------------------------------------------------------------------------
+ * Thành viên đảm nhiệm: NGUYỄN LÊ GIA HÂN
+ * Mã số sinh viên (MSSV): 083306010188
+ * Nhánh Git phát triển: le_han (Đã merge vào main)
+ * Học phần: Lập trình Website — GVHD: ThS. Trần Thịnh Mạnh Đức — Nhóm 6 UTH
+ * Thiết kế chuẩn: Wireframe Mục 5.2 & Quy tắc Responsive 5.7 (File QTTK.html)
+ * 
+ * PHẠM VI CHỨC NĂNG DO NGUYỄN LÊ GIA HÂN HIỆN THỰC HÓA:
+ *   - Mục 1: Bộ dữ liệu mẫu 12 việc làm IT chuẩn hóa (JOBS_DATA)
+ *   - Mục 2: Biến quản lý trạng thái phân trang (currentPage, itemsPerPage)
+ *   - Mục 3: Phân tích tham số URL (parseUrlParams: ?keyword=...&location=...&category=...)
+ *   - Mục 4: Trích xuất tiêu chí lọc đang được chọn (getSelectedFilters)
+ *   - Mục 5: Bộ máy lọc dữ liệu thời gian thực (Filter Engine đa điều kiện)
+ *   - Mục 6: Thuật toán sắp xếp danh sách (Mới nhất, Lương giảm dần, Hạn nộp)
+ *   - Mục 7: Render động thẻ danh sách việc làm chuẩn viền xanh 4.5px F-pattern
+ *   - Mục 8: Render và điều khiển linh kiện phân trang (Pagination Controller)
+ *   - Mục 9: Quản lý và render các chip lọc đang kích hoạt (Active Filter Chips)
+ *   - Mục 10: Tự động đếm số lượng việc làm theo từng tiêu chí thời gian thực
+ *   - Mục 11: Lưu / Bỏ lưu việc làm yêu thích vào localStorage (Bookmark Toggle)
+ *   - Mục 12: Xử lý sự kiện bàn phím, Debounce tìm kiếm và Drawer trên Mobile
+ *   - Mục 13: Hàm khởi tạo trang và kích hoạt lọc ban đầu (Initialization)
  * ==========================================================================
  */
 

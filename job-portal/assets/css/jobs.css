@@ -1,7 +1,23 @@
 /* ==========================================================================
-   JOBS LISTING & SEARCH STYLES (TRANG TRA CỨU & BỘ LỌC VIỆC LÀM)
-   Tác giả đảm nhiệm: Nguyễn Lê Gia Hân (MSSV: 083306010188) — Nhóm 6 UTH
-   Kiến trúc: Chuẩn hóa theo Wireframe Mục 5.2 file QTTK.html (Mô thức Sidebar Layout)
+   MODULE 1: TRANG TRA CỨU & BỘ LỌC VIỆC LÀM (JOBS LISTING & SEARCH STYLES)
+   --------------------------------------------------------------------------
+   Thành viên đảm nhiệm: NGUYỄN LÊ GIA HÂN
+   Mã số sinh viên (MSSV): 083306010188
+   Nhánh Git phát triển: le_han (Đã merge vào main)
+   Học phần: Lập trình Website — GVHD: ThS. Trần Thịnh Mạnh Đức — Nhóm 6 UTH
+   Kiến trúc & Chuẩn mực:
+     - Wireframe Mục 5.2 (Mô thức Sidebar Layout 280px : 1fr) trong QTTK.html
+     - Quy tắc Responsive 5.7 (Off-canvas Drawer & Backdrop Blur trên Mobile)
+   
+   DANH MỤC PHÂN ĐOẠN ĐẢM NHIỆM TRONG TỆP NÀY:
+     - Mục 1 (Dòng 20 - 90): Thanh Breadcrumb & Khối tìm kiếm nhanh (Top Bar Strip)
+     - Mục 2 (Dòng 91 - 100): Bố cục lưới 2 cột Sidebar Layout (280px : 1fr)
+     - Mục 3 (Dòng 101 - 210): Cột trái — Bộ lọc đa tiêu chí (Sticky Sidebar)
+     - Mục 4 (Dòng 211 - 310): Cột phải — Thanh kết quả, sắp xếp & Active Filter Chips
+     - Mục 5 (Dòng 311 - 430): Thẻ danh sách việc làm (Viền xanh trái 4.5px, pill lương)
+     - Mục 6 (Dòng 431 - 480): Linh kiện phân trang danh sách (Pagination)
+     - Mục 7 (Dòng 481 - 510): Trạng thái rỗng không có kết quả (Empty State)
+     - Mục 8 (Dòng 511 - hết): Quy tắc thích ứng màn hình Tablet & Mobile Drawer
    ========================================================================== */
 
 /* --------------------------------------------------------------------------

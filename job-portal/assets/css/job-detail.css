@@ -1,7 +1,22 @@
 /* ==========================================================================
-   JOB DETAIL & APPLY MODAL STYLES (TRANG CHI TIẾT VIỆC LÀM & MODAL NỘP CV)
-   Tác giả đảm nhiệm: Hồ Trúc Gia Hân (MSSV: 056306004131) — Nhóm 6 UTH
-   Kiến trúc: Chuẩn hóa theo Wireframe Mục 5.3 file QTTK.html (Bố cục 70/30 & Sticky Box)
+   MODULE 2: CHI TIẾT VIỆC LÀM & MODAL ỨNG TUYỂN (JOB DETAIL & APPLY MODAL)
+   --------------------------------------------------------------------------
+   Thành viên đảm nhiệm: HỒ TRÚC GIA HÂN
+   Mã số sinh viên (MSSV): 056306004131
+   Nhánh Git phát triển: ho_han (Đã merge vào main)
+   Học phần: Lập trình Website — GVHD: ThS. Trần Thịnh Mạnh Đức — Nhóm 6 UTH
+   Kiến trúc & Chuẩn mực:
+     - Wireframe Mục 5.3 (Bố cục bất đối xứng 70/30 & Sticky Box) trong QTTK.html
+     - Cửa sổ Modal kéo thả tệp CV định dạng PDF theo chuẩn WCAG 2.1 AA
+   
+   DANH MỤC PHÂN ĐOẠN ĐẢM NHIỆM TRONG TỆP NÀY:
+     - Mục 1 (Dòng 20 - 50): Thanh Breadcrumb dẫn hướng động theo vị trí
+     - Mục 2 (Dòng 51 - 65): Bố cục bất đối xứng 2 cột (Asymmetric 2.3fr : 1fr)
+     - Mục 3 (Dòng 66 - 280): Cột trái — Chi tiết JD, yêu cầu, quyền lợi, công ty
+     - Mục 4 (Dòng 281 - 440): Cột phải — Sticky Action Box (Ghim nổi, HR Contact)
+     - Mục 5 (Dòng 441 - 600): Cửa sổ Modal nộp CV (Vùng Drag & Drop Dropzone)
+     - Mục 6 (Dòng 601 - 640): Thanh ứng tuyển Sticky Bottom Bar trên di động
+     - Mục 7 (Dòng 641 - hết): Quy tắc thích ứng màn hình Tablet & Mobile (< 1024px)
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
