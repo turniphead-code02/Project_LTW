@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tra Cứu &amp; Lọc Việc Làm IT — JobPortal | Nguyễn Lê Gia Hân (Nhóm 6 UTH)</title>
+  <meta name="description" content="Trang tra cứu, lọc và tìm kiếm việc làm công nghệ thông tin đa tiêu chí. Thiết kế theo tiêu chuẩn Wireframe 5.2 Mô thức Sidebar Layout trong QTTK.html - Nguyễn Lê Gia Hân (MSSV: 083306010188)." />
+
+  <!-- Preconnect Google Fonts để tối ưu tốc độ tải trang -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- Nạp tệp Stylesheet nền tảng & linh kiện theo kiến trúc module -->
+  <link rel="stylesheet" href="./assets/css/variables.css" />
+  <link rel="stylesheet" href="./assets/css/base.css" />
+  <link rel="stylesheet" href="./assets/css/components.css" />
+  <link rel="stylesheet" href="./assets/css/jobs.css" />
+</head>
+<body>
+
+  <!-- =========================================================================
+       1. THANH ĐIỀU HƯỚNG CỐ ĐỊNH (STICKY HEADER NAVBAR — Z-PATTERN)
+       ========================================================================= -->
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <!-- Cụm Logo thương hiệu -->
+      <a href="./index.html" class="header-brand" aria-label="Trang chủ JobPortal">
+        <div class="brand-icon" aria-hidden="true">💼</div>
+        <div class="brand-text">Job<span>Portal</span><span class="brand-badge">UTH</span></div>
+      </a>
+
+      <!-- Menu điều hướng chính (Kích hoạt tab Tìm Việc Làm) -->
+      <nav class="header-nav" role="navigation" aria-label="Điều hướng chính">
+        <a href="./index.html" class="nav-link">Trang Chủ</a>
+        <a href="./jobs.html" class="nav-link active">Tìm Việc Làm</a>
+        <a href="./index.html#categories" class="nav-link">Ngành Nghề</a>
+        <a href="./index.html#employers" class="nav-link">Doanh Nghiệp</a>
+        <a href="../index.html" class="nav-link" style="color: var(--color-primary); font-weight: 700;">Danh Bạ Nhóm 6</a>
+      </nav>
+
+      <!-- Cụm nút hành động bên phải -->
+      <div class="header-actions">
+        <a href="./employer-dashboard.html" class="btn-employer-slug" title="Dành cho nhà tuyển dụng đăng tin">
+          <span>🏢</span>
+          <span>Nhà Tuyển Dụng</span>
+        </a>
+        <a href="./auth.html?mode=login" class="btn btn-outline btn-sm">Đăng Nhập</a>
+        <a href="./auth.html?mode=register" class="btn btn-accent btn-sm">Đăng Ký</a>
+
+        <!-- Nút mở Menu trên Mobile -->
+        <button class="mobile-toggle-btn" type="button" aria-expanded="false" aria-label="Mở menu điều hướng">
+          ☰
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       2. THANH BREADCRUMB & KHỐI TÌM KIẾM NHANH (TOP BAR STRIP)
+       ========================================================================= -->
+  <div class="jobs-page-header">
+    <div class="container">
+      <!-- Breadcrumbs dẫn hướng -->
+      <nav class="breadcrumbs" aria-label="Đường dẫn trang">
+        <a href="./index.html">Trang Chủ</a>
+        <span class="breadcrumbs-sep">/</span>
+        <span class="breadcrumbs-current" aria-current="page">Tìm Kiếm Việc Làm IT</span>
+      </nav>
+
+      <!-- Khối tìm kiếm nhanh ở đầu trang -->
+      <form class="jobs-search-strip" id="topSearchForm" role="search" onsubmit="event.preventDefault();">
+        <div class="search-strip-input-wrap">
+          <span style="font-size: 1.15rem; color: var(--color-muted);" aria-hidden="true">🔍</span>
+          <input 
+            type="text" 
+            id="topSearchInput" 
+            class="search-strip-input" 
+            placeholder="Tìm theo chức danh, kỹ năng (vd: React, Node.js, Spring Boot, Tester...)" 
+            aria-label="Từ khóa tìm kiếm việc làm"
+          />
+        </div>
+
+        <select id="topLocationSelect" class="search-strip-select" aria-label="Địa điểm làm việc">
+          <option value="">Tất cả địa điểm</option>
+          <option value="hcm">TP. Hồ Chí Minh</option>
+          <option value="hanoi">Hà Nội</option>
+          <option value="danang">Đà Nẵng</option>
+          <option value="cantho">Cần Thơ</option>
+          <option value="remote">Toàn quốc (Remote)</option>
+        </select>
+
+        <button type="button" id="topSearchBtn" class="btn btn-primary" style="padding: 10px 22px;">
+          <span>Tìm Kiếm</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       3. BỐ CỤC CHÍNH 2 CỘT (SIDEBAR LAYOUT: 280PX : 1FR — WIREFRAME 5.2 QTTK)
+       ========================================================================= -->
+  <main id="mainContent" class="main-content" role="main">
+    <div class="container">
+      <div class="jobs-layout-grid" id="jobsMainLayout">
+
+        <!-- -------------------------------------------------------------------
+             CỘT TRÁI: BỘ LỌC ĐA TIÊU CHÍ (SIDEBAR MULTI-CRITERIA FILTERS)
+             ------------------------------------------------------------------- -->
+        <aside class="jobs-filter-sidebar" id="jobsFilterSidebar" aria-label="Bộ lọc tìm kiếm việc làm">
+          <!-- Đầu Sidebar: Tiêu đề, nút đặt lại & nút đóng trên mobile -->
+          <div class="sidebar-header">
+            <div class="sidebar-title">
+              <span>⚙️</span>
+              <span>BỘ LỌC ĐA TIÊU CHÍ</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <button type="button" class="btn-reset-filters" id="btnResetAll" title="Xóa tất cả tiêu chí đã chọn">
+                Đặt lại
+              </button>
+              <button type="button" class="btn-close-sidebar" id="btnCloseSidebarMobile" aria-label="Đóng bảng bộ lọc">
+                ✕
+              </button>
+            </div>
+          </div>
+
+          <!-- Nhóm 1: Địa Điểm (Location) -->
+          <div class="filter-group">
+            <h4 class="filter-group-title">
+              <span>📍 Địa Điểm Làm Việc</span>
+            </h4>
+            <div class="filter-options-list">
+              <label class="filter-label">
+                <input type="checkbox" name="filterLocation" value="hcm" class="filter-checkbox" />
+                <span>TP. Hồ Chí Minh</span>
+                <span class="filter-count">(0)</span>
+              </label>
+              <label class="filter-label">
+                <input type="checkbox" name="filterLocation" value="hanoi" class="filter-checkbox" />
+                <span>Hà Nội</span>
+                <span class="filter-count">(0)</span>
+              </label>
+              <label class="filter-label">
+                <input type="checkbox" name="filterLocation" value="danang" class="filter-checkbox" />
+                <span>Đà Nẵng</span>
+                <span class="filter-count">(0)</span>
+              </label>
+              <label class="filter-label">
+                <input type="checkbox" name="filterLocation" value="cantho" class="filter-checkbox" />
+                <span>Cần Thơ</span>
+                <span class="filter-count">(0)</span>
+              </label>
+              <label class="filter-label">
+                <input type="checkbox" name="filterLocation" value="remote" class="filter-checkbox" />
+                <span>Làm từ xa (Remote)</span>
+                <span class="filter-count">(0)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Nhóm 2: Mức Lương (Salary Range) -->
+          <div class="filter-group">
+            <h4 class="filter-group-title">
+              <span>💰 Mức Lương Hàng Tháng</span>
+            </h4>
+            <div class="filter-options-list">
+              <label class="filter-label">
+                <input type="checkbox" name="filterSalary" value="under-10" class="filter-checkbox" />
+                <span>Dưới 10 Triệu</span>
+                <span class="filter-count">(0)</span>
+              </label>
+              <label class="filter-label">
+                <input type="checkbox" name="filterSalary" value="10-15" class="filter-checkbox" />
+                <span>10 - 15 Triệu</span>
+                <span class="filter-count">(0)</span>
+              </label>
+              <label class="filter-label">
+                <input type="checkbox" name="filterSalary" value="15-25" class="filter-checkbox" />
+                <span>15 - 25 Triệu</span>
+                <span class="filter-count">(0)</span>
+              </label>
+              <label class="filter-label">
+                <input type="checkbox" name="filterSalary" value="over-25" class="filter-checkbox" />
+                <span>Trên 25 Triệu</span>
+                <span class="filter-count">(0)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Nhóm 3: Hình Thức Làm Việc (Work Type) -->
+          <div class="filter-group">
+            <h4 class="filter-group-title">
+              <span>⏰ Hình Thức Làm Việc</span>
+            </h4>
+            <div class="filter-options-list">
+              <label class="filter-label">
+                <input type="checkbox" name="filterWorkType" value="fulltime" class="filter-checkbox" />
+                <span>Toàn thời gian (Full-time)</span>
+                <span class="filter-count">(0)</span>
+              </label>
+              <label class="filter-label">
+                <input type="checkbox" name="filterWorkType" value="parttime" class="filter-checkbox" />
+                <span>Bán thời gian (Part-time)</span>
+                <span class="filter-count">(0)</span>
+              </label>
+              <label class="filter-label">
+                <input type="checkbox" name="filterWorkType" value="internship" class="filter-checkbox" />
+                <span>Thực tập sinh (Internship)</span>
+                <span class="filter-count">(0)</span>
+              </label>
+              <label class="filter-label">
+                <input type="checkbox" name="filterWorkType" value="remote" class="filter-checkbox" />
+                <span>Làm việc từ xa (Remote)</span>
+                <span class="filter-count">(0)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Nhóm 4: Kinh Nghiệm Làm Việc (Experience Level) -->
+          <div class="filter-group">
+            <h4 class="filter-group-title">
+              <span>💼 Kinh Nghiệm Yêu Cầu</span>
+            </h4>
+            <div class="filter-options-list">
+              <label class="filter-label">
+                <input type="checkbox" name="filterExperience" value="fresher" class="filter-checkbox" />
+                <span>Dưới 1 năm / Fresher</span>
+                <span class="filter-count">(0)</span>
+              </label>
+              <label class="filter-label">
+                <input type="checkbox" name="filterExperience" value="1-3" class="filter-checkbox" />
+                <span>1 - 3 năm kinh nghiệm</span>
+                <span class="filter-count">(0)</span>
+              </label>
+              <label class="filter-label">
+                <input type="checkbox" name="filterExperience" value="3-5" class="filter-checkbox" />
+                <span>3 - 5 năm kinh nghiệm</span>
+                <span class="filter-count">(0)</span>
+              </label>
+              <label class="filter-label">
+                <input type="checkbox" name="filterExperience" value="over-5" class="filter-checkbox" />
+                <span>Trên 5 năm</span>
+                <span class="filter-count">(0)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Nhóm 5: Ngành Nghề Chuyên Môn (Category) -->
+          <div class="filter-group">
+            <h4 class="filter-group-title">
+              <span>💻 Lĩnh Vực Chuyên Môn</span>
+            </h4>
+            <div class="filter-options-list">
+              <label class="filter-label">
+                <input type="checkbox" name="filterCategory" value="software" class="filter-checkbox" />
+                <span>Lập trình phần mềm</span>
+                <span class="filter-count">(0)</span>
+              </label>
+              <label class="filter-label">
+                <input type="checkbox" name="filterCategory" value="data-ai" class="filter-checkbox" />
+                <span>Dữ liệu &amp; AI / ML</span>
+                <span class="filter-count">(0)</span>
+              </label>
+              <label class="filter-label">
+                <input type="checkbox" name="filterCategory" value="design" class="filter-checkbox" />
+                <span>Thiết kế UI/UX</span>
+                <span class="filter-count">(0)</span>
+              </label>
+              <label class="filter-label">
+                <input type="checkbox" name="filterCategory" value="security" class="filter-checkbox" />
+                <span>An toàn thông tin</span>
+                <span class="filter-count">(0)</span>
+              </label>
+              <label class="filter-label">
+                <input type="checkbox" name="filterCategory" value="cloud-devops" class="filter-checkbox" />
+                <span>Hạ tầng Cloud &amp; DevOps</span>
+                <span class="filter-count">(0)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Nút áp dụng trên mobile/sidebar -->
+          <div style="margin-top: var(--space-20);">
+            <button type="button" class="btn btn-primary" style="width: 100%;" onclick="document.getElementById('btnCloseSidebarMobile').click();">
+              Áp Dụng Bộ Lọc
+            </button>
+          </div>
+        </aside>
+
+        <!-- -------------------------------------------------------------------
+             CỘT PHẢI: KẾT QUẢ TÌM KIẾM & PHÂN TRANG (RESULTS & PAGINATION)
+             ------------------------------------------------------------------- -->
+        <section class="jobs-results-container" aria-label="Kết quả tìm kiếm việc làm">
+
+          <!-- Thanh điều khiển kết quả: Đếm số lượng, Sắp xếp & Nút mở lọc trên mobile -->
+          <div class="results-control-bar">
+            <div class="results-count-text">
+              Tìm thấy <strong id="resultsCount">12</strong> việc làm phù hợp
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <!-- Nút mở drawer bộ lọc trên mobile -->
+              <button type="button" id="btnMobileFilter" class="btn-mobile-filter" aria-label="Mở bảng bộ lọc tìm kiếm">
+                <span>⚙️</span>
+                <span>Bộ Lọc</span>
+              </button>
+
+              <!-- Dropdown sắp xếp theo tiêu chí -->
+              <div class="results-sort-group">
+                <label for="sortSelect" class="sort-label">Sắp xếp theo:</label>
+                <select id="sortSelect" class="sort-select" aria-label="Sắp xếp việc làm">
+                  <option value="newest" selected>Mới nhất ▼</option>
+                  <option value="salary-desc">Mức lương cao nhất</option>
+                  <option value="deadline-asc">Hạn nộp hồ sơ gần nhất</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Thanh hiển thị các tiêu chí lọc đang được kích hoạt (Active Chips) -->
+          <div class="active-chips-bar" id="activeChipsBar" style="display: none;" role="region" aria-label="Các bộ lọc đang áp dụng">
+            <!-- Render động qua JavaScript -->
+          </div>
+
+          <!-- Danh sách thẻ việc làm (Hydrated & Filtered qua JavaScript) -->
+          <div class="jobs-list" id="jobsListContainer" role="feed" aria-busy="false">
+            <!-- Thẻ việc làm sẽ được render động theo Wireframe 5.2 -->
+          </div>
+
+          <!-- Khối trạng thái rỗng khi không có kết quả (Empty State) -->
+          <div class="empty-state-box" id="emptyStateBox" role="status">
+            <div class="empty-state-icon" aria-hidden="true">🔍</div>
+            <h3 class="empty-state-title">Không Tìm Thấy Việc Làm Phù Hợp</h3>
+            <p class="empty-state-desc">
+              Rất tiếc, hiện tại không có tin tuyển dụng nào khớp với các tiêu chí lọc của bạn. Hãy thử thay đổi từ khóa hoặc đặt lại bộ lọc.
+            </p>
+            <button type="button" id="btnResetEmpty" class="btn btn-primary">
+              <span>Xóa Tất Cả Bộ Lọc &amp; Xem Tất Cả</span>
+            </button>
+          </div>
+
+          <!-- Phân trang danh sách (Pagination Component chuẩn Wireframe 5.2) -->
+          <nav class="pagination-wrap" id="paginationWrap" aria-label="Phân trang việc làm">
+            <!-- Sinh nút « Trước | 1 | 2 | 3 | Sau » qua JavaScript -->
+          </nav>
+
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Lớp phủ mờ Backdrop cho Sidebar Drawer trên Mobile (< 1024px) -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop" aria-hidden="true"></div>
+
+  <!-- =========================================================================
+       4. CHÂN TRANG SITEMAP TOÀN DIỆN (SITE FOOTER — CHUẨN ZERO DEAD-END)
+       ========================================================================= -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <!-- Cột 1: Thông tin thương hiệu & Dự án Nhóm 6 -->
+        <div>
+          <div class="header-brand" style="margin-bottom: var(--space-16); color: #ffffff;">
+            <div class="brand-icon" style="background:#3b82f6;">💼</div>
+            <div class="brand-text" style="color:#ffffff;">Job<span style="color:#60a5fa;">Portal</span></div>
+          </div>
+          <p style="font-size: var(--text-small); color: #94a3b8; line-height: 1.6; margin-bottom: var(--space-16);">
+            Hệ thống Cổng Thông Tin Việc Làm &amp; Tuyển Dụng Trực Tuyến — Đồ án môn Lập trình Website, Khoa Công Nghệ Thông Tin, Trường Đại học Giao thông vận tải TP.HCM (UTH).
+          </p>
+          <p style="font-size: var(--text-xs); color: #64748b; line-height: 1.6;">
+            <strong>Module Tra Cứu &amp; Lọc Việc Làm:</strong> Nguyễn Lê Gia Hân (MSSV: 083306010188)<br />
+            <strong>Trưởng nhóm / Technical Lead:</strong> Trần Hữu Thành (MSSV: 044206000003)
+          </p>
+        </div>
+
+        <!-- Cột 2: Dành Cho Ứng Viên -->
+        <div>
+          <h4 class="footer-col-title">Dành Cho Ứng Viên</h4>
+          <ul class="footer-links">
+            <li><a href="./jobs.html">Tìm kiếm việc làm IT</a></li>
+            <li><a href="./candidate-dashboard.html">Hồ sơ cá nhân &amp; CV</a></li>
+            <li><a href="./my-applications.html">Theo dõi đơn ứng tuyển</a></li>
+            <li><a href="./saved-jobs.html">Việc làm đã lưu</a></li>
+            <li><a href="./jobs.html?keyword=ThucTap">Việc làm thực tập sinh</a></li>
+          </ul>
+        </div>
+
+        <!-- Cột 3: Dành Cho Doanh Nghiệp -->
+        <div>
+          <h4 class="footer-col-title">Dành Cho Doanh Nghiệp</h4>
+          <ul class="footer-links">
+            <li><a href="./employer-dashboard.html">Bảng điều khiển tuyển dụng</a></li>
+            <li><a href="./post-job.html">Đăng tin tuyển dụng mới</a></li>
+            <li><a href="./candidate-management.html">Quản lý danh sách ứng viên</a></li>
+            <li><a href="./auth.html?role=employer">Đăng ký doanh nghiệp</a></li>
+            <li><a href="./employer-guide.html">Quy chế kiểm duyệt hồ sơ</a></li>
+          </ul>
+        </div>
+
+        <!-- Cột 4: Đăng Ký Nhận Bản Tin Việc Làm -->
+        <div>
+          <h4 class="footer-col-title">Đăng Ký Nhận Tin Tuyển Dụng</h4>
+          <p class="footer-newsletter-p">Nhận thông báo việc làm mới nhất phù hợp với chuyên ngành của bạn mỗi sáng Thứ Hai.</p>
+          <form id="newsletterForm" class="newsletter-form" aria-label="Đăng ký nhận tin" onsubmit="event.preventDefault(); window.showToast('Đăng ký nhận tin thành công! Cảm ơn bạn.', 'success');">
+            <input type="email" class="newsletter-input" placeholder="Nhập địa chỉ email của bạn..." required aria-label="Địa chỉ email nhận bản tin" />
+            <button type="submit" class="btn btn-accent btn-sm">Đăng Ký</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Thanh bản quyền đáy trang & Liên kết quay lại Hub -->
+      <div class="footer-bottom">
+        <div>
+          <p>© 2026 Nhóm 6 — Đồ án Lập trình Website (Web Programming). GVHD: ThS. Trần Thịnh Mạnh Đức.</p>
+        </div>
+        <div>
+          <a href="../index.html" class="footer-back-hub" title="Quay về trang danh sách portfolio các thành viên">
+            <span>←</span>
+            <span>Quay lại Danh Bạ Portfolio Nhóm 6</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Nạp tệp kịch bản JavaScript điều khiển -->
+  <script src="./assets/js/main.js"></script>
+  <script src="./assets/js/jobs.js"></script>
+</body>
+</html>

@@ -1,0 +1,592 @@
+/* ==========================================================================
+   JOBS LISTING & SEARCH STYLES (TRANG TRA CỨU & BỘ LỌC VIỆC LÀM)
+   Tác giả đảm nhiệm: Nguyễn Lê Gia Hân (MSSV: 083306010188) — Nhóm 6 UTH
+   Kiến trúc: Chuẩn hóa theo Wireframe Mục 5.2 file QTTK.html (Mô thức Sidebar Layout)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. THANH BREADCRUMB & KHỐI TÌM KIẾM NHANH (TOP BAR)
+   -------------------------------------------------------------------------- */
+.jobs-page-header {
+  background: linear-gradient(180deg, #ffffff 0%, var(--color-bg-page) 100%);
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-24) 0 var(--space-32);
+}
+
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  font-size: var(--text-small);
+  color: var(--color-muted);
+  margin-bottom: var(--space-16);
+}
+
+.breadcrumbs a {
+  color: var(--color-muted);
+  transition: color var(--transition-fast);
+}
+
+.breadcrumbs a:hover {
+  color: var(--color-primary);
+}
+
+.breadcrumbs-sep {
+  color: #cbd5e1;
+}
+
+.breadcrumbs-current {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.jobs-search-strip {
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--transition-fast);
+}
+
+.jobs-search-strip:focus-within {
+  border-color: var(--color-primary-light);
+  box-shadow: var(--shadow-hover);
+}
+
+.search-strip-input-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.search-strip-input {
+  width: 100%;
+  font-size: var(--text-base);
+  color: var(--color-dark);
+  font-weight: 500;
+}
+
+.search-strip-input::placeholder {
+  color: var(--color-muted);
+}
+
+.search-strip-select {
+  border-left: 1px solid var(--color-border);
+  padding-left: var(--space-16);
+  color: var(--color-dark);
+  font-size: var(--text-small);
+  font-weight: 500;
+  cursor: pointer;
+  min-width: 180px;
+}
+
+/* --------------------------------------------------------------------------
+   2. BỐ CỤC 2 CỘT SIDEBAR LAYOUT (CHIA TỶ LỆ 280PX : 1FR THEO MỤC 5.2 QTTK)
+   -------------------------------------------------------------------------- */
+.jobs-layout-grid {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: var(--space-32);
+  align-items: start;
+  padding: var(--space-32) 0 var(--space-80);
+}
+
+/* --------------------------------------------------------------------------
+   3. CỘT TRÁI: BỘ LỌC ĐA TIÊU CHÍ (SIDEBAR FILTERS)
+   -------------------------------------------------------------------------- */
+.jobs-filter-sidebar {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: var(--space-24);
+  box-shadow: var(--shadow-card);
+  position: sticky;
+  top: 94px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: var(--space-16);
+  border-bottom: 1.5px solid var(--color-border);
+  margin-bottom: var(--space-20);
+}
+
+.sidebar-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-reset-filters {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-muted);
+  text-decoration: underline;
+  transition: color var(--transition-fast);
+}
+
+.btn-reset-filters:hover {
+  color: var(--color-danger);
+}
+
+.btn-close-sidebar {
+  display: none;
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  color: var(--color-muted);
+  cursor: pointer;
+  padding: 4px;
+}
+
+/* Từng nhóm bộ lọc (Filter Groups) */
+.filter-group {
+  margin-bottom: var(--space-24);
+  padding-bottom: var(--space-20);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.filter-group:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.filter-group-title {
+  font-size: var(--text-small);
+  font-weight: 700;
+  color: var(--color-dark);
+  margin-bottom: var(--space-12);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.filter-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.filter-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--text-small);
+  color: var(--color-body);
+  cursor: pointer;
+  user-select: none;
+  transition: color var(--transition-fast);
+}
+
+.filter-label:hover {
+  color: var(--color-primary);
+}
+
+.filter-checkbox {
+  width: 17px;
+  height: 17px;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.filter-count {
+  margin-left: auto;
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+  font-family: var(--font-family-mono);
+}
+
+/* --------------------------------------------------------------------------
+   4. CỘT PHẢI: KẾT QUẢ VIỆC LÀM & THANH ĐIỀU KHIỂN (RESULTS CONTAINER)
+   -------------------------------------------------------------------------- */
+.jobs-results-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+
+/* Thanh thông số kết quả & sắp xếp */
+.results-control-bar {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-xs);
+}
+
+.results-count-text {
+  font-size: var(--text-small);
+  color: var(--color-body);
+}
+
+.results-count-text strong {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.results-sort-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sort-label {
+  font-size: var(--text-small);
+  color: var(--color-muted);
+}
+
+.sort-select {
+  font-size: var(--text-small);
+  font-weight: 600;
+  color: var(--color-dark);
+  background: var(--color-bg-page);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-btn);
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+/* Nút mở bộ lọc trên mobile */
+.btn-mobile-filter {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-small);
+  font-weight: 600;
+  color: var(--color-primary);
+  background: var(--color-primary-soft);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  padding: 6px 14px;
+  border-radius: var(--radius-btn);
+}
+
+/* Thanh các bộ lọc đang kích hoạt (Active Filter Chips) */
+.active-chips-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.active-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  border: 1px solid rgba(30, 64, 175, 0.2);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+.chip-remove-btn {
+  cursor: pointer;
+  color: var(--color-primary);
+  font-weight: 800;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+}
+
+.chip-remove-btn:hover {
+  color: var(--color-danger);
+}
+
+/* --------------------------------------------------------------------------
+   5. DANH SÁCH THẺ VIỆC LÀM (CHUẨN VIỀN XANH TRÁI MỤC 5.2 QTTK)
+   -------------------------------------------------------------------------- */
+.job-listing-item {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-left: 4.5px solid var(--color-primary); /* Chuẩn Wireframe 5.2 */
+  border-radius: var(--radius-card);
+  padding: var(--space-24);
+  box-shadow: var(--shadow-card);
+  transition: var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+}
+
+.job-listing-item:hover {
+  border-left-color: var(--color-primary-light);
+  border-top-color: var(--color-primary-light);
+  border-right-color: var(--color-primary-light);
+  border-bottom-color: var(--color-primary-light);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-hover);
+}
+
+.job-item-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-16);
+}
+
+.job-item-main {
+  display: flex;
+  gap: var(--space-16);
+  flex: 1;
+}
+
+.job-item-title {
+  font-size: 1.22rem;
+  font-weight: 700;
+  color: var(--color-dark);
+  margin-bottom: 4px;
+}
+
+.job-item-title a {
+  color: var(--color-dark);
+}
+
+.job-item-title a:hover {
+  color: var(--color-primary);
+}
+
+.job-item-company {
+  font-size: var(--text-small);
+  color: var(--color-body);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.job-item-salary {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #047857; /* Emerald Dark - Tương phản WCAG */
+  background: var(--color-accent-soft);
+  padding: 4px 10px;
+  border-radius: var(--radius-btn);
+  white-space: nowrap;
+}
+
+.job-item-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-16);
+  font-size: var(--text-small);
+  color: var(--color-muted);
+}
+
+.job-item-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.job-item-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.job-item-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--color-border-light);
+  padding-top: var(--space-12);
+  margin-top: var(--space-4);
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+}
+
+.job-item-action-link {
+  font-size: var(--text-small);
+  font-weight: 700;
+  color: var(--color-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: transform var(--transition-fast);
+}
+
+.job-item-action-link:hover {
+  color: var(--color-primary-light);
+  transform: translateX(4px);
+}
+
+/* --------------------------------------------------------------------------
+   6. PHÂN TRANG (PAGINATION COMPONENT — CHUẨN MỤC 5.2 QTTK)
+   -------------------------------------------------------------------------- */
+.pagination-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: var(--space-32);
+}
+
+.page-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-btn);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-dark);
+  font-size: var(--text-small);
+  font-weight: 600;
+  transition: var(--transition-fast);
+}
+
+.page-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: var(--color-primary-soft);
+}
+
+.page-btn.active {
+  background-color: var(--color-primary);
+  color: var(--color-surface);
+  border-color: var(--color-primary);
+  font-weight: 700;
+}
+
+.page-btn.page-prev,
+.page-btn.page-next {
+  width: auto;
+  padding: 0 14px;
+}
+
+.page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   7. TRẠNG THÁI KHÔNG TÌM THẤY KẾT QUẢ (EMPTY STATE)
+   -------------------------------------------------------------------------- */
+.empty-state-box {
+  background: var(--color-surface);
+  border: 1.5px dashed var(--color-border);
+  border-radius: var(--radius-card);
+  padding: 48px 24px;
+  text-align: center;
+  display: none;
+}
+
+.empty-state-icon {
+  font-size: 3rem;
+  margin-bottom: var(--space-12);
+}
+
+.empty-state-title {
+  font-size: var(--text-h3);
+  margin-bottom: var(--space-8);
+}
+
+.empty-state-desc {
+  font-size: var(--text-small);
+  color: var(--color-muted);
+  max-width: 460px;
+  margin: 0 auto var(--space-20);
+}
+
+/* --------------------------------------------------------------------------
+   8. ĐÁP ỨNG THIẾT BỊ DI ĐỘNG (RESPONSIVE RULES CHO SIDEBAR LAYOUT)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .jobs-layout-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-20);
+  }
+
+  .btn-mobile-filter {
+    display: flex;
+  }
+
+  .btn-close-sidebar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-pill);
+    background: var(--color-border-light);
+    color: var(--color-dark);
+  }
+
+  /* Biến Sidebar thành Modal Bottom Sheet / Drawer trên Mobile */
+  .jobs-filter-sidebar {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    bottom: 0;
+    width: 320px;
+    max-width: 85vw;
+    height: 100vh;
+    max-height: 100vh;
+    z-index: 2000;
+    border-radius: 0;
+    box-shadow: var(--shadow-modal);
+    transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .jobs-filter-sidebar.is-open {
+    right: 0;
+  }
+
+  .sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 1999;
+    display: none;
+  }
+
+  .sidebar-backdrop.is-visible {
+    display: block;
+  }
+}
+
+@media (max-width: 640px) {
+  .job-item-header {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .job-item-salary {
+    align-self: flex-start;
+  }
+
+  .results-control-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .search-strip-select {
+    display: none;
+  }
+}

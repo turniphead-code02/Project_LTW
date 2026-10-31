@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chi Tiết Việc Làm &amp; Ứng Tuyển — JobPortal | Hồ Trúc Gia Hân (Nhóm 6 UTH)</title>
+  <meta name="description" content="Chi tiết tin tuyển dụng và cửa sổ nộp hồ sơ CV trực tuyến. Thiết kế theo tiêu chuẩn Wireframe 5.3 Bố cục 70/30 & Sticky Box trong QTTK.html - Hồ Trúc Gia Hân (MSSV: 056306004131)." />
+
+  <!-- Preconnect Google Fonts để tối ưu tốc độ tải trang -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- Nạp tệp Stylesheet nền tảng & linh kiện theo kiến trúc module -->
+  <link rel="stylesheet" href="./assets/css/variables.css" />
+  <link rel="stylesheet" href="./assets/css/base.css" />
+  <link rel="stylesheet" href="./assets/css/components.css" />
+  <link rel="stylesheet" href="./assets/css/jobs.css" />
+  <link rel="stylesheet" href="./assets/css/job-detail.css" />
+</head>
+<body>
+
+  <!-- =========================================================================
+       1. THANH ĐIỀU HƯỚNG CỐ ĐỊNH (STICKY HEADER NAVBAR — Z-PATTERN)
+       ========================================================================= -->
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <!-- Cụm Logo thương hiệu -->
+      <a href="./index.html" class="header-brand" aria-label="Trang chủ JobPortal">
+        <div class="brand-icon" aria-hidden="true">💼</div>
+        <div class="brand-text">Job<span>Portal</span><span class="brand-badge">UTH</span></div>
+      </a>
+
+      <!-- Menu điều hướng chính -->
+      <nav class="header-nav" role="navigation" aria-label="Điều hướng chính">
+        <a href="./index.html" class="nav-link">Trang Chủ</a>
+        <a href="./jobs.html" class="nav-link active">Tìm Việc Làm</a>
+        <a href="./index.html#categories" class="nav-link">Ngành Nghề</a>
+        <a href="./index.html#employers" class="nav-link">Doanh Nghiệp</a>
+        <a href="../index.html" class="nav-link" style="color: var(--color-primary); font-weight: 700;">Danh Bạ Nhóm 6</a>
+      </nav>
+
+      <!-- Cụm nút hành động bên phải -->
+      <div class="header-actions">
+        <a href="./employer-dashboard.html" class="btn-employer-slug" title="Dành cho nhà tuyển dụng đăng tin">
+          <span>🏢</span>
+          <span>Nhà Tuyển Dụng</span>
+        </a>
+        <a href="./auth.html?mode=login" class="btn btn-outline btn-sm">Đăng Nhập</a>
+        <a href="./auth.html?mode=register" class="btn btn-accent btn-sm">Đăng Ký</a>
+
+        <!-- Nút mở Menu trên Mobile -->
+        <button class="mobile-toggle-btn" type="button" aria-expanded="false" aria-label="Mở menu điều hướng">
+          ☰
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       2. THANH BREADCRUMB DẪN HƯỚNG (BREADCRUMBS STRIP)
+       ========================================================================= -->
+  <div class="job-detail-header">
+    <div class="container">
+      <nav class="job-breadcrumbs" aria-label="Đường dẫn trang">
+        <a href="./index.html">Trang Chủ</a>
+        <span class="job-breadcrumbs-sep">/</span>
+        <a href="./jobs.html">Tìm Kiếm Việc Làm IT</a>
+        <span class="job-breadcrumbs-sep">/</span>
+        <span class="job-breadcrumbs-current" id="crumbJobTitle" aria-current="page">Đang tải thông tin...</span>
+      </nav>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       3. BỐ CỤC CHÍNH 2 CỘT 70/30 (ASYMMETRIC 2.3FR : 1FR — WIREFRAME 5.3)
+       ========================================================================= -->
+  <main id="mainContent" class="main-content" role="main">
+    <div class="container">
+      <div class="job-detail-layout">
+
+        <!-- -------------------------------------------------------------------
+             CỘT TRÁI (~70%): NỘI DUNG CHI TIẾT BẢN MÔ TẢ CÔNG VIỆC (JD)
+             ------------------------------------------------------------------- -->
+        <div class="job-detail-main">
+
+          <!-- Khối Header vị trí tuyển dụng -->
+          <article class="job-header-card">
+            <div class="job-header-top">
+              <div class="job-header-logo" id="jobLogoBox" aria-hidden="true">
+                <!-- Chữ cái Logo -->
+                IT
+              </div>
+              <div class="job-header-info">
+                <h1 class="job-header-title" id="jobTitle">Kỹ Sư Lập Trình Frontend React (Junior/Middle)</h1>
+                <div class="job-header-company" id="jobCompany">
+                  <span>🏢</span>
+                  <strong>Công Ty Cổ Phần Công Nghệ VNG</strong>
+                  <span class="badge badge-verified">✓ Xác thực</span>
+                </div>
+                <div class="job-header-meta-pills" id="jobMetaPills">
+                  <!-- Render động pills thông số -->
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- 1. Mô Tả Công Việc (Job Description) -->
+          <section class="jd-section-card" aria-labelledby="headingJD">
+            <h2 class="jd-section-title" id="headingJD">
+              <span class="jd-section-title-icon" aria-hidden="true">📋</span>
+              <span>1. Mô Tả Công Việc (Job Description)</span>
+            </h2>
+            <div class="jd-content-body">
+              <ul class="jd-list" id="jdDescriptionList">
+                <!-- Nội dung mô tả sẽ được nạp qua JavaScript -->
+              </ul>
+            </div>
+          </section>
+
+          <!-- 2. Yêu Cầu Ứng Viên (Requirements) -->
+          <section class="jd-section-card" aria-labelledby="headingReq">
+            <h2 class="jd-section-title" id="headingReq">
+              <span class="jd-section-title-icon" aria-hidden="true">🎯</span>
+              <span>2. Yêu Cầu Ứng Viên (Requirements)</span>
+            </h2>
+            <div class="jd-content-body">
+              <ul class="jd-list" id="jdRequirementsList">
+                <!-- Yêu cầu sẽ được nạp qua JavaScript -->
+              </ul>
+
+              <!-- Khối thẻ công nghệ liên quan -->
+              <div style="margin-top: var(--space-20); border-top: 1px solid var(--color-border-light); padding-top: var(--space-16);">
+                <strong style="font-size: var(--text-small); color: var(--color-dark);">Công nghệ &amp; Kỹ năng trọng tâm:</strong>
+                <div class="jd-tags-wrap" id="jdTagsContainer">
+                  <!-- Tags -->
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 3. Quyền Lợi Được Hưởng (Benefits) -->
+          <section class="jd-section-card" aria-labelledby="headingBenefits">
+            <h2 class="jd-section-title" id="headingBenefits">
+              <span class="jd-section-title-icon" aria-hidden="true">🎁</span>
+              <span>3. Quyền Lợi Được Hưởng (Benefits)</span>
+            </h2>
+            <div class="benefits-grid" id="jdBenefitsGrid">
+              <!-- Render lưới quyền lợi đãi ngộ -->
+            </div>
+          </section>
+
+          <!-- 4. Tổng Quan Về Doanh Nghiệp Tuyển Dụng (Company Profile) -->
+          <section class="company-profile-box" aria-labelledby="headingCompany">
+            <h2 class="jd-section-title" id="headingCompany">
+              <span class="jd-section-title-icon" aria-hidden="true">🏢</span>
+              <span>4. Thông Tin Doanh Nghiệp Tuyển Dụng</span>
+            </h2>
+            <h3 style="font-size: 1.15rem; color: var(--color-primary); margin-bottom: 8px;" id="compName">Tập Đoàn Công Nghệ</h3>
+            <p style="font-size: var(--text-small); color: var(--color-body); line-height: 1.6;" id="compDesc">
+              Thông tin tóm tắt quá trình hình thành và phát triển của công ty.
+            </p>
+
+            <div class="company-meta-grid">
+              <div class="company-meta-item">
+                <span class="company-meta-label">Quy Mô Nhân Sự</span>
+                <span class="company-meta-val" id="compScale">1.000+ nhân viên</span>
+              </div>
+              <div class="company-meta-item">
+                <span class="company-meta-label">Năm Thành Lập</span>
+                <span class="company-meta-val" id="compFounded">2004</span>
+              </div>
+              <div class="company-meta-item">
+                <span class="company-meta-label">Trụ Sở Chính</span>
+                <span class="company-meta-val" id="compHq">TP. Hồ Chí Minh</span>
+              </div>
+            </div>
+
+            <div>
+              <a href="#" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm" id="compWebsite">
+                <span>Xem Website Doanh Nghiệp</span>
+                <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </section>
+
+          <!-- 5. Việc Làm Tương Tự Gợi Ý (Similar Jobs) -->
+          <section class="jd-section-card" aria-labelledby="headingSimilar">
+            <h2 class="jd-section-title" id="headingSimilar">
+              <span class="jd-section-title-icon" aria-hidden="true">💡</span>
+              <span>5. Cơ Hội Việc Làm Tương Tự Có Thể Bạn Quan Tâm</span>
+            </h2>
+            <div class="similar-jobs-wrap" id="similarJobsContainer">
+              <!-- Render danh sách việc làm gợi ý -->
+            </div>
+          </section>
+
+        </div>
+
+        <!-- -------------------------------------------------------------------
+             CỘT PHẢI (~30%): KHỐI HÀNH ĐỘNG GHIM NỔI (STICKY ACTION BOX)
+             ------------------------------------------------------------------- -->
+        <aside class="job-sidebar-sticky" aria-label="Bảng tóm tắt và hành động ứng tuyển">
+
+          <!-- Sticky Action Box (Chuẩn Wireframe 5.3) -->
+          <div class="sticky-action-box">
+            <div class="action-box-salary-row">
+              <div class="action-box-salary-label">Mức Thu Nhập Dự Kiến</div>
+              <div class="action-box-salary-amount" id="stickySalary">15 - 22 Triệu</div>
+            </div>
+
+            <div class="action-box-specs-list">
+              <div class="spec-row">
+                <span class="spec-label">📍 Địa điểm:</span>
+                <span class="spec-val" id="stickyLocation">Quận 7, TP.HCM</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">🕒 Hạn nộp hồ sơ:</span>
+                <span class="spec-val" id="stickyDeadline">25/11/2026</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">💼 Kinh nghiệm:</span>
+                <span class="spec-val" id="stickyExp">1 - 3 năm</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">👥 Số lượng tuyển:</span>
+                <span class="spec-val" id="stickyQuantity">03 Kỹ sư</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">🎖️ Cấp bậc:</span>
+                <span class="spec-val" id="stickyLevel">Junior / Middle</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">⏰ Hình thức:</span>
+                <span class="spec-val" id="stickyWorkType">Toàn thời gian</span>
+              </div>
+            </div>
+
+            <!-- Nút Kêu Gọi Hành Động Ứng Tuyển Chính (High Visibility CTA) -->
+            <button type="button" class="btn-apply-main btn-trigger-apply" aria-haspopup="dialog" aria-controls="applyModal">
+              <span>⚡ ỨNG TUYỂN NGAY</span>
+            </button>
+
+            <!-- Hàng nút phụ: Lưu tin & Chia sẻ -->
+            <div class="action-box-sub-btns">
+              <button type="button" class="btn-sub-action" id="btnBookmarkJob" title="Lưu việc làm vào danh sách yêu thích">
+                <span>🤍</span>
+                <span>Lưu Tin</span>
+              </button>
+              <button type="button" class="btn-sub-action" id="btnShareJob" title="Sao chép liên kết chia sẻ">
+                <span>🔗</span>
+                <span>Chia Sẻ</span>
+              </button>
+            </div>
+
+            <p class="action-box-note">
+              ✓ Ứng tuyển trực tiếp bằng CV chuẩn PDF (Hoàn toàn miễn phí)
+            </p>
+          </div>
+
+          <!-- Thông tin chuyên viên nhân sự phụ trách -->
+          <div class="recruiter-contact-card">
+            <div class="recruiter-header">
+              <div class="recruiter-avatar" aria-hidden="true">HR</div>
+              <div class="recruiter-info">
+                <h5 id="recruiterName">Chuyên Viên Tuyển Dụng</h5>
+                <p id="recruiterRole">Talent Acquisition Specialist</p>
+              </div>
+            </div>
+            <div style="font-size: var(--text-xs); color: var(--color-body); margin-bottom: 6px;">
+              📧 Email: <strong id="recruiterEmail" style="color: var(--color-primary);">hr@company.com</strong>
+            </div>
+            <div class="recruiter-guarantee">
+              <span>🛡️</span>
+              <span>Cam kết phản hồi hồ sơ trong vòng 24 - 48 giờ làm việc</span>
+            </div>
+          </div>
+
+        </aside>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- =========================================================================
+       4. CỬA SỔ MODAL NỘP HỒ SƠ ỨNG TUYỂN (APPLY MODAL — WIREFRAME 5.3 QTTK)
+       ========================================================================= -->
+  <div class="modal-backdrop" id="applyModal" role="dialog" aria-modal="true" aria-labelledby="modalJobTitle">
+    <div class="modal-dialog">
+      <!-- Đầu Modal -->
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <h3 id="modalJobTitle">Nộp Hồ Sơ Ứng Tuyển</h3>
+          <p>Ứng tuyển vị trí tại: <strong id="modalJobCompany">Doanh Nghiệp Tuyển Dụng</strong></p>
+        </div>
+        <button type="button" class="btn-modal-close" id="btnCloseModal" aria-label="Đóng cửa sổ nộp hồ sơ">
+          ✕
+        </button>
+      </div>
+
+      <!-- Thân Form Modal -->
+      <form id="applyJobForm" class="modal-body">
+        <!-- Họ và tên ứng viên -->
+        <div class="form-group">
+          <label for="applicantName" class="form-label">Họ và tên của bạn <span class="req">*</span></label>
+          <input 
+            type="text" 
+            id="applicantName" 
+            class="form-control" 
+            placeholder="Ví dụ: Nguyễn Văn An" 
+            required 
+            aria-required="true"
+          />
+        </div>
+
+        <!-- Email & Số điện thoại (2 cột) -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label for="applicantEmail" class="form-label">Địa chỉ Email <span class="req">*</span></label>
+            <input 
+              type="email" 
+              id="applicantEmail" 
+              class="form-control" 
+              placeholder="example@student.ut.edu.vn" 
+              required 
+              aria-required="true"
+            />
+          </div>
+          <div class="form-group">
+            <label for="applicantPhone" class="form-label">Số điện thoại <span class="req">*</span></label>
+            <input 
+              type="tel" 
+              id="applicantPhone" 
+              class="form-control" 
+              placeholder="0912 345 678" 
+              required 
+              aria-required="true"
+            />
+          </div>
+        </div>
+
+        <!-- Khối kéo thả tệp CV (Dropzone) -->
+        <div class="form-group">
+          <label class="form-label">Tệp CV ứng tuyển đính kèm <span class="req">*</span></label>
+          <div class="cv-upload-dropzone" id="cvDropzone" role="button" tabindex="0" aria-label="Kéo thả tệp CV hoặc click để chọn">
+            <div class="upload-icon" aria-hidden="true">📁</div>
+            <div class="upload-title">
+              Kéo thả tệp CV vào đây hoặc <a href="javascript:void(0);">chọn tệp từ máy tính</a>
+            </div>
+            <div class="upload-hint">
+              Hỗ trợ định dạng: .PDF, .DOC, .DOCX (Dung lượng tối đa 5.0 MB)
+            </div>
+            <input type="file" id="cvFileInput" accept=".pdf,.doc,.docx" style="display: none;" />
+          </div>
+
+          <!-- Thông báo tệp đã chọn -->
+          <div class="file-selected-badge" id="fileSelectedBadge">
+            <div class="file-info">
+              <span aria-hidden="true">📄</span>
+              <span id="selectedFileName">CV_UngTuyen.pdf (1.2 MB)</span>
+            </div>
+            <button type="button" class="btn-remove-file" id="btnRemoveFile" title="Gỡ bỏ và chọn lại tệp khác">
+              ✕
+            </button>
+          </div>
+        </div>
+
+        <!-- Thư ngỏ / Lời giới thiệu -->
+        <div class="form-group">
+          <label for="applicantCoverLetter" class="form-label">Thư ngỏ / Giới thiệu ngắn về bản thân (Không bắt buộc)</label>
+          <textarea 
+            id="applicantCoverLetter" 
+            class="form-control" 
+            placeholder="Em mong muốn ứng tuyển vị trí này vì đam mê với sản phẩm công nghệ của Quý công ty và đã có nền tảng vững chắc về..."
+          ></textarea>
+        </div>
+
+        <!-- Điều khoản cam kết -->
+        <div style="margin-bottom: var(--space-8);">
+          <label style="display: flex; align-items: flex-start; gap: 8px; font-size: var(--text-xs); color: var(--color-muted); cursor: pointer;">
+            <input type="checkbox" required checked style="accent-color: var(--color-primary); margin-top: 2px;" />
+            <span>Tôi cam kết thông tin cung cấp trong hồ sơ là chính xác và đồng ý để Nhà tuyển dụng liên hệ phỏng vấn.</span>
+          </label>
+        </div>
+
+        <!-- Đáy Modal: Các nút hành động -->
+        <div class="modal-footer" style="padding-left: 0; padding-right: 0; margin-top: var(--space-16);">
+          <button type="button" class="btn btn-outline" id="btnCancelModal">Hủy Bỏ</button>
+          <button type="submit" class="btn btn-accent" id="btnSubmitApplication">
+            <span>Xác Nhận Nộp Đơn ↗</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       5. THANH STICKY ỨNG TUYỂN DƯỚI ĐÁY TRÊN THIẾT BỊ DI ĐỘNG (< 1024PX)
+       ========================================================================= -->
+  <div class="mobile-sticky-apply-bar" aria-label="Thanh ứng tuyển nhanh di động">
+    <div class="mobile-bar-inner">
+      <div class="mobile-bar-salary">
+        <span class="mobile-bar-salary-label">Mức lương:</span>
+        <span class="mobile-bar-salary-val" id="mobileBarSalary">15 - 22 Triệu</span>
+      </div>
+      <button type="button" class="btn btn-accent btn-trigger-apply" style="padding: 10px 20px; font-weight: 800;">
+        <span>⚡ Ứng Tuyển</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       6. CHÂN TRANG SITEMAP TOÀN DIỆN (SITE FOOTER — CHUẨN ZERO DEAD-END)
+       ========================================================================= -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <!-- Cột 1: Thông tin thương hiệu & Dự án Nhóm 6 -->
+        <div>
+          <div class="header-brand" style="margin-bottom: var(--space-16); color: #ffffff;">
+            <div class="brand-icon" style="background:#3b82f6;">💼</div>
+            <div class="brand-text" style="color:#ffffff;">Job<span style="color:#60a5fa;">Portal</span></div>
+          </div>
+          <p style="font-size: var(--text-small); color: #94a3b8; line-height: 1.6; margin-bottom: var(--space-16);">
+            Hệ thống Cổng Thông Tin Việc Làm &amp; Tuyển Dụng Trực Tuyến — Đồ án môn Lập trình Website, Khoa Công Nghệ Thông Tin, Trường Đại học Giao thông vận tải TP.HCM (UTH).
+          </p>
+          <p style="font-size: var(--text-xs); color: #64748b; line-height: 1.6;">
+            <strong>Module Chi Tiết Việc Làm &amp; Ứng Tuyển:</strong> Hồ Trúc Gia Hân (MSSV: 056306004131)<br />
+            <strong>Trưởng nhóm / Technical Lead:</strong> Trần Hữu Thành (MSSV: 044206000003)
+          </p>
+        </div>
+
+        <!-- Cột 2: Dành Cho Ứng Viên -->
+        <div>
+          <h4 class="footer-col-title">Dành Cho Ứng Viên</h4>
+          <ul class="footer-links">
+            <li><a href="./jobs.html">Tìm kiếm việc làm IT</a></li>
+            <li><a href="./candidate-dashboard.html">Hồ sơ cá nhân &amp; CV</a></li>
+            <li><a href="./my-applications.html">Theo dõi đơn ứng tuyển</a></li>
+            <li><a href="./saved-jobs.html">Việc làm đã lưu</a></li>
+            <li><a href="./jobs.html?keyword=ThucTap">Việc làm thực tập sinh</a></li>
+          </ul>
+        </div>
+
+        <!-- Cột 3: Dành Cho Doanh Nghiệp -->
+        <div>
+          <h4 class="footer-col-title">Dành Cho Doanh Nghiệp</h4>
+          <ul class="footer-links">
+            <li><a href="./employer-dashboard.html">Bảng điều khiển tuyển dụng</a></li>
+            <li><a href="./post-job.html">Đăng tin tuyển dụng mới</a></li>
+            <li><a href="./candidate-management.html">Quản lý danh sách ứng viên</a></li>
+            <li><a href="./auth.html?role=employer">Đăng ký doanh nghiệp</a></li>
+            <li><a href="./employer-guide.html">Quy chế kiểm duyệt hồ sơ</a></li>
+          </ul>
+        </div>
+
+        <!-- Cột 4: Đăng Ký Nhận Bản Tin Việc Làm -->
+        <div>
+          <h4 class="footer-col-title">Đăng Ký Nhận Tin Tuyển Dụng</h4>
+          <p class="footer-newsletter-p">Nhận thông báo việc làm mới nhất phù hợp với chuyên ngành của bạn mỗi sáng Thứ Hai.</p>
+          <form id="newsletterForm" class="newsletter-form" aria-label="Đăng ký nhận tin" onsubmit="event.preventDefault(); window.showToast('Đăng ký nhận tin thành công! Cảm ơn bạn.', 'success');">
+            <input type="email" class="newsletter-input" placeholder="Nhập địa chỉ email của bạn..." required aria-label="Địa chỉ email nhận bản tin" />
+            <button type="submit" class="btn btn-accent btn-sm">Đăng Ký</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Thanh bản quyền đáy trang & Liên kết quay lại Hub -->
+      <div class="footer-bottom">
+        <div>
+          <p>© 2026 Nhóm 6 — Đồ án Lập trình Website (Web Programming). GVHD: ThS. Trần Thịnh Mạnh Đức.</p>
+        </div>
+        <div>
+          <a href="../index.html" class="footer-back-hub" title="Quay về trang danh sách portfolio các thành viên">
+            <span>←</span>
+            <span>Quay lại Danh Bạ Portfolio Nhóm 6</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Nạp tệp kịch bản JavaScript điều khiển -->
+  <script src="./assets/js/main.js"></script>
+  <script src="./assets/js/job-detail.js"></script>
+</body>
+</html>
