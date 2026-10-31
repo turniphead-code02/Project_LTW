@@ -1,0 +1,115 @@
+/* ==========================================================================
+   JOB PORTAL DESIGN TOKENS — MÔN LẬP TRÌNH WEBSITE (NHÓM 6)
+   Kiến trúc: Chuẩn hóa theo Mục 6 file QTTK.html (Báo cáo Quy tắc thiết kế)
+   Nhóm trưởng & Kiến trúc sư hệ thống: Trần Hữu Thành (MSSV: 044206000003)
+   ========================================================================== */
+
+:root {
+  /* ------------------------------------------------------------------------
+     1. MÀU SẮC THEO QUY TẮC 60 - 30 - 10 & TIÊU CHUẨN TIẾP CẬN WCAG 2.1 AA
+     ------------------------------------------------------------------------ */
+  /* 30% MÀU NHẬN DIỆN THƯƠNG HIỆU (Trust Royal Blue - Sự tin cậy doanh nghiệp) */
+  --color-primary: #1e40af;          /* Blue 800 - Màu thương hiệu chính */
+  --color-primary-light: #3b82f6;    /* Blue 500 - Trạng thái Hover / Focus */
+  --color-primary-dark: #1e3a8a;     /* Blue 900 - Trạng thái Active / Nhấn */
+  --color-primary-soft: #eff6ff;     /* Blue 50  - Nền khối thẻ nổi bật, Badge */
+  --color-primary-rgb: 30, 64, 175;
+
+  /* 10% MÀU ĐIỂM NHẤN HÀNH ĐỘNG (Action Emerald Green - Thôi thúc nộp hồ sơ) */
+  --color-accent: #10b981;           /* Emerald 500 - Nút CTA chính (Tìm việc, Nộp đơn) */
+  --color-accent-hover: #059669;     /* Emerald 600 - Hover nút CTA */
+  --color-accent-soft: #ecfdf5;      /* Emerald 50  - Nhãn trúng tuyển, thành công */
+  --color-accent-rgb: 16, 185, 129;
+
+  /* MÀU TRẠNG THÁI HỆ THỐNG (Status Colors) */
+  --color-warning: #f59e0b;          /* Amber 500 - Badge "Tuyển gấp", Đang chờ duyệt */
+  --color-warning-soft: #fef3c7;     /* Amber 100 - Nền badge tuyển gấp */
+  --color-warning-dark: #b45309;     /* Amber 700 - Chữ trong badge */
+  --color-danger: #ef4444;           /* Red 500   - Báo lỗi, Đã hết hạn, Từ chối */
+  --color-danger-soft: #fee2e2;      /* Red 100   - Nền cảnh báo lỗi */
+  --color-danger-dark: #b91c1c;      /* Red 700   - Chữ báo lỗi */
+
+  /* 60% MÀU NỀN & BẢNG MÀU XÁM TRUNG TÍNH (Neutral Grayscale - Slate) */
+  --color-dark: #0f172a;             /* Slate 900 - Tiêu đề chính (Không dùng #000 thô ráp) */
+  --color-body: #334155;             /* Slate 700 - Thân bài mô tả công việc (Dịu mắt) */
+  --color-muted: #64748b;            /* Slate 500 - Chú thích phụ, ngày đăng, metadata */
+  --color-border: #e2e8f0;           /* Slate 200 - Đường viền ngăn cách card */
+  --color-border-light: #f1f5f9;     /* Slate 100 - Viền mờ ngăn cách danh sách */
+  --color-surface: #ffffff;          /* White     - Bề mặt card, modal, dropdown */
+  --color-bg-page: #f8fafc;          /* Slate 50  - Nền toàn trang web (Dịu mắt) */
+
+  /* ------------------------------------------------------------------------
+     2. HỆ THỐNG TYPOGRAPHY (MODULAR SCALE TỶ LỆ 1.25 — MAJOR THIRD)
+     ------------------------------------------------------------------------ */
+  --font-family-main: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-mono: 'Space Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Thang kích thước chữ theo rem (chuẩn 1rem = 16px) */
+  --text-display: 2.5rem;            /* 40px - Tiêu đề Hero Section trang chủ */
+  --text-h1: 2rem;                   /* 32px - Tiêu đề lớn các Section */
+  --text-h2: 1.5rem;                 /* 24px - Tiêu đề khối / Tên công ty lớn */
+  --text-h3: 1.25rem;                /* 20px - Tên công việc trên thẻ Card */
+  --text-h4: 1.125rem;               /* 18px - Tiểu mục trong mô tả JD */
+  --text-base: 1rem;                 /* 16px - Cỡ chữ thân bài chuẩn mực */
+  --text-small: 0.875rem;            /* 14px - Mức lương, địa điểm, hạn nộp */
+  --text-xs: 0.75rem;                /* 12px - Badge, nhãn phụ kỹ thuật */
+
+  /* Chiều cao dòng (Line-height) tối ưu khả năng đọc */
+  --leading-tight: 1.2;              /* Dành cho Display và H1 */
+  --leading-heading: 1.35;           /* Dành cho H2 và H3 */
+  --leading-body: 1.65;              /* Dành cho văn bản thường (Chuẩn QTTK #1) */
+
+  /* Độ dài dòng văn bản đọc lý tưởng (Line-length) */
+  --max-line-length: 68ch;           /* Khống chế tối đa 65-72 ký tự/dòng */
+
+  /* ------------------------------------------------------------------------
+     3. LƯỚI KHOẢNG TRẮNG 8-POINT GRID (WHITESPACE SYSTEM)
+     ------------------------------------------------------------------------ */
+  --space-2: 2px;
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-40: 40px;
+  --space-48: 48px;
+  --space-64: 64px;
+  --space-80: 80px;                  /* Khoảng cách chuẩn giữa các Section lớn */
+  --space-96: 96px;
+
+  /* ------------------------------------------------------------------------
+     4. GÓC BO TRÒN (BORDER RADIUS)
+     ------------------------------------------------------------------------ */
+  --radius-xs: 4px;
+  --radius-btn: 8px;                 /* Chuẩn cho Nút bấm và Ô nhập liệu Input */
+  --radius-input: 8px;
+  --radius-card: 14px;               /* Chuẩn cho Thẻ Card việc làm, Bảng điều khiển */
+  --radius-modal: 16px;              /* Chuẩn cho Hộp thoại Popup Modal nộp CV */
+  --radius-pill: 999px;              /* Chuẩn viên thuốc cho Tags và Badges */
+
+  /* ------------------------------------------------------------------------
+     5. ĐỔ BÓNG TẠO CHIỀU SÂU (ELEVATION & SHADOWS)
+     ------------------------------------------------------------------------ */
+  --shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+  --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.08), 0 1px 2px -1px rgba(15, 23, 42, 0.05);
+  --shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+  --shadow-hover: 0 14px 30px -4px rgba(30, 64, 175, 0.12), 0 4px 8px -2px rgba(15, 23, 42, 0.04);
+  --shadow-modal: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+
+  /* ------------------------------------------------------------------------
+     6. CHUYỂN ĐỘNG & HIỆU ỨNG (TRANSITIONS)
+     ------------------------------------------------------------------------ */
+  --transition-fast: all 0.15s ease-in-out;
+  --transition-normal: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-smooth: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ------------------------------------------------------------------------
+     7. KHUNG BỐ CỤC CHUẨN (CONTAINER & BREAKPOINTS)
+     ------------------------------------------------------------------------ */
+  --container-max-width: 1240px;
+  --container-padding: 24px;
+  --header-height: 74px;
+}
+

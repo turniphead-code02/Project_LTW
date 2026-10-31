@@ -32,3 +32,8 @@ dist/
 build/
 .cache/
 
+# Large reference documents (>100MB exceeds GitHub push limits)
+TLTK.pdf
+*.pdf
+
+
