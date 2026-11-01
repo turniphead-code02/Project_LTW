@@ -4,24 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>portfolios-051206000952</title>
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
     <header class="header">
         <div class="container">
             <a href="#home" class="logo">Dylan</a>
-            <a href="../../index.html">← Trang chủ nhóm</a>
+            <a href="#">Trang chủ nhóm</a>
             <nav class="nav">
                 <a href="#home">Home</a>
                 <a href="#about">About</a>
                 <a href="#education">Education</a>
+                <a href="#career">Career Goals</a>
                 <a href="#skills">Skills</a>
                 <a href="#projects">Projects</a>
                 <a href="#contact">Contact</a>
             </nav>
             <div class="header-actions">
-                <button class="theme-btn" id="themeBtn" aria-label="Tối">🌙</button>
-                <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+                <button type="button" class="theme-btn" id="themeBtn" aria-label="Tối">🌙</button>
+                <button type="button" class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
             </div>
         </div>
     </header>
@@ -32,7 +33,7 @@
             <span class="status-dot"></span>
             Xin chào! Chào mừng đến với Portfolio của tôi
         </p>
-        <h1>Tôi là <span class="gradient-text">Diễn</span></h1>
+        <h1>Đinh Duy<span class="gradient-text"> Diễn</span></h1>
         
         <h2>Sinh viên Công nghệ Thông tin</h2>
         <p class="description">
@@ -77,135 +78,429 @@
             </div>
             <div class="about-card">
                 <h3>Thông tin cá nhân</h3>
-                <p><strong>Ngành học: </strong>Công nghệ thông tin</p>
-                <p><strong>Email: </strong><a href="mailto:diendd0952@gmail.com">diendd0952@gmail.com</a></p> 
+                <div class="about-info">
+                    <div class="info-item">
+                        <span class="info-icon">🎓</span>
+                        <strong>Trường:</strong>
+                        <span>Đại học Giao thông Vận tải</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">💻</span>
+                        <strong>Ngành học:</strong>
+                        <span>Công nghệ thông tin</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">⚡</span>
+                        <strong>Sở thích:</strong>
+                        <span>Điện tử và công nghệ</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">🏆</span>
+                        <strong>Thể thao:</strong>
+                        <span>Các hoạt động thể thao</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">✉️</span>
+                        <strong>Email:</strong>
+                        <span>
+                            <a href="mailto:diendd0952@gmail.com">
+                                diendd0952@gmail.com
+                            </a>
+                        </span>
+                    </div>
+                </div>
             </div>
         </div>
-        </div>
+    </div>
     </section>
-    <section class="education reveal" id="education">
+<section class="education reveal" id="education">
     <div class="education-container">
-        <h2>Học vấn</h2>
+        <p class="section-label">HÀNH TRÌNH HỌC TẬP</p>
+        <h2>Học vấn & Quá trình phát triển</h2>
+
         <p class="education-description">
-            Quá trình học tập và định hướng phát triển của tôi.
+            Hành trình học tập và tích lũy kiến thức
+            trong lĩnh vực Công nghệ Thông tin của tôi.
         </p>
 
         <div class="education-card">
             <div class="education-icon">🎓</div>
+
             <div class="education-info">
+                <span class="project-tag">Đang học tập</span>
+
                 <h3>Sinh viên Công nghệ Thông tin</h3>
+
                 <p class="education-school">
                     Trường Đại học Giao thông Vận tải
                 </p>
-                <p class="education-time">
-                    Đang học
-                </p>
+
+                <p class="education-time">Đang học</p>
+
                 <p>
-                    Tìm hiểu về lập trình website, cơ sở dữ liệu
-                    và phát triển các ứng dụng phần mềm.
+                    Trong quá trình học tập, tôi từng bước
+                    xây dựng nền tảng kiến thức về lập trình,
+                    phát triển phần mềm và công nghệ thông tin.
+                    Tôi chú trọng kết hợp kiến thức lý thuyết
+                    với việc thực hành qua các bài tập và dự án.
                 </p>
             </div>
         </div>
+
+        <div class="education-details">
+            <article class="education-detail-card">
+                <span class="education-detail-icon">💻</span>
+                <h3>Lập trình Web</h3>
+                <p>
+                    Tìm hiểu HTML, CSS và JavaScript để xây dựng
+                    cấu trúc, thiết kế giao diện và tạo tương tác
+                    cho website.
+                </p>
+            </article>
+
+            <article class="education-detail-card">
+                <span class="education-detail-icon">🗄️</span>
+                <h3>Cơ sở dữ liệu</h3>
+                <p>
+                    Làm quen với SQL, cách tổ chức, lưu trữ
+                    và truy vấn dữ liệu trong hệ thống.
+                </p>
+            </article>
+
+            <article class="education-detail-card">
+                <span class="education-detail-icon">🧩</span>
+                <h3>Tư duy lập trình</h3>
+                <p>
+                    Rèn luyện tư duy logic, phân tích yêu cầu,
+                    chia nhỏ vấn đề và tìm hướng giải quyết
+                    thông qua các bài tập thực hành.
+                </p>
+            </article>
+
+            <article class="education-detail-card">
+                <span class="education-detail-icon">🚀</span>
+                <h3>Thực hành dự án</h3>
+                <p>
+                    Vận dụng kiến thức đã học vào việc xây dựng
+                    Portfolio cá nhân và tham gia dự án
+                    Cổng thông tin việc làm Job Portal.
+                </p>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="career reveal" id="career">
+    <div class="career-container">
+
+        <p class="section-label">ĐỊNH HƯỚNG TƯƠNG LAI</p>
+
+        <h2>Mục tiêu nghề nghiệp</h2>
+
+        <p class="career-description">
+            Tôi mong muốn phát triển bản thân trong lĩnh vực
+            Front-end Development, từng bước xây dựng những
+            giao diện website hiện đại, thân thiện và mang lại
+            trải nghiệm tốt cho người sử dụng.
+        </p>
+
+        <div class="career-highlight">
+            <div class="career-icon">🎯</div>
+
+            <div>
+                <span>ĐỊNH HƯỚNG NGHỀ NGHIỆP</span>
+                <h3>Front-end Developer</h3>
+                <p>
+                    Tập trung vào phát triển giao diện,
+                    trải nghiệm người dùng và tối ưu website.
+                </p>
+            </div>
+        </div>
+
+        <div class="career-grid">
+
+            <article class="career-card">
+                <span class="career-number">01</span>
+                <h3>Mục tiêu ngắn hạn</h3>
+                <p>
+                    Củng cố kiến thức HTML, CSS và JavaScript.
+                    Rèn luyện khả năng xây dựng giao diện
+                    responsive và cải thiện kỹ năng xử lý
+                    các vấn đề trong quá trình lập trình.
+                </p>
+            </article>
+
+            <article class="career-card">
+                <span class="career-number">02</span>
+                <h3>Mục tiêu trung hạn</h3>
+                <p>
+                    Tìm hiểu các công cụ và thư viện
+                    Front-end như React, nâng cao khả năng
+                    tổ chức mã nguồn và phát triển các
+                    giao diện website hoàn chỉnh.
+                </p>
+            </article>
+
+            <article class="career-card">
+                <span class="career-number">03</span>
+                <h3>Mục tiêu dài hạn</h3>
+                <p>
+                    Trở thành Front-end Developer chuyên nghiệp,
+                    có khả năng tham gia xây dựng sản phẩm,
+                    phối hợp với các thành viên trong nhóm
+                    và không ngừng cập nhật công nghệ mới.
+                </p>
+            </article>
+
+        </div>
+
+        <div class="career-strength">
+            <h3>Điểm mạnh tôi muốn phát triển</h3>
+
+            <p>
+                <strong>Tư duy logic và giải quyết vấn đề:</strong>
+                Tôi hướng đến việc phân tích yêu cầu,
+                xác định nguyên nhân, chia nhỏ vấn đề
+                và lựa chọn giải pháp phù hợp trong quá trình
+                xây dựng website.
+            </p>
+        </div>
+
     </div>
 </section>
 
 <section class="skills reveal" id="skills">
     <div class="skills-container">
-        <p class="section-label">NHỮNG GÌ TÔI ĐANG HỌC</p>
-        <h2>Kỹ năng của tôi</h2>
+
+        <p class="section-label">NĂNG LỰC CHUYÊN MÔN</p>
+
+        <h2>Kỹ năng & Công nghệ</h2>
+
         <p class="skills-description">
-            Tôi đang từng bước phát triển kỹ năng lập trình
-            và làm quen với các công nghệ xây dựng website.
+            Tôi đang từng bước phát triển kiến thức và kỹ năng
+            trong lĩnh vực Front-end Development.
+            Thông qua quá trình học tập và thực hành dự án,
+            tôi luôn cố gắng cải thiện khả năng lập trình,
+            tư duy logic và giải quyết vấn đề.
         </p>
-        <div class="skills-grid">
-            <div class="skill-card">
-                <span class="skill-icon">🌐</span>
-                <h3>HTML5</h3>
-                <p>Xây dựng cấu trúc website</p>
 
-        <div class="skill-progress">
-            <div class="skill-progress-bar" data-level="80">
-                <span></span>
+        <!-- FRONT-END -->
+        <div class="skill-category">
+            <div class="skill-category-heading">
+                <span>💻</span>
+                <h3>Front-end Development</h3>
             </div>
-        </div>
-    </div>
 
-    <!-- CSS3 -->
-    <div class="skill-card">
-        <span class="skill-icon">🎨</span>
-        <h3>CSS3</h3>
-        <p>Thiết kế giao diện website</p>
-        <div class="skill-progress">
-            <div class="skill-progress-bar" data-level="70">
-                <span></span>
+            <div class="skills-grid">
+
+                <div class="skill-card">
+                    <span class="skill-icon">🌐</span>
+                    <h3>HTML5</h3>
+                    <p>
+                        Xây dựng cấu trúc và tổ chức
+                        nội dung cho website.
+                    </p>
+                    <div class="skill-progress">
+                        <div class="skill-progress-bar"
+                            data-level="80">
+                            <span></span>
+                        </div>
+                    </div>
+                    <span class="skill-level">80%</span>
+                </div>
+
+                <div class="skill-card">
+                    <span class="skill-icon">🎨</span>
+                    <h3>CSS3</h3>
+                    <p>
+                        Thiết kế giao diện, bố cục,
+                        hiệu ứng và responsive.
+                    </p>
+                    <div class="skill-progress">
+                        <div class="skill-progress-bar"
+                            data-level="70">
+                            <span></span>
+                        </div>
+                    </div>
+                    <span class="skill-level">70%</span>
+                </div>
+
+                <div class="skill-card">
+                    <span class="skill-icon">⚡</span>
+                    <h3>JavaScript</h3>
+                    <p>
+                        Xây dựng chức năng tương tác
+                        và xử lý sự kiện trên website.
+                    </p>
+                    <div class="skill-progress">
+                        <div class="skill-progress-bar"
+                            data-level="50">
+                            <span></span>
+                        </div>
+                    </div>
+                    <span class="skill-level">50%</span>
+                </div>
+
             </div>
         </div>
-    </div>
-    <div class="skill-card">
-        <span class="skill-icon">⚡</span>
-        <h3>JavaScript</h3>
-        <p>Tạo tương tác cho website</p>
-        <div class="skill-progress">
-            <div class="skill-progress-bar" data-level="50">
-                <span></span>
+
+        <!-- PROGRAMMING & DATABASE -->
+        <div class="skill-category">
+            <div class="skill-category-heading">
+                <span>🗄️</span>
+                <h3>Programming & Database</h3>
+            </div>
+
+            <div class="skills-grid">
+
+                <div class="skill-card">
+                    <span class="skill-icon">🗃️</span>
+                    <h3>SQL</h3>
+                    <p>
+                        Làm quen với truy vấn,
+                        quản lý và tổ chức dữ liệu.
+                    </p>
+                    <div class="skill-progress">
+                        <div class="skill-progress-bar"
+                            data-level="60">
+                            <span></span>
+                        </div>
+                    </div>
+                    <span class="skill-level">60%</span>
+                </div>
+
             </div>
         </div>
-    </div>
-    <div class="skill-card">
-        <span class="skill-icon">🗄️</span>
-        <h3>SQL</h3>
-        <p>Làm quen với cơ sở dữ liệu</p>
-        <div class="skill-progress">
-            <div class="skill-progress-bar" data-level="60">
-                <span></span>
+
+        <!-- TOOLS -->
+        <div class="skill-category">
+            <div class="skill-category-heading">
+                <span>🛠️</span>
+                <h3>Tools & Technologies</h3>
+            </div>
+
+            <div class="technology-list">
+                <span>Visual Studio Code</span>
+                <span>Git</span>
+                <span>GitHub</span>
+                <span>Live Server</span>
             </div>
         </div>
+
+        <!-- SOFT SKILLS -->
+        <div class="skill-category">
+            <div class="skill-category-heading">
+                <span>🧠</span>
+                <h3>Soft Skills</h3>
+            </div>
+
+            <div class="soft-skills-grid">
+
+                <article class="soft-skill-card">
+                    <span>🔍</span>
+                    <h4>Tư duy logic</h4>
+                    <p>
+                        Phân tích vấn đề và suy nghĩ
+                        theo trình tự để tìm giải pháp.
+                    </p>
+                </article>
+
+                <article class="soft-skill-card">
+                    <span>🧩</span>
+                    <h4>Giải quyết vấn đề</h4>
+                    <p>
+                        Xác định nguyên nhân,
+                        thử nghiệm và cải thiện giải pháp.
+                    </p>
+                </article>
+
+                <article class="soft-skill-card">
+                    <span>📚</span>
+                    <h4>Tự học</h4>
+                    <p>
+                        Chủ động tìm hiểu kiến thức
+                        và công nghệ mới.
+                    </p>
+                </article>
+
+                <article class="soft-skill-card">
+                    <span>🤝</span>
+                    <h4>Làm việc nhóm</h4>
+                    <p>
+                        Phối hợp và trao đổi trong
+                        quá trình thực hiện dự án.
+                    </p>
+                </article>
+
+            </div>
+        </div>
+
     </div>
-</div>
 </section>
+
 
 <section class="projects reveal" id="projects">
     <div class="projects-container">
-        <p class="section-label">SẢN PHẨM CỦA TÔI</p>
-        <h2>Dự án tiêu biểu</h2>
-        <p class="projects-description">
-            Một số dự án giúp tôi vận dụng kiến thức
-            và rèn luyện kỹ năng lập trình web.
-        </p>
+        <div class="section-heading">
+            <span class="section-label">DỰ ÁN ĐÃ THỰC HIỆN</span>
+            <h2>Dự án <span class="gradient-text">nổi bật</span></h2>
+            <p>
+                Những dự án giúp tôi vận dụng kiến thức đã học
+                và từng bước phát triển kỹ năng lập trình Web.
+            </p>
+        </div>
 
         <div class="projects-grid">
-            <article class="project-card">
-                <div class="project-banner">
-                    <span>💼</span>
-                    <p>WEB DEVELOPMENT</p>
-                </div>
+            <div class="project-card">
+                <div class="project-content">
+                    <span class="project-number">01 / WEB DEVELOPMENT</span>
 
-                <div class="project-info">
-                    <span class="project-tag">Dự án học tập</span>
-                    <h3>Job Portal</h3>
+                    <h3>Cổng thông tin việc làm</h3>
 
-                    <p>
-                        Xây dựng cổng thông tin việc làm,
-                        hỗ trợ người tìm việc tiếp cận cơ hội
-                        nghề nghiệp và doanh nghiệp đăng tuyển.
+                    <p class="project-description">
+                        Xây dựng website kết nối sinh viên, người tìm việc
+                        với các doanh nghiệp. Hệ thống hướng đến việc hỗ trợ
+                        đăng tải thông tin tuyển dụng, quản lý hồ sơ và
+                        hỗ trợ quá trình ứng tuyển.
                     </p>
 
-                    <div class="project-tech">
-                        <span>HTML</span>
-                        <span>CSS</span>
-                        <span>JavaScript</span>
+                    <div class="project-info">
+                        <div>
+                            <strong>Vai trò</strong>
+                            <span>Thành viên nhóm</span>
+                        </div>
+
+                        <div>
+                            <strong>Lĩnh vực</strong>
+                            <span>Phát triển Website</span>
+                        </div>
+
+                        <div>
+                            <strong>Công nghệ</strong>
+                            <span>HTML, CSS, JavaScript</span>
+                        </div>
                     </div>
 
-                    <button type="button"
-                        class="project-link"
-                        id="projectDetailBtn">
-                        Xem chi tiết ↗
-                    </button>
+                    <div class="project-tags">
+                        <span>HTML5</span>
+                        <span>CSS3</span>
+                        <span>JavaScript</span>
+                        <span>UI Design</span>
+                    </div>
+
+                    <button
+                    class="project-link"
+                    id="projectDetailBtn"
+                    type="button">
+                    Tìm hiểu dự án
+                    <span>↗</span>
+                </button>
                 </div>
-            </article>
+            </div>
         </div>
     </div>
 </section>
+
 
 <div class="project-modal" id="projectModal"
     aria-hidden="true">
@@ -272,91 +567,84 @@
 </div>
 
 
+
 <section class="contact reveal" id="contact">
     <div class="contact-container">
+
         <p class="section-label">HÃY KẾT NỐI VỚI TÔI</p>
         <h2>Liên hệ</h2>
 
         <p class="contact-description">
-            Nếu bạn muốn trao đổi về lập trình web,
-            dự án học tập hoặc công nghệ, hãy gửi lời nhắn cho tôi!
+            Bạn có thể kết nối với tôi qua Email,
+            Zalo hoặc Facebook.
         </p>
 
-        <form class="contact-form" id="contactForm">
-            <div class="form-group">
-                <label for="contactName">Họ và tên</label>
-                <input
-                    type="text"
-                    id="contactName"
-                    name="name"
-                    placeholder="Nhập họ và tên"
-                    required
-                    minlength="2"
-                >
-            </div>
+        <div class="contact-grid">
 
-            <div class="form-group">
-                <label for="contactEmail">Email</label>
-                <input
-                    type="email"
-                    id="contactEmail"
-                    name="email"
-                    placeholder="example@gmail.com"
-                    required
-                >
-            </div>
+            <!-- EMAIL -->
+            <a href="mailto:diendd0952@gmail.com"
+               class="contact-card">
 
-            <div class="form-group">
-                <label for="contactMessage">Nội dung</label>
-                <textarea
-                    id="contactMessage"
-                    name="message"
-                    rows="5"
-                    placeholder="Nhập nội dung liên hệ..."
-                    required
-                    minlength="10"
-                ></textarea>
-            </div>
+                <div class="contact-icon">✉️</div>
 
-            <button type="submit" class="btn">
-                Gửi lời nhắn ↗
-            </button>
+                <h3>Email</h3>
 
-            <p id="formStatus" class="form-status"
-                role="status" aria-live="polite"></p>
-        </form>
-        <div class="social-links">
-    <a href="https://mail.google.com/"
-       class="social-link"
-       target="_blank"
-       rel="noopener noreferrer">
-        <span>✉️</span>
-        <span>Email</span>
-    </a>
+                <p>Gửi email trực tiếp cho tôi</p>
 
-        <a href="https://www.facebook.com/"
-        class="social-link"
-        target="_blank"
-        rel="noopener noreferrer">
-        <span>📘</span>
-        <span>Facebook</span>
-    </a>
-    <a href="https://chat.zalo.me/"
-       class="social-link"
-       target="_blank"
-       rel="noopener noreferrer">
-        <span>💬</span>
-        <span>Zalo</span>
-    </a>
-</div>
-        <p class="contact-note">
-            Bạn cũng có thể liên hệ qua email.
-            <a href="mailto:dienddd0952@gmail.com">
-                Gửi email trực tiếp ↗
+                <span class="contact-detail">
+                    diendd0952@gmail.com
+                </span>
+
+                <span class="contact-action">
+                    Gửi email ↗
+                </span>
             </a>
-        </p>
+
+            <!-- ZALO QR -->
+            <div class="contact-card zalo-card">
+
+                <div class="contact-icon">💬</div>
+
+                <h3>Zalo</h3>
+
+                <p>Quét mã QR để xem trang cá nhân</p>
+
+                <div class="zalo-qr-placeholder">
+                    <span>▦</span>
+                    <strong>QR ZALO</strong>
+                    <small>Đang chờ cập nhật mã QR</small>
+                </div>
+
+                <span class="contact-action">
+                    Quét mã để kết nối
+                </span>
+            </div>
+
+            <!-- FACEBOOK -->
+            <a href="https://www.facebook.com/dien.inh.936185"
+               class="contact-card"
+               target="_blank"
+               rel="noopener noreferrer">
+
+                <div class="contact-icon">📘</div>
+
+                <h3>Facebook</h3>
+
+                <p>Xem trang cá nhân của tôi</p>
+
+                <span class="contact-detail">
+                    Đinh Duy Diễn
+                </span>
+
+                <span class="contact-action">
+                    Truy cập Facebook ↗
+                </span>
+            </a>
+
+        </div>
     </div>
 </section>
+
 <button id="backToTop" class="back-to-top"
     type="button" aria-label="Quay lên đầu trang">
     ↑
@@ -365,6 +653,6 @@
     <footer>
             <p>@ 2026 - CV của tôi</p>
     </footer>
-    <script src="./main.js"></script>
+    <script src="./js/main.js"></script>
 </body>
 </html>
