@@ -4,11 +4,9 @@ const nav = document.querySelector(".nav");
 
 if (menuBtn && nav) {
     menuBtn.addEventListener("click", function () {
-        nav.classList.toggle("active");
-    });
+        const isOpen = nav.classList.toggle("active");
 
-    nav.addEventListener("mouseleave", function () {
-        nav.classList.remove("active");
+        menuBtn.setAttribute("aria-expanded", isOpen);
     });
 
     const navLinks = nav.querySelectorAll("a");
@@ -16,6 +14,7 @@ if (menuBtn && nav) {
     navLinks.forEach(function (link) {
         link.addEventListener("click", function () {
             nav.classList.remove("active");
+            menuBtn.setAttribute("aria-expanded", "false");
         });
     });
 }
@@ -125,6 +124,7 @@ const projectModal = document.getElementById("projectModal");
 const closeProjectModal = document.getElementById("closeProjectModal");
 const modalContactBtn = document.getElementById("modalContactBtn");
 
+
 function openProjectModal() {
     if (!projectModal) return;
 
@@ -136,7 +136,10 @@ function openProjectModal() {
     });
 
     document.body.style.overflow = "hidden";
-    closeProjectModal.focus();
+
+    if (closeProjectModal) {
+        closeProjectModal.focus();
+    }
 }
 
 function closeModal() {
@@ -179,7 +182,19 @@ if (projectDetailBtn && projectModal && closeProjectModal) {
 if (modalContactBtn) {
     modalContactBtn.addEventListener("click", function () {
         closeModal();
-        window.location.hash = "contact";
+
+        setTimeout(function () {
+            const contactSection = document.getElementById("contact");
+
+            if (contactSection) {
+                contactSection.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+
+                history.replaceState(null, "", "#contact");
+            }
+        }, 350);
     });
 }
 
@@ -262,3 +277,4 @@ if ("IntersectionObserver" in window && sections.length > 0) {
         activeSectionObserver.observe(section);
     });
 }
+
