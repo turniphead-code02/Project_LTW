@@ -1,0 +1,1297 @@
+/* ========================================
+   PORTFOLIO - NGUYỄN PHÚ QUANG
+   MAIN STYLE CSS
+======================================== */
+/* ========================================
+   1. RESET CSS
+======================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+/* ========================================
+   2. THEME VARIABLES
+======================================== */
+:root {
+    --bg-color: #0B1120;
+    --text-color: #F1F5F9;
+    --accent-color: #67E8F9;
+    --button-bg: #17243A;
+}
+/* Light Mode */
+body.light-mode {
+    --bg-color: #FFFFFF;
+    --text-color: #0F172A;
+    --accent-color: #2563EB;
+    --button-bg: #EAF0F8;
+}
+/* ========================================
+   3. GLOBAL STYLES
+======================================== */
+html {
+    scroll-behavior: smooth;
+}
+body {
+    min-height: 100vh;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: "Inter", sans-serif;
+    transition:
+        background-color 0.4s ease,
+        color 0.4s ease;
+}
+button,
+a {
+    -webkit-tap-highlight-color: transparent;
+}
+a:focus-visible,
+button:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 3px;
+}
+/* ========================================
+   4. HEADER
+======================================== */
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+    background-color: var(--bg-color);
+    border-bottom: 1px solid var(--button-bg);
+    transition: background-color 0.4s ease;
+}
+.header-container {
+    width: 100%;
+    min-height: 80px;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+/* ========================================
+   5. LOGO / PROFILE
+======================================== */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    min-width: 0;
+    text-decoration: none;
+}
+.logo-avatar {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+.logo-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+}
+.logo-name {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-color);
+}
+.logo-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.logo-tags span {
+    padding: 4px 9px;
+    border-radius: 5px;
+    background-color: var(--button-bg);
+    color: var(--accent-color);
+    font-size: 11px;
+    white-space: nowrap;
+}
+/* ========================================
+   6. NAVIGATION
+======================================== */
+.navbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.nav-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 16px;
+    border-radius: 10px;
+    background-color: var(--button-bg);
+    color: var(--text-color);
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease,
+        transform 0.3s ease;
+}
+.nav-link:hover {
+    background-color: var(--accent-color);
+    color: var(--bg-color);
+    transform: translateY(-2px);
+}
+/* ========================================
+   7. HEADER ACTIONS
+======================================== */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+/* Download CV */
+.cv-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 16px;
+    border-radius: 10px;
+    background-color: var(--accent-color);
+    color: var(--bg-color);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: transform 0.3s ease;
+}
+.cv-button:hover {
+    transform: translateY(-2px);
+}
+/* Theme & Menu Buttons */
+.icon-button {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--accent-color);
+    border-radius: 10px;
+    background-color: transparent;
+    color: var(--accent-color);
+    font-size: 18px;
+    cursor: pointer;
+    transition:
+        background-color 0.3s ease,
+        transform 0.3s ease;
+}
+.icon-button:hover {
+    background-color: var(--button-bg);
+    transform: translateY(-2px);
+}
+.menu-toggle {
+    display: none;
+}
+/* ========================================
+   8. HOME SECTION
+======================================== */
+.demo {
+    min-height: calc(100vh - 90px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 24px;
+    text-align: center;
+}
+.demo h1 {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: clamp(28px, 5vw, 48px);
+}
+.demo p {
+    color: var(--accent-color);
+    font-size: 16px;
+}
+/* ========================================
+   9. ABOUT ME SECTION
+======================================== */
+.about-section {
+    padding: 100px 24px;
+    scroll-margin-top: 100px;
+}
+.about-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+/* Heading */
+.about-heading {
+    text-align: center;
+    margin-bottom: 55px;
+}
+.about-heading h2 {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 38px;
+    font-weight: 700;
+}
+/* Hai cột chính */
+.about-content {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    align-items: stretch;
+    gap: 65px;
+}
+/* ========================================
+   9.1 ABOUT LEFT - CONTACT & IMAGE
+======================================== */
+/* Cột trái chia 3 hàng:
+   Hàng 1 = 1 phần
+   Hàng 2 + 3 = 2 phần
+*/
+.about-left {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) minmax(0, 2fr);
+    gap: 16px;
+    min-width: 0;
+    min-height: 0;
+}
+/* Hàng 1: Liên hệ */
+.about-contact {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    min-width: 0;
+    padding: 24px;
+    border: 1px solid var(--button-bg);
+    border-radius: 20px;
+    background-color: var(--button-bg);
+    scroll-margin-top: 110px;
+}
+.about-contact h3 {
+    color: var(--text-color);
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+}
+/* Contact Icons */
+.about-contact-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+.about-contact-links a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border: 1px solid var(--accent-color);
+    border-radius: 12px;
+    color: var(--accent-color);
+    font-size: 22px;
+    text-decoration: none;
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease,
+        transform 0.3s ease;
+}
+.about-contact-links a:hover {
+    background-color: var(--bg-color);
+    transform: translateY(-4px);
+}
+.about-contact-links a:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 3px;
+}
+/* ========================================
+   9.2 ABOUT IMAGE - BOTTOM 2 ROWS
+======================================== */
+.about-image {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    border: 2px solid var(--button-bg);
+    border-radius: 24px;
+    background-color: var(--button-bg);
+}
+.about-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    object-fit: cover;
+    object-position: center;
+}
+/* Image Caption */
+.about-image-caption {
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background-color: var(--button-bg);
+    color: var(--accent-color);
+    font-size: 13px;
+    font-weight: 600;
+}
+/* ========================================
+   9.3 ABOUT RIGHT - PERSONAL INFORMATION
+======================================== */
+.about-info {
+    min-width: 0;
+}
+.about-greeting {
+    color: var(--accent-color);
+    font-size: 15px;
+    font-weight: 600;
+}
+.about-info h3 {
+    margin-top: 10px;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 34px;
+    font-weight: 700;
+}
+.about-role {
+    margin-top: 10px;
+    color: var(--accent-color);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.7;
+}
+.about-description {
+    margin-top: 20px;
+    color: var(--text-color);
+    opacity: 0.85;
+    font-size: 15px;
+    line-height: 1.9;
+}
+/* About Highlights */
+.about-highlights {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 30px;
+}
+.about-highlight {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    min-height: 145px;
+    padding: 18px;
+    border-radius: 14px;
+    background-color: var(--button-bg);
+}
+.about-highlight > i {
+    color: var(--accent-color);
+    font-size: 19px;
+    flex-shrink: 0;
+}
+.about-highlight div {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    min-width: 0;
+}
+.about-highlight strong {
+    font-size: 14px;
+    line-height: 1.5;
+}
+.about-highlight span {
+    font-size: 12px;
+    line-height: 1.6;
+    opacity: 0.8;
+    overflow-wrap: anywhere;
+}
+/* Contact Button */
+.about-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 30px;
+    padding: 14px 22px;
+    border-radius: 12px;
+    background-color: var(--accent-color);
+    color: var(--bg-color);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+}
+.about-button:hover {
+    transform: translateY(-3px);
+}
+/* ========================================
+   10. SKILLS ACCORDION SECTION
+======================================== */
+.skills-section {
+    padding: 100px 24px;
+    scroll-margin-top: 100px;
+}
+.skills-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.skills-heading {
+    text-align: center;
+    margin-bottom: 45px;
+}
+.skills-label {
+    display: inline-block;
+    margin-bottom: 14px;
+    color: var(--accent-color);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 3px;
+}
+.skills-heading h2 {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 38px;
+    font-weight: 700;
+}
+.skills-heading p {
+    max-width: 600px;
+    margin: 16px auto 0;
+    color: var(--text-color);
+    opacity: 0.75;
+    font-size: 15px;
+    line-height: 1.8;
+}
+/* Accordion Container */
+.skills-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+/* Main Skill Box */
+.skill-group {
+    border: 1px solid var(--button-bg);
+    border-radius: 16px;
+    background-color: var(--button-bg);
+    overflow: hidden;
+    transition: border-color 0.3s ease;
+}
+.skill-group[open] {
+    border-color: var(--accent-color);
+}
+/* Clickable Header */
+.skill-group-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 24px;
+    cursor: pointer;
+    list-style: none;
+    transition: background-color 0.3s ease;
+}
+.skill-group-header::-webkit-details-marker {
+    display: none;
+}
+.skill-group-header::marker {
+    content: "";
+}
+.skill-group-header > i:first-child {
+    width: 30px;
+    flex-shrink: 0;
+    color: var(--accent-color);
+    font-size: 24px;
+    text-align: center;
+}
+.skill-group-header span {
+    flex: 1;
+    color: var(--text-color);
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+}
+.skill-arrow {
+    flex-shrink: 0;
+    color: var(--accent-color);
+    transition: transform 0.3s ease;
+}
+.skill-group[open] .skill-arrow {
+    transform: rotate(180deg);
+}
+.skill-group-header:hover {
+    background-color: var(--bg-color);
+}
+.skill-group-header:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: -3px;
+}
+/* Child Skills Grid */
+.skill-children {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    padding: 20px;
+    border-top: 1px solid var(--accent-color);
+}
+/* Child Skill Box */
+.skill-child {
+    min-width: 0;
+    padding: 22px;
+    border: 1px solid var(--button-bg);
+    border-radius: 12px;
+    background-color: var(--bg-color);
+    transition:
+        transform 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+.skill-child:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent-color);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+.skill-child h3 {
+    margin-bottom: 10px;
+    color: var(--accent-color);
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+}
+.skill-child p {
+    color: var(--text-color);
+    opacity: 0.8;
+    font-size: 14px;
+    line-height: 1.8;
+}
+/* ========================================
+   11. PROJECTS SECTION
+======================================== */
+.projects-section {
+    padding: 100px 24px;
+    scroll-margin-top: 100px;
+}
+.projects-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+/* Heading */
+.projects-heading {
+    text-align: center;
+    margin-bottom: 45px;
+}
+.projects-label {
+    display: inline-block;
+    margin-bottom: 14px;
+    color: var(--accent-color);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    letter-spacing: 3px;
+}
+.projects-heading h2 {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 38px;
+}
+.projects-heading p {
+    max-width: 650px;
+    margin: 16px auto 0;
+    color: var(--text-color);
+    opacity: 0.75;
+    font-size: 15px;
+    line-height: 1.8;
+}
+/* 3 Projects on Desktop */
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+/* Clickable project cards: the whole card is one GitHub link */
+.projects-grid > a.project-card {
+    color: var(--text-color);
+    text-decoration: none;
+    cursor: pointer;
+}
+.projects-grid > a.project-card:visited {
+    color: var(--text-color);
+}
+.projects-grid > a.project-card:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 4px;
+}
+/* Project Card */
+.project-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--button-bg);
+    border-radius: 14px;
+    background-color: var(--button-bg);
+    transition:
+        transform 0.3s ease,
+        border-color 0.3s ease;
+}
+.project-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--accent-color);
+}
+/* Project Image */
+.project-image {
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    background-color: var(--bg-color);
+}
+.project-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+.project-card:hover .project-image img {
+    transform: scale(1.05);
+}
+/* Project Content */
+.project-content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 18px;
+}
+/* Technology Tags */
+.project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+.project-tags span {
+    padding: 5px 8px;
+    border-radius: 6px;
+    background-color: var(--bg-color);
+    color: var(--accent-color);
+    font-size: 11px;
+    font-weight: 600;
+}
+/* Project Title */
+.project-content h3 {
+    margin-bottom: 10px;
+    color: var(--text-color);
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 18px;
+}
+/* Description */
+.project-content p {
+    margin-bottom: 16px;
+    color: var(--text-color);
+    opacity: 0.8;
+    font-size: 13px;
+    line-height: 1.7;
+}
+/* Legacy GitHub Link */
+.project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+    color: var(--accent-color);
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: gap 0.3s ease;
+}
+.project-link:hover {
+    gap: 15px;
+}
+/* ========================================
+   12. ACCESSIBILITY
+======================================== */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}
+/* ========================================
+   FONT SIZE CONTROL
+======================================== */
+:root {
+    --font-scale: 1;
+}
+/* Khung chứa nút Aa */
+.font-control {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+/* Nút Aa cạnh Tải CV */
+.font-toggle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 42px;
+    height: 42px;
+    border: 1px solid var(--accent-color);
+    border-radius: 12px;
+    background: transparent;
+    color: var(--text-color);
+    font-size: 18px;
+    cursor: pointer;
+    transition:
+        color 0.3s ease,
+        background 0.3s ease,
+        transform 0.3s ease;
+}
+.font-toggle:hover {
+    color: var(--accent-color);
+    transform: translateY(-2px);
+}
+.font-toggle:focus-visible,
+.font-reset:focus-visible,
+#font-slider:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 3px;
+}
+/* Bảng điều chỉnh xuất hiện khi nhấn Aa */
+.font-panel {
+    position: absolute;
+    top: calc(100% + 14px);
+    right: 0;
+    z-index: 1100;
+    width: 280px;
+    max-width: calc(100vw - 24px);
+    padding: 20px;
+    border: 1px solid var(--accent-color);
+    border-radius: 16px;
+    background: var(--bg-color);
+    color: var(--text-color);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+}
+/* Ẩn bảng khi chưa nhấn */
+.font-panel[hidden] {
+    display: none !important;
+}
+/* Tiêu đề bảng */
+.font-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+.font-panel-header strong {
+    color: var(--accent-color);
+}
+/* Hàng chứa thanh trượt */
+.font-slider-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.font-slider-row span {
+    font-size: 15px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+/* Thanh trượt */
+#font-slider {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+    accent-color: var(--accent-color);
+    cursor: pointer;
+}
+/* Nút khôi phục mặc định */
+.font-reset {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    margin-top: 20px;
+    padding: 11px;
+    border: 1px solid var(--accent-color);
+    border-radius: 10px;
+    background: transparent;
+    color: var(--accent-color);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        background 0.3s ease,
+        color 0.3s ease;
+}
+.font-reset:hover {
+    background: var(--accent-color);
+    color: var(--bg-color);
+}
+/* ========================================
+   FONT SCALING - WEBSITE CONTENT
+======================================== */
+/* Phóng to chữ nội dung từ 16px đến 24px */
+.about-description,
+.about-role,
+.about-greeting,
+.about-highlight span,
+.skill-child p,
+.project-content p,
+.skills-heading p,
+.projects-heading p {
+    font-size: calc(16px * var(--font-scale));
+}
+/* Tiêu đề nhỏ */
+.about-highlight strong,
+.skill-child h3,
+.project-content h3 {
+    font-size: calc(18px * var(--font-scale));
+}
+/* Tên nhóm kỹ năng */
+.skill-group-header span {
+    font-size: calc(16px * var(--font-scale));
+}
+/* ========================================
+
+   BINARY BACKGROUND - 0 & 1
+
+   Transparent canvas: preserves original theme
+
+======================================== */
+/* Only the green digits are painted by JavaScript.
+
+   The canvas itself never paints a background. */
+
+#binary-background {
+
+    position: fixed;
+
+    inset: 0;
+
+    width: 100%;
+
+    height: 100%;
+
+    display: block;
+
+    background: transparent;
+
+    pointer-events: none;
+
+    z-index: 0;
+
+    opacity: 1;
+
+}
+/* Establish layering without changing the existing theme colors. */
+
+body {
+
+    position: relative;
+
+    isolation: isolate;
+
+}
+/* Keep the header sticky, as originally defined above. */
+
+body > .header {
+
+    z-index: 1000;
+
+}
+/* Main content stays above the moving binary digits. */
+
+body > main,
+
+body > footer,
+
+body > section {
+
+    position: relative;
+
+    z-index: 1;
+
+}
+/* For layouts without a main wrapper, keep sections above canvas. */
+
+.demo,
+
+.about-section,
+
+.skills-section,
+
+.projects-section {
+
+    position: relative;
+
+    z-index: 1;
+
+}
+/* On a white background the digits should be subtler. */
+
+body.light-mode #binary-background {
+
+    opacity: 0.85;
+
+}
+@media (prefers-reduced-motion: reduce) {
+
+    #binary-background {
+
+        display: none;
+
+    }
+
+}
+
+
+/* ========================================
+   FONT SCALING - ADDITIONAL TEXT ELEMENTS
+   Keep original sizes when --font-scale is 1.
+======================================== */
+.logo-name { font-size: calc(20px * var(--font-scale)); }
+.logo-tags span { font-size: calc(11px * var(--font-scale)); }
+.nav-link, .cv-button { font-size: calc(14px * var(--font-scale)); }
+.demo h1 { font-size: clamp(calc(28px * var(--font-scale)), calc(5vw * var(--font-scale)), calc(48px * var(--font-scale))); }
+.demo p { font-size: calc(16px * var(--font-scale)); }
+.about-heading h2, .skills-heading h2, .projects-heading h2 { font-size: calc(38px * var(--font-scale)); }
+.about-contact h3 { font-size: calc(22px * var(--font-scale)); }
+.about-info h3 { font-size: calc(34px * var(--font-scale)); }
+.about-image-caption { font-size: calc(13px * var(--font-scale)); }
+.about-button { font-size: calc(14px * var(--font-scale)); }
+.skills-label, .projects-label { font-size: calc(13px * var(--font-scale)); }
+.skill-group-header > i:first-child { font-size: calc(24px * var(--font-scale)); }
+.project-tags span { font-size: calc(11px * var(--font-scale)); }
+.project-link { font-size: calc(13px * var(--font-scale)); }
+
+/* Preserve responsive default sizes while allowing Aa scaling.
+   Higher specificity than the original single-class responsive rules. */
+@media (max-width: 1100px) {
+  body .about-info h3 { font-size: calc(29px * var(--font-scale)); }
+  body .about-contact h3 { font-size: calc(20px * var(--font-scale)); }
+}
+@media (max-width: 768px) {
+  body .about-heading h2, body .skills-heading h2, body .projects-heading h2 { font-size: calc(30px * var(--font-scale)); }
+  body .about-info h3 { font-size: calc(28px * var(--font-scale)); }
+}
+@media (max-width: 600px) {
+  body .logo-name { font-size: calc(15px * var(--font-scale)); }
+  body .about-heading h2, body .skills-heading h2, body .projects-heading h2 { font-size: calc(28px * var(--font-scale)); }
+  body .about-info h3 { font-size: calc(26px * var(--font-scale)); }
+  body .about-contact h3 { font-size: calc(19px * var(--font-scale)); }
+}
+@media (max-width: 480px) {
+  body .logo-name { font-size: calc(14px * var(--font-scale)); }
+  body .cv-button { font-size: calc(14px * var(--font-scale)); }
+  body .about-heading h2, body .skills-heading h2, body .projects-heading h2 { font-size: calc(26px * var(--font-scale)); }
+  body .about-info h3 { font-size: calc(25px * var(--font-scale)); }
+  body .about-contact h3 { font-size: calc(18px * var(--font-scale)); }
+  body .about-image-caption { font-size: calc(11px * var(--font-scale)); }
+  body .about-button { font-size: calc(13px * var(--font-scale)); }
+}
+
+/* ===== HOME BANNER ===== */
+
+.demo {
+    min-height: calc(100vh - 90px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 24px;
+    text-align: center;
+}
+
+.home-card {
+    width: 100%;
+    max-width: 850px;
+    padding: 60px 45px;
+    border: 1px solid var(--accent-color);
+    border-radius: 24px;
+    background: var(--bg-color);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12);
+}
+
+.home-label {
+    display: inline-block;
+    margin-bottom: 24px;
+    padding: 9px 18px;
+    border: 1px solid var(--accent-color);
+    border-radius: 30px;
+    color: var(--accent-color);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.home-card h1 {
+    margin-bottom: 12px;
+    font-size: clamp(20px, 3vw, 28px);
+    font-weight: 500;
+}
+
+.home-card h2 {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: clamp(30px, 5vw, 52px);
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.home-card h2 span {
+    color: var(--accent-color);
+}
+
+.home-role {
+    margin-top: 22px;
+    color: var(--accent-color);
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.home-role i {
+    margin-right: 8px;
+}
+
+.home-intro {
+    max-width: 620px;
+    margin: 24px auto 0;
+    color: var(--text-color);
+    font-size: 15px;
+    line-height: 1.9;
+    opacity: 0.85;
+}
+
+.home-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 32px;
+}
+
+.home-buttons a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 22px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.3s ease,
+                background-color 0.3s ease;
+}
+
+.home-buttons a:hover {
+    transform: translateY(-4px);
+}
+
+.home-primary-btn {
+    background: var(--accent-color);
+    color: var(--bg-color);
+}
+
+.home-secondary-btn {
+    border: 1px solid var(--accent-color);
+    background: var(--button-bg);
+    color: var(--accent-color);
+}
+
+/* ===== HOME RESPONSIVE ===== */
+
+@media (max-width: 600px) {
+    .demo {
+        padding: 35px 16px;
+    }
+
+    .home-card {
+        padding: 40px 20px;
+        border-radius: 18px;
+    }
+
+    .home-label {
+        font-size: 10px;
+        letter-spacing: 1px;
+    }
+
+    .home-role {
+        font-size: 14px;
+        line-height: 1.7;
+    }
+
+    .home-intro {
+        font-size: 14px;
+    }
+
+    .home-buttons {
+        flex-direction: column;
+    }
+
+    .home-buttons a {
+        width: 100%;
+    }
+}
+
+/* ===== CONTACT FORM ICON ===== */
+
+.contact-form-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--accent-color);
+    border-radius: 12px;
+    background: transparent;
+    color: var(--accent-color);
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.contact-form-icon:hover {
+    background: var(--accent-color);
+    color: var(--bg-color);
+    transform: translateY(-3px);
+}
+
+/* ===== CONTACT MODAL ===== */
+
+.contact-modal[hidden] {
+    display: none !important;
+}
+
+.contact-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(6px);
+}
+
+.contact-modal-box {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 35px;
+    border: 1px solid var(--accent-color);
+    border-radius: 20px;
+    background: var(--bg-color);
+    color: var(--text-color);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+.contact-modal-box h2 {
+    margin-bottom: 10px;
+    font-size: 24px;
+}
+
+.contact-modal-description {
+    margin-bottom: 25px;
+    font-size: 14px;
+    line-height: 1.7;
+    opacity: 0.8;
+}
+
+.contact-modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    border: none;
+    background: transparent;
+    color: var(--text-color);
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.contact-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 18px;
+}
+
+.contact-field label {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.contact-field input,
+.contact-field textarea {
+    width: 100%;
+    padding: 13px 15px;
+    border: 1px solid var(--accent-color);
+    border-radius: 10px;
+    background: var(--bg-color);
+    color: var(--text-color);
+    font: inherit;
+    font-size: 14px;
+    outline: none;
+    resize: vertical;
+}
+
+.contact-field input:focus,
+.contact-field textarea:focus {
+    box-shadow: 0 0 0 3px rgba(103, 232, 249, 0.15);
+}
+
+.contact-form-status {
+    margin-bottom: 12px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.contact-form-status:empty {
+    display: none;
+}
+
+.contact-submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    background: var(--accent-color);
+    color: var(--bg-color);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.contact-submit:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
+
+@media (max-width: 480px) {
+    .contact-modal-box {
+        padding: 28px 20px;
+    }
+
+    .contact-modal-box h2 {
+        font-size: 20px;
+    }
+}

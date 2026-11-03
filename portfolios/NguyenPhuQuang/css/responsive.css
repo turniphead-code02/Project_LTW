@@ -1,0 +1,762 @@
+
+/* ========================================
+   RESPONSIVE CSS
+   Portfolio - Nguyễn Phú Quang
+======================================== */
+
+
+/* ========================================
+   1. TABLET & SMALL LAPTOP
+   Màn hình từ 1100px trở xuống
+======================================== */
+
+@media (max-width: 1100px) {
+
+    /* ===== HEADER ===== */
+
+    .header-container {
+        min-height: 72px;
+    }
+
+    .navbar {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+
+        padding: 12px 24px 20px;
+
+        background-color: var(--bg-color);
+        border-bottom: 1px solid var(--button-bg);
+    }
+
+    .navbar.active {
+        display: flex;
+    }
+
+    .nav-link {
+        padding: 14px 16px;
+        margin: 3px 0;
+    }
+
+    .menu-toggle {
+        display: flex;
+    }
+
+
+    /* ===== ABOUT ME ===== */
+
+    .about-content {
+        gap: 35px;
+    }
+
+    .about-info h3 {
+        font-size: 29px;
+    }
+
+    .about-highlights {
+        gap: 12px;
+    }
+
+    .about-highlight {
+        padding: 15px;
+    }
+
+    /* Cột trái: Liên hệ và ảnh */
+    .about-left {
+        gap: 14px;
+    }
+
+    .about-contact {
+        padding: 18px;
+        gap: 14px;
+    }
+
+    .about-contact h3 {
+        font-size: 20px;
+    }
+
+    .about-contact-links {
+        gap: 12px;
+    }
+
+    .about-contact-links a {
+        width: 46px;
+        height: 46px;
+        font-size: 20px;
+    }
+
+
+    /* ===== SKILLS ===== */
+
+    .skills-section {
+        padding: 80px 24px;
+    }
+
+    .skills-accordion {
+        gap: 14px;
+    }
+
+    .skill-group-header {
+        padding: 22px;
+    }
+
+    .skill-children {
+        gap: 14px;
+    }
+
+    .skill-child {
+        padding: 20px;
+    }
+
+
+    /* ===== PROJECTS ===== */
+
+    .projects-section {
+        padding: 80px 24px;
+    }
+
+    .projects-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+    }
+}
+
+
+/* ========================================
+   2. TABLET
+   Màn hình từ 768px trở xuống
+======================================== */
+
+@media (max-width: 768px) {
+
+    /* ===== ABOUT ME ===== */
+
+    .about-section {
+        padding: 70px 20px;
+    }
+
+    .about-heading {
+        margin-bottom: 40px;
+    }
+
+    .about-heading h2 {
+        font-size: 30px;
+    }
+
+    /* Chuyển 2 cột thành 1 cột */
+    .about-content {
+        grid-template-columns: 1fr;
+        gap: 35px;
+    }
+
+    /* Cột trái */
+    .about-left {
+        width: 100%;
+        max-width: 450px;
+        margin: 0 auto;
+
+        grid-template-rows: auto auto;
+        gap: 16px;
+    }
+
+    /* Hàng 1: Liên hệ */
+    .about-contact {
+        min-height: 150px;
+        padding: 20px;
+    }
+
+    .about-contact h3 {
+        font-size: 20px;
+    }
+
+    /* Hàng 2 + 3: Ảnh */
+    .about-image {
+        width: 100%;
+        height: 450px;
+        max-width: none;
+    }
+
+    .about-image img {
+        width: 100%;
+        height: 100%;
+        max-height: none;
+        object-fit: cover;
+    }
+
+    /* Nội dung bên phải */
+    .about-info h3 {
+        font-size: 28px;
+    }
+
+    .about-description {
+        line-height: 1.8;
+    }
+
+    .about-highlights {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .about-highlight {
+        min-height: 145px;
+    }
+
+
+    /* ===== SKILLS ===== */
+
+    .skills-section {
+        padding: 70px 20px;
+    }
+
+    .skills-heading {
+        margin-bottom: 40px;
+    }
+
+    .skills-heading h2 {
+        font-size: 30px;
+    }
+
+    .skills-heading p {
+        font-size: calc(14px * var(--font-scale));
+    }
+
+    .skill-group-header {
+        padding: 20px;
+    }
+
+    .skill-group-header span {
+        font-size: calc(18px * var(--font-scale));
+    }
+
+    .skill-children {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        padding: 16px;
+    }
+
+    .skill-child {
+        padding: 18px;
+    }
+
+    .skill-child h3 {
+        font-size: calc(17px * var(--font-scale));
+    }
+
+    .skill-child p {
+        font-size: calc(13px * var(--font-scale));
+    }
+
+
+    /* ===== PROJECTS ===== */
+
+    .projects-section {
+        padding: 70px 20px;
+    }
+
+    .projects-heading h2 {
+        font-size: 30px;
+    }
+
+    .projects-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+    }
+
+    .project-content {
+        padding: 18px;
+    }
+
+    .project-content h3 {
+        font-size: calc(18px * var(--font-scale));
+    }
+
+    .project-content p {
+        font-size: calc(13px * var(--font-scale));
+    }
+}
+
+
+/* ========================================
+   3. MOBILE
+   Màn hình từ 600px trở xuống
+======================================== */
+
+@media (max-width: 600px) {
+
+    /* ===== HEADER ===== */
+
+    .logo {
+        gap: 8px;
+    }
+
+    .logo-avatar {
+        width: 45px;
+        height: 45px;
+    }
+
+    .logo-name {
+        font-size: 15px;
+    }
+
+    .logo-tags {
+        display: none;
+    }
+
+
+    /* ===== ABOUT ME ===== */
+
+    .about-section {
+        padding: 60px 20px;
+    }
+
+    .about-heading h2 {
+        font-size: 28px;
+    }
+
+    .about-info h3 {
+        font-size: 26px;
+    }
+
+    .about-description {
+        font-size: calc(14px * var(--font-scale));
+    }
+
+    /* Khung bên trái */
+    .about-left {
+        max-width: 100%;
+        gap: 14px;
+    }
+
+    .about-contact {
+        min-height: 140px;
+        padding: 20px;
+    }
+
+    .about-contact h3 {
+        font-size: 19px;
+    }
+
+    .about-image {
+        height: 400px;
+    }
+
+    /* Thông tin bên phải */
+    .about-highlights {
+        grid-template-columns: 1fr;
+    }
+
+    .about-highlight {
+        min-height: auto;
+    }
+
+
+    /* ===== SKILLS ===== */
+
+    .skills-section {
+        padding: 60px 20px;
+    }
+
+    .skills-heading h2 {
+        font-size: 28px;
+    }
+
+    .skill-children {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 16px;
+    }
+
+    .skill-group-header {
+        gap: 14px;
+        padding: 18px;
+    }
+
+    .skill-group-header span {
+        font-size: calc(17px * var(--font-scale));
+    }
+
+    .skill-group-header > i:first-child {
+        font-size: 22px;
+    }
+
+    .skill-child {
+        padding: 18px;
+    }
+
+
+    /* ===== PROJECTS ===== */
+
+    .projects-section {
+        padding: 60px 20px;
+    }
+
+    .projects-heading h2 {
+        font-size: 28px;
+    }
+
+    .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .project-content {
+        padding: 20px;
+    }
+
+    .project-content h3 {
+        font-size: calc(20px * var(--font-scale));
+    }
+}
+
+
+/* ========================================
+   4. SMALL MOBILE
+   Màn hình từ 480px trở xuống
+======================================== */
+
+@media (max-width: 480px) {
+
+    /* ===== HEADER ===== */
+
+    .header-container {
+        padding: 12px 16px;
+        gap: 8px;
+    }
+
+    .header-actions {
+        gap: 8px;
+        flex-shrink: 0;
+    }
+
+    .logo {
+        min-width: 0;
+    }
+
+    .logo-info {
+        min-width: 0;
+    }
+
+    .logo-name {
+        font-size: 14px;
+        overflow-wrap: anywhere;
+    }
+
+    .cv-button {
+        padding: 10px;
+    }
+
+    .cv-button span {
+        display: none;
+    }
+
+    .icon-button {
+        width: 38px;
+        height: 38px;
+        flex-shrink: 0;
+    }
+
+
+    /* ===== ABOUT ME ===== */
+
+    .about-section {
+        padding: 55px 16px;
+    }
+
+    .about-heading {
+        margin-bottom: 35px;
+    }
+
+    .about-heading h2 {
+        font-size: 26px;
+    }
+
+    .about-content {
+        gap: 25px;
+    }
+
+    /* Cột trái */
+    .about-left {
+        gap: 12px;
+    }
+
+    .about-contact {
+        min-height: 130px;
+        padding: 16px;
+        gap: 12px;
+        border-radius: 16px;
+    }
+
+    .about-contact h3 {
+        font-size: 18px;
+    }
+
+    .about-contact-links {
+        gap: 12px;
+    }
+
+    .about-contact-links a {
+        width: 44px;
+        height: 44px;
+        font-size: 19px;
+    }
+
+    /* Ảnh */
+    .about-image {
+        height: 350px;
+        border-radius: 18px;
+    }
+
+    .about-image-caption {
+        left: 12px;
+        bottom: 12px;
+        padding: 10px 12px;
+        font-size: 11px;
+    }
+
+    /* Nội dung bên phải */
+    .about-info h3 {
+        font-size: 25px;
+    }
+
+    .about-role {
+        font-size: calc(14px * var(--font-scale));
+        line-height: 1.7;
+    }
+
+    .about-description {
+        font-size: calc(14px * var(--font-scale));
+        line-height: 1.8;
+    }
+
+    .about-highlights {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .about-highlight {
+        min-height: auto;
+        padding: 16px;
+    }
+
+    .about-highlight span {
+        overflow-wrap: anywhere;
+    }
+
+    .about-button {
+        padding: 12px 18px;
+        font-size: 13px;
+    }
+
+
+    /* ===== SKILLS ===== */
+
+    .skills-section {
+        padding: 55px 16px;
+    }
+
+    .skills-heading {
+        margin-bottom: 35px;
+    }
+
+    .skills-heading h2 {
+        font-size: 26px;
+    }
+
+    .skills-heading p {
+        font-size: calc(13px * var(--font-scale));
+        line-height: 1.7;
+    }
+
+    .skill-group {
+        border-radius: 12px;
+    }
+
+    .skill-group-header {
+        gap: 12px;
+        padding: 18px 14px;
+    }
+
+    .skill-group-header span {
+        font-size: calc(16px * var(--font-scale));
+        line-height: 1.5;
+    }
+
+    .skill-group-header > i:first-child {
+        width: 25px;
+        font-size: 20px;
+    }
+
+    .skill-arrow {
+        font-size: 14px;
+    }
+
+    .skill-children {
+        grid-template-columns: 1fr;
+        padding: 14px;
+        gap: 12px;
+    }
+
+    .skill-child {
+        padding: 16px;
+        border-radius: 10px;
+    }
+
+    .skill-child h3 {
+        font-size: calc(16px * var(--font-scale));
+        margin-bottom: 8px;
+    }
+
+    .skill-child p {
+        font-size: calc(13px * var(--font-scale));
+        line-height: 1.7;
+    }
+
+
+    /* ===== PROJECTS ===== */
+
+    .projects-section {
+        padding: 55px 16px;
+    }
+
+    .projects-heading h2 {
+        font-size: 26px;
+    }
+
+    .projects-heading p {
+        font-size: calc(13px * var(--font-scale));
+    }
+
+    .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .project-content {
+        padding: 16px;
+    }
+
+    .project-content h3 {
+        font-size: calc(17px * var(--font-scale));
+    }
+
+    .project-content p {
+        font-size: calc(13px * var(--font-scale));
+    }
+
+    .project-tags span {
+        font-size: 11px;
+    }
+}
+
+
+/* ========================================
+   PROJECT CARD - CLICKABLE ENTIRE CARD
+   Compatible with <a class="project-card">
+======================================== */
+
+.project-card {
+    color: var(--text-color);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.project-card:visited {
+    color: var(--text-color);
+}
+
+.project-card:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 4px;
+}
+
+.project-card .project-content,
+.project-card .project-content h3 {
+    color: var(--text-color);
+}
+
+/* ========================================
+   FONT CONTROL RESPONSIVE
+======================================== */
+
+/* Tablet */
+@media (max-width: 768px) {
+
+    .font-toggle {
+        width: 40px;
+        height: 40px;
+        font-size: 17px;
+    }
+
+    .font-panel {
+        width: 260px;
+        padding: 18px;
+    }
+
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+
+    .font-toggle {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+    }
+
+    .font-panel {
+        width: 230px;
+        right: -40px;
+        padding: 16px;
+    }
+
+    .font-panel-header {
+        font-size: 13px;
+    }
+
+    .font-slider-row {
+        gap: 8px;
+    }
+
+    .font-reset {
+        padding: 10px;
+    }
+
+}
+
+
+/* ========================================
+   5. BINARY BACKGROUND RESPONSIVE
+   Keep original Dark / Light background colors
+======================================== */
+
+@media (max-width: 768px) {
+    #binary-background {
+        opacity: 0.25;
+    }
+
+    body.light-mode #binary-background {
+        opacity: 0.85;
+    }
+}
+
+@media (max-width: 480px) {
+    #binary-background {
+        opacity: 0.18;
+    }
+
+    body.light-mode #binary-background {
+        opacity: 0.85;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #binary-background {
+        display: none;
+    }
+}
