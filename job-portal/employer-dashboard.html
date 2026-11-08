@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bảng Điều Khiển Nhà Tuyển Dụng — JobPortal | Đinh Duy Diễn (Nhóm 6 UTH)</title>
+  <meta name="description" content="Bảng điều khiển quản trị tuyển dụng: thống kê tin đang chạy, CV mới nhận và lịch phỏng vấn - Đinh Duy Diễn (MSSV: 051206000952)." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <link rel="stylesheet" href="./assets/css/variables.css" />
+  <link rel="stylesheet" href="./assets/css/base.css" />
+  <link rel="stylesheet" href="./assets/css/components.css" />
+  <link rel="stylesheet" href="./assets/css/employer.css" />
+</head>
+<body class="emp-body">
+
+  <!-- =========================================================================
+       THÔNG TIN PHÂN CÔNG ĐỒ ÁN (MODULE 4 - TASK ASSIGNMENT)
+       Thành viên đảm nhiệm: ĐINH DUY DIỄN
+       Mã số sinh viên (MSSV): 051206000952
+       Nhánh Git quản lý: dinh_dien
+       Đơn vị: Nhóm 6 — Khoa Công Nghệ Thông Tin — Trường ĐH GTVT TP.HCM (UTH)
+       Học phần: Lập trình Website — GVHD: ThS. Trần Thịnh Mạnh Đức
+
+       PHẠM VI ĐẢM NHIỆM:
+       - Tệp HTML: employer-dashboard.html
+       - Tệp CSS: assets/css/employer.css
+       - Tệp JS: assets/js/employer-table.js
+       ========================================================================= -->
+
+  <!-- >>> BẮT ĐẦU PHẠM VI CODE DO ĐINH DUY DIỄN (051206000952) ĐẢM NHIỆM >>> -->
+  <div class="emp-shell" id="empShell">
+
+    <!-- ===================== SIDEBAR MENU TRÁI (CO GIÃN) ===================== -->
+    <aside class="emp-sidebar" id="empSidebar" aria-label="Menu quản trị tuyển dụng">
+      <a href="./index.html" class="header-brand emp-brand" aria-label="Về trang chủ JobPortal">
+        <div class="brand-icon" aria-hidden="true">💼</div>
+        <div class="brand-text">Job<span>Portal</span></div>
+      </a>
+
+      <nav class="emp-menu" aria-label="Điều hướng nhà tuyển dụng">
+        <a href="./employer-dashboard.html" class="emp-menu-link active" aria-current="page">
+          <span class="emp-menu-icon" aria-hidden="true">📊</span><span class="emp-label">Tổng quan</span>
+        </a>
+        <a href="./post-job.html" class="emp-menu-link">
+          <span class="emp-menu-icon" aria-hidden="true">📝</span><span class="emp-label">Đăng tin mới</span>
+        </a>
+        <a href="./candidate-management.html" class="emp-menu-link">
+          <span class="emp-menu-icon" aria-hidden="true">👥</span><span class="emp-label">Quản lý ứng viên</span>
+        </a>
+        <a href="./jobs.html" class="emp-menu-link">
+          <span class="emp-menu-icon" aria-hidden="true">🔎</span><span class="emp-label">Xem cổng việc làm</span>
+        </a>
+      </nav>
+
+      <div class="emp-sidebar-foot">
+        <a href="../index.html" class="emp-menu-link" title="Quay về trang danh sách portfolio các thành viên">
+          <span class="emp-menu-icon" aria-hidden="true">←</span><span class="emp-label">Danh Bạ Portfolio Nhóm 6</span>
+        </a>
+        <a href="./auth.html?mode=login" class="emp-menu-link">
+          <span class="emp-menu-icon" aria-hidden="true">🚪</span><span class="emp-label">Đăng xuất</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- ===================== VÙNG NỘI DUNG CHÍNH ===================== -->
+    <div class="emp-main">
+
+      <!-- Topbar: nút thu/mở menu, thông báo, tài khoản -->
+      <header class="emp-topbar">
+        <div class="emp-topbar-left">
+          <button type="button" class="emp-icon-btn emp-toggle" id="btnToggleSidebar" aria-label="Mở menu điều hướng" aria-controls="empSidebar" aria-expanded="false">☰</button>
+          <span class="cell-strong">Nhà tuyển dụng</span>
+        </div>
+        <div class="emp-topbar-right">
+          <div class="emp-notif-wrap">
+            <button type="button" class="emp-icon-btn" id="btnNotif" aria-label="Thông báo" aria-haspopup="true" aria-expanded="false" aria-controls="notifPanel">
+              <span aria-hidden="true">🔔</span>
+              <span class="emp-notif-dot" id="notifCount">0</span>
+            </button>
+            <div class="notif-panel" id="notifPanel" role="region" aria-label="Danh sách thông báo" hidden>
+              <div class="notif-head">
+                <strong>Thông báo</strong>
+                <button type="button" class="notif-markall" id="btnMarkAllRead">Đánh dấu đã đọc tất cả</button>
+              </div>
+              <div class="notif-list" id="notifList"><!-- Render bằng employer-table.js --></div>
+              <a href="./candidate-management.html" class="notif-foot">Xem tất cả hồ sơ ứng viên</a>
+            </div>
+          </div>
+          <div class="emp-user">
+            <div class="emp-avatar" aria-hidden="true">HR</div>
+            <span class="emp-user-name">Phòng Nhân sự</span>
+          </div>
+        </div>
+      </header>
+
+      <main id="mainContent" class="emp-content" role="main">
+
+        <div class="emp-page-head">
+          <div>
+            <h1>Tổng quan tuyển dụng</h1>
+            <p>Theo dõi tin đăng và hồ sơ ứng viên mới nhất của doanh nghiệp.</p>
+          </div>
+          <a href="./post-job.html" class="btn btn-accent">+ Đăng tin tuyển dụng</a>
+        </div>
+
+        <!-- Thẻ KPI -->
+        <section class="kpi-grid" aria-label="Chỉ số tuyển dụng">
+          <article class="kpi-card">
+            <div class="kpi-label">Tin đang chạy</div>
+            <div class="kpi-value" data-count="8">0</div>
+            <div class="kpi-note">2 tin sắp hết hạn trong 7 ngày</div>
+          </article>
+          <article class="kpi-card is-accent">
+            <div class="kpi-label">CV mới nhận</div>
+            <div class="kpi-value" data-count="47">0</div>
+            <div class="kpi-note">Trong 7 ngày qua</div>
+          </article>
+          <article class="kpi-card is-warning">
+            <div class="kpi-label">Buổi phỏng vấn</div>
+            <div class="kpi-value" data-count="5">0</div>
+            <div class="kpi-note">Đã hẹn trong tuần này</div>
+          </article>
+          <article class="kpi-card">
+            <div class="kpi-label">Lượt xem tin</div>
+            <div class="kpi-value" data-count="1280">0</div>
+            <div class="kpi-note">Tổng 30 ngày gần nhất</div>
+          </article>
+        </section>
+
+        <!-- Hồ sơ ứng viên mới nhận -->
+        <section class="emp-panel" aria-labelledby="headingRecent">
+          <div class="emp-panel-head">
+            <h2 id="headingRecent">Hồ sơ mới nhận</h2>
+            <a href="./candidate-management.html" class="btn btn-outline btn-sm">Xem tất cả</a>
+          </div>
+          <div class="emp-table-wrap">
+            <table class="emp-table">
+              <thead>
+                <tr>
+                  <th scope="col">Ứng viên</th>
+                  <th scope="col">Vị trí ứng tuyển</th>
+                  <th scope="col">Ngày nộp</th>
+                  <th scope="col">Trạng thái</th>
+                  <th scope="col">Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="recentTableBody"><!-- Render bằng employer-table.js --></tbody>
+            </table>
+          </div>
+          <div class="emp-empty" id="recentEmpty" hidden>
+            Chưa có hồ sơ mới. <a href="./post-job.html" style="color: var(--color-primary); font-weight: 600;">Đăng thêm tin tuyển dụng</a> để thu hút ứng viên.
+          </div>
+        </section>
+
+        <!-- Tin đang tuyển -->
+        <section class="emp-panel" aria-labelledby="headingJobs">
+          <div class="emp-panel-head">
+            <h2 id="headingJobs">Tin đang tuyển</h2>
+            <a href="./post-job.html" class="btn btn-ghost btn-sm">Đăng tin mới</a>
+          </div>
+          <div class="emp-table-wrap">
+            <table class="emp-table">
+              <thead>
+                <tr>
+                  <th scope="col">Chức danh</th>
+                  <th scope="col">Hạn nộp</th>
+                  <th scope="col">Hồ sơ</th>
+                  <th scope="col">Trạng thái</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td data-label="Chức danh"><div class="cell-strong">Frontend Developer (React)</div><div class="cell-sub">TP. Hồ Chí Minh</div></td>
+                  <td data-label="Hạn nộp">25/11/2026</td>
+                  <td data-label="Hồ sơ">18</td>
+                  <td data-label="Trạng thái"><span class="status status-approved">Đang hiển thị</span></td>
+                </tr>
+                <tr>
+                  <td data-label="Chức danh"><div class="cell-strong">Backend Developer (Node.js)</div><div class="cell-sub">Hà Nội</div></td>
+                  <td data-label="Hạn nộp">12/11/2026</td>
+                  <td data-label="Hồ sơ">21</td>
+                  <td data-label="Trạng thái"><span class="status status-interview">Sắp hết hạn</span></td>
+                </tr>
+                <tr>
+                  <td data-label="Chức danh"><div class="cell-strong">Thực tập sinh QA/Tester</div><div class="cell-sub">Remote</div></td>
+                  <td data-label="Hạn nộp">30/11/2026</td>
+                  <td data-label="Hồ sơ">8</td>
+                  <td data-label="Trạng thái"><span class="status status-new">Chờ duyệt</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Lớp phủ mờ khi mở menu trên mobile -->
+  <div class="emp-backdrop" id="empBackdrop" aria-hidden="true"></div>
+  <!-- <<< KẾT THÚC PHẠM VI CODE DO ĐINH DUY DIỄN (051206000952) ĐẢM NHIỆM <<< -->
+
+  <script src="./assets/js/main.js"></script>
+  <script src="./assets/js/employer-table.js"></script>
+</body>
+</html>

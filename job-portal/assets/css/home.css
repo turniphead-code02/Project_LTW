@@ -1,0 +1,412 @@
+/* ==========================================================================
+   HOMEPAGE SPECIFIC STYLES (TRANG CHỦ CỔNG VIỆC LÀM)
+   Kiến trúc: Chuẩn hóa theo Wireframe Mục 5.1 file QTTK.html
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. HERO SECTION (Z-PATTERN & THANH TÌM KIẾM ĐA NĂNG)
+   -------------------------------------------------------------------------- */
+.hero-section {
+  position: relative;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.88) 0%, rgba(30, 64, 175, 0.82) 100%),
+              url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+  color: var(--color-surface);
+  padding: 84px 0 96px;
+  overflow: hidden;
+}
+
+.hero-content {
+  text-align: center;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(8px);
+  color: #93c5fd; /* Blue 300 */
+  padding: 6px 16px;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-small);
+  font-weight: 600;
+  margin-bottom: var(--space-20);
+}
+
+.hero-title {
+  font-size: var(--text-display);
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--color-surface);
+  margin-bottom: var(--space-16);
+  letter-spacing: -0.03em;
+}
+
+.hero-title span {
+  color: #6ee7b7; /* Emerald 300 */
+}
+
+.hero-subtitle {
+  font-size: 1.125rem;
+  color: #cbd5e1; /* Slate 300 */
+  line-height: var(--leading-body);
+  max-width: 680px;
+  margin: 0 auto var(--space-36);
+}
+
+/* Thanh tìm kiếm việc làm đa trường (4 Fields Search Bar) */
+.hero-search-box {
+  background: var(--color-surface);
+  border-radius: var(--radius-card);
+  padding: 10px;
+  box-shadow: 0 16px 36px -4px rgba(15, 23, 42, 0.35);
+  display: grid;
+  grid-template-columns: 2fr 1.25fr 1.25fr auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.search-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-right: 1px solid var(--color-border);
+  color: var(--color-body);
+}
+
+.search-field:nth-child(3) {
+  border-right: none;
+}
+
+.search-icon {
+  color: var(--color-primary);
+  font-size: 1.15rem;
+  flex-shrink: 0;
+}
+
+.search-input,
+.search-select {
+  width: 100%;
+  font-size: var(--text-small);
+  color: var(--color-dark);
+  font-weight: 500;
+}
+
+.search-input::placeholder {
+  color: var(--color-muted);
+}
+
+.search-select {
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.search-submit-btn {
+  height: 52px;
+  padding: 0 28px;
+  font-size: 1rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Từ khóa tìm kiếm phổ biến dưới thanh tìm kiếm */
+.hero-popular-tags {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: var(--space-20);
+  font-size: var(--text-small);
+  color: #cbd5e1;
+}
+
+.hero-tag-link {
+  color: var(--color-surface);
+  background: rgba(255, 255, 255, 0.1);
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-xs);
+  transition: var(--transition-fast);
+}
+
+.hero-tag-link:hover {
+  background: var(--color-accent);
+  color: var(--color-surface);
+}
+
+/* --------------------------------------------------------------------------
+   2. KHỐI THỐNG KÊ NHANH (QUICK STATS SECTION)
+   -------------------------------------------------------------------------- */
+.stats-section-wrap {
+  margin-top: -36px;
+  position: relative;
+  z-index: 10;
+}
+
+/* --------------------------------------------------------------------------
+   3. DANH MỤC NGHỀ NGHIỆP TRỌNG ĐIỂM (GRID 4 CỘT)
+   -------------------------------------------------------------------------- */
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-20);
+}
+
+/* --------------------------------------------------------------------------
+   4. LƯỚI VIỆC LÀM NỔI BẬT (3-COLUMN CARD GRID)
+   -------------------------------------------------------------------------- */
+.jobs-filter-tabs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  margin-bottom: var(--space-36);
+  flex-wrap: wrap;
+}
+
+.tab-btn {
+  font-size: var(--text-small);
+  font-weight: 600;
+  color: var(--color-muted);
+  padding: 8px 18px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  transition: var(--transition-fast);
+}
+
+.tab-btn:hover {
+  border-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.tab-btn.active {
+  background-color: var(--color-primary);
+  color: var(--color-surface);
+  border-color: var(--color-primary);
+  box-shadow: 0 2px 8px rgba(30, 64, 175, 0.25);
+}
+
+.jobs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-24);
+  margin-bottom: var(--space-48);
+}
+
+.jobs-cta-center {
+  text-align: center;
+}
+
+/* --------------------------------------------------------------------------
+   5. KHỐI GIÁ TRỊ DÀNH CHO SINH VIÊN (WHY JOBPORTAL)
+   -------------------------------------------------------------------------- */
+.features-section {
+  background-color: #f1f5f9; /* Slate 100 */
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-32);
+}
+
+.feature-box {
+  background: var(--color-surface);
+  padding: var(--space-32);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-normal);
+}
+
+.feature-box:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-primary-light);
+  box-shadow: var(--shadow-hover);
+}
+
+.feature-icon-wrap {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background-color: var(--color-primary-soft);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  margin-bottom: var(--space-20);
+}
+
+.feature-title {
+  font-size: var(--text-h3);
+  margin-bottom: var(--space-8);
+}
+
+.feature-desc {
+  font-size: var(--text-small);
+  color: var(--color-muted);
+  line-height: var(--leading-body);
+}
+
+/* --------------------------------------------------------------------------
+   6. DOANH NGHIỆP TUYỂN DỤNG HÀNG ĐẦU
+   -------------------------------------------------------------------------- */
+.employers-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--space-16);
+}
+
+.employer-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: var(--space-20);
+  text-align: center;
+  transition: var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.employer-card:hover {
+  border-color: var(--color-primary-light);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-sm);
+}
+
+.employer-logo-img {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  margin-bottom: var(--space-12);
+  border-radius: 8px;
+}
+
+.employer-name {
+  font-size: var(--text-small);
+  font-weight: 700;
+  color: var(--color-dark);
+  margin-bottom: 2px;
+}
+
+.employer-openings {
+  font-size: var(--text-xs);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   7. BANNER HÀNH ĐỘNG KÊU GỌI (CALL-TO-ACTION BANNER)
+   -------------------------------------------------------------------------- */
+.cta-banner {
+  background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+  border-radius: 20px;
+  padding: 56px 48px;
+  color: var(--color-surface);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-32);
+  box-shadow: 0 16px 36px -4px rgba(30, 64, 175, 0.3);
+}
+
+.cta-banner-text {
+  max-width: 620px;
+}
+
+.cta-banner-title {
+  font-size: var(--text-h1);
+  color: var(--color-surface);
+  margin-bottom: var(--space-12);
+}
+
+.cta-banner-desc {
+  font-size: 1.05rem;
+  color: #bfdbfe; /* Blue 200 */
+  line-height: var(--leading-body);
+}
+
+.cta-banner-actions {
+  display: flex;
+  gap: var(--space-16);
+  flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+   8. ĐÁP ỨNG THIẾT BỊ DI ĐỘNG (HOMEPAGE RESPONSIVE)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1200px) {
+  .categories-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .jobs-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .employers-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .hero-search-box {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 16px;
+  }
+
+  .search-field {
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+    padding: 8px 4px;
+  }
+
+  .search-submit-btn {
+    width: 100%;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-20);
+  }
+
+  .cta-banner {
+    flex-direction: column;
+    text-align: center;
+    padding: 40px 24px;
+  }
+
+  .cta-banner-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .cta-banner-actions .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .jobs-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .categories-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .employers-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+

@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Đăng nhập và đăng ký tài khoản JobPortal">
+    <title>Đăng nhập - JobPortal</title>
+
+    <link rel="stylesheet" href="./assets/css/variables.css">
+    <link rel="stylesheet" href="./assets/css/base.css">
+    <link rel="stylesheet" href="./assets/css/components.css">
+    <link rel="stylesheet" href="./assets/css/auth.css">
+</head>
+<body class="auth-page">
+
+    <main class="auth-container">
+        <section class="auth-intro">
+            <a href="./index.html" class="auth-brand">
+                💼 JobPortal
+            </a>
+
+            <div class="auth-intro-content">
+                <span class="auth-label">JOBPORTAL - UTH</span>
+                <h1>Kết nối cơ hội,<br>kiến tạo tương lai.</h1>
+                <p>
+                    Nền tảng kết nối ứng viên tài năng
+                    với những doanh nghiệp hàng đầu.
+                </p>
+            </div>
+
+            <p class="auth-footer">
+                © 2026 JobPortal - Nhóm 6 UTH
+            </p>
+        </section>
+
+        <section class="auth-form-section">
+            <div class="auth-card">
+
+                <div class="auth-heading">
+                    <h2 id="formTitle">Chào mừng trở lại!</h2>
+                    <p id="formDescription">
+                        Đăng nhập để tiếp tục sử dụng JobPortal.
+                    </p>
+                </div>
+
+                <div class="auth-tabs">
+                    <button type="button" class="auth-tab active"
+                            id="loginTab">
+                        Đăng nhập
+                    </button>
+
+                    <button type="button" class="auth-tab"
+                            id="registerTab">
+                        Đăng ký
+                    </button>
+                </div>
+
+                <form id="authForm" novalidate>
+
+                    <div class="form-group" id="nameGroup" hidden>
+                        <label for="fullName">Họ và tên</label>
+                        <input type="text" id="fullName"
+                               placeholder="Nguyễn Văn A"
+                               autocomplete="name">
+                        <small class="error-message"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email"
+                               placeholder="example@email.com"
+                               autocomplete="email">
+                        <small class="error-message"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Mật khẩu</label>
+                        <input type="password" id="password"
+                               placeholder="Nhập mật khẩu"
+                               autocomplete="current-password">
+                        <small class="error-message"></small>
+                    </div>
+
+                    <div class="password-strength" id="strengthGroup" hidden>
+                        <div class="strength-bars">
+                            <span></span><span></span>
+                            <span></span><span></span>
+                        </div>
+                        <small id="strengthText"></small>
+                    </div>
+
+                    <div class="form-group" id="confirmGroup" hidden>
+                        <label for="confirmPassword">
+                            Xác nhận mật khẩu
+                        </label>
+                        <input type="password" id="confirmPassword"
+                               placeholder="Nhập lại mật khẩu"
+                               autocomplete="new-password">
+                        <small class="error-message"></small>
+                    </div>
+
+                    <div class="form-group" id="roleGroup" hidden>
+                        <label for="role">Bạn muốn đăng ký với tư cách</label>
+                        <select id="role">
+                            <option value="candidate">Ứng viên</option>
+                            <option value="employer">Nhà tuyển dụng</option>
+                        </select>
+                    </div>
+
+                    <div class="form-options" id="loginOptions">
+                        <label class="remember-label">
+                            <input type="checkbox" id="remember">
+                            Ghi nhớ đăng nhập
+                        </label>
+                        <a href="#" id="forgotPassword">
+                            Quên mật khẩu?
+                        </a>
+                    </div>
+
+                    <div id="formMessage" class="form-message"
+                         role="alert" aria-live="polite"></div>
+
+                    <button type="submit" class="auth-submit"
+                            id="submitButton">
+                        Đăng nhập
+                    </button>
+                </form>
+
+                <p class="auth-switch">
+                    <span id="switchText">Chưa có tài khoản?</span>
+                    <button type="button" id="switchButton">
+                        Đăng ký ngay
+                    </button>
+                </p>
+
+                <a href="./index.html" class="back-home">
+                    ← Quay lại trang chủ
+                </a>
+
+            </div>
+        </section>
+    </main>
+
+    <script src="./assets/js/auth-validation.js"></script>
+</body>
+</html>
