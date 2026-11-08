@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cổng Thông Tin Việc Làm & Tuyển Dụng Hàng Đầu — JobPortal.vn</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/jobs.css" />
+</head>
+<body>
+
+  <!-- HEADER NAVIGATION -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="brand-logo">🌐 JobPortal<span>.vn</span></a>
+      <nav class="nav-links">
+        <a href="index.html" class="active">Trang chủ</a>
+        <a href="jobs.html">Việc làm</a>
+        <a href="#companies">Công ty</a>
+        <a href="#categories">Danh mục</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="btn-theme-toggle" id="themeToggleBtn" aria-label="Đổi giao diện sáng tối">🌙</button>
+        <button class="btn-secondary">Đăng nhập</button>
+        <button class="btn-primary">Đăng tuyển</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION (Z-Pattern) -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <span class="hero-badge">🚀 Khám phá 5,000+ việc làm chất lượng cao</span>
+      <h1 class="hero-title">Kết Nối Nhân Tài Công Nghệ <br>Với Doanh Nghiệp Hàng Đầu</h1>
+      <p class="hero-subtitle">Tìm kiếm cơ hội nghề nghiệp bứt phá mức lương, môi trường chuyên nghiệp tại TP.HCM và toàn quốc.</p>
+      
+      <div class="search-box-hero">
+        <input type="text" placeholder="Nhập vị trí, kỹ năng (React, Java, UI/UX...)" />
+        <select>
+          <option value="">Tất cả địa điểm</option>
+          <option value="hcm">Hồ Chí Minh</option>
+          <option value="hn">Hà Nội</option>
+        </select>
+        <a href="jobs.html" class="btn-search-hero">Tìm Kiếm</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS COUNTER -->
+  <section class="section-container">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h3>5,000+</h3>
+        <p>Việc làm Active</p>
+      </div>
+      <div class="stat-card">
+        <h3 class="accent-text">1,200+</h3>
+        <p>Doanh nghiệp uy tín</p>
+      </div>
+      <div class="stat-card">
+        <h3>85,000+</h3>
+        <p>Ứng viên tin dùng</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORIES GRID -->
+  <section id="categories" class="section-container" style="margin-top: 50px;">
+    <div class="section-header">
+      <h2>Danh Mục Nghề Nghiệp Hot</h2>
+      <a href="jobs.html" class="link-more">Xem tất cả &rarr;</a>
+    </div>
+
+    <div class="categories-grid">
+      <div class="category-card">
+        <div class="cat-icon">💻</div>
+        <h3>Software Engineering</h3>
+        <p>1,450 việc làm đang mở</p>
+      </div>
+      <div class="category-card">
+        <div class="cat-icon">📊</div>
+        <h3>Data Science &amp; AI</h3>
+        <p>620 việc làm đang mở</p>
+      </div>
+      <div class="category-card">
+        <div class="cat-icon">🎨</div>
+        <h3>UI/UX Product Design</h3>
+        <p>380 việc làm đang mở</p>
+      </div>
+      <div class="category-card">
+        <div class="cat-icon">🛡️</div>
+        <h3>Cloud &amp; DevOps</h3>
+        <p>410 việc làm đang mở</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="companies" class="site-footer">
+    <div class="footer-container">
+      <div>
+        <h3>🌐 JobPortal.vn</h3>
+        <p>Nền tảng công nghệ kết nối nhân lực chuyên nghiệp hàng đầu tại Việt Nam, phục vụ đồ án học phần Lập trình Website.</p>
+      </div>
+      <div>
+        <h4>Dành Cho Ứng Viên</h4>
+        <p><a href="jobs.html">Tìm kiếm việc làm</a></p>
+        <p><a href="#">Tạo CV chuyên nghiệp</a></p>
+      </div>
+      <div>
+        <h4>Dành Cho Nhà Tuyển Dụng</h4>
+        <p><a href="#">Đăng tin tuyển dụng</a></p>
+        <p><a href="#">Giải pháp nhân sự</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/jobs-filter.js"></script>
+</body>
+</html>

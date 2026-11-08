@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tìm Kiếm Việc Làm IT — Job Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/jobs.css" />
+</head>
+<body>
+
+  <!-- HEADER NAVIGATION -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="brand-logo">🌐 JobPortal<span>.vn</span></a>
+      <nav class="nav-links">
+        <a href="index.html">Trang chủ</a>
+        <a href="jobs.html" class="active">Việc làm</a>
+        <a href="#">Công ty</a>
+        <a href="#">Cẩm nang</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="btn-theme-toggle" id="themeToggleBtn" aria-label="Đổi giao diện sáng tối">🌙</button>
+        <button class="btn-secondary">Đăng nhập</button>
+        <button class="btn-primary">Đăng tuyển</button>
+        <button class="btn-toggle-filter" id="openFilterBtn">🔍 Bộ lọc</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER (SIDEBAR LAYOUT) -->
+  <main class="main-wrapper">
+    
+    <!-- LỚP PHỦ MÀN HÌNH DI ĐỘNG -->
+    <div class="filter-overlay" id="filterOverlay"></div>
+
+    <!-- CỘT TRÁI: BỘ LỌC ĐA TIÊU CHÍ (SIDEBAR / DRAWER) -->
+    <aside class="sidebar-filter" id="sidebarFilter">
+      <div class="filter-header">
+        <h3>Bộ Lọc Tìm Kiếm</h3>
+        <button class="btn-close-filter" id="closeFilterBtn">&times;</button>
+      </div>
+
+      <form id="filterForm">
+        <!-- Từ khóa -->
+        <div class="filter-group">
+          <label for="keywordInput">Từ khóa kỹ năng</label>
+          <input type="text" id="keywordInput" placeholder="Ví dụ: React, Java, Node.js..." />
+        </div>
+
+        <!-- Địa điểm -->
+        <div class="filter-group">
+          <label for="locationSelect">Địa điểm</label>
+          <select id="locationSelect">
+            <option value="all">Tất cả địa điểm</option>
+            <option value="hcm">Hồ Chí Minh</option>
+            <option value="hn">Hà Nội</option>
+            <option value="dn">Đà Nẵng</option>
+          </select>
+        </div>
+
+        <!-- Mức lương -->
+        <div class="filter-group">
+          <label>Mức lương tối thiểu (\$/tháng)</label>
+          <div class="range-box">
+            <input type="range" id="salaryRange" min="500" max="4000" step="100" value="500" />
+            <span id="salaryValue">\$500+</span>
+          </div>
+        </div>
+
+        <!-- Hình thức làm việc -->
+        <div class="filter-group">
+          <label>Hình thức làm việc</label>
+          <div class="checkbox-list">
+            <label><input type="checkbox" name="type" value="Full-time" checked /> Full-time</label>
+            <label><input type="checkbox" name="type" value="Remote" /> Remote (Từ xa)</label>
+            <label><input type="checkbox" name="type" value="Hybrid" /> Hybrid</label>
+            <label><input type="checkbox" name="type" value="Part-time" /> Part-time</label>
+          </div>
+        </div>
+
+        <!-- Cấp bậc / Kinh nghiệm -->
+        <div class="filter-group">
+          <label>Cấp bậc</label>
+          <div class="checkbox-list">
+            <label><input type="checkbox" name="level" value="Intern/Fresher" /> Intern / Fresher</label>
+            <label><input type="checkbox" name="level" value="Junior" /> Junior</label>
+            <label><input type="checkbox" name="level" value="Senior" /> Senior</label>
+            <label><input type="checkbox" name="level" value="Manager" /> Lead / Manager</label>
+          </div>
+        </div>
+
+        <button type="button" class="btn-reset" id="resetFilterBtn">Đặt lại bộ lọc</button>
+      </form>
+    </aside>
+
+    <!-- CỘT PHẢI: LƯỚI THẺ VIỆC LÀM & PHÂN TRANG -->
+    <section class="content-results">
+      <div class="results-header">
+        <h2 id="resultCounter">Đang tải việc làm...</h2>
+        <div class="sort-box">
+          <label for="sortSelect">Sắp xếp:</label>
+          <select id="sortSelect">
+            <option value="newest">Mới nhất</option>
+            <option value="salaryHigh">Lương cao nhất</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- LƯỚI THẺ VIỆC LÀM -->
+      <div class="jobs-grid" id="jobsGrid"></div>
+
+      <!-- THANH PHÂN TRANG -->
+      <ul class="pagination" id="pagination"></ul>
+    </section>
+
+  </main>
+
+  <script src="assets/jobs-filter.js"></script>
+</body>
+</html>
