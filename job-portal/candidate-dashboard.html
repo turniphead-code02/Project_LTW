@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Bảng điều khiển Ứng viên: Quản lý hồ sơ cá nhân, học vấn, kỹ năng, tải lên CV mặc định, liên kết Portfolio/GitHub và theo dõi tiến trình 4 bước tuyển dụng - Nguyễn Phú Quang (MSSV: 036206029474) Nhóm 6 UTH.">
+
+    <title>Hồ Sơ Ứng Viên &amp; Bảng Điều Khiển — JobPortal | Nguyễn Phú Quang (Nhóm 6 UTH)</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- CSS dùng chung của hệ thống -->
+    <link rel="stylesheet" href="./assets/css/variables.css">
+    <link rel="stylesheet" href="./assets/css/base.css">
+    <link rel="stylesheet" href="./assets/css/components.css">
+    <link rel="stylesheet" href="./assets/css/toast.css">
+
+    <!-- CSS riêng Module 3 của Nguyễn Phú Quang -->
+    <link rel="stylesheet" href="./assets/css/candidate.css">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+
+<body class="candidate-page-body">
+
+    <!-- =========================================================================
+         THÔNG TIN PHÂN CÔNG ĐỒ ÁN (MODULE 3 - TASK ASSIGNMENT)
+         -------------------------------------------------------------------------
+         Thành viên đảm nhiệm: NGUYỄN PHÚ QUANG
+         Mã số sinh viên (MSSV): 036206029474
+         Nhánh Git phát triển: nguyen_quang (Đã merge vào main)
+         Đơn vị: Nhóm 6 — Khoa Công Nghệ Thông Tin — Trường ĐH Giao Thông Vận Tải TP.HCM (UTH)
+         Học phần: Lập trình Website (Web Programming) — GVHD: ThS. Trần Thịnh Mạnh Đức
+         
+         PHẠM VI ĐẢM NHIỆM:
+         - Tệp HTML: candidate-dashboard.html (Quản lý hồ sơ cá nhân, học vấn, kỹ năng, tải lên CV mặc định, liên kết Portfolio/GitHub)
+         - Tệp CSS: assets/css/candidate.css (100% định kiểu phân hệ ứng viên & stepper)
+         - Tệp JS: assets/js/candidate.js (Logic hoàn thiện hồ sơ, CRUD học vấn/kỹ năng/CV, stepper 4 bước)
+         - Quy chuẩn thiết kế: Wireframe Mục 5.4 Phân Hệ Ứng Viên (Candidate Dashboard & Stepper) trong QTTK.html
+         ========================================================================= -->
+
+    <!-- =========================================================================
+         1. THANH ĐIỀU HƯỚNG CỐ ĐỊNH (STICKY HEADER NAVBAR — ĐỒNG BỘ TOÀN DỰ ÁN)
+         ========================================================================= -->
+    <header class="site-header" role="banner">
+        <div class="container header-inner">
+            <!-- Cụm Logo thương hiệu JobPortal UTH -->
+            <a href="./index.html" class="header-brand" aria-label="Trang chủ JobPortal">
+                <div class="brand-icon" aria-hidden="true">💼</div>
+                <div class="brand-text">Job<span>Portal</span><span class="brand-badge">UTH</span></div>
+            </a>
+
+            <!-- Menu điều hướng chính -->
+            <nav class="header-nav" id="headerNav" role="navigation" aria-label="Điều hướng chính">
+                <a href="./index.html" class="nav-link">Trang Chủ</a>
+                <a href="./jobs.html" class="nav-link">Tìm Việc Làm</a>
+                <a href="./candidate-dashboard.html" class="nav-link active" aria-current="page">Hồ Sơ &amp; Ứng Tuyển</a>
+                <a href="./index.html#employers" class="nav-link">Doanh Nghiệp</a>
+                <a href="../index.html" class="nav-link" style="color: var(--color-primary); font-weight: 700;">Danh Bạ Nhóm 6</a>
+            </nav>
+
+            <!-- Cụm thông tin tài khoản bên phải -->
+            <div class="header-actions">
+                <a href="./employer-dashboard.html" class="btn-employer-slug" title="Dành cho nhà tuyển dụng đăng tin">
+                    <span>🏢</span>
+                    <span>Nhà Tuyển Dụng</span>
+                </a>
+
+                <div class="header-user" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                    <div class="user-avatar" style="width: 34px; height: 34px; border-radius: 50%; background: var(--color-primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.95rem;">Q</div>
+                    <span id="headerUserName" style="font-size: 0.875rem; font-weight: 600; color: var(--color-dark);">Nguyễn Phú Quang</span>
+                </div>
+
+                <!-- Nút menu mobile -->
+                <button class="mobile-toggle-btn"
+                        id="mobileMenuBtn"
+                        type="button"
+                        aria-label="Mở menu điều hướng"
+                        aria-expanded="false"
+                        aria-controls="headerNav">
+                    ☰
+                </button>
+            </div>
+        </div>
+    </header>
+
+
+    <!-- =========================================================================
+         2. BỐ CỤC PHÂN HỆ ỨNG VIÊN (CANDIDATE DASHBOARD LAYOUT)
+         ========================================================================= -->
+    <div class="candidate-layout">
+
+        <!-- ==================== SIDEBAR TRÁI ĐIỀU HƯỚNG TABS ==================== -->
+        <aside class="candidate-sidebar" aria-label="Menu quản trị ứng viên">
+
+            <div class="sidebar-profile">
+                <div class="profile-avatar" aria-hidden="true">Q</div>
+                <h3 id="sidebarUserName">Nguyễn Phú Quang</h3>
+                <span class="candidate-badge">
+                    <i class="fa-solid fa-circle-check"></i> Ứng Viên IT
+                </span>
+            </div>
+
+            <!-- Menu các phân hệ chuyển Tab -->
+            <nav class="sidebar-menu" aria-label="Menu chức năng ứng viên">
+                <a href="./candidate-dashboard.html"
+                   class="sidebar-link active"
+                   aria-current="page">
+                    <i class="fa-regular fa-user" aria-hidden="true"></i>
+                    <span>Hồ sơ cá nhân</span>
+                </a>
+
+                <a href="./my-applications.html"
+                   class="sidebar-link">
+                    <i class="fa-regular fa-file-lines" aria-hidden="true"></i>
+                    <span>Đơn ứng tuyển</span>
+                    <span class="sidebar-badge" id="sidebarAppCount">0</span>
+                </a>
+
+                <button type="button"
+                        class="sidebar-link"
+                        data-tab="tab-saved">
+                    <i class="fa-regular fa-bookmark" aria-hidden="true"></i>
+                    <span>Việc làm đã lưu</span>
+                    <span class="sidebar-badge" id="sidebarSaveCount">0</span>
+                </button>
+
+                <a href="./jobs.html" class="sidebar-link">
+                    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                    <span>Tìm việc làm mới</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <a href="../index.html" class="sidebar-link-home" title="Về trang tổng hợp Portfolio Nhóm 6">
+                    <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+                    <span>Danh Bạ Nhóm 6 UTH</span>
+                </a>
+
+                <button class="logout-btn" id="logoutBtn" type="button">
+                    <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>
+                    <span>Đăng xuất</span>
+                </button>
+            </div>
+
+        </aside>
+
+
+        <!-- ==================== VÙNG NỘI DUNG CHÍNH (MAIN PANELS) ==================== -->
+        <main class="candidate-main" id="mainContent" role="main">
+
+            <!-- Tiêu đề trang -->
+            <div class="page-heading">
+                <h1>Hồ sơ cá nhân &amp; Kho CV</h1>
+                <p>Quản lý thông tin hồ sơ, học vấn, kỹ năng, CV và các liên kết chuyên môn của bạn.</p>
+            </div>
+
+
+            <!-- =================================================================
+                 TAB 1: HỒ SƠ CÁ NHÂN (QUẢN LÝ HỒ SƠ, HỌC VẤN, KỸ NĂNG, CV, LINKS)
+                 ================================================================= -->
+            <div id="tab-profile" class="tab-content-panel active">
+
+                <!-- ========== 1. THẺ ĐỘ HOÀN THIỆN HỒ SƠ ========== -->
+                <section class="dashboard-card completion-card" aria-label="Độ hoàn thiện hồ sơ">
+                    <div class="completion-info">
+                        <h2>Độ hoàn thiện hồ sơ ứng viên</h2>
+                        <div class="completion-progress">
+                            <strong id="completionPercent">0%</strong>
+                            <div class="progress-track"
+                                 role="progressbar"
+                                 id="completionProgress"
+                                 aria-label="Thanh đo độ hoàn thiện hồ sơ"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100"
+                                 aria-valuenow="0">
+                                <div class="progress-fill" id="progressFill"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="completion-tip">
+                        <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+                        <span>Hoàn thiện trên 80% để tăng gấp 3 lần tỷ lệ được Nhà tuyển dụng gọi phỏng vấn!</span>
+                    </div>
+                </section>
+
+
+                <!-- ========== 2. BỐ CỤC LƯỚI NỘI DUNG 2 CỘT ========== -->
+                <div class="dashboard-grid">
+
+                    <!-- CỘT TRÁI (HỌ TÊN, THÔNG TIN, HỌC VẤN, KỸ NĂNG) -->
+                    <div class="dashboard-column">
+
+                        <!-- KHỐI 1: THÔNG TIN CÁ NHÂN -->
+                        <section class="dashboard-card" id="personalInfoSection" aria-labelledby="headingPersonalInfo">
+                            <div class="card-heading">
+                                <h2 id="headingPersonalInfo">
+                                    <i class="fa-regular fa-user" aria-hidden="true"></i>
+                                    Thông tin cá nhân
+                                </h2>
+                                <button class="btn-outline btn-sm" id="editProfileBtn" type="button">
+                                    <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                                    Chỉnh sửa
+                                </button>
+                            </div>
+
+                            <form id="profileForm">
+                                <div class="form-grid">
+                                    <div class="form-group full-width">
+                                        <label for="fullName">Họ và tên <span class="required">*</span></label>
+                                        <input type="text"
+                                               id="fullName"
+                                               name="full_name"
+                                               value="Nguyễn Phú Quang"
+                                               maxlength="100"
+                                               required
+                                               disabled>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="email">Địa chỉ Email</label>
+                                        <input type="email"
+                                               id="email"
+                                               name="email"
+                                               value="quang.np@student.ut.edu.vn"
+                                               readonly>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="phone">Số điện thoại liên hệ</label>
+                                        <input type="tel"
+                                               id="phone"
+                                               name="phone"
+                                               placeholder="0901 234 567"
+                                               maxlength="15"
+                                               disabled>
+                                    </div>
+
+                                    <div class="form-group full-width">
+                                        <label for="location">Tỉnh / Thành phố làm việc mong muốn</label>
+                                        <select id="location" name="location" disabled>
+                                            <option value="">Chọn địa điểm</option>
+                                            <option value="hcm" selected>TP. Hồ Chí Minh</option>
+                                            <option value="hanoi">Hà Nội</option>
+                                            <option value="danang">Đà Nẵng</option>
+                                            <option value="cantho">Cần Thơ</option>
+                                            <option value="remote">Làm việc từ xa (Remote)</option>
+                                            <option value="other">Tỉnh thành khác</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-actions" id="profileActions" hidden>
+                                    <button type="button" class="btn-outline btn-sm" id="cancelProfileBtn">
+                                        Hủy
+                                    </button>
+                                    <button type="submit" class="btn-primary btn-sm">
+                                        <i class="fa-solid fa-check" aria-hidden="true"></i>
+                                        Lưu thay đổi
+                                    </button>
+                                </div>
+                            </form>
+                        </section>
+
+
+                        <!-- KHỐI 2: HỌC VẤN -->
+                        <section class="dashboard-card" id="educationSection" aria-labelledby="headingEducation">
+                            <div class="card-heading">
+                                <h2 id="headingEducation">
+                                    <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
+                                    Trình độ học vấn
+                                </h2>
+                                <button class="btn-outline btn-sm" id="addEducationBtn" type="button">
+                                    <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                                    Thêm trường
+                                </button>
+                            </div>
+
+                            <!-- Danh sách trường học do JS render -->
+                            <div class="education-list" id="educationList"></div>
+
+                            <!-- Form thêm trường học -->
+                            <form id="educationForm" hidden style="background: var(--color-bg-page); padding: 16px; border-radius: 8px; border: 1px solid var(--color-border); margin-top: 10px;">
+                                <div class="form-group">
+                                    <label for="schoolName">Tên trường học / Cơ sở đào tạo <span class="required">*</span></label>
+                                    <input type="text" id="schoolName" placeholder="VD: Trường ĐH Giao Thông Vận Tải TP.HCM" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="major">Chuyên ngành đào tạo <span class="required">*</span></label>
+                                    <input type="text" id="major" placeholder="VD: Công Nghệ Thông Tin / Kỹ Thuật Phần Mềm" required>
+                                </div>
+
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="startYear">Năm bắt đầu <span class="required">*</span></label>
+                                        <input type="number" id="startYear" min="1970" max="2099" placeholder="2022" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="endYear">Năm tốt nghiệp (Dự kiến)</label>
+                                        <input type="number" id="endYear" min="1970" max="2099" placeholder="2026">
+                                    </div>
+                                </div>
+
+                                <div class="form-actions" style="margin-top: 8px; padding-top: 8px;">
+                                    <button type="button" class="btn-outline btn-sm" id="cancelEducationBtn">
+                                        Hủy
+                                    </button>
+                                    <button type="submit" class="btn-primary btn-sm">
+                                        Lưu học vấn
+                                    </button>
+                                </div>
+                            </form>
+                        </section>
+
+
+                        <!-- KHỐI 3: KỸ NĂNG CHUYÊN MÔN -->
+                        <section class="dashboard-card" id="skillsSection" aria-labelledby="headingSkills">
+                            <div class="card-heading">
+                                <h2 id="headingSkills">
+                                    <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                                    Kỹ năng chuyên môn
+                                </h2>
+                            </div>
+
+                            <form class="skill-input-group" id="skillForm">
+                                <input type="text"
+                                       id="skillInput"
+                                       maxlength="50"
+                                       placeholder="Nhập kỹ năng (vd: React, Node.js, SQL, Git...)"
+                                       aria-label="Nhập kỹ năng chuyên môn">
+                                <button class="btn-primary" type="submit">
+                                    <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                                    Thêm
+                                </button>
+                            </form>
+
+                            <!-- Danh sách thẻ kỹ năng do JS render -->
+                            <div class="skills-list" id="skillsList" aria-live="polite"></div>
+                        </section>
+
+                    </div>
+
+
+                    <!-- CỘT PHẢI (KHO CV, LIÊN KẾT PORTFOLIO / GITHUB) -->
+                    <div class="dashboard-column">
+
+                        <!-- KHỐI 4: QUẢN LÝ KHO CV & TẢI LÊN CV MẶC ĐỊNH -->
+                        <section class="dashboard-card" id="resumeSection" aria-labelledby="headingResumes">
+                            <div class="card-heading">
+                                <h2 id="headingResumes">
+                                    <i class="fa-regular fa-file-lines" aria-hidden="true"></i>
+                                    Kho Hồ Sơ &amp; CV Ứng Tuyển
+                                </h2>
+                            </div>
+
+                            <p style="font-size: 0.85rem; color: var(--color-muted); margin-bottom: 14px;">
+                                CV được đánh dấu <strong>CV Mặc Định</strong> sẽ được tự động đính kèm khi bạn ứng tuyển nhanh trên JobPortal.
+                            </p>
+
+                            <!-- Danh sách CV do JS render -->
+                            <div class="resume-list" id="resumeList"></div>
+
+                            <!-- Khối tải lên CV định dạng PDF <= 5MB -->
+                            <div class="resume-upload" role="button" tabindex="0" aria-label="Tải lên tệp CV PDF mới">
+                                <i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i>
+                                <h3>Tải lên CV Mới (PDF)</h3>
+                                <p>Kéo &amp; thả tệp CV vào đây, hoặc bấm nút bên dưới. Tối đa 5MB.</p>
+
+                                <input type="file"
+                                       id="resumeFile"
+                                       accept=".pdf,application/pdf"
+                                       hidden>
+
+                                <button class="btn-outline btn-sm" id="uploadResumeBtn" type="button">
+                                    <i class="fa-solid fa-paperclip" aria-hidden="true"></i>
+                                    Chọn tệp từ máy tính
+                                </button>
+
+                                <p id="resumeFileName" class="selected-file-name" aria-live="polite"></p>
+                            </div>
+                        </section>
+
+
+                        <!-- KHỐI 5: LIÊN KẾT CÁ NHÂN (PORTFOLIO & GITHUB) -->
+                        <section class="dashboard-card" id="socialLinksSection" aria-labelledby="headingSocialLinks">
+                            <div class="card-heading">
+                                <h2 id="headingSocialLinks">
+                                    <i class="fa-solid fa-link" aria-hidden="true"></i>
+                                    Liên kết Portfolio &amp; GitHub
+                                </h2>
+                            </div>
+
+                            <p style="font-size: 0.85rem; color: var(--color-muted); margin-bottom: 14px;">
+                                Bổ sung liên kết để chứng minh năng lực thực tế thông qua các dự án mã nguồn và website cá nhân.
+                            </p>
+
+                            <form id="socialLinksForm">
+                                <div class="form-group">
+                                    <label for="portfolioUrl">Website Portfolio Cá Nhân</label>
+                                    <div class="input-icon-group">
+                                        <i class="fa-solid fa-globe" aria-hidden="true"></i>
+                                        <input type="text"
+                                               id="portfolioUrl"
+                                               placeholder="VD: ../portfolios/NguyenPhuQuang/index.html">
+                                        <a href="#"
+                                           id="openPortfolio"
+                                           target="_blank"
+                                           rel="noopener noreferrer"
+                                           aria-label="Mở trang Portfolio trong tab mới"
+                                           title="Mở liên kết Portfolio"
+                                           hidden>
+                                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="githubUrl">Trang Cá Nhân GitHub</label>
+                                    <div class="input-icon-group">
+                                        <i class="fa-brands fa-github" aria-hidden="true"></i>
+                                        <input type="url"
+                                               id="githubUrl"
+                                               placeholder="https://github.com/nguyenphuquang">
+                                        <a href="#"
+                                           id="openGithub"
+                                           target="_blank"
+                                           rel="noopener noreferrer"
+                                           aria-label="Mở trang GitHub trong tab mới"
+                                           title="Mở liên kết GitHub"
+                                           hidden>
+                                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button class="btn-primary btn-sm" type="submit">
+                                        <i class="fa-solid fa-floppy-disk" aria-hidden="true"></i>
+                                        Lưu liên kết
+                                    </button>
+                                </div>
+                            </form>
+                        </section>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================================
+                 TAB 2: THEO DÕI ĐƠN ỨNG TUYỂN & PROGRESS STEPPER 4 BƯỚC
+                 (ĐẶC TẢ WIREFRAME 5.4 TRONG QTTK.HTML)
+                 ================================================================= -->
+            <div id="tab-applications" class="tab-content-panel">
+                <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-card); padding: 20px; margin-bottom: 20px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+                        <div>
+                            <h2 style="font-size:1.15rem; font-weight:700; color:var(--color-dark); margin-bottom:4px;">
+                                Quy Trình Tuyển Dụng 4 Bước Trực Quan
+                            </h2>
+                            <p style="font-size:0.85rem; color:var(--color-muted); margin:0;">
+                                Ứng dụng Quy tắc #9 (UX - Trực quan hóa tiến trình): Giúp ứng viên theo dõi chính xác từng giai đoạn xử lý hồ sơ.
+                            </p>
+                        </div>
+                        <a href="./jobs.html" class="btn-primary btn-sm" style="text-decoration:none;">
+                            <span>+ Nộp đơn công việc mới</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Danh sách đơn ứng tuyển do JS render -->
+                <div id="applicationsContainer"></div>
+            </div>
+
+
+            <!-- =================================================================
+                 TAB 3: DANH SÁCH VIỆC LÀM ĐÃ LƯU (SAVED JOBS)
+                 ================================================================= -->
+            <div id="tab-saved" class="tab-content-panel">
+                <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-card); padding: 20px; margin-bottom: 20px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+                        <div>
+                            <h2 style="font-size:1.15rem; font-weight:700; color:var(--color-dark); margin-bottom:4px;">
+                                Cơ Hội Việc Làm Đã Đánh Dấu Quan Tâm
+                            </h2>
+                            <p style="font-size:0.85rem; color:var(--color-muted); margin:0;">
+                                Các tin tuyển dụng bạn đã bấm biểu tượng trái tim từ trang Tra cứu việc làm.
+                            </p>
+                        </div>
+                        <a href="./jobs.html" class="btn-outline btn-sm" style="text-decoration:none;">
+                            <span>🔎 Khám phá thêm việc làm</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Danh sách việc làm đã lưu do JS render -->
+                <div id="savedJobsContainer"></div>
+            </div>
+
+        </main>
+
+    </div>
+
+
+    <!-- =========================================================================
+         3. HỆ THỐNG TOAST THÔNG BÁO DÙNG CHUNG
+         ========================================================================= -->
+    <div id="toastContainer" class="toast-container" role="status" aria-live="polite"></div>
+
+
+    <!-- =========================================================================
+         4. JAVASCRIPT LOGIC
+         ========================================================================= -->
+    <script src="./assets/js/main.js"></script>
+    <script src="./assets/js/toast.js"></script>
+    <script src="./assets/js/candidate.js"></script>
+
+</body>
+</html>

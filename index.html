@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trang Chủ Nhóm — Đồ Án Lập Trình Web (Job Portal)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --border: #334155;
+      --gold: #e2b93b;
+      --gold-hover: #f5d061;
+      --text: #f8fafc;
+      --sub: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 60px 20px;
+    }
+    .hub-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 99px;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+    h1 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+    .highlight { color: var(--gold); }
+    .subtitle { color: var(--sub); }
+    .members-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .member-card {
+      background-color: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.25s, border-color 0.25s;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .member-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--gold);
+    }
+    .member-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .member-avatar {
+      width: 58px;
+      height: 58px;
+      border-radius: 12px;
+      object-fit: cover;
+      border: 1px solid var(--gold);
+      flex-shrink: 0;
+    }
+    .member-info {
+      min-width: 0;
+    }
+    .member-name {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .member-id {
+      font-size: 13px;
+      color: var(--gold);
+      font-weight: 600;
+      display: block;
+    }
+    .member-btn {
+      display: inline-block;
+      text-align: center;
+      padding: 9px 14px;
+      border-radius: 10px;
+      background-color: var(--gold);
+      color: #0f172a;
+      font-weight: 700;
+      font-size: 13px;
+      transition: background-color 0.2s;
+    }
+    .member-card:hover .member-btn {
+      background-color: var(--gold-hover);
+    }
+    @media (max-width: 900px) {
+      .members-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 600px) {
+      .members-grid {
+        grid-template-columns: 1fr;
+      }
+      h1 {
+        font-size: 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <header class="hub-header">
+      <span class="badge">PROJECT_LTW • JOB PORTAL TEAM</span>
+      <h1>Danh Sách <span class="highlight">Portfolio Thành Viên</span></h1>
+      <p class="subtitle">Chọn thẻ thành viên bên dưới để xem trang Portfolio cá nhân của từng thành viên trong nhóm.</p>
+    </header>
+
+    <!-- BANNER TRUY CẬP ỨNG DỤNG JOB PORTAL (SẢN PHẨM CỐT LÕI ĐỒ ÁN) -->
+    <div style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); border-radius: 16px; padding: 22px 28px; margin-bottom: 36px; display: flex; align-items: center; justify-content: space-between; gap: 20px; box-shadow: 0 10px 25px -5px rgba(30, 64, 175, 0.35); flex-wrap: wrap;">
+      <div>
+        <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; background: rgba(255,255,255,0.2); color: #ffffff; padding: 4px 10px; border-radius: 99px; display: inline-block; margin-bottom: 8px;">Sản Phẩm Đồ Án Chính Thức</span>
+        <h2 style="font-size: 20px; font-weight: 800; color: #ffffff; margin: 0 0 4px; letter-spacing: -0.01em;">Cổng Thông Tin Việc Làm (Job Portal Platform)</h2>
+        <p style="font-size: 13.5px; color: #dbeafe; margin: 0;">Hiện thực hóa chuẩn mực theo tài liệu thiết kế QTTK.html — Kiến trúc sư Lead Trần Hữu Thành.</p>
+      </div>
+      <a href="./job-portal/index.html" style="background: #10b981; color: #ffffff; padding: 12px 24px; border-radius: 10px; font-weight: 700; font-size: 14px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4); white-space: nowrap; transition: transform 0.2s, background-color 0.2s;">
+        <span>Khám Phá Sàn Việc Làm</span>
+        <span style="font-size: 16px;">→</span>
+      </a>
+    </div>
+
+    <section class="members-grid">
+      <!-- Thành viên 1: Trần Hữu Thành -->
+      <a href="./portfolios/044206000003_THT/index.html" class="member-card">
+        <div class="member-top">
+          <img src="./portfolios/044206000003_THT/images/tht2.jpg" alt="Trần Hữu Thành" class="member-avatar" />
+          <div class="member-info">
+            <h2 class="member-name">Trần Hữu Thành</h2>
+            <span class="member-id">MSSV: 044206000003</span>
+          </div>
+        </div>
+        <span class="member-btn">Xem Portfolio Cá Nhân →</span>
+      </a>
+
+      <!-- Thành viên 2: Nguyễn Lê Gia Hân -->
+      <a href="./portfolios/083306010188_NguyenLeGiaHan/PORTFOLIO/index.html" class="member-card">
+        <div class="member-top">
+          <img src="./portfolios/083306010188_NguyenLeGiaHan/PORTFOLIO/assets/avatar.jpg" alt="Nguyễn Lê Gia Hân" class="member-avatar" />
+          <div class="member-info">
+            <h2 class="member-name">Nguyễn Lê Gia Hân</h2>
+            <span class="member-id">MSSV: 083306010188</span>
+          </div>
+        </div>
+        <span class="member-btn">Xem Portfolio Cá Nhân →</span>
+      </a>
+
+      <!-- Thành viên 3: Hồ Trúc Gia Hân -->
+      <a href="./portfolios/056306004131_Ho-Truc-Gia-Han/index.html" class="member-card">
+        <div class="member-top">
+          <img src="./portfolios/056306004131_Ho-Truc-Gia-Han/assets/avatar.JPG" alt="Hồ Trúc Gia Hân" class="member-avatar" />
+          <div class="member-info">
+            <h2 class="member-name">Hồ Trúc Gia Hân</h2>
+            <span class="member-id">MSSV: 056306004131</span>
+          </div>
+        </div>
+        <span class="member-btn">Xem Portfolio Cá Nhân →</span>
+      </a>
+
+      <!-- Thành viên 4: Nguyễn Phú Quang -->
+      <a href="./portfolios/NguyenPhuQuang/index.html" class="member-card">
+        <div class="member-top">
+          <img src="./portfolios/NguyenPhuQuang/images/a_ban_than.png" alt="Nguyễn Phú Quang" class="member-avatar" />
+          <div class="member-info">
+            <h2 class="member-name">Nguyễn Phú Quang</h2>
+            <span class="member-id">MSSV: 036206029474 </span>
+          </div>
+        </div>
+        <span class="member-btn">Xem Portfolio Cá Nhân →</span>
+      </a>
+
+      <!-- Thành viên 5: Đinh Duy Diện -->
+      <a href="./portfolios/051206000952_DinhDuyDien/index.html" class="member-card">
+        <div class="member-top">
+          <img src="./portfolios/051206000952_DinhDuyDien/assets/avatar.webp" alt="Đinh Duy Diện" class="member-avatar" />
+          <div class="member-info">
+            <h2 class="member-name">Đinh Duy Diện</h2>
+            <span class="member-id">MSSV: 051206000952</span>
+          </div>
+        </div>
+        <span class="member-btn">Xem Portfolio Cá Nhân →</span>
+      </a>
+
+      <!-- Thành viên 6: Lê Hoàng Thiên Hương -->
+      <a href="./portfolios/042303000056_LeHoangThienHuong/index.html" class="member-card">
+        <div class="member-top">
+          <img src="./portfolios/042303000056_LeHoangThienHuong/assets/avatar.jpg" alt="Lê Hoàng Thiên Hương" class="member-avatar" />
+          <div class="member-info">
+            <h2 class="member-name">Lê Hoàng Thiên Hương</h2>
+            <span class="member-id">MSSV: 042303000056</span>
+          </div>
+        </div>
+        <span class="member-btn">Xem Portfolio Cá Nhân →</span>
+      </a>
+    </section>
+  </main>
+</body>
+</html>

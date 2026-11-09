@@ -1,0 +1,1029 @@
+
+/*
+   PHẦN 1: KHAI BÁO BIẾN CSS TOÀN CỤC (:root)
+  Quản lý tập trung mã màu, font chữ, hiệu ứng chuyển động
+*/
+:root {
+  /* Khai báo 3 họ font chữ chính */
+  --font-serif: 'Newsreader', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Space Mono', 'SF Mono', Consolas, monospace;
+
+  /* Bảng màu mặc định: Chế độ ban đêm */
+  --bg-primary: #0a0c10;         /* Màu nền tối chính (đen tro sâu) */
+  --bg-surface: #12161f;         /* Màu nền bề mặt các khối nội dung */
+  --bg-surface-elevated: #181d28;/* Màu nền khối nổi bật */
+  --bg-subtle: rgba(255, 255, 255, 0.035);
+
+  --text-primary: #f6f3ed;       /* Màu chữ chính: màu xương ấm cổ điển */
+  --text-secondary: #9fa6b2;     /* Màu chữ phụ / mô tả ngắn */
+  --text-muted: #5f6775;         /* Màu chữ chú thích nhỏ / ngày tháng */
+
+  --accent-gold: #cfa85e;        /* Màu nhấn: Vàng kim sâm-panh sang trọng */
+  --accent-gold-soft: rgba(207, 168, 94, 0.12);
+  --accent-gold-hover: #dfb96f;
+
+  --border-hairline: rgba(255, 255, 255, 0.08); /* Đường viền mảnh siêu tinh tế */
+  --border-medium: rgba(255, 255, 255, 0.16);
+  --border-accent: rgba(207, 168, 94, 0.38);
+
+  --shadow-editorial: 0 16px 40px -10px rgba(0, 0, 0, 0.45);
+  --transition-smooth: all 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* BẢNG MÀU CHẾ ĐỘ SÁNG */
+body.light-mode {
+  --bg-primary: #fbf9f4;         /* Nền giấy mỹ thuật màu ngà */
+  --bg-surface: #ffffff;         /* Bề mặt trắng tinh tế */
+  --bg-surface-elevated: #f4efe4;
+  --bg-subtle: rgba(0, 0, 0, 0.028);
+
+  --text-primary: #17181c;       /* Mực in than đen tuyền */
+  --text-secondary: #4a515c;
+  --text-muted: #7d8492;
+
+  --accent-gold: #9e7228;        /* Vàng đồng cổ điển */
+  --accent-gold-soft: rgba(158, 114, 40, 0.1);
+  --accent-gold-hover: #b48533;
+
+  --border-hairline: rgba(20, 23, 28, 0.09);
+  --border-medium: rgba(20, 23, 28, 0.18);
+  --border-accent: rgba(158, 114, 40, 0.38);
+
+  --shadow-editorial: 0 16px 40px -10px rgba(25, 20, 10, 0.08);
+
+  --border-medium: rgba(20, 23, 28, 0.18);
+  --border-accent: rgba(158, 114, 40, 0.38);
+
+  --shadow-editorial: 0 16px 40px -10px rgba(25, 20, 10, 0.08);
+}
+
+/* 
+   PHẦN 2: THIẾT LẬP CƠ BẢN & ĐẶT LẠI LỀ
+  box-sizing: border-box giúp kích thước phần tử tính luôn cả padding
+   */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body.editorial-body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.68;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.4s ease, color 0.4s ease;
+  overflow-x: hidden;
+  position: relative;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* 
+  PHẦN 3: NỀN KHÔNG GIAN ĐỘNG (SAO BĂNG, ĐOM ĐÓM VÀNG)
+  Dùng CSS keyframes và fixed canvas tạo chiều sâu chuyển động
+   */
+.celestial-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.ambient-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.4;
+  transition: opacity 0.5s ease;
+}
+
+.glow-top {
+  width: 520px;
+  height: 520px;
+  background: radial-gradient(circle, rgba(207, 168, 94, 0.18) 0%, transparent 70%);
+  top: -160px;
+  left: -80px;
+}
+
+.glow-bottom {
+  width: 580px;
+  height: 580px;
+  background: radial-gradient(circle, rgba(94, 138, 207, 0.12) 0%, transparent 70%);
+  bottom: -200px;
+  right: -100px;
+}
+
+/* Hiệu ứng vệt Sao băng lướt qua bầu trời đêm */
+.star-trace {
+  position: absolute;
+  width: 160px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent-gold), rgba(207, 168, 94, 0.3), transparent);
+  transform: rotate(-30deg);
+  opacity: 0;
+  animation: tracePass 7.5s infinite ease-in-out;
+}
+
+.star-trace::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: -1.5px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 10px 2px var(--accent-gold);
+}
+
+.trace-1 { top: 12%; right: 18%; animation-delay: 1s; animation-duration: 8s; }
+.trace-2 { top: 38%; right: 6%;  animation-delay: 4.5s; animation-duration: 6.8s; }
+.trace-3 { top: 72%; right: 42%; animation-delay: 2.8s; animation-duration: 9.2s; }
+
+@keyframes tracePass {
+  0% { transform: rotate(-30deg) translate3d(0, 0, 0); opacity: 0; }
+  8% { opacity: 0.95; }
+  18% { transform: rotate(-30deg) translate3d(-340px, 190px, 0); opacity: 0; }
+  100% { opacity: 0; }
+}
+
+/* Hiệu ứng các đốm Đom đóm vàng bay lơ lửng */
+.ember {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent-gold);
+  box-shadow: 0 0 12px 3px var(--accent-gold);
+  opacity: 0;
+  animation: emberDrift 11s infinite ease-in-out;
+}
+
+.e-1 { top: 22%; left: 16%; animation-delay: 0s;   animation-duration: 12s; }
+.e-2 { top: 48%; left: 32%; animation-delay: 3s;   animation-duration: 10s; }
+.e-3 { top: 75%; left: 18%; animation-delay: 1.5s; animation-duration: 13s; }
+.e-4 { top: 30%; right: 24%; animation-delay: 4.2s; animation-duration: 11.5s; }
+.e-5 { top: 62%; right: 14%; animation-delay: 6s;   animation-duration: 9.5s; }
+.e-6 { top: 88%; right: 36%; animation-delay: 2.2s; animation-duration: 14s; }
+
+@keyframes emberDrift {
+  0%   { transform: translate(0, 0) scale(0.8); opacity: 0; }
+  25%  { opacity: 0.85; transform: translate(14px, -28px) scale(1.1); }
+  50%  { opacity: 0.4;  transform: translate(-10px, -62px) scale(0.9); }
+  75%  { opacity: 0.9;  transform: translate(18px, -94px) scale(1.2); }
+  100% { transform: translate(6px, -130px) scale(0.7); opacity: 0; }
+}
+
+/*
+  PHẦN 4: THANH TIỆN ÍCH ĐẦU TRANG
+  Gắn cố định (sticky) trên cùng, chứa nút quay về nhóm và nút đổi theme
+*/
+.masthead-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: rgba(10, 12, 16, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border-hairline);
+  transition: background-color 0.4s ease, border-color 0.4s ease;
+}
+
+body.light-mode .masthead-bar {
+  background-color: rgba(251, 249, 244, 0.92);
+}
+
+.masthead-container {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+}
+
+.masthead-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hub-back-slug {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  padding: 4px 10px;
+  border: 1px solid var(--border-accent);
+  border-radius: 4px;
+  transition: var(--transition-smooth);
+}
+
+.hub-back-slug:hover {
+  background-color: var(--accent-gold-soft);
+  transform: translateX(-2px);
+}
+
+.slug-arrow {
+  transition: transform 0.2s ease;
+}
+
+.hub-back-slug:hover .slug-arrow {
+  transform: translateX(-3px);
+}
+
+.masthead-center {
+  display: none;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+}
+
+@media (min-width: 900px) {
+  .masthead-center {
+    display: block;
+  }
+}
+
+.masthead-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.editorial-theme-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  color: var(--text-primary);
+  border: 1px solid var(--border-hairline);
+  border-radius: 4px;
+  transition: var(--transition-smooth);
+}
+
+.editorial-theme-btn:hover {
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+}
+
+.theme-icon {
+  font-size: 0.95rem;
+  transition: transform 0.3s ease;
+}
+
+.editorial-theme-btn:hover .theme-icon {
+  transform: rotate(180deg);
+}
+
+/* 
+  PHẦN 5: BỐ CỤC CHÍNH DẠNG TẠP CHÍ
+  Chia 2 cột tỷ lệ 340px (cột trái) và 1fr (cột phải)
+  */
+.editorial-spread {
+  position: relative;
+  z-index: 1;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 44px 28px 80px;
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 60px;
+}
+
+/*
+  PHẦN 6: CỘT HỒ SƠ VÀ CHÂN DUNG CỐ ĐỊNH
+  Giữ cố định ảnh và mục lục khi người dùng cuộn nội dung bên phải
+  */
+.dossier-column {
+  position: relative;
+}
+
+.dossier-sticky {
+  position: sticky;
+  top: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* Khung ảnh chân dung với tem mã lưu trữ */
+.portrait-card {
+  position: relative;
+}
+
+.portrait-frame {
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--border-medium);
+  background-color: var(--bg-surface);
+  box-shadow: var(--shadow-editorial);
+}
+
+.portrait-img {
+  width: 100%;
+  aspect-ratio: 4 / 4.7;
+  object-fit: cover;
+  filter: contrast(102%) brightness(98%);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s ease;
+}
+
+.portrait-frame:hover .portrait-img {
+  transform: scale(1.025);
+}
+
+.portrait-plate {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background-color: var(--bg-surface-elevated);
+  border-top: 1px solid var(--border-hairline);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+}
+
+.plate-code {
+  color: var(--accent-gold);
+  font-weight: 700;
+}
+
+/* Khối định danh cá nhân và hiệu ứng chữ gõ tự động */
+.identity-block {
+  border-bottom: 1px solid var(--border-hairline);
+  padding-bottom: 22px;
+}
+
+.dossier-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  letter-spacing: 0.1em;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.dossier-name {
+  font-family: var(--font-serif);
+  font-size: 2.2rem;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+}
+
+.dossier-typing {
+  font-size: 0.86rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 24px;
+}
+
+.typing-prefix {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.typing-output {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.cursor-pipe {
+  color: var(--accent-gold);
+  font-weight: 700;
+  animation: blinkPipe 0.9s infinite;
+}
+
+@keyframes blinkPipe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Mục lục đánh số La Mã tự động sáng (Scroll-Spy) */
+.editorial-index {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.index-link {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 9px 12px;
+  border-radius: 4px;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  border-left: 2px solid transparent;
+  transition: var(--transition-smooth);
+}
+
+.index-num {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--accent-gold);
+  width: 22px;
+}
+
+.index-title {
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.index-link:hover,
+.index-link.active {
+  color: var(--text-primary);
+  background-color: var(--bg-subtle);
+  border-left-color: var(--accent-gold);
+}
+
+.dossier-meta-footer {
+  border-top: 1px solid var(--border-hairline);
+  padding-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.meta-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+}
+
+.meta-k {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+}
+
+.meta-v {
+  color: var(--text-secondary);
+  font-weight: 500;
+  text-align: right;
+}
+
+/*
+  PHẦN 7: CỘT DIỄN GIẢI NỘI DUNG CHÍNH
+  Gồm 4 phần I (Mở đầu), II (Dự án), III (Kỹ năng), IV (Liên hệ)
+  */
+.narrative-column {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+}
+
+.editorial-section {
+  position: relative;
+  scroll-margin-top: 96px;
+}
+
+/* Thanh tiêu đề phân cách các phần (Section Kicker Header) */
+.section-kicker-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 26px;
+}
+
+.kicker-index {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  letter-spacing: 0.1em;
+  font-weight: 700;
+}
+
+.kicker-line {
+  flex: 1;
+  height: 1px;
+  background-color: var(--border-hairline);
+}
+
+.kicker-name {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+}
+
+/* Phần I: Lời mở đầu & Tuyên ngôn kỹ thuật */
+.hero-manifesto {
+  margin-bottom: 40px;
+}
+
+.editorial-headline {
+  font-family: var(--font-serif);
+  font-size: clamp(2.1rem, 3.8vw, 3.4rem);
+  font-weight: 400;
+  line-height: 1.18;
+  letter-spacing: -0.025em;
+  margin-bottom: 30px;
+  color: var(--text-primary);
+}
+
+.editorial-headline em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--accent-gold);
+}
+
+.lead-story-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 36px;
+  border-top: 1px solid var(--border-hairline);
+  padding-top: 24px;
+}
+
+.lead-paragraph {
+  font-size: 1.06rem;
+  line-height: 1.74;
+  color: var(--text-primary);
+}
+
+.lead-paragraph strong {
+  font-weight: 600;
+  color: var(--accent-gold);
+}
+
+.lead-subparagraph {
+  font-size: 0.96rem;
+  line-height: 1.72;
+  color: var(--text-secondary);
+}
+.lead-subparagraph strong {
+  font-weight: 600;
+  color: var(--accent-gold);
+  font-style: italic;
+}
+
+
+/* Hai trụ cột định hướng phát triển và phương châm làm việc */
+.pillars-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.pillar-card {
+  padding: 26px 28px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-hairline);
+  border-radius: 6px;
+  transition: var(--transition-smooth);
+}
+
+.pillar-card:hover {
+  border-color: var(--border-medium);
+  transform: translateY(-2px);
+}
+
+.pillar-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.pillar-symbol {
+  color: var(--accent-gold);
+  font-size: 0.82rem;
+}
+
+.pillar-tag {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  letter-spacing: 0.08em;
+}
+
+.pillar-title {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-bottom: 10px;
+}
+
+.pillar-text {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+/* Phần II: Danh mục các dự án tiêu biểu (Exhibition Catalogue) */
+.catalogue-intro {
+  margin-bottom: 30px;
+}
+
+.section-display-title {
+  font-family: var(--font-serif);
+  font-size: 2.1rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+
+.section-display-desc {
+  font-size: 0.94rem;
+  color: var(--text-secondary);
+}
+
+.catalogue-list {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--border-hairline);
+}
+
+.catalogue-entry {
+  display: grid;
+  grid-template-columns: 70px 1fr 130px;
+  gap: 28px;
+  align-items: start;
+  padding: 34px 0;
+  border-bottom: 1px solid var(--border-hairline);
+  transition: var(--transition-smooth);
+}
+
+.catalogue-entry:hover {
+  background-color: var(--bg-subtle);
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.catalogue-aside {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.entry-index {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.25rem;
+  color: var(--accent-gold);
+}
+
+.entry-year {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.entry-heading-group {
+  margin-bottom: 10px;
+}
+
+.entry-category {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent-gold);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.entry-title {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+}
+
+.entry-summary {
+  font-size: 0.94rem;
+  color: var(--text-secondary);
+  line-height: 1.68;
+  margin-bottom: 16px;
+  max-width: 640px;
+}
+
+.entry-specs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.spec-pill {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  padding: 3px 9px;
+  border-radius: 3px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-hairline);
+  color: var(--text-secondary);
+}
+
+.catalogue-action {
+  text-align: right;
+  padding-top: 6px;
+}
+
+.catalogue-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  padding: 7px 12px;
+  border: 1px solid var(--border-hairline);
+  border-radius: 4px;
+  transition: var(--transition-smooth);
+}
+
+.catalogue-entry:hover .catalogue-cta,
+.catalogue-cta:hover {
+  background-color: var(--accent-gold);
+  border-color: var(--accent-gold);
+  color: #0a0c10;
+}
+
+.cta-arrow {
+  transition: transform 0.2s ease;
+}
+
+.catalogue-cta:hover .cta-arrow {
+  transform: translate(2px, -2px);
+}
+
+/* Phần III: Bảng kỹ năng và bộ lọc chuyên môn (Taxonomy Index) */
+.taxonomy-ribbon {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 26px;
+  flex-wrap: wrap;
+}
+
+.ribbon-btn {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  padding: 6px 14px;
+  border-radius: 4px;
+  border: 1px solid var(--border-hairline);
+  color: var(--text-secondary);
+  transition: var(--transition-smooth);
+}
+
+.ribbon-btn:hover {
+  border-color: var(--accent-gold);
+  color: var(--text-primary);
+}
+
+.ribbon-btn.active {
+  background-color: var(--accent-gold-soft);
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+  font-weight: 700;
+}
+
+.taxonomy-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.taxonomy-card {
+  padding: 24px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-hairline);
+  border-radius: 6px;
+  display: flex;
+  gap: 16px;
+  transition: var(--transition-smooth);
+}
+
+.taxonomy-card:hover {
+  border-color: var(--border-medium);
+  transform: translateY(-2px);
+}
+
+.tax-index {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.15rem;
+  color: var(--accent-gold);
+  line-height: 1;
+}
+
+.tax-content {
+  flex: 1;
+}
+
+.tax-category {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.tax-title {
+  font-family: var(--font-serif);
+  font-size: 1.18rem;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-bottom: 8px;
+}
+
+.tax-desc {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.62;
+}
+
+/* Phần IV: Kênh liên hệ trực tiếp và Mạng xã hội */
+.directory-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 50px;
+}
+
+.directory-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-hairline);
+  border-radius: 6px;
+  transition: var(--transition-smooth);
+}
+
+.directory-row:hover {
+  border-color: var(--accent-gold);
+  transform: translateY(-2px);
+  background-color: var(--bg-surface-elevated);
+}
+
+.row-channel {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.row-icon {
+  font-size: 1.25rem;
+  color: var(--accent-gold);
+  width: 22px;
+  text-align: center;
+}
+
+.channel-name {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: block;
+  line-height: 1.2;
+}
+
+.channel-handle {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.row-arrow {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.directory-row:hover .row-arrow {
+  color: var(--accent-gold);
+  transform: translate(3px, -3px);
+}
+
+/* Chân trang thông tin bản quyền và liên kết quay về nhóm */
+.editorial-colophon {
+  border-top: 1px solid var(--border-hairline);
+  padding-top: 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 20px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.colophon-back-link {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--accent-gold);
+  text-transform: uppercase;
+  transition: var(--transition-smooth);
+}
+
+.colophon-back-link:hover {
+  text-decoration: underline;
+}
+
+/*
+  PHẦN 8: GIAO DIỆN TƯƠNG THÍCH MÀN HÌNH
+  Chuyển thành 1 cột khi xem trên máy tính bảng hoặc điện thoại di động
+  */
+@media (max-width: 1080px) {
+  .editorial-spread {
+    grid-template-columns: 290px 1fr;
+    gap: 40px;
+    padding: 32px 20px 60px;
+  }
+}
+
+@media (max-width: 860px) {
+  .editorial-spread {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+
+  .dossier-sticky {
+    position: static;
+  }
+
+  .portrait-frame {
+    max-width: 280px;
+  }
+
+  .lead-story-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .catalogue-entry {
+    grid-template-columns: 50px 1fr;
+    gap: 20px;
+  }
+
+  .catalogue-action {
+    grid-column: 2;
+    text-align: left;
+    margin-top: 8px;
+  }
+
+  .pillars-grid,
+  .taxonomy-grid,
+  .directory-list {
+    grid-template-columns: 1fr;
+  }
+
+  .editorial-colophon {
+    flex-direction: column;
+    gap: 14px;
+  }
+}

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Trang theo dõi tiến độ ứng tuyển: Danh sách các đơn đã nộp, tích hợp thành phần 4-Step Recruitment Stepper (Đã nộp -> Đã xem -> Hẹn phỏng vấn -> Kết quả) - Nguyễn Phú Quang (MSSV: 036206029474) Nhóm 6 UTH.">
+
+    <title>Theo Dõi Tiến Độ Ứng Tuyển — JobPortal | Nguyễn Phú Quang (Nhóm 6 UTH)</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- CSS dùng chung của hệ thống -->
+    <link rel="stylesheet" href="./assets/css/variables.css">
+    <link rel="stylesheet" href="./assets/css/base.css">
+    <link rel="stylesheet" href="./assets/css/components.css">
+    <link rel="stylesheet" href="./assets/css/toast.css">
+
+    <!-- CSS riêng Module 3 của Nguyễn Phú Quang -->
+    <link rel="stylesheet" href="./assets/css/candidate.css">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+
+<body class="candidate-page-body">
+
+    <!-- =========================================================================
+         THÔNG TIN PHÂN CÔNG ĐỒ ÁN (MODULE 3 - TASK ASSIGNMENT)
+         -------------------------------------------------------------------------
+         Thành viên đảm nhiệm: NGUYỄN PHÚ QUANG
+         Mã số sinh viên (MSSV): 036206029474
+         Nhánh Git phát triển: nguyen_quang (Đã merge vào main)
+         Đơn vị: Nhóm 6 — Khoa Công Nghệ Thông Tin — Trường ĐH Giao Thông Vận Tải TP.HCM (UTH)
+         Học phần: Lập trình Website (Web Programming) — GVHD: ThS. Trần Thịnh Mạnh Đức
+         
+         PHẠM VI ĐẢM NHIỆM:
+         - Tệp HTML: my-applications.html (Trang Theo dõi tiến độ ứng tuyển với 4-Step Recruitment Stepper)
+         - Tệp CSS: assets/css/candidate.css (100% định kiểu Stepper 4 bước & thẻ hồ sơ)
+         - Tệp JS: assets/js/my-applications.js (Logic bộ lọc trạng thái, KPI, xem lịch PV, rút đơn)
+         - Căn cứ thiết kế: Wireframe Mục 5.4 Phân Hệ Ứng Viên (Candidate Stepper) trong QTTK.html
+         ========================================================================= -->
+
+    <!-- =========================================================================
+         1. THANH ĐIỀU HƯỚNG CỐ ĐỊNH (STICKY HEADER NAVBAR — ĐỒNG BỘ TOÀN DỰ ÁN)
+         ========================================================================= -->
+    <header class="site-header" role="banner">
+        <div class="container header-inner">
+            <!-- Cụm Logo thương hiệu JobPortal UTH -->
+            <a href="./index.html" class="header-brand" aria-label="Trang chủ JobPortal">
+                <div class="brand-icon" aria-hidden="true">💼</div>
+                <div class="brand-text">Job<span>Portal</span><span class="brand-badge">UTH</span></div>
+            </a>
+
+            <!-- Menu điều hướng chính -->
+            <nav class="header-nav" id="headerNav" role="navigation" aria-label="Điều hướng chính">
+                <a href="./index.html" class="nav-link">Trang Chủ</a>
+                <a href="./jobs.html" class="nav-link">Tìm Việc Làm</a>
+                <a href="./candidate-dashboard.html" class="nav-link active" aria-current="page">Hồ Sơ &amp; Ứng Tuyển</a>
+                <a href="./index.html#employers" class="nav-link">Doanh Nghiệp</a>
+                <a href="../index.html" class="nav-link" style="color: var(--color-primary); font-weight: 700;">Danh Bạ Nhóm 6</a>
+            </nav>
+
+            <!-- Cụm thông tin tài khoản bên phải -->
+            <div class="header-actions">
+                <a href="./employer-dashboard.html" class="btn-employer-slug" title="Dành cho nhà tuyển dụng đăng tin">
+                    <span>🏢</span>
+                    <span>Nhà Tuyển Dụng</span>
+                </a>
+
+                <div class="header-user" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                    <div class="user-avatar" style="width: 34px; height: 34px; border-radius: 50%; background: var(--color-primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.95rem;">Q</div>
+                    <span id="headerUserName" style="font-size: 0.875rem; font-weight: 600; color: var(--color-dark);">Nguyễn Phú Quang</span>
+                </div>
+
+                <!-- Nút menu mobile -->
+                <button class="mobile-toggle-btn"
+                        id="mobileMenuBtn"
+                        type="button"
+                        aria-label="Mở menu điều hướng"
+                        aria-expanded="false"
+                        aria-controls="headerNav">
+                    ☰
+                </button>
+            </div>
+        </div>
+    </header>
+
+
+    <!-- =========================================================================
+         2. BỐ CỤC PHÂN HỆ ỨNG VIÊN (CANDIDATE DASHBOARD LAYOUT)
+         ========================================================================= -->
+    <div class="candidate-layout">
+
+        <!-- ==================== SIDEBAR TRÁI ĐIỀU HƯỚNG ==================== -->
+        <aside class="candidate-sidebar" aria-label="Menu quản trị ứng viên">
+
+            <div class="sidebar-profile">
+                <div class="profile-avatar" aria-hidden="true">Q</div>
+                <h3 id="sidebarUserName">Nguyễn Phú Quang</h3>
+                <span class="candidate-badge">
+                    <i class="fa-solid fa-circle-check"></i> Ứng Viên IT
+                </span>
+            </div>
+
+            <!-- Menu các phân hệ của Ứng viên -->
+            <nav class="sidebar-menu" aria-label="Menu chức năng ứng viên">
+                <a href="./candidate-dashboard.html" class="sidebar-link">
+                    <i class="fa-regular fa-user" aria-hidden="true"></i>
+                    <span>Hồ sơ cá nhân</span>
+                </a>
+
+                <a href="./my-applications.html" class="sidebar-link active" aria-current="page">
+                    <i class="fa-regular fa-file-lines" aria-hidden="true"></i>
+                    <span>Đơn ứng tuyển</span>
+                    <span class="sidebar-badge" id="sidebarAppCount">0</span>
+                </a>
+
+                <a href="./candidate-dashboard.html#saved" class="sidebar-link">
+                    <i class="fa-regular fa-bookmark" aria-hidden="true"></i>
+                    <span>Việc làm đã lưu</span>
+                </a>
+
+                <a href="./jobs.html" class="sidebar-link">
+                    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                    <span>Tìm việc làm mới</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <a href="../index.html" class="sidebar-link-home" title="Về trang tổng hợp Portfolio Nhóm 6">
+                    <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+                    <span>Danh Bạ Nhóm 6 UTH</span>
+                </a>
+
+                <button class="logout-btn" id="logoutBtn" type="button">
+                    <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>
+                    <span>Đăng xuất</span>
+                </button>
+            </div>
+
+        </aside>
+
+
+        <!-- ==================== VÙNG NỘI DUNG CHÍNH (MAIN CONTENT) ==================== -->
+        <main class="candidate-main" id="mainContent" role="main">
+
+            <!-- Tiêu đề trang & Dẫn nhập -->
+            <div class="page-heading">
+                <h1>Theo Dõi Tiến Độ Ứng Tuyển</h1>
+                <p>
+                    Ứng dụng <strong>Quy tắc #9 (UX - Trực quan hóa tiến trình)</strong>: Giúp bạn nắm rõ vòng đời hồ sơ với <strong>Thanh tiến trình 4 bước (Recruitment Stepper)</strong> chuẩn Wireframe 5.4 trong báo cáo QTTK.html.
+                </p>
+            </div>
+
+
+            <!-- =================================================================
+                 1. KHỐI THỐNG KÊ KPI NHANH (SUMMARY METRICS)
+                 ================================================================= -->
+            <section class="kpi-stats-grid" aria-label="Thống kê tổng quan đơn ứng tuyển">
+                <div class="kpi-card">
+                    <div class="kpi-icon-wrap" style="background: var(--color-primary-soft); color: var(--color-primary);">
+                        <i class="fa-regular fa-paper-plane" aria-hidden="true"></i>
+                    </div>
+                    <div>
+                        <div class="kpi-val" id="statTotal">0</div>
+                        <div class="kpi-title">Tổng Đơn Đã Nộp</div>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon-wrap" style="background: #e0f2fe; color: #0284c7;">
+                        <i class="fa-regular fa-eye" aria-hidden="true"></i>
+                    </div>
+                    <div>
+                        <div class="kpi-val" id="statViewed">0</div>
+                        <div class="kpi-title">Đã Được Mở Xem</div>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon-wrap" style="background: var(--color-warning-soft); color: var(--color-warning-dark);">
+                        <i class="fa-regular fa-calendar-check" aria-hidden="true"></i>
+                    </div>
+                    <div>
+                        <div class="kpi-val" id="statInterview">0</div>
+                        <div class="kpi-title">Hẹn Phỏng Vấn</div>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon-wrap" style="background: var(--color-accent-soft); color: var(--color-accent);">
+                        <i class="fa-solid fa-trophy" aria-hidden="true"></i>
+                    </div>
+                    <div>
+                        <div class="kpi-val" id="statOffer">0</div>
+                        <div class="kpi-title">Đề Nghị Nhận Việc</div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- =================================================================
+                 2. THANH TÌM KIẾM & BỘ LỌC TRẠNG THÁI (SEARCH & STATUS PILLS)
+                 ================================================================= -->
+            <section class="app-filter-strip" aria-label="Bộ lọc đơn ứng tuyển">
+                <!-- Ô tìm kiếm nhanh -->
+                <div class="app-search-box">
+                    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                    <input type="text"
+                           id="appSearchInput"
+                           placeholder="Tìm kiếm theo vị trí ứng tuyển, tên doanh nghiệp hoặc địa điểm..."
+                           aria-label="Tìm kiếm trong danh sách đơn ứng tuyển">
+                </div>
+
+                <!-- Các nút lọc trạng thái -->
+                <div class="app-filter-pills-row" role="tablist" aria-label="Lọc theo trạng thái tiến trình">
+                    <button type="button" class="app-filter-pill active" data-status="all">
+                        <span>Tất cả đơn</span>
+                        <span class="pill-count">0</span>
+                    </button>
+
+                    <button type="button" class="app-filter-pill" data-status="submitted">
+                        <span>1. Đã nộp</span>
+                        <span class="pill-count">0</span>
+                    </button>
+
+                    <button type="button" class="app-filter-pill" data-status="viewed">
+                        <span>2. Đã xem CV</span>
+                        <span class="pill-count">0</span>
+                    </button>
+
+                    <button type="button" class="app-filter-pill" data-status="interview">
+                        <span>3. Hẹn phỏng vấn</span>
+                        <span class="pill-count">0</span>
+                    </button>
+
+                    <button type="button" class="app-filter-pill" data-status="offer">
+                        <span>4. Trúng tuyển</span>
+                        <span class="pill-count">0</span>
+                    </button>
+
+                    <button type="button" class="app-filter-pill" data-status="rejected">
+                        <span>Chưa phù hợp</span>
+                        <span class="pill-count">0</span>
+                    </button>
+                </div>
+            </section>
+
+
+            <!-- =================================================================
+                 3. DANH SÁCH ĐƠN ỨNG TUYỂN VỚI STEPPER 4 BƯỚC
+                 (RENDER ĐỘNG TỪ LOCALSTORAGE: jobportal_applied_jobs)
+                 ================================================================= -->
+            <section id="myApplicationsList" class="applications-list" aria-live="polite">
+                <!-- JavaScript sẽ render danh sách thẻ đơn tại đây -->
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- =========================================================================
+         4. HỘP THOẠI MODAL XEM CHI TIẾT LỊCH PHỎNG VẤN (INTERVIEW MODAL)
+         ========================================================================= -->
+    <div id="interviewModal" class="candidate-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="interviewModalTitle">
+        <div class="candidate-modal-card">
+            <div class="modal-header-row">
+                <h3 id="interviewModalTitle">
+                    <i class="fa-regular fa-calendar-check" style="color: var(--color-primary); margin-right: 6px;"></i>
+                    Chi Tiết Lịch Phỏng Vấn
+                </h3>
+                <button type="button" class="btn-close-modal" id="btnCloseInterviewModal" aria-label="Đóng cửa sổ">
+                    &times;
+                </button>
+            </div>
+
+            <div>
+                <div class="app-modal-info-row">
+                    <span class="app-modal-info-label">Vị trí ứng tuyển:</span>
+                    <strong class="app-modal-info-val" id="modalInterviewJobTitle">-</strong>
+                </div>
+
+                <div class="app-modal-info-row">
+                    <span class="app-modal-info-label">Doanh nghiệp:</span>
+                    <strong class="app-modal-info-val" id="modalInterviewCompany">-</strong>
+                </div>
+
+                <div class="app-modal-info-row">
+                    <span class="app-modal-info-label">Thời gian phỏng vấn:</span>
+                    <strong class="app-modal-info-val" id="modalInterviewTime" style="color: var(--color-primary); font-size: 1rem;">-</strong>
+                </div>
+
+                <div class="app-modal-info-row">
+                    <span class="app-modal-info-label">Hình thức:</span>
+                    <span class="app-modal-info-val" id="modalInterviewFormat">-</span>
+                </div>
+
+                <div class="app-modal-info-row">
+                    <span class="app-modal-info-label">Nền tảng / Địa điểm:</span>
+                    <span class="app-modal-info-val" id="modalInterviewPlatform">-</span>
+                </div>
+
+                <!-- Khối liên kết phòng họp online -->
+                <div class="interview-highlight-box">
+                    <div>
+                        <div style="font-weight: 700; color: #166534; margin-bottom: 2px;">
+                            <i class="fa-solid fa-video"></i> Liên Kết Phòng Họp Trực Tuyến:
+                        </div>
+                        <a href="#" id="modalInterviewLink" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary); font-weight: 600; word-break: break-all; font-size: 0.85rem;">
+                            Đang tải liên kết...
+                        </a>
+                    </div>
+                </div>
+
+                <div class="app-modal-info-row">
+                    <span class="app-modal-info-label">Hội đồng phỏng vấn:</span>
+                    <span class="app-modal-info-val" id="modalInterviewInterviewers">-</span>
+                </div>
+
+                <div class="app-modal-info-row" style="flex-direction: column; gap: 4px;">
+                    <span class="app-modal-info-label" style="width: auto;">Ghi chú &amp; Hướng dẫn từ Nhà Tuyển Dụng:</span>
+                    <div id="modalInterviewNote" style="background: var(--color-bg-page); border: 1px solid var(--color-border); border-radius: 8px; padding: 12px; font-size: 0.85rem; color: var(--color-body); line-height: 1.5;">
+                        -
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px; text-align: right;">
+                <button type="button" class="btn-primary btn-sm" onclick="document.getElementById('btnCloseInterviewModal').click();">
+                    Đã hiểu &amp; Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- =========================================================================
+         5. HỘP THOẠI MODAL XEM THƯ GIỚI THIỆU (COVER LETTER MODAL)
+         ========================================================================= -->
+    <div id="letterModal" class="candidate-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="letterModalTitle">
+        <div class="candidate-modal-card">
+            <div class="modal-header-row">
+                <h3 id="letterModalTitle">
+                    <i class="fa-regular fa-envelope-open" style="color: var(--color-primary); margin-right: 6px;"></i>
+                    Thư Giới Thiệu (Cover Letter)
+                </h3>
+                <button type="button" class="btn-close-modal" id="btnCloseLetterModal" aria-label="Đóng cửa sổ">
+                    &times;
+                </button>
+            </div>
+
+            <p style="font-size: 0.85rem; color: var(--color-muted); margin-bottom: 12px;">
+                Đơn nộp cho: <strong id="letterJobTitle" style="color: var(--color-dark);">-</strong>
+            </p>
+
+            <div id="letterContent" style="background: var(--color-bg-page); border: 1px solid var(--color-border); border-radius: 8px; padding: 16px; font-size: 0.9rem; line-height: 1.6; color: var(--color-dark); white-space: pre-line; max-height: 300px; overflow-y: auto;">
+                -
+            </div>
+
+            <div style="margin-top: 20px; text-align: right;">
+                <button type="button" class="btn-outline btn-sm" onclick="document.getElementById('btnCloseLetterModal').click();">
+                    Đóng cửa sổ
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- =========================================================================
+         6. HỆ THỐNG TOAST THÔNG BÁO DÙNG CHUNG
+         ========================================================================= -->
+    <div id="toastContainer" class="toast-container" role="status" aria-live="polite"></div>
+
+
+    <!-- =========================================================================
+         7. JAVASCRIPT LOGIC
+         ========================================================================= -->
+    <script src="./assets/js/main.js"></script>
+    <script src="./assets/js/toast.js"></script>
+    <script src="./assets/js/my-applications.js"></script>
+
+</body>
+</html>

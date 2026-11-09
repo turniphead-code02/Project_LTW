@@ -1,0 +1,591 @@
+﻿
+/* =========================
+   1. CAI DAT CHUNG
+========================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 85px;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #fff9fc;
+    color: #654b5b;
+    line-height: 1.8;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+section {
+    scroll-margin-top: 85px;
+}
+
+/* =========================
+   2. THANH DIEU HUONG
+========================= */
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 15px 7%;
+    background: #fff9fcf2;
+    border-bottom: 1px solid #f7dce9;
+    backdrop-filter: blur(10px);
+}
+
+.logo {
+    color: #d65e95;
+    font-size: 21px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.navbar nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+    .navbar nav a {
+        font-size: 14px;
+        transition: color 0.3s ease;
+    }
+
+        .navbar nav a:hover {
+            color: #d65e95;
+        }
+
+/* =========================
+   3. KHU VUC TRANG CHU
+========================= */
+.hero {
+    position: relative;
+    display: grid;
+    grid-template-columns: 300px minmax(0, 1fr);
+    align-items: start;
+    gap: 65px;
+    min-height: 560px;
+    padding: 65px 9%;
+    overflow: hidden;
+    background: linear-gradient(135deg, #fff9fc, #ffe8f2);
+}
+
+/* Avatar ben trai, sat phia tren */
+.hero-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 0;
+}
+
+.avatar-frame {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    height: 300px;
+    margin-top: 5px;
+}
+
+/* Anh hinh tron */
+.avatar {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 240px;
+    height: 240px;
+    object-fit: cover;
+    object-position: center;
+    border: 7px solid white;
+    border-radius: 50%;
+    outline: 3px dashed #e875a7;
+    outline-offset: 5px;
+    box-shadow: 0 0 0 12px #ffe0ed, 0 15px 35px #d65e9533;
+    animation: avatar-float 4s ease-in-out infinite, avatar-glow 3s ease-in-out infinite alternate;
+}
+
+@keyframes avatar-float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+@keyframes avatar-glow {
+    from {
+        box-shadow: 0 0 0 10px #ffe0ed, 0 12px 28px #d65e9533;
+    }
+
+    to {
+        box-shadow: 0 0 0 14px #f9c9df, 0 15px 38px #d65e9566;
+    }
+}
+
+.avatar-caption {
+    margin-top: 15px;
+    color: #c45b8a;
+    font-size: 14px;
+    font-style: italic;
+}
+
+/* Hoa, no va ngoi sao */
+.bow,
+.flower,
+.star {
+    position: absolute;
+    z-index: 2;
+    user-select: none;
+}
+
+.bow {
+    top: -5px;
+    right: 8px;
+    font-size: 43px;
+    animation: bow-wiggle 3s ease-in-out infinite;
+}
+
+.flower {
+    font-size: 35px;
+    animation: flower-sway 3s ease-in-out infinite;
+}
+
+.flower-one {
+    top: 20px;
+    left: 5px;
+}
+
+.flower-two {
+    right: 3px;
+    bottom: 25px;
+    animation-delay: 0.8s;
+}
+
+.star {
+    color: #df76a5;
+    font-size: 29px;
+    animation: sparkle 1.8s ease-in-out infinite alternate;
+}
+
+.star-one {
+    left: 15px;
+    bottom: 35px;
+}
+
+.star-two {
+    top: 30px;
+    right: 15px;
+    animation-delay: 0.6s;
+}
+
+.background-star {
+    position: absolute;
+    color: #e7a4c2;
+    pointer-events: none;
+}
+
+.star-three {
+    top: 40px;
+    right: 9%;
+    font-size: 35px;
+}
+
+.star-four {
+    bottom: 45px;
+    left: 48%;
+    font-size: 25px;
+}
+
+@keyframes bow-wiggle {
+    0%, 100% {
+        transform: rotate(-7deg);
+    }
+
+    50% {
+        transform: rotate(7deg);
+    }
+}
+
+@keyframes flower-sway {
+    0%, 100% {
+        transform: rotate(-7deg) scale(1);
+    }
+
+    50% {
+        transform: rotate(7deg) scale(1.08);
+    }
+}
+
+@keyframes sparkle {
+    from {
+        opacity: 0.4;
+        transform: scale(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+}
+
+/* =========================
+   4. PHAN GIOI THIEU
+========================= */
+.hero-text {
+    max-width: 620px;
+    padding-top: 24px;
+}
+
+.eyebrow,
+.section-label {
+    color: #c45b8a;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.eyebrow {
+    margin-bottom: 18px;
+}
+
+.hero h1 {
+    margin-bottom: 20px;
+    color: #654357;
+    font-size: clamp(32px, 4vw, 48px);
+    line-height: 1.3;
+}
+
+.pink-text {
+    color: #d65e95;
+}
+
+.student-id {
+    font-size: 17px;
+    margin-bottom: 20px;
+}
+
+    .student-id strong {
+        font-size: 17px;
+    }
+
+.intro {
+    max-width: 700px;
+    margin-bottom: 25px;
+    font-size: 17px;
+    line-height: 1.8;
+}
+
+.pink-button {
+    display: inline-block;
+    padding: 13px 30px;
+    color: white;
+    background: #e875a7;
+    border-radius: 30px;
+    font-size: 18px;
+    font-weight: 600;
+    box-shadow: 0 7px 18px #e875a744;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .pink-button:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 25px #e875a766;
+    }
+
+.hero-note {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-top: 27px;
+    color: #b66b8d;
+    font-size: 14px;
+}
+
+/* =========================
+   5. CAC PHAN NOI DUNG
+========================= */
+.content-section {
+    padding: 75px 9%;
+    text-align: center;
+}
+
+.alternate {
+    background: #fff0f6;
+}
+
+.content-section h2,
+.goal-section h2 {
+    margin: 8px 0 32px;
+    color: #bd5687;
+    font-size: 36px;
+}
+
+    .content-section h2 span {
+        color: #e875a7;
+    }
+
+.about-card {
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 30px;
+    text-align: left;
+    font-size: 18px;
+    line-height: 1.8;
+    background: white;
+    border: 1px solid #f5d7e5;
+    border-radius: 22px;
+    box-shadow: 0 8px 25px #d65e9510;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .about-card p + p {
+        margin-top: 15px;
+    }
+
+    .about-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px #d65e9520;
+    }
+
+/* =========================
+   6. THE KY NANG, SO THICH
+========================= */
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+}
+
+.info-card {
+    padding: 28px 22px;
+    background: white;
+    border: 1px solid #f5d7e5;
+    border-radius: 22px;
+    box-shadow: 0 8px 25px #d65e9510;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .info-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 16px 35px #d97da333;
+    }
+
+.card-icon {
+    margin-bottom: 12px;
+    font-size: 38px;
+}
+
+.info-card h3 {
+    margin-bottom: 8px;
+    color: #bd5687;
+    font-size: 26px;
+}
+
+.info-card p {
+    font-size: 18px;
+    line-height: 1.8;
+}
+
+/* =========================
+   7. MUC TIEU
+========================= */
+.goal-section {
+    margin: 70px 9%;
+    padding: 45px 30px;
+    text-align: center;
+    background: linear-gradient(135deg, #ffe5f0, #fff1f7);
+    border: 1px solid #f5d0e1;
+    border-radius: 28px;
+}
+
+.goal-icon {
+    font-size: 35px;
+}
+
+.goal-section h2 {
+    margin-bottom: 15px;
+}
+
+.goal-section > p:not(.section-label) {
+    max-width: 680px;
+    margin: 0 auto;
+    font-size: 18px;
+    line-height: 1.8;
+}
+
+.goal-ending {
+    margin-top: 20px !important;
+    color: #c45b8a;
+    font-style: italic;
+}
+
+/* =========================
+   8. CHAN TRANG
+========================= */
+footer {
+    padding: 25px 15px;
+    text-align: center;
+    background: #fbe4ee;
+    color: #80576b;
+    font-size: 14px;
+}
+
+/* =========================
+   9. HIEU UNG CUON TRANG
+========================= */
+.reveal {
+    opacity: 0;
+    transform: translateY(25px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+    .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+/* =========================
+   10. MAN HINH NHO
+========================= */
+@media (max-width: 850px) {
+    .navbar {
+        flex-direction: column;
+        padding: 14px 5%;
+    }
+
+        .navbar nav {
+            gap: 12px;
+        }
+
+    .hero {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        gap: 25px;
+        padding: 40px 7% 60px;
+        text-align: center;
+    }
+
+    .hero-profile {
+        width: 100%;
+    }
+
+    .hero-text {
+        padding-top: 0;
+    }
+
+    .intro {
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    .hero-note {
+        justify-content: center;
+        font-size: 26px;
+    }
+
+    .card-container {
+        grid-template-columns: 1fr;
+    }
+
+    .content-section {
+        padding: 55px 7%;
+    }
+
+    .goal-section {
+        margin: 45px 7%;
+        padding: 35px 22px;
+    }
+
+    .background-star {
+        display: none;
+    }
+}
+
+/* Giam chuyen dong theo cai dat thiet bi */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+    }
+
+    .reveal {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.back-home {
+    display: inline-block;
+    margin: 20px 9%;
+    padding: 13px 30px;
+    color: white;
+    background: #e875a7;
+    border-radius: 30px;
+    font-size: 18px;
+    font-weight: 600;
+    box-shadow: 0 7px 18px #e875a744;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .back-home:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 25px #e875a766;
+    }
+
+.contact-info {
+    text-align: center;
+    width: 85%;
+    max-width: 850px;
+    margin: 40px auto;
+    padding: 40px 30px;
+    line-height: 2;
+    background: #fff0f6;
+    border: 2px solid #ffd1e3;
+    border-radius: 30px;
+    box-shadow: 0 8px 20px #e875a726;
+}
+
+    .contact-info h2 {
+        color: #e875a7;
+        font-size: 36px;
+        margin-bottom: 25px;
+    }
+
+    .contact-info p {
+        font-size: 22px;
+        margin: 15px 0;
+    }
+
+    .contact-info a {
+        color: #c94f85;
+        font-size: 22px;
+        font-weight: 600;
+        text-decoration: none;
+        overflow-wrap: anywhere;
+    }
+
+        .contact-info a:hover {
+            color: #e875a7;
+            text-decoration: underline;
+        }

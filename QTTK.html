@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Báo Cáo Chuyên Đề: Quy Tắc Thiết Kế Website & Ứng Dụng Vào Dự Án Job Portal — Nhóm 6</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ==========================================================================
+       BÁO CÁO HỌC THUẬT QUY TẮC THIẾT KẾ WEBSITE & LIÊN HỆ DỰ ÁN CUỐI KỲ
+       Môn học: Lập trình Website — GVHD: ThS. Trần Thịnh Mạnh Đức
+       Nhóm thực hiện: Nhóm 6 (Job Portal Team)
+       ========================================================================== */
+
+    @page {
+      size: A4 portrait;
+      margin: 18mm 16mm 18mm 16mm;
+      @bottom-right {
+        content: counter(page);
+        font-family: 'Space Mono', monospace;
+        font-size: 9pt;
+        color: #64748b;
+      }
+    }
+
+    :root {
+      --primary: #1e40af;       /* Blue 800 - Deep Trust */
+      --primary-light: #3b82f6; /* Blue 500 */
+      --primary-soft: #eff6ff;  /* Blue 50 */
+      --accent: #10b981;        /* Emerald 500 - Action Green */
+      --accent-soft: #ecfdf5;
+      --warning: #f59e0b;       /* Amber 500 */
+      --danger: #ef4444;        /* Red 500 */
+      --dark: #0f172a;          /* Slate 900 - Text main */
+      --body: #334155;          /* Slate 700 - Body text */
+      --muted: #64748b;         /* Slate 500 */
+      --border: #e2e8f0;        /* Slate 200 */
+      --surface: #ffffff;
+      --bg-page: #f8fafc;       /* Slate 50 */
+      --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-mono: 'Space Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-main);
+      color: var(--body);
+      background-color: var(--bg-page);
+      line-height: 1.65;
+      font-size: 10pt;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .report-wrapper {
+      max-width: 820px;
+      margin: 0 auto;
+      background: var(--surface);
+      padding: 40px 48px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    /* In ấn chuẩn A4 */
+    @media print {
+      body {
+        background: transparent;
+        font-size: 8.8pt;
+        line-height: 1.55;
+      }
+      .report-wrapper {
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+      }
+      table.data-table {
+        font-size: 8pt;
+        margin: 10px 0 14px;
+      }
+      table.data-table th, table.data-table td {
+        padding: 4px 7px;
+      }
+      h1.sec-title {
+        page-break-before: always;
+        break-before: page;
+        margin-top: 10px;
+      }
+      .no-break, table.data-table, tr, .wireframe-box, .callout, .palette-grid, .cover-project-box, .cover-footer {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+      .page-break {
+        page-break-before: always;
+        break-before: page;
+      }
+      h1, h2, h3, h4 {
+        page-break-after: avoid;
+        break-after: avoid;
+      }
+      .cover-page {
+        min-height: 245mm;
+        height: 245mm;
+        margin-bottom: 0;
+        page-break-after: always;
+        break-after: page;
+      }
+    }
+
+    /* TRANG BÌA (COVER PAGE) */
+    .cover-page {
+      min-height: 920px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 3px double var(--primary);
+      padding: 48px 36px;
+      background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+      margin-bottom: 40px;
+      page-break-after: always;
+    }
+
+    .cover-header {
+      text-align: center;
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 20px;
+    }
+
+    .cover-school {
+      font-size: 13pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--dark);
+      letter-spacing: 0.05em;
+    }
+
+    .cover-faculty {
+      font-size: 11pt;
+      font-weight: 600;
+      color: var(--primary);
+      margin-top: 4px;
+    }
+
+    .cover-body {
+      text-align: center;
+      padding: 40px 10px;
+    }
+
+    .cover-tag {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 9pt;
+      font-weight: 700;
+      color: var(--primary);
+      background: var(--primary-soft);
+      border: 1px solid var(--primary-light);
+      padding: 5px 14px;
+      border-radius: 99px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .cover-title {
+      font-size: 22pt;
+      font-weight: 800;
+      color: var(--dark);
+      line-height: 1.3;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .cover-subtitle {
+      font-size: 12pt;
+      font-weight: 500;
+      color: var(--primary);
+      max-width: 600px;
+      margin: 0 auto 30px;
+    }
+
+    .cover-project-box {
+      background: var(--primary-soft);
+      border: 1px dashed var(--primary-light);
+      border-radius: 12px;
+      padding: 16px 24px;
+      display: inline-block;
+      text-align: left;
+    }
+
+    .cover-project-box p {
+      margin: 4px 0;
+      font-size: 10pt;
+    }
+
+    .cover-footer {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+      font-size: 9.5pt;
+    }
+
+    .meta-group h4 {
+      font-size: 10pt;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .meta-group ul {
+      list-style: none;
+    }
+
+    .meta-group li {
+      margin-bottom: 4px;
+    }
+
+    /* TIÊU ĐỀ & PHÂN CẤP NỘI DUNG */
+    h1.sec-title {
+      font-size: 16pt;
+      font-weight: 800;
+      color: var(--primary);
+      text-transform: uppercase;
+      border-left: 5px solid var(--primary);
+      padding-left: 14px;
+      margin: 36px 0 16px;
+      letter-spacing: -0.01em;
+    }
+
+    h2.sub-title {
+      font-size: 12.5pt;
+      font-weight: 700;
+      color: var(--dark);
+      margin: 24px 0 10px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h3.sub-sub-title {
+      font-size: 11pt;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 16px 0 6px;
+    }
+
+    p {
+      margin-bottom: 10px;
+      text-align: justify;
+    }
+
+    ul, ol {
+      margin: 8px 0 14px 24px;
+    }
+
+    li {
+      margin-bottom: 5px;
+    }
+
+    strong {
+      color: var(--dark);
+    }
+
+    /* HỘP GHI CHÚ / BẢNG THÔNG TIN */
+    .callout {
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin: 14px 0;
+      font-size: 9.5pt;
+    }
+
+    .callout-blue {
+      background: var(--primary-soft);
+      border-left: 4px solid var(--primary);
+      color: #1e3a8a;
+    }
+
+    .callout-green {
+      background: var(--accent-soft);
+      border-left: 4px solid var(--accent);
+      color: #065f46;
+    }
+
+    .callout-amber {
+      background: #fffbeb;
+      border-left: 4px solid var(--warning);
+      color: #92400e;
+    }
+
+    /* BẢNG SO SÁNH / THÔNG SỐ */
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 20px;
+      font-size: 9pt;
+    }
+
+    table.data-table th, table.data-table td {
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      text-align: left;
+    }
+
+    table.data-table th {
+      background-color: #f1f5f9;
+      color: var(--dark);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 8.5pt;
+      letter-spacing: 0.03em;
+    }
+
+    table.data-table tr:nth-child(even) {
+      background-color: #f8fafc;
+    }
+
+    /* MẪU MÀU (COLOR SWATCHES) */
+    .palette-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 14px 0 20px;
+    }
+
+    .swatch-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--surface);
+    }
+
+    .swatch-color {
+      height: 48px;
+      width: 100%;
+    }
+
+    .swatch-meta {
+      padding: 8px;
+      font-size: 8pt;
+    }
+
+    .swatch-name {
+      font-weight: 700;
+      color: var(--dark);
+      display: block;
+    }
+
+    .swatch-hex {
+      font-family: var(--font-mono);
+      color: var(--muted);
+    }
+
+    .swatch-role {
+      font-size: 7.5pt;
+      color: var(--primary);
+      margin-top: 2px;
+    }
+
+    /* WIREFRAME / BỐ CỤC KHUNG MINH HOẠ */
+    .wireframe-box {
+      border: 1.5px dashed #cbd5e1;
+      border-radius: 10px;
+      padding: 16px;
+      background: #f8fafc;
+      margin: 16px 0 24px;
+    }
+
+    .wireframe-header {
+      font-family: var(--font-mono);
+      font-size: 8.5pt;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 6px;
+    }
+
+    .wf-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .wf-grid-sidebar {
+      display: grid;
+      grid-template-columns: 1fr 2.5fr;
+      gap: 12px;
+    }
+
+    .wf-block {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 10px;
+      font-size: 8pt;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .wf-block.highlight-wf {
+      border-color: var(--primary-light);
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .badge-code {
+      font-family: var(--font-mono);
+      font-size: 8.5pt;
+      background: #f1f5f9;
+      color: var(--primary);
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="report-wrapper">
+
+    <!-- =========================================================================
+         TRANG BÌA (COVER PAGE)
+         ========================================================================= -->
+    <section class="cover-page">
+      <div class="cover-header">
+        <h2 class="cover-school">Trường Đại Học Giao Thông Vận Tải TP.HCM</h2>
+        <h3 class="cover-faculty">Khoa Công Nghệ Thông Tin — Bộ Môn Kỹ Thuật Phần Mềm</h3>
+      </div>
+
+      <div class="cover-body">
+        <span class="cover-tag">Báo Cáo Nghiên Cứu &amp; Thiết Kế Hệ Thống</span>
+        <h1 class="cover-title">Quy Tắc Thiết Kế Website Chuẩn Mực &amp; Ứng Dụng Thực Chiến</h1>
+        <p class="cover-subtitle">
+          Nghiên cứu, dịch thuật lý thuyết từ tài liệu <em>Theory Lectures (Web Design Rules &amp; Personalities Framework)</em> và liên hệ thiết kế chi tiết cho dự án cuối khóa: <strong>Cổng Thông Tin Việc Làm (Job Portal)</strong>
+        </p>
+
+        <div class="cover-project-box">
+          <p><strong>Học phần:</strong> Lập trình Website (Web Programming)</p>
+          <p><strong>Giảng viên hướng dẫn:</strong> ThS. Trần Thịnh Mạnh Đức</p>
+          <p><strong>Dự án triển khai:</strong> Cổng Thông Tin Việc Làm &amp; Tuyển Dụng Trực Tuyến (Job Portal)</p>
+          <p><strong>Ngày thực hiện:</strong> Tháng 10 / 2026</p>
+        </div>
+      </div>
+
+      <div class="cover-footer">
+        <div class="meta-group">
+          <h4>Nhóm Thực Hiện: Nhóm 6</h4>
+          <ul>
+            <li><strong>Trần Hữu Thành</strong> — MSSV: 044206000003 (Nhóm trưởng)</li>
+            <li><strong>Nguyễn Lê Gia Hân</strong> — MSSV: 083306010188</li>
+            <li><strong>Hồ Trúc Gia Hân</strong> — MSSV: 056306004131</li>
+            <li><strong>Nguyễn Phú Quang</strong> — Thành viên phát triển</li>
+            <li><strong>Đinh Duy Diện</strong> — MSSV: 051206000952</li>
+            <li><strong>Lê Hoàng Thiên Hương</strong> — MSSV: 042303000056</li>
+          </ul>
+        </div>
+
+        <div class="meta-group" style="text-align: right;">
+          <h4>Đánh Giá Của Giảng Viên</h4>
+          <p style="margin-top: 16px;">Điểm số: ................................................</p>
+          <p style="margin-top: 8px;">Chữ ký GVHD: .....................................</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         PHẦN 1: TỔNG QUAN & DỊCH THUẬT QUY TẮC THIẾT KẾ WEBSITE (THEORY LECTURES)
+         ========================================================================= -->
+    <h1 class="sec-title">Phần I: Dịch Thuật &amp; Đúc Kết Bộ Quy Tắc Thiết Kế Website</h1>
+
+    <div class="callout callout-blue">
+      <strong>Mục tiêu học thuật:</strong> Trích xuất, dịch nghĩa và hệ thống hóa toàn bộ các quy tắc thiết kế giao diện từ tài liệu bài giảng <em>Theory Lectures v2</em> (bao gồm <strong>Khung 7 Tính cách Website</strong> và các <strong>Quy tắc từ #1 đến #10</strong>), đóng vai trò làm kim chỉ nam lý thuyết trước khi bước vào xây dựng sản phẩm thực tế.
+    </div>
+
+    <div class="callout callout-green" style="border-left: 4px solid var(--accent); background: #f0fdf4; margin-top: 14px;">
+      <strong>Tuyên bố Liêm chính Học thuật &amp; Sáng tạo Độc lập:</strong> Nhóm 6 cam kết thực hiện chuyên đề theo đúng phương pháp luận chuẩn mực: <em>Học hỏi và tiếp thu khung lý thuyết thiết kế chuẩn quốc tế (Theory Lectures v2 của ThS. Trần Thịnh Mạnh Đức &amp; Jonas Schmedtmann) để tự xây dựng giải pháp cho bài toán riêng</em>. Toàn bộ cấu trúc nghiệp vụ sàn tuyển dụng việc làm IT, sơ đồ hành trình ứng viên, kiến trúc bố cục wireframe và hệ thống mã nguồn đều do Nhóm 6 tự tay thiết kế và triển khai 100%, độc lập hoàn toàn với dự án bài tập mẫu ẩm thực (Omnifood) trong giáo trình.
+    </div>
+
+    <!-- 1. KHUNG 7 TÍNH CÁCH WEBSITE -->
+    <h2 class="sub-title">1. Khung Tính Cách Website (The Website-Personalities Framework)</h2>
+    <p>
+      Theo bài giảng (Slide 81–93 và 235–257), một sai lầm phổ biến của lập trình viên là chọn màu sắc và font chữ một cách ngẫu nhiên hoặc cảm tính. Khung tính cách website yêu cầu người thiết kế phải trả lời câu hỏi cốt lõi: <em>"Bạn muốn người dùng cảm nhận được năng lượng, thần thái (vibe) nào khi bước vào trang web?"</em>. Toàn bộ các thành phần thiết kế sau đó bắt buộc phải phục tùng tính cách đã chọn.
+    </p>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 22%;">Nhóm Tính Cách</th>
+          <th style="width: 28%;">Thần Thái / Lĩnh Vực</th>
+          <th style="width: 25%;">Đặc Trưng Typography &amp; Màu</th>
+          <th style="width: 25%;">Icons, Shadows &amp; Layout</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1. Serious / Elegant</strong></td>
+          <td>Sang trọng, đẳng cấp (Bất động sản cao cấp, thời trang xa xỉ, trang sức).</td>
+          <td>Font Serif thanh mảnh (Thin serif), chữ nhỏ; màu vàng kim, pastel, đen tuyền.</td>
+          <td>Không dùng shadow, không bo góc; layout mang tính nghệ thuật, ảnh lớn.</td>
+        </tr>
+        <tr>
+          <td><strong>2. Minimalist / Simple</strong></td>
+          <td>Tối giản, tinh gọn, tập trung tối đa vào nội dung chữ (Portfolio, đồ gia dụng).</td>
+          <td>Font Sans-serif vuông vức, màu đen/xám trên nền trắng tinh khiết.</td>
+          <td>Hạn chế icon, không shadow, không border-radius; bố cục 1 cột hẹp.</td>
+        </tr>
+        <tr>
+          <td><strong>3. Plain / Neutral</strong></td>
+          <td>Trung tính, chuẩn mực, đề cao trật tự (Tập đoàn tài chính, tổ chức nhà nước).</td>
+          <td>Font Sans-serif trung tính, cỡ chữ nhỏ; màu an toàn (xanh navy, xám đen).</td>
+          <td>Rất ít icon, không shadow, layout dạng bảng biểu và lưới hàng nghiêm túc.</td>
+        </tr>
+        <tr>
+          <td><strong>4. Bold / Confident</strong></td>
+          <td>Táo bạo, mạnh mẽ, tạo ấn tượng thị giác choáng ngợp (Agency, du lịch mạo hiểm).</td>
+          <td>Font Sans-serif cỡ đại (Big bold), viết hoa; khối màu rực rỡ, độ tương phản cao.</td>
+          <td>Hạn chế icon và shadow; dùng các khối màu khổng lồ để dẫn dắt ánh nhìn.</td>
+        </tr>
+        <tr>
+          <td><strong>5. Calm / Peaceful</strong></td>
+          <td>Thư thái, an lành, chăm sóc sức khỏe (Y tế, thiền định, dược phẩm).</td>
+          <td>Font Serif mềm mại hoặc Sans-serif bo tròn; màu pastel dịu mắt (xanh ngọc, nâu ấm).</td>
+          <td>Icon nét mảnh, shadow rất nhẹ, góc bo tròn nhẹ nhàng, layout tự nhiên.</td>
+        </tr>
+        <tr>
+          <td><strong>6. Startup / Upbeat</strong></td>
+          <td>Hiện đại, tươi sáng, giàu năng lượng (Phần mềm SaaS, nền tảng tuyển dụng, Fintech).</td>
+          <td>Font Sans-serif đương đại (Inter, Roboto); màu xanh dương tin cậy, điểm nhấn xanh lá/cam.</td>
+          <td><strong>Rất chuộng icon, shadow mềm mại, góc bo tròn (8px–16px), layout dạng thẻ (Cards) &amp; Z-pattern.</strong></td>
+        </tr>
+        <tr>
+          <td><strong>7. Playful / Fun</strong></td>
+          <td>Vui tươi, sáng tạo, phá cách (Trò chơi, sản phẩm trẻ em, giải trí).</td>
+          <td>Font chữ tròn trịa; màu sắc sặc sỡ, minh họa vẽ tay (Hand-drawn), hoạt họa sống động.</td>
+          <td>Bo góc cực đại (Pill shape), shadow phát sáng (Glow), layout tự do.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 2. QUY TẮC #1: TYPOGRAPHY -->
+    <h2 class="sub-title">2. Quy Tắc Thiết Kế #1: Typography (Nghệ Thuật Kiểu Chữ — Slide 94–108)</h2>
+    <p>Chữ chiếm hơn 90% lượng thông tin trên web. Một hệ thống chữ chuẩn mực phải tuân thủ các nguyên tắc vàng sau:</p>
+    <ul>
+      <li><strong>Nguyên tắc 1 &amp; 2 — Số lượng font:</strong> Sử dụng các font chữ phổ biến, đã được kiểm chứng (Inter, Roboto, Open Sans). Tối ưu nhất là chỉ dùng <strong>01 font duy nhất</strong> cho toàn bộ trang web (thay đổi bằng kích thước và độ đậm), tối đa không quá 02 font.</li>
+      <li><strong>Nguyên tắc 3 — Phù hợp tính cách:</strong> Chọn font Sans-serif cho sản phẩm hiện đại/công nghệ; font Serif cho sự sang trọng hoặc cổ điển.</li>
+      <li><strong>Nguyên tắc 4, 5, 6 &amp; 7 — Thang kích thước (Type Scale):</strong> Giới hạn số lượng font-size để tránh lộn xộn. Cỡ chữ thân bài (Body text) chuẩn từ <code>16px đến 18px</code>; tiêu đề H1 có thể đạt từ <code>40px đến 56px</code>.</li>
+      <li><strong>Nguyên tắc 8 — Độ đậm (Font-weight):</strong> Không sử dụng font-weight dưới 400 (tránh chữ quá mảnh gây mờ mắt khi đọc). Tiêu đề dùng <code>600 - 800</code>, thân bài dùng <code>400 - 500</code>.</li>
+      <li><strong>Nguyên tắc 9 &amp; 12 — Độ dài dòng (Line Length):</strong> Giới hạn số lượng ký tự trên một dòng từ <strong>45 đến 75 ký tự</strong> (lý tưởng là 65 ký tự). Dòng quá dài khiến mắt nhanh mỏi; dòng quá ngắn làm ngắt nhịp đọc.</li>
+      <li><strong>Nguyên tắc 10 &amp; 11 — Chiều cao dòng (Line Height):</strong> Đối với văn bản thông thường, chiều cao dòng phải đạt từ <strong>1.5 đến 1.75</strong> lần cỡ chữ (ví dụ: font 16px đi với line-height 24px–28px). Tiêu đề cỡ lớn dùng line-height ngắn hơn (1.1–1.3).</li>
+      <li><strong>Nguyên tắc 13 — Không căn đều hai bên (Don't Justify Text):</strong> Không dùng <code>text-align: justify</code> trên web vì sẽ tạo ra các "dòng sông khoảng trắng" (rivers of white space) gây khó đọc. Bắt buộc căn lề trái (left-aligned).</li>
+    </ul>
+
+    <!-- 3. QUY TẮC #2: COLORS -->
+    <h2 class="sub-title">3. Quy Tắc Thiết Kế #2: Colors (Màu Sắc &amp; Độ Tương Phản — Slide 109–125)</h2>
+    <ul>
+      <li><strong>Tâm lý màu sắc:</strong> Màu chính (Main color) phải đồng điệu với thông điệp: Xanh dương = Tin cậy, Trí tuệ, Ổn định; Xanh lá = Tăng trưởng, Thành công, Tài chính; Cam/Vàng = Nhiệt huyết, Thôi thúc hành động.</li>
+      <li><strong>Cấu trúc bảng màu tối thiểu:</strong> Cần ít nhất 02 nhóm màu: <strong>01 màu chủ đạo</strong> (Brand Color) và <strong>01 dải màu xám</strong> (Gray Scale từ trắng đến đen than). Tuyệt đối không dùng màu CSS mặc định thô ráp (như <code>blue</code>, <code>red</code>, <code>green</code>).</li>
+      <li><strong>Quy tắc tỷ lệ 60 - 30 - 10:</strong>
+        <ul>
+          <li><strong>60% Màu nền/Trung tính:</strong> Nền trang web, khoảng trắng, thẻ bề mặt (Off-white, Light Gray).</li>
+          <li><strong>30% Màu cấu trúc/Thương hiệu:</strong> Header, thanh điều hướng, tiêu đề chính, đường viền.</li>
+          <li><strong>10% Màu điểm nhấn (Accent/Action):</strong> Dành riêng cho các nút bấm hành động quan trọng (Call to Action - CTA), badge trạng thái cần người dùng click ngay.</li>
+        </ul>
+      </li>
+      <li><strong>Tiêu chuẩn tiếp cận WCAG (Contrast Accessibility):</strong> Độ tương phản giữa chữ và nền phải đạt tối thiểu <strong>4.5:1</strong> đối với văn bản thông thường và <strong>3:1</strong> đối với chữ lớn (&ge;18px).</li>
+      <li><strong>Quy tắc chữ đen:</strong> Không bao giờ dùng màu đen tuyệt đối <code>#000000</code> cho chữ trên nền trắng vì độ tương phản quá gắt. Nên làm dịu bằng màu xám than tối (ví dụ: <code>#0f172a</code> hoặc <code>#1e293b</code>).</li>
+    </ul>
+
+    <!-- 4. QUY TẮC #3: IMAGES & ILLUSTRATIONS -->
+    <h2 class="sub-title">4. Quy Tắc Thiết Kế #3: Images &amp; Illustrations (Hình Ảnh &amp; Minh Họa — Slide 126–148)</h2>
+    <ul>
+      <li><strong>Ảnh có mục đích truyền tải:</strong> Chỉ sử dụng hình ảnh thực sự liên quan và hỗ trợ cho câu chuyện của website. Tránh dùng ảnh stock quá gượng gạo, giả tạo.</li>
+      <li><strong>Tận dụng khuôn mặt con người:</strong> Khoa học thị giác chứng minh mắt người luôn bị thu hút mạnh mẽ nhất bởi khuôn mặt của người khác. Ảnh có người thật tạo cảm giác gần gũi và độ tin cậy tức thì.</li>
+      <li><strong>Kỹ thuật đặt chữ đè lên ảnh (Text on Image):</strong>
+        <ul>
+          <li><em>Cách 1:</em> Phủ một lớp màu tối bán trong suốt (Dark Overlay) hoặc lớp chuyển sắc (Gradient).</li>
+          <li><em>Cách 2:</em> Đặt khối chữ vào bên trong một khung nền mờ (Card container) có độ tương phản độc lập.</li>
+        </ul>
+      </li>
+      <li><strong>Quy chuẩn màn hình Retina (2x Rule):</strong> Ảnh hiển thị kích thước 400x300px trên web thì tệp ảnh gốc phải xuất ở kích thước tối thiểu 800x600px để không bị vỡ hạt trên màn hình độ phân giải cao.</li>
+    </ul>
+
+    <!-- 5. CÁC QUY TẮC TỪ #4 ĐẾN #9 -->
+    <h2 class="sub-title">5. Tóm Tắt Quy Tắc #4 Đến #9: Icons, Shadows, Whitespace &amp; UX</h2>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 25%;">Quy Tắc</th>
+          <th style="width: 75%;">Nội Dung Đúc Kết Từ Bài Giảng</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>#4. Icons (Biểu tượng)</strong></td>
+          <td>Bắt buộc dùng icon định dạng <strong>SVG vector</strong> hoặc icon font (Font Awesome, Lucide), không dùng ảnh .png. Icon phải đồng nhất một phong cách (Outlined hoặc Filled), có cùng độ dày nét (Stroke width). Icon dùng để hỗ trợ thị giác cho chữ, không dùng để thay thế hoàn toàn chữ nếu ý nghĩa chưa rõ ràng.</td>
+        </tr>
+        <tr>
+          <td><strong>#5. Shadows (Đổ bóng)</strong></td>
+          <td>Chỉ dùng shadow khi phù hợp với tính cách website. Đổ bóng tạo chiều sâu vật lý (Elevation). Dùng <strong>subtle shadow</strong> (đổ bóng mờ nhẹ, bán kính blur lớn, độ trong suốt thấp 5%–10%) cho các thẻ bài; dùng shadow lớn cho cửa sổ Modal hoặc Dropdown menu lơ lửng.</td>
+        </tr>
+        <tr>
+          <td><strong>#6. Border-Radius</strong></td>
+          <td>Góc bo cong làm giao diện trở nên thân thiện, giảm bớt tính nghiêm nghị, cứng nhắc. Nút bấm và ô nhập liệu nên bo góc từ <code>6px đến 10px</code>; thẻ bài bo <code>12px đến 16px</code>; nhãn trạng thái bo tròn dạng viên thuốc <code>99px</code>.</td>
+        </tr>
+        <tr>
+          <td><strong>#7. Whitespace (Khoảng trắng)</strong></td>
+          <td>Khoảng trắng không phải là không gian lãng phí, mà là công cụ dẫn dắt mắt đọc. Áp dụng <strong>Định luật Gestalt về khoảng cách (Proximity):</strong> các phần tử thuộc cùng một nhóm phải đặt gần nhau hơn khoảng cách giữa các nhóm khác nhau. Áp dụng quy tắc khoảng cách bội số của 8px (8, 16, 24, 32, 48, 64, 96px).</td>
+        </tr>
+        <tr>
+          <td><strong>#8. Visual Hierarchy</strong></td>
+          <td>Tạo lập trật tự thị giác rõ ràng: phần tử quan trọng nhất phải to nhất, đậm nhất hoặc có màu tương phản mạnh nhất. Đặt các thành phần cốt lõi ở nửa trên trang web (Above the fold).</td>
+        </tr>
+        <tr>
+          <td><strong>#9. User Experience (UX)</strong></td>
+          <td><strong>"Don't make me think":</strong> Đừng tái phát minh bánh xe; hãy sử dụng các bố cục quen thuộc. Mọi tương tác phải có phản hồi thị giác (hover, focus, active). <strong>Quy tắc triệt tiêu ngõ cụt (Zero Dead-End Rule):</strong> Không bao giờ để người dùng bị kẹt lại ở một trang thông báo hay trang lỗi mà không có nút quay về.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 6. QUY TẮC #10: ELEMENTS & LAYOUT PATTERNS -->
+    <h2 class="sub-title">6. Quy Tắc Thiết Kế #10: Elements, Components &amp; Layout Patterns (Slide 258–340)</h2>
+    <p>Bài giảng phân loại hệ thống giao diện thành 4 tầng kiến trúc:</p>
+    <ul>
+      <li><strong>A. Elements:</strong> Các nguyên tử giao diện cơ bản (Văn bản, Nút bấm, Ảnh, Ô nhập dữ liệu input, Nhãn tag/badge).</li>
+      <li><strong>B. Components:</strong> Các cụm linh kiện tương tác (Breadcrumbs, Thanh phân trang Pagination, Hộp cảnh báo Alert bar, Khối thống kê KPI, Thẻ thông tin Card, Tabs, Accordion, Bảng biểu Table, Cửa sổ bật lên Modal).</li>
+      <li><strong>C. Section Components:</strong> Các khối cấu trúc trang (Thanh điều hướng Header Navigation, Khối Hero Section mở đầu, Khối tính năng Feature Row, Chân trang Footer).</li>
+      <li><strong>D. Layout Patterns:</strong> Các mô thức bố cục kinh điển:
+        <ul>
+          <li><em>F-Pattern:</em> Mắt người đọc lướt theo hình chữ F (phù hợp với trang nhiều chữ, danh sách tin tức hoặc danh sách việc làm).</li>
+          <li><em>Z-Pattern:</em> Mắt người di chuyển zíc-zắc từ trái qua phải, chéo xuống dưới (phù hợp với trang chủ, Landing page, Hero section).</li>
+          <li><em>Grid of Cards:</em> Lưới các ô thẻ đồng đều (hiển thị danh mục việc làm, danh sách công ty).</li>
+          <li><em>Sidebar Layout:</em> Bố cục chia cột gồm 1 cột phụ cố định (bộ lọc tìm kiếm hoặc menu điều khiển) và 1 cột chính hiển thị dữ liệu.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <!-- =========================================================================
+         PHẦN 2: LIÊN HỆ & THIẾT KẾ CHI TIẾT CHO ĐỒ ÁN JOB PORTAL (NHÓM 6)
+         ========================================================================= -->
+    <h1 class="sec-title">Phần II: Liên Hệ &amp; Thiết Kế Thực Chiến Vào Dự Án Job Portal</h1>
+
+    <div class="callout callout-green">
+      <strong>Ứng dụng thực tiễn:</strong> Áp dụng chuẩn xác 100% các quy tắc đã học ở Phần I vào việc xây dựng Đồ án <strong>Cổng Thông Tin Việc Làm (Job Portal)</strong> của Nhóm 6, đảm bảo tính khả thi công nghệ, sự đồng bộ thẩm mỹ và trải nghiệm người dùng đạt chuẩn điểm xuất sắc.
+    </div>
+
+    <!-- 1. ĐỊNH HÌNH TÍNH CÁCH WEBSITE -->
+    <h2 class="sub-title">1. Định Vị Tính Cách Website (Website Personality Mapping)</h2>
+    <p>
+      Dựa trên <strong>Khung 7 Tính Cách Website</strong> từ slide bài giảng, Nhóm 6 xác định tính cách của hệ thống Job Portal là sự giao thoa hoàn hảo giữa:
+    </p>
+    <div class="callout callout-blue">
+      <h3 style="margin-top: 0; color: var(--primary);">TÍNH CÁCH CHỦ ĐẠO: STARTUP / UPBEAT lai PLAIN / NEUTRAL (Modern Professional)</h3>
+      <p style="margin-bottom: 0;">
+        • <strong>Vế Startup / Upbeat (Hướng đến Ứng viên - Sinh viên):</strong> Đem lại cảm giác tươi sáng, hiện đại, năng động, thủ tục nộp CV nhanh gọn, trực quan, không gây cảm giác quan liêu nặng nề.<br />
+        • <strong>Vế Plain / Neutral (Hướng đến Doanh nghiệp &amp; Quản trị):</strong> Đảm bảo tính trật tự, nghiêm túc, an toàn bảo mật, bảng biểu dữ liệu mạch lạc, tạo dựng niềm tin cho nhà tuyển dụng đăng tin và quản lý nhân sự.
+      </p>
+    </div>
+
+    <!-- 2. HỆ THỐNG TYPOGRAPHY CHO JOB PORTAL -->
+    <h2 class="sub-title">2. Thiết Kế Hệ Thống Typography (Chọn Kiểu Chữ &amp; Phân Cấp)</h2>
+    <p>
+      Tuân thủ <strong>Quy tắc #1 (Typography)</strong>, nhóm không dùng font ngẫu nhiên mà tuyển chọn kỹ lưỡng:
+    </p>
+    <ul>
+      <li><strong>Font chữ chủ đạo (Single Typeface Strategy):</strong> Sử dụng font <strong>Plus Jakarta Sans</strong> (hoặc <strong>Inter</strong>). Đây là font Sans-serif hình học hiện đại, có tỷ lệ x-height lớn giúp đọc cực kỳ rõ nét ở các kích thước nhỏ trên cả màn hình di động lẫn máy tính, hỗ trợ đầy đủ bộ ký tự Tiếng Việt có dấu.</li>
+      <li><strong>Font phụ trợ cho thông số kỹ thuật:</strong> Dùng <strong>Space Mono</strong> ở một số nhãn mã hồ sơ, mốc thời gian hoặc badge mã định danh kỹ thuật để tạo điểm nhấn chuyên nghiệp.</li>
+    </ul>
+
+    <h3 class="sub-sub-title">Thang đo tỷ lệ chữ (Modular Typography Scale):</h3>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Cấp Độ</th>
+          <th>Phần Tử Áp Dụng Trong Job Portal</th>
+          <th>Font Size</th>
+          <th>Weight</th>
+          <th>Line Height</th>
+          <th>Quy Tắc Đáp Ứng</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Display / H1</strong></td>
+          <td>Tiêu đề mở đầu Hero Section trang chủ: <em>"Khám Phá Cơ Hội Nghề Nghiệp Đột Phá"</em></td>
+          <td><code>44px - 48px</code></td>
+          <td>800 (ExtraBold)</td>
+          <td>1.2</td>
+          <td>Quy tắc 7: Tiêu đề lớn thu hút ánh nhìn đầu tiên.</td>
+        </tr>
+        <tr>
+          <td><strong>Heading H2</strong></td>
+          <td>Tiêu đề các khối lớn: <em>"Việc Làm Mới Nhất", "Doanh Nghiệp Hàng Đầu"</em></td>
+          <td><code>28px - 32px</code></td>
+          <td>700 (Bold)</td>
+          <td>1.3</td>
+          <td>Quy tắc 4: Phân cấp rõ rệt so với thân bài.</td>
+        </tr>
+        <tr>
+          <td><strong>Heading H3</strong></td>
+          <td>Tên công việc trên thẻ Card việc làm, tiêu đề mục trong mô tả JD</td>
+          <td><code>18px - 20px</code></td>
+          <td>600 (SemiBold)</td>
+          <td>1.4</td>
+          <td>Quy tắc 8: Nổi bật vị trí tuyển dụng.</td>
+        </tr>
+        <tr>
+          <td><strong>Body Regular</strong></td>
+          <td>Đoạn văn mô tả công việc (JD), quyền lợi, giới thiệu doanh nghiệp</td>
+          <td><code>16px</code></td>
+          <td>400 (Regular)</td>
+          <td><strong>1.65</strong></td>
+          <td>Quy tắc 5 &amp; 10: Chiều cao dòng chuẩn 1.65 chống mỏi mắt.</td>
+        </tr>
+        <tr>
+          <td><strong>Small / Meta</strong></td>
+          <td>Mức lương, địa điểm làm việc, hạn nộp hồ sơ, tên công ty</td>
+          <td><code>13px - 14px</code></td>
+          <td>500 (Medium)</td>
+          <td>1.5</td>
+          <td>Quy tắc 4: Giữ cỡ chữ phụ không dưới 12px.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-amber">
+      <strong>Quy tắc khống chế độ dài dòng văn bản (Line Length Rule):</strong> Trong trang Chi tiết tin tuyển dụng (Job Detail), khối văn bản mô tả JD được giới hạn chiều rộng <code>max-width: 68ch</code> (tương đương 680px - 720px), đảm bảo mỗi dòng chỉ chứa từ <strong>65 đến 72 ký tự</strong>, giúp nhà tuyển dụng và ứng viên đọc thông suốt mà không bị mất dấu mắt.
+    </div>
+
+    <!-- 3. HỆ THỐNG MÀU SẮC CHO JOB PORTAL -->
+    <h2 class="sub-title">3. Thiết Kế Bảng Màu (Color Palette &amp; Tỷ Lệ 60-30-10)</h2>
+    <p>
+      Theo <strong>Quy tắc #2 (Colors)</strong>, sàn giao dịch việc làm đòi hỏi sự tin cậy cao độ, do đó màu chủ đạo được chọn là màu <strong>Xanh Dương Hoàng Gia (Trust Royal Blue)</strong> kết hợp với màu hành động <strong>Xanh Ngọc Lục Bảo (Action Emerald Green)</strong>:
+    </p>
+
+    <div class="palette-grid">
+      <div class="swatch-card">
+        <div class="swatch-color" style="background-color: #1e40af;"></div>
+        <div class="swatch-meta">
+          <span class="swatch-name">Primary Blue</span>
+          <span class="swatch-hex">#1E40AF</span>
+          <p class="swatch-role">Màu thương hiệu / Tin cậy</p>
+        </div>
+      </div>
+
+      <div class="swatch-card">
+        <div class="swatch-color" style="background-color: #10b981;"></div>
+        <div class="swatch-meta">
+          <span class="swatch-name">Action Green</span>
+          <span class="swatch-hex">#10B981</span>
+          <p class="swatch-role">Nút "Ứng tuyển ngay" (CTA)</p>
+        </div>
+      </div>
+
+      <div class="swatch-card">
+        <div class="swatch-color" style="background-color: #f59e0b;"></div>
+        <div class="swatch-meta">
+          <span class="swatch-name">Badge Amber</span>
+          <span class="swatch-hex">#F59E0B</span>
+          <p class="swatch-role">Badge "Tuyển Gấp / Hot"</p>
+        </div>
+      </div>
+
+      <div class="swatch-card">
+        <div class="swatch-color" style="background-color: #0f172a;"></div>
+        <div class="swatch-meta">
+          <span class="swatch-name">Slate Dark</span>
+          <span class="swatch-hex">#0F172A</span>
+          <p class="swatch-role">Màu chữ chính (Êm mắt)</p>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="sub-sub-title">Phân bổ tỷ lệ màu sắc 60 - 30 - 10 trong giao diện Job Portal:</h3>
+    <ul>
+      <li><strong>60% Nền &amp; Bề mặt trung tính:</strong> Nền trang web dùng màu xám ngà dịu mắt <code>#F8FAFC</code>; các thẻ bài việc làm và bảng dữ liệu dùng nền trắng tinh <code>#FFFFFF</code> viền xám nhạt <code>#E2E8F0</code>. Không để mắt bị chói lóa.</li>
+      <li><strong>30% Cấu trúc nhận diện thương hiệu:</strong> Màu xanh dương <code>#1E40AF</code> được áp dụng cho Header bar, tiêu đề bài viết, icon danh mục nghề nghiệp và nút tìm kiếm.</li>
+      <li><strong>10% Điểm nhấn hành động (Call To Action):</strong> Dành riêng cho nút <strong>"Nộp Hồ Sơ Ngay"</strong> với màu xanh lá <code>#10B981</code> (tạo tâm lý khuyến khích, mở ra cơ hội việc làm) và nhãn <strong>"Tuyển Gấp"</strong> màu cam <code>#F59E0B</code>.</li>
+      <li><strong>Kiểm tra tiếp cận WCAG AA:</strong> Chữ <code>#0F172A</code> trên nền trắng đạt tỷ lệ tương phản <strong>15.8:1</strong> (vượt xa chuẩn tối thiểu 4.5:1); nút xanh lá chữ trắng đạt <strong>4.6:1</strong>, đảm bảo người khiếm thị nhẹ hoặc người dùng điện thoại ngoài trời nắng vẫn đọc rõ.</li>
+    </ul>
+
+    <!-- 4. HÌNH ẢNH, ICONS, SHADOWS, BORDER-RADIUS -->
+    <h2 class="sub-title">4. Hình Ảnh, Biểu Tượng, Đổ Bóng &amp; Góc Bo (Quy Tắc #3 Đến #7)</h2>
+    <ul>
+      <li><strong>Hình ảnh (Images):</strong>
+        <ul>
+          <li>Banner Hero Section sử dụng ảnh người thật (sinh viên làm việc tại văn phòng công nghệ hiện đại), áp dụng kỹ thuật <strong>Dark Gradient Overlay (Đen 35% đến 60%)</strong> để làm nổi bật hộp tìm kiếm màu trắng bên trên.</li>
+          <li>Logo doanh nghiệp quy chuẩn tỷ lệ vuông <strong>1:1</strong> (kích thước chuẩn <code>56x56px</code> hoặc <code>64x64px</code>), lưu ảnh gốc chuẩn 2x để hiển thị sắc nét trên màn hình Retina.</li>
+        </ul>
+      </li>
+      <li><strong>Biểu tượng (Icons):</strong> Dùng bộ icon <strong>Lucide Icons / Feather Icons dạng SVG</strong> với độ dày nét (stroke-width) cố định <code>1.75px</code>. Mọi icon đều đi kèm nhãn chữ (ví dụ: icon vị trí 📍 đi kèm "TP. Hồ Chí Minh", icon tiền tệ 💵 đi kèm "15 - 20 Triệu").</li>
+      <li><strong>Đổ bóng (Shadows):</strong> Tuân thủ tinh thần Startup/Upbeat: Dùng <strong>Soft Ambient Shadow</strong>:
+        <br />• Thẻ việc làm bình thường: <code>box-shadow: 0 1px 3px rgba(0,0,0,0.05);</code>
+        <br />• Thẻ việc làm khi di chuột (Hover): Nâng nhẹ lên cao kèm <code>box-shadow: 0 10px 25px -5px rgba(30,64,175,0.1);</code> (shadow pha ánh xanh thương hiệu).
+        <br />• Cửa sổ Modal nộp CV: <code>box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);</code> tạo cảm giác nổi hẳn lên trên mặt phẳng web.
+      </li>
+      <li><strong>Góc bo tròn (Border-Radius):</strong>
+        <br />• Nút bấm (Buttons) và ô nhập dữ liệu (Inputs): Bo góc <strong>8px</strong> (chuẩn hiện đại, dễ thao tác ngón tay).
+        <br />• Thẻ bài việc làm (Job Cards) và Modal Container: Bo góc <strong>14px</strong> (tạo sự mềm mại, thân thiện).
+        <br />• Nhãn trạng thái (Pills/Tags): Bo tròn hoàn toàn <strong>999px</strong> (phong cách viên thuốc).
+      </li>
+      <li><strong>Hệ thống khoảng trắng (Whitespace Scale 8-Point Grid):</strong> Toàn bộ margin và padding đều là bội số của 8px: <code>8px, 16px, 24px, 32px, 48px, 64px, 96px</code>. Khoảng cách giữa các Section lớn trên trang là <code>80px</code>.</li>
+    </ul>
+
+    <!-- 5. BỐ CỤC CHI TIẾT TỪNG TRANG TRONG JOB PORTAL -->
+    <h2 class="sub-title">5. Đặc Tả Bố Cục Chi Tiết Từng Trang (Page Layout Architecture &amp; UX)</h2>
+    <p>
+      Ứng dụng <strong>Quy tắc #8 (Visual Hierarchy)</strong>, <strong>Quy tắc #9 (UX)</strong> và <strong>Quy tắc #10 (Layout Patterns)</strong>, nhóm thiết kế bố cục khung cho từng phân hệ màn hình cụ thể như sau:
+    </p>
+
+    <!-- TRANG 1: TRANG CHỦ -->
+    <h3 class="sub-sub-title">5.1. Trang Chủ (Public Homepage) — Mô thức Z-Pattern &amp; F-Pattern kết hợp</h3>
+    <p>
+      Trang đón tiếp người dùng áp dụng mô thức <strong>Z-Pattern</strong> ở phần mở đầu (mắt quét Logo ➔ Menu ➔ Nút Đăng nhập ➔ Khối tìm kiếm), sau đó chuyển sang <strong>F-Pattern</strong> ở danh sách việc làm bên dưới:
+    </p>
+
+    <div class="wireframe-box">
+      <div class="wireframe-header">
+        <span>SƠ ĐỒ BỐ CỤC KHUNG: TRANG CHỦ (HOMEPAGE)</span>
+        <span>LAYOUT: Z-PATTERN &amp; 3-COLUMN CARD GRID</span>
+      </div>
+
+      <!-- Header -->
+      <div class="wf-block highlight-wf" style="margin-bottom: 8px;">
+        [HEADER STICKY]: Logo JobPortal | Menu Danh mục | Cổng Doanh Nghiệp | Nút Đăng nhập - Đăng ký
+      </div>
+
+      <!-- Hero Section -->
+      <div class="wf-block" style="background: #e2e8f0; padding: 20px 10px; margin-bottom: 8px;">
+        <p style="font-weight:700; color:#1e293b; margin-bottom: 8px;">[HERO SECTION - ẢNH NỀN OVERLAY ĐEN 40%]</p>
+        <p style="font-size: 8.5pt; color: #475569; margin-bottom: 12px;">H1: Khám Phá Hơn 5.000+ Cơ Hội Việc Làm Dành Cho Sinh Viên &amp; Kỹ Sư Trẻ</p>
+        <div style="background:#fff; border: 1.5px solid #3b82f6; border-radius:6px; padding:8px; display:inline-block; width:90%;">
+          🔍 [Input: Tên công việc / Kỹ năng] | 📍 [Dropdown: Tỉnh / Thành phố] | 🏷️ [Dropdown: Ngành nghề] | 🟢 [BTN: Tìm Việc Ngay]
+        </div>
+      </div>
+
+      <!-- Thống kê nhanh -->
+      <div class="wf-grid-3" style="margin-bottom: 8px;">
+        <div class="wf-block highlight-wf">📊 5.200+ Việc làm đang mở</div>
+        <div class="wf-block highlight-wf">🏢 850+ Doanh nghiệp uy tín</div>
+        <div class="wf-block highlight-wf">👥 12.000+ Ứng viên ứng tuyển</div>
+      </div>
+
+      <!-- Danh mục ngành nghề -->
+      <div class="wf-block" style="margin-bottom: 8px;">
+        <p style="font-weight:600; text-align:left; margin-bottom:6px;">H2: Danh Mục Nghề Nghiệp Trọng Điểm</p>
+        <div class="wf-grid-3">
+          <div class="wf-block">💻 Công Nghệ Thông Tin (1.200)</div>
+          <div class="wf-block">📈 Marketing &amp; Truyền Thông (850)</div>
+          <div class="wf-block">🚚 Logistics &amp; Chuỗi Cung Ứng (640)</div>
+        </div>
+      </div>
+
+      <!-- Danh sách việc làm mới nhất (Lưới Card) -->
+      <div class="wf-block" style="margin-bottom: 8px;">
+        <p style="font-weight:600; text-align:left; margin-bottom:6px;">H2: Việc Làm Nổi Bật &amp; Tuyển Gấp</p>
+        <div class="wf-grid-3">
+          <div class="wf-block highlight-wf" style="text-align:left;">
+            <span style="float:right; background:#fef3c7; color:#b45309; padding:2px 6px; border-radius:4px; font-size:7pt;">Tuyển gấp</span>
+            <strong>Kỹ Sư Backend Node.js</strong><br />
+            🏢 FPT Software | 📍 TP. HCM<br />
+            💵 18 - 25 Triệu | 🕒 Hạn: 15/11
+          </div>
+          <div class="wf-block" style="text-align:left;">
+            <strong>UI/UX Designer Junior</strong><br />
+            🏢 VNG Corporation | 📍 TP. HCM<br />
+            💵 12 - 16 Triệu | 🕒 Hạn: 20/11
+          </div>
+          <div class="wf-block" style="text-align:left;">
+            <strong>Thực Tập Sinh Lập Trình Web</strong><br />
+            🏢 TMA Solutions | 📍 TP. HCM<br />
+            💵 Thỏa thuận | 🕒 Hạn: 30/11
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="wf-block" style="background:#0f172a; color:#cbd5e1; text-align:center;">
+        [FOOTER SITEMAP]: Về JobPortal | Quy chế hoạt động | Chính sách bảo mật | Đăng ký nhận bản tin | © 2026 Nhóm 6 UTH
+      </div>
+    </div>
+
+    <!-- TRANG 2: TRANG TRA CỨU & LỌC VIỆC LÀM -->
+    <h3 class="sub-sub-title">5.2. Trang Tra Cứu &amp; Lọc Việc Làm (Job Listing &amp; Search Page) — Mô thức Sidebar Layout</h3>
+    <p>
+      Áp dụng <strong>Mô thức Sidebar Layout</strong> (Slide 310): Cột bên trái giữ bộ lọc đa tiêu chí giúp người dùng thu hẹp phạm vi tìm kiếm nhanh chóng; cột bên phải hiển thị danh sách thẻ kết quả theo luồng đọc <strong>F-Pattern</strong>:
+    </p>
+
+    <div class="wireframe-box">
+      <div class="wireframe-header">
+        <span>SƠ ĐỒ BỐ CỤC KHUNG: TRANG TÌM KIẾM &amp; LỌC VIỆC LÀM</span>
+        <span>LAYOUT: 2-COLUMN SIDEBAR PATTERN (1 : 2.5)</span>
+      </div>
+
+      <div class="wf-grid-sidebar">
+        <!-- Cột trái: Bộ lọc Sidebar -->
+        <div class="wf-block highlight-wf" style="text-align: left; line-height: 1.8;">
+          <strong style="color: var(--primary);">BỘ LỌC ĐA TIÊU CHÍ</strong><br />
+          <hr style="border:0; border-top:1px solid #cbd5e1; margin:6px 0;" />
+          <strong>Địa Điểm:</strong><br />
+          ☑ TP. Hồ Chí Minh<br />
+          ☐ Hà Nội | ☐ Đà Nẵng<br />
+          <br />
+          <strong>Mức Lương:</strong><br />
+          ☐ Dưới 10 Triệu<br />
+          ☑ 10 - 20 Triệu<br />
+          ☐ Trên 20 Triệu<br />
+          <br />
+          <strong>Hình Thức Làm Việc:</strong><br />
+          ☑ Toàn thời gian (Full-time)<br />
+          ☐ Bán thời gian (Part-time)<br />
+          ☐ Thực tập (Internship)<br />
+          <br />
+          <button style="background:var(--primary); color:#fff; border:none; padding:4px 8px; border-radius:4px; font-size:7.5pt; width:100%;">Áp Dụng Bộ Lọc</button>
+        </div>
+
+        <!-- Cột phải: Danh sách kết quả & Phân trang -->
+        <div>
+          <div class="wf-block" style="text-align:left; margin-bottom:8px; display:flex; justify-content:space-between;">
+            <span>Tìm thấy <strong>148 việc làm</strong> phù hợp</span>
+            <span>Sắp xếp theo: [Mới nhất ▼]</span>
+          </div>
+
+          <!-- Danh sách thẻ việc làm -->
+          <div class="wf-block" style="text-align:left; margin-bottom:8px; border-left:4px solid var(--primary);">
+            <div style="display:flex; justify-content:space-between;">
+              <h4 style="color:var(--dark); margin:0;">Frontend React Developer</h4>
+              <span style="color:var(--accent); font-weight:700;">15 - 22 Triệu</span>
+            </div>
+            <p style="color:var(--muted); margin:4px 0;">Công ty TNHH Phần Mềm DTS • 📍 Quận 1, TP.HCM • 🏷️ JavaScript, React, CSS3</p>
+            <div style="display:flex; justify-content:space-between; font-size:7.5pt;">
+              <span style="color:#64748b;">🕒 Đăng 2 ngày trước • Hạn nộp: 25/11/2026</span>
+              <a href="#" style="color:var(--primary); font-weight:700;">Xem chi tiết &amp; Nộp hồ sơ →</a>
+            </div>
+          </div>
+
+          <div class="wf-block" style="text-align:left; margin-bottom:8px; border-left:4px solid var(--primary);">
+            <div style="display:flex; justify-content:space-between;">
+              <h4 style="color:var(--dark); margin:0;">Chuyên Viên Phân Tích Dữ Liệu (Data Analyst)</h4>
+              <span style="color:var(--accent); font-weight:700;">12 - 18 Triệu</span>
+            </div>
+            <p style="color:var(--muted); margin:4px 0;">Tập Đoàn Bán Lẻ WinCommerce • 📍 Bình Thạnh, TP.HCM • 🏷️ SQL, Python, PowerBI</p>
+            <div style="display:flex; justify-content:space-between; font-size:7.5pt;">
+              <span style="color:#64748b;">🕒 Đăng hôm qua • Hạn nộp: 30/11/2026</span>
+              <a href="#" style="color:var(--primary); font-weight:700;">Xem chi tiết &amp; Nộp hồ sơ →</a>
+            </div>
+          </div>
+
+          <!-- Phân trang Pagination -->
+          <div class="wf-block highlight-wf" style="text-align:center;">
+            [COMPONENTS: PAGINATION]: « Trước | <strong>1</strong> | 2 | 3 | 4 | 5 | Sau »
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRANG 3: TRANG CHI TIẾT TIN TUYỂN DỤNG -->
+    <h3 class="sub-sub-title">5.3. Trang Chi Tiết Việc Làm &amp; Ứng Tuyển (Job Detail &amp; Apply Modal)</h3>
+    <p>
+      Trang chi tiết áp dụng <strong>Bố cục 2 cột bất đối xứng (70% - 30%)</strong>. Cột trái trình bày chi tiết JD (Mô tả, Yêu cầu, Quyền lợi) theo trật tự Visual Hierarchy; cột phải là khối <strong>Sticky Action Box</strong> ghim nút "Ứng Tuyển Ngay" luôn hiển thị trong tầm mắt:
+    </p>
+
+    <div class="wireframe-box">
+      <div class="wireframe-header">
+        <span>SƠ ĐỒ BỐ CỤC KHUNG: TRANG CHI TIẾT VIỆC LÀM &amp; MODAL NỘP CV</span>
+        <span>LAYOUT: ASYMMETRIC 70/30 &amp; STICKY CTA BOX</span>
+      </div>
+
+      <div style="font-size:8pt; color:var(--muted); margin-bottom:8px;">
+        📍 <strong>Breadcrumbs:</strong> Trang chủ &gt; Việc làm CNTT &gt; Chi tiết việc làm Kỹ sư Backend Node.js
+      </div>
+
+      <div class="wf-grid-sidebar" style="grid-template-columns: 2.3fr 1fr;">
+        <!-- Cột trái: JD Chi tiết -->
+        <div class="wf-block" style="text-align:left; line-height: 1.6;">
+          <h3 style="color:var(--primary); margin-top:0;">Kỹ Sư Lập Trình Backend Node.js (Fresher/Junior)</h3>
+          <p style="color:var(--muted); font-size:8pt;">FPT Software • Đăng ngày 24/10/2026 • Lượt xem: 320</p>
+          <hr style="border:0; border-top:1px solid #cbd5e1; margin:8px 0;" />
+          <strong>1. Mô Tả Công Việc (Job Description):</strong>
+          <ul style="margin:4px 0 8px 16px; font-size:8pt;">
+            <li>Phát triển các dịch vụ RESTful API phục vụ hệ thống tuyển dụng trực tuyến.</li>
+            <li>Tham gia thiết kế CSDL quan hệ PostgreSQL chuẩn 3NF và tối ưu truy vấn.</li>
+          </ul>
+          <strong>2. Yêu Cầu Ứng Viên (Requirements):</strong>
+          <ul style="margin:4px 0 8px 16px; font-size:8pt;">
+            <li>Nắm vững nền tảng JavaScript/TypeScript và môi trường Node.js runtime.</li>
+            <li>Có kiến thức về cơ sở dữ liệu quan hệ (SQL) và công cụ quản lý mã nguồn Git.</li>
+          </ul>
+          <strong>3. Quyền Lợi Được Hưởng (Benefits):</strong>
+          <ul style="margin:4px 0 8px 16px; font-size:8pt;">
+            <li>Mức thu nhập cạnh tranh từ 15 - 22 triệu/tháng + Lương tháng 13.</li>
+            <li>Được đào tạo bài bản bởi các chuyên gia công nghệ cao cấp.</li>
+          </ul>
+        </div>
+
+        <!-- Cột phải: Sticky Action Box -->
+        <div class="wf-block highlight-wf" style="text-align:left; height: fit-content;">
+          <strong style="color:var(--dark);">THÔNG TIN TÓM TẮT</strong>
+          <hr style="border:0; border-top:1px solid #93c5fd; margin:6px 0;" />
+          <p style="margin:4px 0;">💵 <strong>Mức lương:</strong> 15 - 22 Triệu</p>
+          <p style="margin:4px 0;">📍 <strong>Địa điểm:</strong> Q.9, TP. Thủ Đức</p>
+          <p style="margin:4px 0;">🕒 <strong>Hạn chót:</strong> 15/11/2026</p>
+          <p style="margin:4px 0;">💼 <strong>Kinh nghiệm:</strong> 0 - 1 năm</p>
+          <button style="background:var(--accent); color:#fff; border:none; padding:10px; border-radius:6px; font-weight:700; width:100%; margin-top:10px; font-size:9pt; cursor:pointer;">
+            ⚡ ỨNG TUYỂN NGAY
+          </button>
+          <p style="font-size:7.5pt; text-align:center; color:var(--muted); margin-top:6px;">Ứng tuyển trực tiếp bằng CV chuẩn PDF</p>
+        </div>
+      </div>
+
+      <!-- Popup Modal minh họa -->
+      <div style="background:#ffffff; border:2px solid var(--primary); border-radius:8px; padding:12px; margin-top:12px; text-align:left;">
+        <span style="float:right; font-weight:700; color:var(--danger); cursor:pointer;">✖ Đóng</span>
+        <strong style="color:var(--primary);">[MODAL WINDOW]: NỘP HỒ SƠ ỨNG TUYỂN</strong>
+        <p style="font-size:8pt; margin:4px 0 8px;">Vị trí: Kỹ Sư Lập Trình Backend Node.js — FPT Software</p>
+        <div style="background:#f1f5f9; border:1px dashed #94a3b8; padding:8px; text-align:center; border-radius:4px; font-size:8pt;">
+          📁 Kéo thả tệp CV định dạng .PDF (Tối đa 5MB) hoặc <a href="#" style="color:var(--primary); font-weight:700;">chọn từ kho hồ sơ</a>
+        </div>
+        <div style="margin-top:6px;">
+          <label style="font-size:8pt;">Thư ngỏ / Giới thiệu ngắn:</label>
+          <textarea style="width:100%; height:40px; font-size:8pt; border:1px solid #cbd5e1; border-radius:4px;" placeholder="Em mong muốn ứng tuyển vì..."></textarea>
+        </div>
+        <div style="text-align:right; margin-top:6px;">
+          <button style="background:var(--accent); color:#fff; border:none; padding:6px 14px; border-radius:4px; font-weight:700; font-size:8pt;">Xác Nhận Nộp Đơn ↗</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRANG 4: PHÂN HỆ ỨNG VIÊN -->
+    <h3 class="sub-sub-title">5.4. Phân Hệ Ứng Viên (Candidate Dashboard &amp; Progress Stepper)</h3>
+    <p>
+      Ứng dụng <strong>Quy tắc #9 (UX - Trực quan hóa tiến trình)</strong>: Người tìm việc cần biết chính xác hồ sơ của mình đang ở giai đoạn nào. Nhóm sử dụng <strong>Thanh tiến trình 4 bước (Step Component)</strong> để loại bỏ cảm giác chờ đợi mòn mỏi trong vô vọng:
+    </p>
+
+    <div class="wireframe-box">
+      <div class="wireframe-header">
+        <span>SƠ ĐỒ BỐ CỤC KHUNG: THEO DÕI ĐƠN ỨNG TUYỂN (CANDIDATE STEPPER)</span>
+        <span>UX COMPONENT: 4-STEP RECRUITMENT TIMELINE</span>
+      </div>
+
+      <div class="wf-block" style="text-align:left; margin-bottom:10px;">
+        <h4 style="margin:0 0 6px; color:var(--dark);">Đơn Ứng Tuyển: Kỹ Sư Backend Node.js — FPT Software</h4>
+        <p style="font-size:8pt; color:var(--muted); margin-bottom:10px;">Tệp CV đã nộp: <code>CV_TranHuuThanh_Backend.pdf</code> • Nộp lúc: 08:30 ngày 24/10/2026</p>
+
+        <!-- Stepper -->
+        <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; padding:12px; border-radius:8px;">
+          <div style="text-align:center; flex:1;">
+            <div style="background:var(--accent); color:#fff; width:24px; height:24px; border-radius:50%; margin:0 auto 4px; line-height:24px; font-weight:700; font-size:8pt;">✓</div>
+            <strong style="color:var(--dark); font-size:7.5pt;">1. ĐÃ NỘP ĐƠN</strong><br /><span style="font-size:7pt; color:var(--muted);">24/10 08:30</span>
+          </div>
+          <div style="height:2px; background:var(--accent); flex:1;"></div>
+          <div style="text-align:center; flex:1;">
+            <div style="background:var(--accent); color:#fff; width:24px; height:24px; border-radius:50%; margin:0 auto 4px; line-height:24px; font-weight:700; font-size:8pt;">✓</div>
+            <strong style="color:var(--dark); font-size:7.5pt;">2. DOANH NGHIỆP ĐÃ XEM</strong><br /><span style="font-size:7pt; color:var(--muted);">25/10 14:15</span>
+          </div>
+          <div style="height:2px; background:#3b82f6; flex:1;"></div>
+          <div style="text-align:center; flex:1;">
+            <div style="background:#3b82f6; color:#fff; width:24px; height:24px; border-radius:50%; margin:0 auto 4px; line-height:24px; font-weight:700; font-size:8pt;">3</div>
+            <strong style="color:var(--primary); font-size:7.5pt;">3. HẸN PHỎNG VẤN</strong><br /><span style="font-size:7pt; color:var(--primary);">Đã gửi lịch qua Email</span>
+          </div>
+          <div style="height:2px; background:#cbd5e1; flex:1;"></div>
+          <div style="text-align:center; flex:1;">
+            <div style="background:#cbd5e1; color:#64748b; width:24px; height:24px; border-radius:50%; margin:0 auto 4px; line-height:24px; font-weight:700; font-size:8pt;">4</div>
+            <strong style="color:#64748b; font-size:7.5pt;">4. KẾT QUẢ CUỐI CÙNG</strong><br /><span style="font-size:7pt; color:var(--muted);">Đang chờ đánh giá</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRANG 5: PHÂN HỆ DOANH NGHIỆP -->
+    <h3 class="sub-sub-title">5.5. Phân Hệ Doanh Nghiệp (Employer Portal &amp; Candidate Table)</h3>
+    <p>
+      Áp dụng tính cách <strong>Plain / Neutral</strong>: Nhà tuyển dụng cần quản lý số lượng lớn ứng viên, do đó giao diện tập trung vào <strong>Cấu trúc bảng biểu (Data Table Component)</strong> có khả năng sắp xếp, lọc trạng thái và thao tác nhanh:
+    </p>
+
+    <div class="wireframe-box">
+      <div class="wireframe-header">
+        <span>SƠ ĐỒ BỐ CỤC KHUNG: BẢNG QUẢN LÝ ỨNG VIÊN (EMPLOYER CONSOLE)</span>
+        <span>COMPONENT: SORTABLE TABLE &amp; QUICK ACTION DROPDOWN</span>
+      </div>
+
+      <div class="wf-block" style="text-align:left;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+          <strong>Tin đăng: Kỹ Sư Backend Node.js (Tổng số: 42 hồ sơ)</strong>
+          <div>
+            <span>Lọc trạng thái: [Tất cả hồ sơ ▼]</span> |
+            <button style="background:var(--primary); color:#fff; border:none; padding:3px 8px; border-radius:4px; font-size:7.5pt;">Xuất File Excel</button>
+          </div>
+        </div>
+
+        <table class="data-table" style="margin:0;">
+          <thead>
+            <tr>
+              <th>Ứng Viên</th>
+              <th>Ngày Nộp</th>
+              <th>Hồ Sơ CV</th>
+              <th>Trạng Thái</th>
+              <th>Hành Động Nhanh</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Trần Hữu Thành</strong><br /><span style="font-size:7.5pt; color:var(--muted);">tomshel216@gmail.com</span></td>
+              <td>24/10/2026</td>
+              <td><a href="#" style="color:var(--primary); font-weight:600;">📄 Xem CV (PDF)</a></td>
+              <td><span style="background:#eff6ff; color:#1e40af; padding:2px 6px; border-radius:4px; font-size:7.5pt;">Đã xem CV</span></td>
+              <td>[Đổi trạng thái: Hẹn Phỏng Vấn ▼]</td>
+            </tr>
+            <tr>
+              <td><strong>Nguyễn Văn A</strong><br /><span style="font-size:7.5pt; color:var(--muted);">nguyenvana@gmail.com</span></td>
+              <td>23/10/2026</td>
+              <td><a href="#" style="color:var(--primary); font-weight:600;">📄 Xem CV (PDF)</a></td>
+              <td><span style="background:#ecfdf5; color:#065f46; padding:2px 6px; border-radius:4px; font-size:7.5pt;">Trúng tuyển</span></td>
+              <td>[Đã gửi thư mời làm việc ✓]</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TRANG 6: NGUYÊN TẮC ZERO DEAD-END -->
+    <h3 class="sub-sub-title">5.6. Hiện Thực Hóa Quy Tắc Triệt Tiêu Trang Ngõ Cụt (Zero Dead-End Rule)</h3>
+    <p>
+      Theo <strong>Quy tắc #9 (UX - Zero Dead-End)</strong>, bất kể người dùng gặp sự cố kỹ thuật hay hoàn tất một quy trình nộp hồ sơ, hệ thống luôn phải cung cấp ít nhất 01 lối thoát hành động:
+    </p>
+    <ul>
+      <li><strong>Trang 404 Not Found:</strong> Thay vì hiển thị thông báo lỗi kỹ thuật vô nghĩa, trang 404 được thiết kế hình ảnh vui nhộn với thông điệp: <em>"Rất tiếc! Công việc này đã hết hạn tuyển dụng hoặc đường dẫn không tồn tại."</em> kèm 02 nút bấm nổi bật: <code>[Khám phá việc làm khác]</code> và <code>[Về trang chủ JobPortal]</code>.</li>
+      <li><strong>Trang nộp hồ sơ thành công (Success State):</strong> Hiển thị biểu tượng dấu tích xanh, gửi thông báo xác nhận qua email, đồng thời gợi ý: <em>"3 Công việc cùng chuyên môn có thể bạn quan tâm"</em> kèm nút <code>[Theo dõi tiến độ đơn tại Dashboard]</code>. Người dùng không bao giờ rơi vào trạng thái bế tắc.</li>
+    </ul>
+
+    <div class="page-break"></div>
+
+    <!-- TRANG 7: THIẾT KẾ ĐÁP ỨNG & BREAKPOINTS (SLIDE 370–405) -->
+    <h3 class="sub-sub-title">5.7. Quy Chuẩn Thiết Kế Đáp Ứng &amp; Chiến Lược Breakpoint (Slide 370–405)</h3>
+    <p>
+      Theo bài giảng từ Slide 370 đến 405, Thiết kế đáp ứng (Responsive Web Design - RWD) dựa trên 3 trụ cột: <strong>Fluid Layouts</strong>, <strong>Flexible Images</strong> và <strong>Media Queries</strong>. Đối với hệ thống Job Portal, sinh viên thường tìm việc trên điện thoại nhưng nhà tuyển dụng lại quản trị trên máy tính. Do đó, nhóm xây dựng ma trận chuyển đổi linh hoạt theo các ngưỡng màn hình tiêu chuẩn:
+    </p>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 18%;">Thiết Bị &amp; Breakpoint</th>
+          <th style="width: 25%;">Trang Chủ &amp; Tra Cứu Việc Làm</th>
+          <th style="width: 27%;">Trang Chi Tiết JD &amp; Ứng Tuyển</th>
+          <th style="width: 30%;">Dashboard Quản Trị Tuyển Dụng</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Desktop</strong><br /><code class="badge-code">&gt; 1200px</code></td>
+          <td>Hiển thị lưới 3 cột thẻ việc làm; Sidebar bộ lọc cố định bên trái (280px); Menu ngang đầy đủ.</td>
+          <td>Bố cục bất đối xứng 70/30 (Nội dung JD bên trái, Box thông tin công ty &amp; Nút nộp đơn dính sticky bên phải).</td>
+          <td>Hiển thị thanh Sidebar điều hướng rộng (260px); Bảng ứng viên <code>&lt;table&gt;</code> đầy đủ 6 cột dữ liệu &amp; action buttons.</td>
+        </tr>
+        <tr>
+          <td><strong>Tablet / Small Laptop</strong><br /><code class="badge-code">768px – 1199px</code></td>
+          <td>Chuyển sang lưới 2 cột; Sidebar bộ lọc thu gọn dạng Accordion trên đầu trang; Padding giảm từ 48px xuống 24px.</td>
+          <td>Khối công ty chuyển xuống dưới phần mô tả JD; Giữ nguyên form nộp CV ở dạng Popup Modal canh giữa màn hình.</td>
+          <td>Sidebar rút gọn thành Icon menu (Rail navigation); Bảng dữ liệu bật thanh cuộn ngang <code>overflow-x: auto</code> mượt mà.</td>
+        </tr>
+        <tr>
+          <td><strong>Mobile</strong><br /><code class="badge-code">&lt; 768px</code></td>
+          <td>Chuyển 100% về cột đơn (1-column stack); Menu điều hướng ẩn vào <strong>Hamburger Drawer</strong>; Bộ lọc chuyển thành <strong>Bottom-sheet Modal</strong> khi bấm nút <code>[Lọc việc làm]</code>.</td>
+          <td>Nội dung trải dọc tuần tự. Kích hoạt <strong>Thanh Sticky Bottom Bar</strong> dính sát đáy màn hình chứa nút <code>[Ứng Tuyển Ngay]</code> cỡ lớn, nằm trong vùng chạm ngón cái (Thumb-zone).</td>
+          <td>Tự động biến đổi cấu trúc bảng <code>&lt;table&gt;</code> thành <strong>Danh sách thẻ tóm tắt (Card-based list)</strong>: Mỗi ứng viên là 1 ô thẻ với các nút Duyệt / Từ chối to bản dễ chạm.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="page-break"></div>
+
+    <!-- 6. HỆ THỐNG BIẾN THIẾT KẾ KỸ THUẬT (CSS DESIGN TOKENS) -->
+    <h2 class="sub-title">6. Khai Báo Biến Thiết Kế Hệ Thống Sẵn Sàng Cho Lập Trình (CSS Design Tokens)</h2>
+    <p>
+      Nhằm xóa bỏ khoảng cách giữa lý thuyết và mã nguồn, toàn bộ hệ màu 60-30-10, thang chữ Modular scale, lưới khoảng cách 8-pt và độ bóng đã được lập trình sẵn thành hệ thống biến CSS (CSS Custom Properties). Khi bước vào code, cả nhóm chỉ việc nhúng khối biến này vào tệp <code>variables.css</code> dùng chung:
+    </p>
+
+    <div class="no-break" style="background: #0f172a; border-radius: 8px; padding: 12px 16px; margin: 10px 0; color: #f8fafc; font-family: var(--font-mono); font-size: 7.5pt; line-height: 1.45; border: 1px solid #1e293b;">
+      <span style="color: #64748b;">/* ==========================================================================
+         JOB PORTAL DESIGN TOKENS — MÔN LẬP TRÌNH WEBSITE (NHÓM 6)
+         ========================================================================== */</span><br />
+      <span style="color: #f43f5e;">:root</span> {<br />
+      &nbsp;&nbsp;<span style="color: #94a3b8;">/* --- 1. MÀU SẮC THEO QUY TẮC 60-30-10 &amp; WCAG --- */</span><br />
+      &nbsp;&nbsp;<span style="color: #38bdf8;">--color-primary:</span> <span style="color: #fbbf24;">#1e40af</span>;       <span style="color: #64748b;">/* 30% Nhận diện tin cậy: Header, Primary Button */</span><br />
+      &nbsp;&nbsp;<span style="color: #38bdf8;">--color-primary-light:</span> <span style="color: #fbbf24;">#3b82f6</span>; <span style="color: #64748b;">/* Tương tác Hover */</span><br />
+      &nbsp;&nbsp;<span style="color: #38bdf8;">--color-primary-soft:</span> <span style="color: #fbbf24;">#eff6ff</span>;  <span style="color: #64748b;">/* Nền thẻ nổi bật, Badge tech */</span><br />
+      &nbsp;&nbsp;<span style="color: #38bdf8;">--color-accent:</span> <span style="color: #fbbf24;">#10b981</span>;        <span style="color: #64748b;">/* 10% Điểm nhấn: Nút Nộp Đơn, Trạng thái thành công */</span><br />
+      &nbsp;&nbsp;<span style="color: #38bdf8;">--color-dark:</span> <span style="color: #fbbf24;">#0f172a</span>;          <span style="color: #64748b;">/* Chữ chính (Không dùng #000 tuyệt đối) */</span><br />
+      &nbsp;&nbsp;<span style="color: #38bdf8;">--color-body:</span> <span style="color: #fbbf24;">#334155</span>;          <span style="color: #64748b;">/* Nội dung mô tả JD */</span><br />
+      &nbsp;&nbsp;<span style="color: #38bdf8;">--color-bg-page:</span> <span style="color: #fbbf24;">#f8fafc</span>;       <span style="color: #64748b;">/* 60% Nền toàn trang Slate 50 */</span><br />
+      &nbsp;&nbsp;<span style="color: #38bdf8;">--color-border:</span> <span style="color: #fbbf24;">#e2e8f0</span>;        <span style="color: #64748b;">/* Đường viền ngăn cách card */</span><br />
+      <br />
+      &nbsp;&nbsp;<span style="color: #94a3b8;">/* --- 2. THANG ĐO TYPOGRAPHY (SCALE RATIO 1.25) --- */</span><br />
+      &nbsp;&nbsp;<span style="color: #38bdf8;">--font-family:</span> <span style="color: #fbbf24;">'Plus Jakarta Sans', system-ui, sans-serif</span>;<br />
+      &nbsp;&nbsp;<span style="color: #38bdf8;">--text-display:</span> <span style="color: #a7f3d0;">2.5rem</span>;   <span style="color: #64748b;">/* 40px - Hero Title */</span><br />
+      &nbsp;&nbsp;<span style="color: #38bdf8;">--text-h1:</span> <span style="color: #a7f3d0;">2rem</span>;         <span style="color: #64748b;">/* 32px - Section Heading */</span><br />
+      &nbsp;&nbsp;<span style="color: #38bdf8;">--text-h2:</span> <span style="color: #a7f3d0;">1.5rem</span>;        <span style="color: #64748b;">/* 24px - Job Card Title */</span><br />
+      &nbsp;&nbsp;<span style="color: #38bdf8;">--text-h3:</span> <span style="color: #a7f3d0;">1.25rem</span>;       <span style="color: #64748b;">/* 20px - Sub-heading / Modal Title */</span><br />
+      &nbsp;&nbsp;<span style="color: #38bdf8;">--text-base:</span> <span style="color: #a7f3d0;">1rem</span>;        <span style="color: #64748b;">/* 16px - Base Body Text */</span><br />
+      &nbsp;&nbsp;<span style="color: #38bdf8;">--text-small:</span> <span style="color: #a7f3d0;">0.875rem</span>;    <span style="color: #64748b;">/* 14px - Meta info, Salary, Location */</span><br />
+      &nbsp;&nbsp;<span style="color: #38bdf8;">--leading-body:</span> <span style="color: #a7f3d0;">1.65</span>;      <span style="color: #64748b;">/* Line-height chuẩn mực */</span><br />
+      <br />
+      &nbsp;&nbsp;<span style="color: #94a3b8;">/* --- 3. KHOẢNG TRẮNG 8-POINT GRID &amp; ELEVATION --- */</span><br />
+      &nbsp;&nbsp;<span style="color: #38bdf8;">--space-8:</span> <span style="color: #a7f3d0;">8px</span>; <span style="color: #38bdf8;">--space-16:</span> <span style="color: #a7f3d0;">16px</span>; <span style="color: #38bdf8;">--space-24:</span> <span style="color: #a7f3d0;">24px</span>; <span style="color: #38bdf8;">--space-32:</span> <span style="color: #a7f3d0;">32px</span>; <span style="color: #38bdf8;">--space-64:</span> <span style="color: #a7f3d0;">64px</span>;<br />
+      &nbsp;&nbsp;<span style="color: #38bdf8;">--radius-btn:</span> <span style="color: #a7f3d0;">8px</span>; <span style="color: #38bdf8;">--radius-card:</span> <span style="color: #a7f3d0;">14px</span>; <span style="color: #38bdf8;">--radius-pill:</span> <span style="color: #a7f3d0;">99px</span>;<br />
+      &nbsp;&nbsp;<span style="color: #38bdf8;">--shadow-card:</span> <span style="color: #a7f3d0;">0 4px 20px -2px rgba(15, 23, 42, 0.08)</span>;<br />
+      &nbsp;&nbsp;<span style="color: #38bdf8;">--shadow-hover:</span> <span style="color: #a7f3d0;">0 12px 28px -4px rgba(15, 23, 42, 0.12)</span>;<br />
+      }
+    </div>
+
+    <!-- =========================================================================
+         PHẦN 3: TỔNG KẾT & CAM KẾT CHUẨN KỸ NGHỆ PHẦN MỀM
+         ========================================================================= -->
+    <h1 class="sec-title">Phần III: Tổng Kết &amp; Cam Kết Triển Khai Kỹ Thuật</h1>
+
+    <h2 class="sub-title">1. Bảng Đối Chiếu Kiểm Định Thiết Kế (Design Audit Checklist)</h2>
+    <p>Nhóm 6 xây dựng bảng kiểm tra nhằm đảm bảo 100% mã nguồn Frontend sẽ tuân thủ tuyệt đối các quy tắc lý thuyết:</p>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Hạng Mục Kiểm Định</th>
+          <th>Quy Tắc Lý Thuyết Ứng Dụng</th>
+          <th>Hiện Thực Kỹ Thuật Trong Dự Án Job Portal</th>
+          <th>Trạng Thái</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Typography Scale</strong></td>
+          <td>Quy tắc #1 (Thang đo font, line-height 1.65, &le;75 ký tự/dòng)</td>
+          <td>Khai báo biến CSS toàn cục <code>--font-main: 'Plus Jakarta Sans'</code>, khống chế <code>max-width: 68ch</code> cho JD.</td>
+          <td><strong style="color:var(--accent);">✓ ĐẠT CHUẨN</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Color Harmony (60-30-10)</strong></td>
+          <td>Quy tắc #2 (Tâm lý màu sắc, tỷ lệ không gian, tương phản WCAG)</td>
+          <td>Xanh Navy chủ đạo (Tin cậy), Xanh Lá hành động (Nộp đơn), nền Slate 50 dịu mắt. Tương phản đạt 15.8:1.</td>
+          <td><strong style="color:var(--accent);">✓ ĐẠT CHUẨN</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Retina Ready Images</strong></td>
+          <td>Quy tắc #3 (Ảnh 2x, text overlay gradient)</td>
+          <td>Banner Hero dùng Dark Gradient Overlay 40%; Logo doanh nghiệp lưu trữ chuẩn tỉ lệ 1:1 độ nét 2x.</td>
+          <td><strong style="color:var(--accent);">✓ ĐẠT CHUẨN</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Vector Consistency</strong></td>
+          <td>Quy tắc #4 (SVG icon, stroke đồng nhất)</td>
+          <td>Sử dụng trọn bộ Lucide SVG Icons với độ dày nét 1.75px, luôn đi kèm nhãn text giải thích.</td>
+          <td><strong style="color:var(--accent);">✓ ĐẠT CHUẨN</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Subtle Elevation</strong></td>
+          <td>Quy tắc #5 &amp; #6 (Shadows mờ nhẹ &amp; bo góc 8px–14px)</td>
+          <td>Shadow card mềm mại bán kính blur 20px, bo góc 8px cho nút và 14px cho card theo đúng phong cách Startup.</td>
+          <td><strong style="color:var(--accent);">✓ ĐẠT CHUẨN</strong></td>
+        </tr>
+        <tr>
+          <td><strong>8-Point Spacing</strong></td>
+          <td>Quy tắc #7 (Whitespace có hệ thống &amp; Định luật Gestalt)</td>
+          <td>Toàn bộ padding/margin tuân thủ thang đo bội số 8px (8, 16, 24, 32, 48, 80px).</td>
+          <td><strong style="color:var(--accent);">✓ ĐẠT CHUẨN</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Zero Dead-End UX</strong></td>
+          <td>Quy tắc #9 (Không trang cụt, phản hồi đa trạng thái)</td>
+          <td>Mọi trang kết quả, lỗi 404 hay form nộp đơn đều có nút điều hướng quay về bảng tin hoặc trang chủ.</td>
+          <td><strong style="color:var(--accent);">✓ ĐẠT CHUẨN</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Layout Patterns</strong></td>
+          <td>Quy tắc #10 (Z-Pattern, F-Pattern, 2-Column Sidebar, Modal)</td>
+          <td>Hiện thực chuẩn xác bố cục trang chủ (Z/F Pattern), tra cứu (Sidebar) và chi tiết (Asymmetric 70/30).</td>
+          <td><strong style="color:var(--accent);">✓ ĐẠT CHUẨN</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Responsive Breakpoints</strong></td>
+          <td>Slide 370–405 (Fluid layout, Mobile thumb-zone, Drawer)</td>
+          <td>Tự động co giãn theo 3 breakpoint (Desktop &gt;1200px, Tablet 768–1199px, Mobile &lt;768px), biến đổi bảng sang thẻ tóm tắt.</td>
+          <td><strong style="color:var(--accent);">✓ ĐẠT CHUẨN</strong></td>
+        </tr>
+        <tr>
+          <td><strong>CSS Design Tokens</strong></td>
+          <td>Quy tắc #1, #2, #7 (Hệ thống biến số `:root` dùng chung)</td>
+          <td>Khai báo tập trung trong file <code>variables.css</code>, đảm bảo 6 thành viên trong nhóm code đồng bộ tuyệt đối.</td>
+          <td><strong style="color:var(--accent);">✓ ĐẠT CHUẨN</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 class="sub-title" style="page-break-before: always; break-before: page;">2. Lời Kết &amp; Cam Kết Triển Khai</h2>
+    <p>
+      Qua việc nghiên cứu chuyên sâu tập bài giảng <em>Theory Lectures</em> của ThS. Trần Thịnh Mạnh Đức, Nhóm 6 nhận thức sâu sắc rằng: <strong>Thiết kế giao diện website không phải là sự trang trí mỹ thuật ngẫu hứng, mà là một môn khoa học kỹ nghệ có cấu trúc chặt chẽ</strong>. Từng quyết định lựa chọn cỡ chữ 16px, chiều cao dòng 1.65, mã màu xanh navy <code>#1E40AF</code>, bán kính bo góc 12px hay khoảng cách trắng 24px đều có cơ sở tâm lý học hành vi và toán học thị giác nâng đỡ phía sau.
+    </p>
+    <p>
+      Bản báo cáo đặc tả này sẽ là khuôn mẫu tiêu chuẩn kỹ thuật bất biến để 6 thành viên Nhóm 6 bước vào giai đoạn hiện thực hóa mã nguồn (Coding Implementation) cho sản phẩm <strong>Cổng Thông Tin Việc Làm (Job Portal)</strong>, cam kết mang đến một sản phẩm web hoàn thiện cao nhất về cả công năng lẫn thẩm mỹ.
+    </p>
+
+    <div style="margin-top: 36px; display: flex; justify-content: space-between; align-items: flex-end;">
+      <div>
+        <p style="font-size: 8.5pt; color: var(--muted); margin: 0;">Tài liệu lưu hành nội bộ — Nhóm 6 Đồ án Lập trình Website</p>
+        <p style="font-size: 8.5pt; color: var(--muted); margin: 0;">Trường Đại học Giao thông vận tải TP.HCM (UTH)</p>
+      </div>
+
+      <div style="text-align: right;">
+        <p style="font-size: 9.5pt; font-weight: 700; color: var(--dark); margin-bottom: 30px;">Đại diện Nhóm 6 (Nhóm trưởng)</p>
+        <p style="font-size: 10pt; font-weight: 700; color: var(--primary);">Trần Hữu Thành</p>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,38 @@
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE & Editor Settings
+.vscode/
+.idea/
+.vs/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+
+# Node / Dependencies (nếu có sau này)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment & Secrets
+.env
+.env.local
+.env.*.local
+
+# Build output
+dist/
+build/
+.cache/
+
+# Large reference documents (>100MB exceeds GitHub push limits)
+TLTK.pdf
+QTTK.pdf
+!ProjectLTW - Schema.pdf
