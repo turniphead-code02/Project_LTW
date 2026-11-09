@@ -1,0 +1,487 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Trang quản trị hệ thống JobPortal">
+    <title>Quản trị hệ thống - JobPortal</title>
+
+    <link rel="stylesheet" href="./assets/css/variables.css">
+    <link rel="stylesheet" href="./assets/css/base.css">
+    <link rel="stylesheet" href="./assets/css/components.css">
+    <link rel="stylesheet" href="./assets/css/admin.css">
+    <link rel="stylesheet" href="./assets/css/toast.css">
+</head>
+
+<body class="admin-page">
+
+  <!-- =========================================================================
+       THÔNG TIN PHÂN CÔNG ĐỒ ÁN (MODULE 5 - TASK ASSIGNMENT)
+       -------------------------------------------------------------------------
+       Thành viên đảm nhiệm: LÊ HOÀNG THIÊN HƯƠNG
+       Mã số sinh viên (MSSV): 042303000056
+       Nhánh Git phát triển: feature/module5-auth-admin (Đã merge vào main)
+       Đơn vị: Nhóm 6 — Khoa Công Nghệ Thông Tin — Trường ĐH GTVT TP.HCM (UTH)
+       Học phần: Lập trình Website (Web Programming) — GVHD: ThS. Trần Thịnh Mạnh Đức
+       
+       PHẠM VI ĐẢM NHIỆM:
+       - admin-portal.html (Bảng điều khiển quản trị viên: duyệt tin, khóa/mở tài khoản, thống kê)
+       - assets/css/admin.css, assets/js/admin.js
+       - Quy chuẩn thiết kế: Wireframe Mục 5.6 trong QTTK.html
+       ========================================================================= -->
+
+<div class="admin-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar">
+
+        <a href="index.html" class="admin-brand">
+            <span class="brand-icon">J</span>
+            <span>JobPortal</span>
+        </a>
+
+        <div class="admin-profile">
+            <div class="admin-avatar">A</div>
+            <div>
+                <strong>Administrator</strong>
+                <small>Quản trị hệ thống</small>
+            </div>
+        </div>
+
+        <nav class="admin-nav">
+
+            <p class="nav-heading">QUẢN LÝ</p>
+
+            <button class="nav-item active" data-section="overview">
+                <span>▦</span> Tổng quan
+            </button>
+
+            <button class="nav-item" data-section="employers">
+                <span>▣</span> Duyệt doanh nghiệp
+                <span class="nav-count" id="employer-count">0</span>
+            </button>
+
+            <button class="nav-item" data-section="jobs">
+                <span>▤</span> Kiểm duyệt tin tuyển dụng
+                <span class="nav-count" id="job-count">0</span>
+            </button>
+
+            <p class="nav-heading">HỆ THỐNG</p>
+
+            <button class="nav-item" data-section="settings">
+                <span>⚙</span> Cài đặt hệ thống
+            </button>
+
+            <a href="index.html" class="nav-item nav-link">
+                <span>←</span> Về trang chủ
+            </a>
+
+        </nav>
+
+        <div class="sidebar-footer">
+            <small>JobPortal © 2026</small>
+            <small>Admin Console v1.0</small>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="admin-main">
+
+        <!-- TOPBAR -->
+        <header class="admin-topbar">
+
+            <div>
+                <h1 id="page-title">Tổng quan hệ thống</h1>
+                <p>Xin chào, Administrator!</p>
+            </div>
+
+            <div class="admin-topbar-right">
+                <span class="admin-status">
+                    <span class="status-dot"></span>
+                    Hệ thống Demo
+                </span>
+
+                <div class="topbar-avatar">A</div>
+            </div>
+
+        </header>
+
+
+        <!-- 1. OVERVIEW -->
+        <section class="admin-section active" id="overview">
+
+            <div class="admin-welcome">
+                <div>
+                    <h2>Trung tâm quản trị JobPortal</h2>
+                    <p>Theo dõi và kiểm soát hoạt động tuyển dụng.</p>
+                </div>
+                <span class="welcome-icon">📊</span>
+            </div>
+
+            <div class="stats-grid">
+
+                <article class="stat-card">
+                    <div class="stat-icon blue">🏢</div>
+                    <p>Tổng doanh nghiệp</p>
+                    <h3 id="total-employers">0</h3>
+                    <small>Trong dữ liệu demo</small>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-icon orange">⏳</div>
+                    <p>Chờ duyệt doanh nghiệp</p>
+                    <h3 id="pending-employers">0</h3>
+                    <small>Cần xử lý</small>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-icon purple">📋</div>
+                    <p>Tổng tin tuyển dụng</p>
+                    <h3 id="total-jobs">0</h3>
+                    <small>Trong dữ liệu demo</small>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-icon green">✓</div>
+                    <p>Tin chờ kiểm duyệt</p>
+                    <h3 id="pending-jobs">0</h3>
+                    <small>Cần kiểm tra</small>
+                </article>
+
+            </div>
+
+            <div class="admin-panel">
+
+                <div class="panel-heading">
+                    <div>
+                        <h2>Hoạt động cần xử lý</h2>
+                        <p>Các yêu cầu đang chờ quản trị viên.</p>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+
+                    <button class="quick-action" data-section="employers">
+                        <span>🏢</span>
+                        <div>
+                            <strong>Phê duyệt doanh nghiệp</strong>
+                            <small id="overview-employer-count">
+                                0 yêu cầu đang chờ
+                            </small>
+                        </div>
+                        <span>→</span>
+                    </button>
+
+                    <button class="quick-action" data-section="jobs">
+                        <span>📋</span>
+                        <div>
+                            <strong>Kiểm duyệt tin tuyển dụng</strong>
+                            <small id="overview-job-count">
+                                0 tin đang chờ
+                            </small>
+                        </div>
+                        <span>→</span>
+                    </button>
+
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- 2. EMPLOYERS -->
+        <section class="admin-section" id="employers">
+
+            <div class="section-intro">
+                <div>
+                    <h2>Phê duyệt doanh nghiệp</h2>
+                    <p>
+                        Kiểm tra thông tin doanh nghiệp trước khi cấp quyền hoạt động.
+                    </p>
+                </div>
+            </div>
+
+            <div class="admin-panel">
+
+                <div class="table-toolbar">
+
+                    <input
+                        type="search"
+                        id="employer-search"
+                        placeholder="Tìm theo tên hoặc email doanh nghiệp..."
+                    >
+
+                    <select id="employer-filter">
+                        <option value="all">Tất cả trạng thái</option>
+                        <option value="pending">Chờ duyệt</option>
+                        <option value="approved">Đã duyệt</option>
+                        <option value="rejected">Từ chối</option>
+                    </select>
+
+                </div>
+
+                <div class="table-responsive">
+
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Doanh nghiệp</th>
+                                <th>Email</th>
+                                <th>Ngày đăng ký</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="employer-table-body"></tbody>
+                    </table>
+
+                </div>
+
+                <p class="empty-message" id="employer-empty" hidden>
+                    Không tìm thấy doanh nghiệp phù hợp.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- 3. JOB MODERATION -->
+        <section class="admin-section" id="jobs">
+
+            <div class="section-intro">
+                <div>
+                    <h2>Kiểm duyệt tin tuyển dụng</h2>
+                    <p>
+                        Đảm bảo nội dung tin tuyển dụng phù hợp trước khi công khai.
+                    </p>
+                </div>
+            </div>
+
+            <div class="admin-panel">
+
+                <div class="table-toolbar">
+
+                    <input
+                        type="search"
+                        id="job-search"
+                        placeholder="Tìm theo chức danh hoặc công ty..."
+                    >
+
+                    <select id="job-filter">
+                        <option value="all">Tất cả trạng thái</option>
+                        <option value="pending">Chờ duyệt</option>
+                        <option value="approved">Đã duyệt</option>
+                        <option value="rejected">Từ chối</option>
+                    </select>
+
+                </div>
+
+                <div class="table-responsive">
+
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Vị trí tuyển dụng</th>
+                                <th>Doanh nghiệp</th>
+                                <th>Mức lương</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="job-table-body"></tbody>
+                    </table>
+
+                </div>
+
+                <p class="empty-message" id="job-empty" hidden>
+                    Không tìm thấy tin tuyển dụng phù hợp.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- 4. SYSTEM SETTINGS -->
+        <section class="admin-section" id="settings">
+
+            <div class="section-intro">
+                <div>
+                    <h2>Cài đặt hệ thống</h2>
+                    <p>
+                        Quản lý thông tin và cấu hình chung của JobPortal.
+                    </p>
+                </div>
+            </div>
+
+            <!-- GENERAL SETTINGS -->
+            <div class="admin-panel">
+
+                <div class="settings-heading">
+                    <div class="settings-icon">⚙️</div>
+                    <div>
+                        <h2>Thông tin chung</h2>
+                        <p>Cập nhật thông tin cơ bản của hệ thống.</p>
+                    </div>
+                </div>
+
+                <div class="settings-form">
+
+                    <div class="form-group">
+                        <label for="system-name">Tên hệ thống</label>
+                        <input
+                            type="text"
+                            id="system-name"
+                            value="JobPortal"
+                            placeholder="Nhập tên hệ thống"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="admin-email">Email quản trị viên</label>
+                        <input
+                            type="email"
+                            id="admin-email"
+                            value="admin@jobportal.com"
+                            placeholder="Nhập email quản trị"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="system-description">Mô tả hệ thống</label>
+                        <textarea
+                            id="system-description"
+                            rows="4"
+                            placeholder="Nhập mô tả hệ thống"
+                        >Nền tảng kết nối nhà tuyển dụng và ứng viên.</textarea>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="settings-save-btn"
+                        id="save-settings"
+                    >
+                        💾 Lưu cài đặt
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- MODERATION SETTINGS -->
+            <div class="admin-panel">
+
+                <div class="settings-heading">
+                    <div class="settings-icon">🛡️</div>
+                    <div>
+                        <h2>Cấu hình kiểm duyệt</h2>
+                        <p>Thiết lập các yêu cầu kiểm duyệt nội dung.</p>
+                    </div>
+                </div>
+
+                <div class="settings-option">
+
+                    <div>
+                        <strong>Kiểm duyệt doanh nghiệp</strong>
+                        <p>
+                            Yêu cầu quản trị viên phê duyệt doanh nghiệp đăng ký.
+                        </p>
+                    </div>
+
+                    <label class="switch">
+                        <input
+                            type="checkbox"
+                            id="approve-employer"
+                            checked
+                        >
+                        <span class="slider"></span>
+                    </label>
+
+                </div>
+
+                <div class="settings-option">
+
+                    <div>
+                        <strong>Kiểm duyệt tin tuyển dụng</strong>
+                        <p>
+                            Yêu cầu phê duyệt tin tuyển dụng trước khi công khai.
+                        </p>
+                    </div>
+
+                    <label class="switch">
+                        <input
+                            type="checkbox"
+                            id="approve-job"
+                            checked
+                        >
+                        <span class="slider"></span>
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <!-- SYSTEM INFORMATION -->
+            <div class="admin-panel">
+
+                <div class="settings-heading">
+                    <div class="settings-icon">ℹ️</div>
+                    <div>
+                        <h2>Thông tin hệ thống</h2>
+                        <p>Thông tin phiên bản hiện tại.</p>
+                    </div>
+                </div>
+
+                <div class="system-info">
+
+                    <div>
+                        <span>Tên hệ thống</span>
+                        <strong>JobPortal</strong>
+                    </div>
+
+                    <div>
+                        <span>Phiên bản</span>
+                        <strong>Admin Console v1.0</strong>
+                    </div>
+
+                    <div>
+                        <span>Năm phát triển</span>
+                        <strong>2026</strong>
+                    </div>
+
+                    <div>
+                        <span>Trạng thái</span>
+                        <strong class="system-running">
+                            ● Đang hoạt động (Demo)
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- FOOTER -->
+        <footer class="admin-footer">
+            © 2026 JobPortal - Nhóm 6 UTH. All rights reserved.
+        </footer>
+
+    </main>
+
+</div>
+
+<script src="./assets/js/toast.js" defer></script>
+<script src="./assets/js/admin.js" defer></script>
+
+</body>
+</html>

@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Đăng nhập - JobPortal</title>
+
+    <link rel="stylesheet" href="./assets/css/variables.css">
+    <link rel="stylesheet" href="./assets/css/base.css">
+    <link rel="stylesheet" href="./assets/css/components.css">
+    <link rel="stylesheet" href="./assets/css/auth.css">
+
+    <style>
+        [hidden] {
+            display: none !important;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 1050px;
+            min-height: 620px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: white;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 15px 45px rgba(15, 23, 42, 0.12);
+        }
+
+        .auth-intro {
+            background: linear-gradient(145deg, #1d4ed8, #2563eb, #0ea5e9);
+            color: white;
+            padding: 55px 45px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .auth-logo {
+            font-size: 29px;
+            font-weight: 800;
+            margin-bottom: 45px;
+        }
+
+        .auth-intro h1 {
+            font-size: 36px;
+            line-height: 1.3;
+            margin-bottom: 20px;
+        }
+
+        .auth-intro p {
+            line-height: 1.8;
+            color: #e0f2fe;
+            font-size: 15px;
+        }
+
+        .auth-features {
+            margin-top: 30px;
+            line-height: 2.5;
+        }
+
+        .auth-form-container {
+            padding: 45px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .auth-heading h2 {
+            font-size: 29px;
+            color: #0f172a;
+            margin: 0 0 10px;
+        }
+
+        .auth-heading p {
+            color: #64748b;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .auth-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            background: #f1f5f9;
+            padding: 5px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .auth-tab {
+            border: none;
+            padding: 12px;
+            border-radius: 7px;
+            cursor: pointer;
+            background: transparent;
+            font-size: 15px;
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        .auth-tab.active {
+            background: white;
+            color: #2563eb;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #334155;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            height: 46px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 0 13px;
+            font-size: 14px;
+            outline: none;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+        }
+
+        .login-options {
+            display: flex;
+            justify-content: flex-end;
+            margin: 5px 0 20px;
+        }
+
+        .login-options a,
+        .auth-switch a {
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .login-options a:hover,
+        .auth-switch a:hover {
+            text-decoration: underline;
+        }
+
+        #submitButton {
+            width: 100%;
+            min-height: 48px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            display: block;
+            visibility: visible;
+        }
+
+        #submitButton:hover {
+            background: #1d4ed8;
+        }
+
+        #formMessage {
+            display: none;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .auth-switch {
+            text-align: center;
+            color: #64748b;
+            font-size: 14px;
+            margin-top: 22px;
+        }
+
+        .strength-bar-container {
+            width: 100%;
+            height: 5px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        #strengthBar {
+            width: 0;
+            height: 100%;
+            background: #2563eb;
+            transition: width 0.2s;
+        }
+
+        #strengthText {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 5px;
+        }
+
+        .auth-footer {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 12px;
+            margin-top: 25px;
+        }
+
+        /* POPUP QUÊN MẬT KHẨU */
+
+        #forgotModal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: rgba(15,23,42,0.6);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .forgot-box {
+            width: 100%;
+            max-width: 420px;
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            position: relative;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        #closeForgot {
+            position: absolute;
+            top: 12px;
+            right: 17px;
+            border: none;
+            background: transparent;
+            font-size: 26px;
+            cursor: pointer;
+            color: #64748b;
+        }
+
+        .forgot-icon {
+            text-align: center;
+            font-size: 42px;
+        }
+
+        .forgot-box h2 {
+            text-align: center;
+            color: #0f172a;
+            margin: 12px 0;
+        }
+
+        .forgot-description {
+            text-align: center;
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        #forgotEmail {
+            width: 100%;
+            height: 46px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 0 12px;
+            margin-top: 8px;
+        }
+
+        #forgotSubmit {
+            width: 100%;
+            height: 46px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            background: #2563eb;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 12px;
+        }
+
+        #forgotMessage {
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        #backToLogin {
+            display: block;
+            width: 100%;
+            margin-top: 15px;
+            border: none;
+            background: transparent;
+            color: #2563eb;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        @media (max-width: 750px) {
+            body {
+                padding: 12px;
+            }
+
+            .auth-container {
+                grid-template-columns: 1fr;
+            }
+
+            .auth-intro {
+                padding: 30px;
+            }
+
+            .auth-intro h1 {
+                font-size: 27px;
+            }
+
+            .auth-logo {
+                margin-bottom: 20px;
+            }
+
+            .auth-features {
+                display: none;
+            }
+
+            .auth-form-container {
+                padding: 30px 22px;
+            }
+        }
+    </style>
+</head>
+
+<body class="auth-page">
+
+  <!-- =========================================================================
+       THÔNG TIN PHÂN CÔNG ĐỒ ÁN (MODULE 5 - TASK ASSIGNMENT)
+       -------------------------------------------------------------------------
+       Thành viên đảm nhiệm: LÊ HOÀNG THIÊN HƯƠNG
+       Mã số sinh viên (MSSV): 042303000056
+       Nhánh Git phát triển: feature/module5-auth-admin (Đã merge vào main)
+       Đơn vị: Nhóm 6 — Khoa Công Nghệ Thông Tin — Trường ĐH GTVT TP.HCM (UTH)
+       Học phần: Lập trình Website (Web Programming) — GVHD: ThS. Trần Thịnh Mạnh Đức
+       
+       PHẠM VI ĐẢM NHIỆM TRONG DỰ ÁN:
+       - Phân hệ Xác thực: auth.html (Đăng nhập, đăng ký, quên mật khẩu đa vai trò)
+       - Phân hệ Quản trị: admin-portal.html (Duyệt tin, quản lý doanh nghiệp & user)
+       - Trang xử lý lỗi hệ thống: 404.html, 500.html
+       - Stylesheet: assets/css/auth.css, admin.css, error.css, toast.css
+       - Kịch bản JS: assets/js/auth-validation.js, admin.js, toast.js, account-nav.js
+       - Quy chuẩn thiết kế: Wireframe Mục 5.6 trong QTTK.html
+       ========================================================================= -->
+
+    <div class="auth-container">
+
+        <!-- PHẦN GIỚI THIỆU -->
+        <section class="auth-intro">
+
+            <div class="auth-logo">
+                JobPortal
+            </div>
+
+            <h1>Kết nối nhân tài với cơ hội nghề nghiệp</h1>
+
+            <p>
+                Nền tảng tuyển dụng giúp ứng viên tìm kiếm công việc
+                phù hợp và doanh nghiệp tiếp cận nguồn nhân lực chất lượng.
+            </p>
+
+            <div class="auth-features">
+                <div>✓ Tìm kiếm việc làm dễ dàng</div>
+                <div>✓ Kết nối với doanh nghiệp</div>
+                <div>✓ Quản lý hồ sơ chuyên nghiệp</div>
+                <div>✓ Cập nhật cơ hội nghề nghiệp mới</div>
+            </div>
+
+        </section>
+
+        <!-- PHẦN ĐĂNG NHẬP / ĐĂNG KÝ -->
+        <section class="auth-form-container">
+
+            <div class="auth-heading">
+                <h2 id="formTitle">Đăng nhập</h2>
+
+                <p id="formDescription">
+                    Đăng nhập để tiếp tục sử dụng JobPortal.
+                </p>
+            </div>
+
+            <!-- TAB -->
+            <div class="auth-tabs">
+
+                <button
+                    type="button"
+                    id="loginTab"
+                    class="auth-tab active">
+                    Đăng nhập
+                </button>
+
+                <button
+                    type="button"
+                    id="registerTab"
+                    class="auth-tab">
+                    Đăng ký
+                </button>
+
+            </div>
+
+            <!-- FORM -->
+            <form id="authForm">
+
+                <!-- HỌ TÊN -->
+                <div class="form-group" id="nameGroup" hidden>
+                    <label for="fullName">Họ và tên / Tên doanh nghiệp</label>
+
+                    <input
+                        type="text"
+                        id="fullName"
+                        placeholder="Nhập họ tên hoặc tên doanh nghiệp">
+                </div>
+
+                <!-- EMAIL -->
+                <div class="form-group">
+                    <label for="email">Địa chỉ email</label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="example@email.com"
+                        required>
+                </div>
+
+                <!-- MẬT KHẨU -->
+                <div class="form-group">
+                    <label for="password">Mật khẩu</label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Nhập mật khẩu"
+                        required>
+                </div>
+
+                <!-- ĐỘ MẠNH MẬT KHẨU -->
+                <div class="form-group" id="strengthGroup" hidden>
+
+                    <div class="strength-bar-container">
+                        <div id="strengthBar"></div>
+                    </div>
+
+                    <div id="strengthText">
+                        Chưa nhập mật khẩu
+                    </div>
+
+                </div>
+
+                <!-- XÁC NHẬN MẬT KHẨU -->
+                <div class="form-group" id="confirmGroup" hidden>
+                    <label for="confirmPassword">
+                        Xác nhận mật khẩu
+                    </label>
+
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        placeholder="Nhập lại mật khẩu">
+                </div>
+
+                <!-- VAI TRÒ -->
+                <div class="form-group" id="roleGroup" hidden>
+                    <label for="role">Bạn là</label>
+
+                    <select id="role">
+                        <option value="candidate">
+                            Ứng viên
+                        </option>
+
+                        <option value="employer">
+                            Doanh nghiệp
+                        </option>
+                    </select>
+                </div>
+
+                <!-- QUÊN MẬT KHẨU -->
+                <div class="login-options" id="loginOptions">
+                    <a href="#" id="forgotPassword">
+                        Quên mật khẩu?
+                    </a>
+                </div>
+
+                <!-- NÚT SUBMIT -->
+                <button
+                    type="submit"
+                    id="submitButton">
+                    Đăng nhập
+                </button>
+
+                <!-- THÔNG BÁO -->
+                <div id="formMessage"></div>
+
+            </form>
+
+            <!-- CHUYỂN ĐỔI -->
+            <div class="auth-switch">
+                <span id="switchText">
+                    Bạn chưa có tài khoản?
+                </span>
+
+                <a href="#" id="switchButton">
+                    Đăng ký ngay
+                </a>
+            </div>
+
+            <div class="auth-footer">
+                © 2026 JobPortal. All rights reserved.
+            </div>
+
+        </section>
+
+    </div>
+
+    <!-- POPUP QUÊN MẬT KHẨU -->
+    <div id="forgotModal">
+
+        <div class="forgot-box">
+
+            <button type="button" id="closeForgot">
+                &times;
+            </button>
+
+            <div class="forgot-icon">🔐</div>
+
+            <h2>Quên mật khẩu?</h2>
+
+            <p class="forgot-description">
+                Nhập email đã đăng ký để tìm tài khoản của bạn.
+            </p>
+
+            <form id="forgotForm">
+
+                <label for="forgotEmail">
+                    Địa chỉ email
+                </label>
+
+                <input
+                    type="email"
+                    id="forgotEmail"
+                    placeholder="Nhập email của bạn"
+                    required>
+
+                <p id="forgotMessage"></p>
+
+                <button type="submit" id="forgotSubmit">
+                    Gửi yêu cầu
+                </button>
+
+            </form>
+
+            <button type="button" id="backToLogin">
+                Quay lại đăng nhập
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script src="./assets/js/auth-validation.js"></script>
+
+</body>
+</html>
