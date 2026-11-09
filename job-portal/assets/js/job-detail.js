@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
       title: 'Frontend React Developer (Junior / Middle)',
       company: 'Công Ty Cổ Phần Công Nghệ VNG',
       logo: 'VNG',
-      logoBg: 'linear-gradient(135deg, #ff6b4a 0%, #ff8e53 100%)',
+      logoBg: '#ea580c',
       verified: true,
       isHot: true,
       salary: '15 - 22 Triệu',
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function () {
       title: 'Junior Backend Node.js / NestJS Engineer',
       company: 'FPT Software Global',
       logo: 'FPT',
-      logoBg: 'linear-gradient(135deg, #0284c7 0%, #2563eb 100%)',
+      logoBg: '#0284c7',
       verified: true,
       isHot: true,
       salary: '14 - 20 Triệu',
@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function () {
       title: 'Thực Tập Sinh Lập Trình Java / Spring Boot (Có Phụ Cấp)',
       company: 'Viettel Solutions (Tập Đoàn Viettel)',
       logo: 'VT',
-      logoBg: 'linear-gradient(135deg, #dc2626 0%, #ef4444 100%)',
+      logoBg: '#b91c1c',
       verified: true,
       isHot: false,
       salary: '6 - 8 Triệu (Hỗ trợ)',
@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function () {
       title: 'Chuyên Viên Phân Tích Dữ Liệu (Data Analyst)',
       company: 'MoMo (Ví Điện Tử MoMo)',
       logo: 'MM',
-      logoBg: 'linear-gradient(135deg, #be185d 0%, #ec4899 100%)',
+      logoBg: '#9d174d',
       verified: true,
       isHot: true,
       salary: '16 - 24 Triệu',
@@ -440,7 +440,7 @@ document.addEventListener('DOMContentLoaded', function () {
         btn.disabled = true;
       } else {
         btn.classList.remove('is-applied');
-        btn.innerHTML = '<span>⚡ ỨNG TUYỂN NGAY</span>';
+        btn.innerHTML = '<span>ỨNG TUYỂN NGAY</span>';
         btn.disabled = false;
       }
     });
