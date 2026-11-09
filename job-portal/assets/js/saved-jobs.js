@@ -592,15 +592,15 @@ document.addEventListener('DOMContentLoaded', function () {
           <!-- Phần đầu thẻ: Logo, Tên công ty, Tiêu đề, Mức lương -->
           <div class="job-item-header">
             <div style="display: flex; gap: 16px; align-items: flex-start;">
-              <!-- Logo Công ty -->
-              <div class="company-logo-badge" style="background: ${job.logoBg}; width: 52px; height: 52px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #ffffff; font-weight: 800; font-size: 1.1rem; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.12);">
+              <!-- Logo Công ty (Nền trắng theo QTTK Rule #3) -->
+              <div class="company-logo-badge" style="background: #ffffff; color: ${job.logoBg}; border: 1px solid var(--color-border); width: 52px; height: 52px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.05rem; flex-shrink: 0; box-shadow: var(--shadow-sm);">
                 ${job.logo}
               </div>
 
               <!-- Tiêu đề & Công ty -->
               <div>
                 <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 4px;">
-                  <span style="font-size: 0.85rem; font-weight: 600; color: var(--color-muted);">${job.company}</span>
+                  <span style="font-size: 0.85rem; font-weight: 600; color: var(--color-muted);"><i class="fa-regular fa-building" aria-hidden="true"></i> ${job.company}</span>
                   ${job.verified ? `
                     <span class="candidate-badge" style="background: #ecfdf5; color: #047857; font-size: 0.725rem; padding: 2px 8px;">
                       <i class="fa-solid fa-circle-check"></i> Đã xác thực
@@ -608,7 +608,7 @@ document.addEventListener('DOMContentLoaded', function () {
                   ` : ''}
                   ${job.isHot ? `
                     <span class="candidate-badge" style="background: #fef2f2; color: #b91c1c; font-size: 0.725rem; padding: 2px 8px;">
-                      <i class="fa-solid fa-fire"></i> Hot
+                      <i class="fa-solid fa-fire"></i> Tuyển gấp
                     </span>
                   ` : ''}
                 </div>
@@ -623,8 +623,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             <!-- Mức lương & Nút bỏ lưu -->
             <div style="display: flex; align-items: center; gap: 12px; flex-shrink: 0;">
-              <span class="job-salary-pill" style="background: var(--color-primary-soft); color: var(--color-primary); padding: 6px 14px; border-radius: 999px; font-weight: 700; font-size: 0.95rem; white-space: nowrap;">
-                💰 ${job.salary}
+              <span class="job-salary-pill" style="background: var(--color-accent-soft); color: #047857; border: 1px solid rgba(16,185,129,0.25); padding: 6px 14px; border-radius: 999px; font-weight: 700; font-size: 0.95rem; white-space: nowrap;">
+                <i class="fa-solid fa-money-bill-wave" aria-hidden="true"></i> ${job.salary}
               </span>
 
               <button 
@@ -633,11 +633,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 data-id="${job.id}" 
                 title="Bỏ lưu công việc này" 
                 aria-label="Bỏ lưu ${job.title}"
-                style="background: transparent; border: none; font-size: 1.35rem; cursor: pointer; color: var(--color-danger); transition: transform 0.2s; display: flex; align-items: center; justify-content: center; padding: 4px;"
-                onmouseover="this.style.transform='scale(1.2)'"
-                onmouseout="this.style.transform='scale(1)'"
+                style="background: #ffffff; border: 1px solid var(--color-border); width: 36px; height: 36px; border-radius: 8px; font-size: 1rem; cursor: pointer; color: var(--color-primary); transition: all 0.2s; display: flex; align-items: center; justify-content: center;"
               >
-                ❤️
+                <i class="fa-solid fa-bookmark"></i>
               </button>
             </div>
           </div>

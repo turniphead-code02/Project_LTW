@@ -3,230 +3,621 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Trang Chủ Nhóm — Đồ Án Lập Trình Web (Job Portal)</title>
+  <title>Nhóm 6 — Đồ Án Lập Trình Website | Trường ĐH Giao Thông Vận Tải TP.HCM (UTH)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <style>
     :root {
-      --bg: #0f172a;
-      --card: #1e293b;
-      --border: #334155;
-      --gold: #e2b93b;
-      --gold-hover: #f5d061;
-      --text: #f8fafc;
-      --sub: #94a3b8;
+      --primary: #1e40af;
+      --primary-light: #3b82f6;
+      --primary-soft: #eff6ff;
+      --accent: #10b981;
+      --accent-hover: #059669;
+      --dark: #0f172a;
+      --body: #334155;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --surface: #ffffff;
+      --bg-page: #f8fafc;
+      --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'Space Mono', monospace;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
+      font-family: var(--font-main);
+      background-color: var(--bg-page);
+      color: var(--body);
       line-height: 1.6;
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
     }
-    .container {
-      max-width: 1050px;
-      margin: 0 auto;
-      padding: 60px 20px;
-    }
-    .hub-header {
-      text-align: center;
-      margin-bottom: 48px;
-    }
-    .badge {
-      display: inline-block;
-      padding: 6px 14px;
-      border-radius: 99px;
-      border: 1px solid var(--gold);
-      color: var(--gold);
+
+    /* Top Academic Bar */
+    .top-bar {
+      background-color: var(--dark);
+      color: #cbd5e1;
       font-size: 13px;
+      padding: 10px 0;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    .container {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .top-bar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .top-bar-school {
       font-weight: 600;
-      margin-bottom: 14px;
+      color: #f8fafc;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
+
+    .top-bar-meta {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 12.5px;
+    }
+
+    /* Main Header */
+    .page-header {
+      background-color: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 32px 0;
+    }
+
+    .header-grid {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+
+    .header-title-block {
+      max-width: 680px;
+    }
+
+    .course-label {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+      display: block;
+    }
+
     h1 {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 36px;
-      margin-bottom: 10px;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--dark);
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+      margin-bottom: 8px;
     }
-    .highlight { color: var(--gold); }
-    .subtitle { color: var(--sub); }
+
+    .header-desc {
+      font-size: 15px;
+      color: var(--muted);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-self: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-main);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 11px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: #ffffff;
+      border: 1px solid var(--primary);
+    }
+
+    .btn-primary:hover {
+      background-color: #1e3a8a;
+    }
+
+    .btn-accent {
+      background-color: var(--accent);
+      color: #ffffff;
+      border: 1px solid var(--accent);
+    }
+
+    .btn-accent:hover {
+      background-color: var(--accent-hover);
+    }
+
+    .btn-outline {
+      background-color: var(--surface);
+      color: var(--dark);
+      border: 1px solid var(--border);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background-color: var(--primary-soft);
+    }
+
+    /* Main Content */
+    .main-wrap {
+      padding: 40px 0 64px;
+      flex: 1;
+    }
+
+    /* Project Overview Card */
+    .project-summary-bar {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--primary);
+      border-radius: 8px;
+      padding: 24px 28px;
+      margin-bottom: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .project-summary-info h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .project-summary-info p {
+      font-size: 14px;
+      color: var(--body);
+      max-width: 720px;
+    }
+
+    .project-quick-links {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* Section Header */
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .section-head h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .section-head span {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* Members Grid */
     .members-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 20px;
     }
+
     .member-card {
-      background-color: var(--card);
+      background-color: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 16px;
+      border-radius: 10px;
       padding: 20px;
-      text-decoration: none;
-      color: inherit;
-      transition: transform 0.25s, border-color 0.25s;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       gap: 16px;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
+
     .member-card:hover {
-      transform: translateY(-4px);
-      border-color: var(--gold);
+      border-color: #94a3b8;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
     }
+
     .member-top {
       display: flex;
       align-items: center;
       gap: 14px;
     }
+
     .member-avatar {
-      width: 58px;
-      height: 58px;
-      border-radius: 12px;
+      width: 56px;
+      height: 56px;
+      border-radius: 8px;
       object-fit: cover;
-      border: 1px solid var(--gold);
+      border: 1px solid var(--border);
+      background-color: var(--bg-page);
       flex-shrink: 0;
     }
+
     .member-info {
       min-width: 0;
     }
-    .member-name {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 17px;
+
+    .member-role-tag {
+      display: inline-block;
+      font-size: 11px;
       font-weight: 700;
+      color: var(--primary);
+      background-color: var(--primary-soft);
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-bottom: 4px;
+    }
+
+    .member-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--dark);
       margin-bottom: 2px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
+
     .member-id {
-      font-size: 13px;
-      color: var(--gold);
-      font-weight: 600;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted);
       display: block;
     }
-    .member-btn {
-      display: inline-block;
-      text-align: center;
-      padding: 9px 14px;
-      border-radius: 10px;
-      background-color: var(--gold);
-      color: #0f172a;
-      font-weight: 700;
+
+    .member-task {
       font-size: 13px;
-      transition: background-color 0.2s;
+      color: var(--body);
+      background-color: var(--bg-page);
+      padding: 10px 12px;
+      border-radius: 6px;
+      border: 1px solid #f1f5f9;
     }
-    .member-card:hover .member-btn {
-      background-color: var(--gold-hover);
+
+    .member-task strong {
+      color: var(--dark);
+      display: block;
+      font-size: 12px;
+      margin-bottom: 2px;
     }
-    @media (max-width: 900px) {
+
+    .member-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-top: 4px;
+    }
+
+    .member-link {
+      flex: 1;
+      text-align: center;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      background-color: var(--bg-page);
+      color: var(--dark);
+      border: 1px solid var(--border);
+      transition: all 0.15s ease;
+    }
+
+    .member-link:hover {
+      background-color: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    .member-module-link {
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      color: var(--primary);
+      background-color: var(--primary-soft);
+      transition: all 0.15s ease;
+    }
+
+    .member-module-link:hover {
+      background-color: #dbeafe;
+    }
+
+    /* Footer */
+    .hub-footer {
+      background-color: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 20px 0;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .hub-footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    @media (max-width: 960px) {
       .members-grid {
         grid-template-columns: repeat(2, 1fr);
       }
     }
-    @media (max-width: 600px) {
+
+    @media (max-width: 640px) {
       .members-grid {
         grid-template-columns: 1fr;
       }
       h1 {
-        font-size: 28px;
+        font-size: 22px;
       }
     }
   </style>
 </head>
 <body>
-  <main class="container">
-    <header class="hub-header">
-      <span class="badge">PROJECT_LTW • JOB PORTAL TEAM</span>
-      <h1>Danh Sách <span class="highlight">Portfolio Thành Viên</span></h1>
-      <p class="subtitle">Chọn thẻ thành viên bên dưới để xem trang Portfolio cá nhân của từng thành viên trong nhóm.</p>
-    </header>
 
-    <!-- BANNER TRUY CẬP ỨNG DỤNG JOB PORTAL (SẢN PHẨM CỐT LÕI ĐỒ ÁN) -->
-    <div style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); border-radius: 16px; padding: 22px 28px; margin-bottom: 36px; display: flex; align-items: center; justify-content: space-between; gap: 20px; box-shadow: 0 10px 25px -5px rgba(30, 64, 175, 0.35); flex-wrap: wrap;">
-      <div>
-        <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; background: rgba(255,255,255,0.2); color: #ffffff; padding: 4px 10px; border-radius: 99px; display: inline-block; margin-bottom: 8px;">Sản Phẩm Đồ Án Chính Thức</span>
-        <h2 style="font-size: 20px; font-weight: 800; color: #ffffff; margin: 0 0 4px; letter-spacing: -0.01em;">Cổng Thông Tin Việc Làm (Job Portal Platform)</h2>
-        <p style="font-size: 13.5px; color: #dbeafe; margin: 0;">Hiện thực hóa chuẩn mực theo tài liệu thiết kế QTTK.html — Kiến trúc sư Lead Trần Hữu Thành.</p>
+  <!-- Thanh thông tin trường & học phần -->
+  <div class="top-bar">
+    <div class="container top-bar-inner">
+      <div class="top-bar-school">
+        <i class="fa-solid fa-building-columns"></i>
+        <span>Trường Đại học Giao thông vận tải TP.HCM (UTH) — Khoa Công Nghệ Thông Tin</span>
       </div>
-      <a href="./job-portal/index.html" style="background: #10b981; color: #ffffff; padding: 12px 24px; border-radius: 10px; font-weight: 700; font-size: 14px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4); white-space: nowrap; transition: transform 0.2s, background-color 0.2s;">
-        <span>Khám Phá Sàn Việc Làm</span>
-        <span style="font-size: 16px;">→</span>
-      </a>
+      <div class="top-bar-meta">
+        <span>Học phần: <strong>Lập trình Website</strong></span>
+        <span>GVHD: <strong>ThS. Trần Thịnh Mạnh Đức</strong></span>
+      </div>
     </div>
+  </div>
 
-    <section class="members-grid">
-      <!-- Thành viên 1: Trần Hữu Thành -->
-      <a href="./portfolios/044206000003_THT/index.html" class="member-card">
-        <div class="member-top">
-          <img src="./portfolios/044206000003_THT/images/tht2.jpg" alt="Trần Hữu Thành" class="member-avatar" />
-          <div class="member-info">
-            <h2 class="member-name">Trần Hữu Thành</h2>
-            <span class="member-id">MSSV: 044206000003</span>
-          </div>
-        </div>
-        <span class="member-btn">Xem Portfolio Cá Nhân →</span>
-      </a>
+  <!-- Phần đầu trang -->
+  <header class="page-header">
+    <div class="container header-grid">
+      <div class="header-title-block">
+        <span class="course-label">Báo Cáo &amp; Sản Phẩm Đồ Án Cuối Kỳ — Nhóm 6</span>
+        <h1>Hệ Thống Cổng Thông Tin Việc Làm &amp; Tuyển Dụng IT (JobPortal)</h1>
+        <p class="header-desc">
+          Trang tổng hợp hồ sơ cá nhân (Portfolio), tài liệu đặc tả quy tắc thiết kế giao diện và sản phẩm ứng dụng Web của 6 thành viên Nhóm 6.
+        </p>
+      </div>
+      <div class="header-actions">
+        <a href="./QTTK.html" class="btn btn-outline">
+          <i class="fa-regular fa-file-lines"></i>
+          <span>Tài Liệu QTTK.html</span>
+        </a>
+        <a href="./job-portal/index.html" class="btn btn-primary">
+          <span>Mở Ứng Dụng JobPortal</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </header>
 
-      <!-- Thành viên 2: Nguyễn Lê Gia Hân -->
-      <a href="./portfolios/083306010188_NguyenLeGiaHan/PORTFOLIO/index.html" class="member-card">
-        <div class="member-top">
-          <img src="./portfolios/083306010188_NguyenLeGiaHan/PORTFOLIO/assets/avatar.jpg" alt="Nguyễn Lê Gia Hân" class="member-avatar" />
-          <div class="member-info">
-            <h2 class="member-name">Nguyễn Lê Gia Hân</h2>
-            <span class="member-id">MSSV: 083306010188</span>
-          </div>
-        </div>
-        <span class="member-btn">Xem Portfolio Cá Nhân →</span>
-      </a>
+  <main class="main-wrap">
+    <div class="container">
 
-      <!-- Thành viên 3: Hồ Trúc Gia Hân -->
-      <a href="./portfolios/056306004131_Ho-Truc-Gia-Han/index.html" class="member-card">
-        <div class="member-top">
-          <img src="./portfolios/056306004131_Ho-Truc-Gia-Han/assets/avatar.JPG" alt="Hồ Trúc Gia Hân" class="member-avatar" />
-          <div class="member-info">
-            <h2 class="member-name">Hồ Trúc Gia Hân</h2>
-            <span class="member-id">MSSV: 056306004131</span>
-          </div>
+      <!-- Khối điều hướng nhanh vào các phân hệ của đồ án -->
+      <section class="project-summary-bar" aria-label="Truy cập nhanh các phân hệ">
+        <div class="project-summary-info">
+          <h2>
+            <i class="fa-solid fa-layer-group" style="color: var(--primary);"></i>
+            <span>Các Phân Hệ Nghiệp Vụ Trong Đồ Án JobPortal</span>
+          </h2>
+          <p>
+            Hệ thống bao gồm 5 phân hệ chức năng liên thông: Trang chủ &amp; Tra cứu việc làm, Chi tiết JD &amp; Nộp CV, Hồ sơ Ứng viên (Stepper 4 bước), Quản trị Tuyển dụng và Cổng kiểm duyệt Admin.
+          </p>
         </div>
-        <span class="member-btn">Xem Portfolio Cá Nhân →</span>
-      </a>
+        <div class="project-quick-links">
+          <a href="./job-portal/index.html" class="btn btn-outline">Trang Chủ</a>
+          <a href="./job-portal/jobs.html" class="btn btn-outline">Tra Cứu Việc Làm</a>
+          <a href="./job-portal/candidate-dashboard.html" class="btn btn-outline">Cổng Ứng Viên</a>
+          <a href="./job-portal/employer-dashboard.html" class="btn btn-outline">Cổng Doanh Nghiệp</a>
+          <a href="./job-portal/admin-portal.html" class="btn btn-outline">Quản Trị Admin</a>
+        </div>
+      </section>
 
-      <!-- Thành viên 4: Nguyễn Phú Quang -->
-      <a href="./portfolios/NguyenPhuQuang/index.html" class="member-card">
-        <div class="member-top">
-          <img src="./portfolios/NguyenPhuQuang/images/a_ban_than.png" alt="Nguyễn Phú Quang" class="member-avatar" />
-          <div class="member-info">
-            <h2 class="member-name">Nguyễn Phú Quang</h2>
-            <span class="member-id">MSSV: 036206029474 </span>
-          </div>
-        </div>
-        <span class="member-btn">Xem Portfolio Cá Nhân →</span>
-      </a>
+      <!-- Danh sách 6 thành viên & phân công -->
+      <div class="section-head">
+        <h2>Danh Sách Thành Viên &amp; Phân Công Thực Hiện</h2>
+        <span>Nhóm 6 — 06 thành viên</span>
+      </div>
 
-      <!-- Thành viên 5: Đinh Duy Diện -->
-      <a href="./portfolios/051206000952_DinhDuyDien/index.html" class="member-card">
-        <div class="member-top">
-          <img src="./portfolios/051206000952_DinhDuyDien/assets/avatar.webp" alt="Đinh Duy Diện" class="member-avatar" />
-          <div class="member-info">
-            <h2 class="member-name">Đinh Duy Diện</h2>
-            <span class="member-id">MSSV: 051206000952</span>
+      <section class="members-grid" aria-label="Danh sách thành viên Nhóm 6">
+        <!-- Thành viên 1: Trần Hữu Thành -->
+        <article class="member-card">
+          <div>
+            <div class="member-top">
+              <img src="./portfolios/044206000003_THT/images/tht2.jpg" alt="Trần Hữu Thành" class="member-avatar" />
+              <div class="member-info">
+                <span class="member-role-tag">Nhóm Trưởng / Technical Lead</span>
+                <h3 class="member-name">Trần Hữu Thành</h3>
+                <span class="member-id">MSSV: 044206000003</span>
+              </div>
+            </div>
+            <div class="member-task" style="margin-top: 14px;">
+              <strong>Phụ trách: Kiến trúc hệ thống, CSDL &amp; Trang chủ</strong>
+              Thiết kế Design Tokens, lược đồ CSDL 10 bảng PostgreSQL và giao diện Trang chủ.
+            </div>
           </div>
-        </div>
-        <span class="member-btn">Xem Portfolio Cá Nhân →</span>
-      </a>
+          <div class="member-actions">
+            <a href="./portfolios/044206000003_THT/index.html" class="member-link">Portfolio Cá Nhân</a>
+            <a href="./job-portal/index.html" class="member-module-link" title="Xem phân hệ Trang chủ">Module 0 →</a>
+          </div>
+        </article>
 
-      <!-- Thành viên 6: Lê Hoàng Thiên Hương -->
-      <a href="./portfolios/042303000056_LeHoangThienHuong/index.html" class="member-card">
-        <div class="member-top">
-          <img src="./portfolios/042303000056_LeHoangThienHuong/assets/avatar.jpg" alt="Lê Hoàng Thiên Hương" class="member-avatar" />
-          <div class="member-info">
-            <h2 class="member-name">Lê Hoàng Thiên Hương</h2>
-            <span class="member-id">MSSV: 042303000056</span>
+        <!-- Thành viên 2: Nguyễn Lê Gia Hân -->
+        <article class="member-card">
+          <div>
+            <div class="member-top">
+              <img src="./portfolios/083306010188_NguyenLeGiaHan/PORTFOLIO/assets/avatar.jpg" alt="Nguyễn Lê Gia Hân" class="member-avatar" />
+              <div class="member-info">
+                <span class="member-role-tag">Module 1 — Tìm kiếm &amp; Lọc</span>
+                <h3 class="member-name">Nguyễn Lê Gia Hân</h3>
+                <span class="member-id">MSSV: 083306010188</span>
+              </div>
+            </div>
+            <div class="member-task" style="margin-top: 14px;">
+              <strong>Phụ trách: Trang Tra Cứu &amp; Lọc Việc Làm</strong>
+              Bố cục Sidebar 2 cột, bộ lọc đa tiêu chí thời gian thực, phân trang và Drawer di động.
+            </div>
           </div>
-        </div>
-        <span class="member-btn">Xem Portfolio Cá Nhân →</span>
-      </a>
-    </section>
+          <div class="member-actions">
+            <a href="./portfolios/083306010188_NguyenLeGiaHan/PORTFOLIO/index.html" class="member-link">Portfolio Cá Nhân</a>
+            <a href="./job-portal/jobs.html" class="member-module-link" title="Xem phân hệ Tìm việc">Module 1 →</a>
+          </div>
+        </article>
+
+        <!-- Thành viên 3: Hồ Trúc Gia Hân -->
+        <article class="member-card">
+          <div>
+            <div class="member-top">
+              <img src="./portfolios/056306004131_Ho-Truc-Gia-Han/assets/avatar.JPG" alt="Hồ Trúc Gia Hân" class="member-avatar" />
+              <div class="member-info">
+                <span class="member-role-tag">Module 2 — Chi tiết &amp; Ứng tuyển</span>
+                <h3 class="member-name">Hồ Trúc Gia Hân</h3>
+                <span class="member-id">MSSV: 056306004131</span>
+              </div>
+            </div>
+            <div class="member-task" style="margin-top: 14px;">
+              <strong>Phụ trách: Chi Tiết Việc Làm &amp; Modal Nộp CV</strong>
+              Bố cục bất đối xứng 70/30, Sticky Action Box, kéo thả tệp CV PDF và kiểm tra định dạng.
+            </div>
+          </div>
+          <div class="member-actions">
+            <a href="./portfolios/056306004131_Ho-Truc-Gia-Han/index.html" class="member-link">Portfolio Cá Nhân</a>
+            <a href="./job-portal/job-detail.html" class="member-module-link" title="Xem phân hệ Chi tiết việc làm">Module 2 →</a>
+          </div>
+        </article>
+
+        <!-- Thành viên 4: Nguyễn Phú Quang -->
+        <article class="member-card">
+          <div>
+            <div class="member-top">
+              <img src="./portfolios/NguyenPhuQuang/images/my_avata.png" alt="Nguyễn Phú Quang" class="member-avatar" />
+              <div class="member-info">
+                <span class="member-role-tag">Module 3 — Phân hệ Ứng viên</span>
+                <h3 class="member-name">Nguyễn Phú Quang</h3>
+                <span class="member-id">MSSV: 036206029474</span>
+              </div>
+            </div>
+            <div class="member-task" style="margin-top: 14px;">
+              <strong>Phụ trách: Hồ Sơ Ứng Viên &amp; Stepper 4 Bước</strong>
+              Quản lý hồ sơ, học vấn, kho CV mặc định, việc làm đã lưu và thanh tiến trình 4 bước.
+            </div>
+          </div>
+          <div class="member-actions">
+            <a href="./portfolios/NguyenPhuQuang/index.html" class="member-link">Portfolio Cá Nhân</a>
+            <a href="./job-portal/my-applications.html" class="member-module-link" title="Xem phân hệ Ứng viên">Module 3 →</a>
+          </div>
+        </article>
+
+        <!-- Thành viên 5: Đinh Duy Diện -->
+        <article class="member-card">
+          <div>
+            <div class="member-top">
+              <img src="./portfolios/051206000952_DinhDuyDien/assets/avatar.webp" alt="Đinh Duy Diện" class="member-avatar" />
+              <div class="member-info">
+                <span class="member-role-tag">Module 4 — Phân hệ Doanh nghiệp</span>
+                <h3 class="member-name">Đinh Duy Diện</h3>
+                <span class="member-id">MSSV: 051206000952</span>
+              </div>
+            </div>
+            <div class="member-task" style="margin-top: 14px;">
+              <strong>Phụ trách: Cổng Tuyển Dụng &amp; Bảng Ứng Viên</strong>
+              Dashboard doanh nghiệp, biểu mẫu đăng tin mới và bảng quản lý trạng thái hồ sơ ứng viên.
+            </div>
+          </div>
+          <div class="member-actions">
+            <a href="./portfolios/051206000952_DinhDuyDien/index.html" class="member-link">Portfolio Cá Nhân</a>
+            <a href="./job-portal/candidate-management.html" class="member-module-link" title="Xem phân hệ Nhà tuyển dụng">Module 4 →</a>
+          </div>
+        </article>
+
+        <!-- Thành viên 6: Lê Hoàng Thiên Hương -->
+        <article class="member-card">
+          <div>
+            <div class="member-top">
+              <img src="./portfolios/042303000056_LeHoangThienHuong/assets/avatar.jpg" alt="Lê Hoàng Thiên Hương" class="member-avatar" />
+              <div class="member-info">
+                <span class="member-role-tag">Module 5 — Xác thực &amp; Admin</span>
+                <h3 class="member-name">Lê Hoàng Thiên Hương</h3>
+                <span class="member-id">MSSV: 042303000056</span>
+              </div>
+            </div>
+            <div class="member-task" style="margin-top: 14px;">
+              <strong>Phụ trách: Đăng Nhập/Đăng Ký &amp; Quản Trị Hệ Thống</strong>
+              Xác thực đa vai trò, kiểm duyệt tin đăng/doanh nghiệp và trang điều hướng lỗi 404/500.
+            </div>
+          </div>
+          <div class="member-actions">
+            <a href="./portfolios/042303000056_LeHoangThienHuong/index.html" class="member-link">Portfolio Cá Nhân</a>
+            <a href="./job-portal/admin-portal.html" class="member-module-link" title="Xem phân hệ Admin">Module 5 →</a>
+          </div>
+        </article>
+      </section>
+
+    </div>
   </main>
+
+  <footer class="hub-footer">
+    <div class="container hub-footer-inner">
+      <span>© 2026 Nhóm 6 — Khoa Công Nghệ Thông Tin, Trường ĐH Giao thông vận tải TP.HCM (UTH).</span>
+      <span>Báo cáo chuyên đề Quy tắc thiết kế Website &amp; Đồ án JobPortal</span>
+    </div>
+  </footer>
+
 </body>
 </html>

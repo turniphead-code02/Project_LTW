@@ -122,13 +122,13 @@ document.addEventListener('DOMContentLoaded', function () {
       const jobTitle = btn.closest('.job-card').querySelector('.job-card-title').textContent.trim();
 
       if (isSaved) {
-        btn.innerHTML = '❤️';
+        btn.innerHTML = '<i class="fa-solid fa-bookmark"></i>';
         btn.setAttribute('aria-label', 'Bỏ lưu việc làm');
         if (window.showToast) {
           window.showToast(`Đã lưu "${jobTitle}" vào danh sách theo dõi!`, 'success');
         }
       } else {
-        btn.innerHTML = '🤍';
+        btn.innerHTML = '<i class="fa-regular fa-bookmark"></i>';
         btn.setAttribute('aria-label', 'Lưu việc làm này');
         if (window.showToast) {
           window.showToast(`Đã bỏ lưu "${jobTitle}"!`, 'warning');

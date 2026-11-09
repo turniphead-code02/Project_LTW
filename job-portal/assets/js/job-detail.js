@@ -80,12 +80,12 @@ document.addEventListener('DOMContentLoaded', function () {
         'Tinh thần trách nhiệm cao, chủ động trong công việc và khả năng đọc hiểu tài liệu kỹ thuật tiếng Anh tốt.'
       ],
       benefits: [
-        { icon: '💰', title: 'Thu Nhập Hấp Dẫn', desc: '15 - 22 Triệu/tháng + Lương tháng 13 + Thưởng hiệu quả dự án hàng quý.' },
-        { icon: '🏥', title: 'Bảo Hiểm Cao Cấp', desc: 'Gói bảo hiểm sức khỏe VNG Care toàn diện cho cá nhân và người thân.' },
-        { icon: '💻', title: 'Thiết Bị Đỉnh Cao', desc: 'Cung cấp MacBook Pro M3 mới 100% cùng màn hình rời 4K cao cấp.' },
-        { icon: '🍱', title: 'Ăn Uống Miễn Phí', desc: 'Căn-tin hiện đại phục vụ bữa sáng, trưa và cà phê/trà bánh miễn phí mỗi ngày.' },
-        { icon: '🏋️', title: 'Phòng Gym & Hồ Bơi', desc: 'Khu thể thao, phòng gym tiêu chuẩn quốc tế và hồ bơi vô cực ngay tại Campus.' },
-        { icon: '📚', title: 'Đào Tạo Chuyên Sâu', desc: 'Tài trợ 100% chi phí các khóa học AWS, GCP và chứng chỉ công nghệ quốc tế.' }
+        { icon: '<i class="fa-solid fa-money-bill-wave"></i>', title: 'Thu Nhập Hấp Dẫn', desc: '15 - 22 Triệu/tháng + Lương tháng 13 + Thưởng hiệu quả dự án hàng quý.' },
+        { icon: '<i class="fa-solid fa-heart-pulse"></i>', title: 'Bảo Hiểm Cao Cấp', desc: 'Gói bảo hiểm sức khỏe VNG Care toàn diện cho cá nhân và người thân.' },
+        { icon: '<i class="fa-solid fa-laptop-code"></i>', title: 'Thiết Bị Làm Việc', desc: 'Cung cấp MacBook Pro M3 mới 100% cùng màn hình rời 4K cao cấp.' },
+        { icon: '<i class="fa-solid fa-utensils"></i>', title: 'Ăn Uống Miễn Phí', desc: 'Căn-tin hiện đại phục vụ bữa sáng, trưa và cà phê/trà bánh miễn phí mỗi ngày.' },
+        { icon: '<i class="fa-solid fa-dumbbell"></i>', title: 'Phòng Gym & Hồ Bơi', desc: 'Khu thể thao, phòng gym tiêu chuẩn quốc tế và hồ bơi vô cực ngay tại Campus.' },
+        { icon: '<i class="fa-solid fa-graduation-cap"></i>', title: 'Đào Tạo Chuyên Sâu', desc: 'Tài trợ 100% chi phí các khóa học AWS, GCP và chứng chỉ công nghệ quốc tế.' }
       ]
     },
 
@@ -139,12 +139,12 @@ document.addEventListener('DOMContentLoaded', function () {
         'Ưu tiên ứng viên có chứng chỉ tiếng Anh (TOEIC 650+ hoặc tương đương) hoặc tiếng Nhật (JLPT N3).'
       ],
       benefits: [
-        { icon: '💰', title: 'Thu Nhập Cạnh Tranh', desc: '14 - 20 Triệu/tháng + Thưởng hoàn thành dự án + Thưởng hiệu suất năm.' },
-        { icon: '✈️', title: 'Cơ Hội Onsite', desc: 'Cơ hội làm việc ngắn hạn và dài hạn tại Nhật Bản, Singapore, Hoa Kỳ.' },
-        { icon: '🚌', title: 'Xe Đưa Đón Miễn Phí', desc: 'Hệ thống xe buýt đưa đón nhân viên từ trung tâm TP.HCM đến F-Town.' },
-        { icon: '🏥', title: 'FPT Care', desc: 'Chế độ bảo hiểm sức khỏe toàn diện FPT Care dành cho nhân viên và người phụ thuộc.' },
-        { icon: '⚽', title: 'Hoạt Động Thể Thao', desc: 'Sân bóng đá cỏ nhân tạo, sân tennis, bóng bàn nội bộ miễn phí.' },
-        { icon: '🎓', title: 'Chứng Chỉ Quốc Tế', desc: 'Thưởng nóng lên đến $1.000 khi thi đỗ các chứng chỉ AWS / Azure / GCP.' }
+        { icon: '<i class="fa-solid fa-money-bill-wave"></i>', title: 'Thu Nhập Cạnh Tranh', desc: '14 - 20 Triệu/tháng + Thưởng hoàn thành dự án + Thưởng hiệu suất năm.' },
+        { icon: '<i class="fa-solid fa-plane-departure"></i>', title: 'Cơ Hội Onsite', desc: 'Cơ hội làm việc ngắn hạn và dài hạn tại Nhật Bản, Singapore, Hoa Kỳ.' },
+        { icon: '<i class="fa-solid fa-bus"></i>', title: 'Xe Đưa Đón Miễn Phí', desc: 'Hệ thống xe buýt đưa đón nhân viên từ trung tâm TP.HCM đến F-Town.' },
+        { icon: '<i class="fa-solid fa-heart-pulse"></i>', title: 'FPT Care', desc: 'Chế độ bảo hiểm sức khỏe toàn diện FPT Care dành cho nhân viên và người phụ thuộc.' },
+        { icon: '<i class="fa-solid fa-futbol"></i>', title: 'Hoạt Động Thể Thao', desc: 'Sân bóng đá cỏ nhân tạo, sân tennis, bóng bàn nội bộ miễn phí.' },
+        { icon: '<i class="fa-solid fa-certificate"></i>', title: 'Chứng Chỉ Quốc Tế', desc: 'Thưởng nóng lên đến $1.000 khi thi đỗ các chứng chỉ AWS / Azure / GCP.' }
       ]
     },
 
@@ -197,10 +197,10 @@ document.addEventListener('DOMContentLoaded', function () {
         'Có tư duy logic nhạy bén, ham học hỏi và sẵn sàng cam kết thực tập tối thiểu 3 ngày/tuần.'
       ],
       benefits: [
-        { icon: '💵', title: 'Phụ Cấp Hàng Tháng', desc: 'Trợ cấp 6 - 8 triệu/tháng tương xứng với năng lực và số buổi tham gia.' },
-        { icon: '👔', title: 'Lên Kỹ Sư Chính Thức', desc: 'Cơ hội ký hợp đồng lao động chính thức ngay sau khi kết thúc đợt thực tập.' },
-        { icon: '👨‍🏫', title: 'Mentor 1-1', desc: 'Được các kỹ sư trưởng và kiến trúc sư hệ thống giàu kinh nghiệm hướng dẫn trực tiếp.' },
-        { icon: '📜', title: 'Chứng Nhận Đồ Án', desc: 'Được đóng mộc xác nhận thực tập và hỗ trợ số liệu hoàn thành Khóa luận tốt nghiệp.' }
+        { icon: '<i class="fa-solid fa-money-bill-wave"></i>', title: 'Phụ Cấp Hàng Tháng', desc: 'Trợ cấp 6 - 8 triệu/tháng tương xứng với năng lực và số buổi tham gia.' },
+        { icon: '<i class="fa-solid fa-user-check"></i>', title: 'Lên Kỹ Sư Chính Thức', desc: 'Cơ hội ký hợp đồng lao động chính thức ngay sau khi kết thúc đợt thực tập.' },
+        { icon: '<i class="fa-solid fa-chalkboard-user"></i>', title: 'Mentor 1-1', desc: 'Được các kỹ sư trưởng và kiến trúc sư hệ thống giàu kinh nghiệm hướng dẫn trực tiếp.' },
+        { icon: '<i class="fa-solid fa-file-signature"></i>', title: 'Chứng Nhận Đồ Án', desc: 'Được đóng mộc xác nhận thực tập và hỗ trợ số liệu hoàn thành Khóa luận tốt nghiệp.' }
       ]
     },
 
@@ -253,10 +253,10 @@ document.addEventListener('DOMContentLoaded', function () {
         'Tư duy phân tích số liệu sắc bén (Data-driven mindset) và kỹ năng thuyết trình giải pháp tốt.'
       ],
       benefits: [
-        { icon: '💰', title: 'Thu Nhập Hấp Dẫn', desc: '16 - 24 Triệu/tháng + Gói thưởng hiệu quả kinh doanh cuối năm.' },
-        { icon: '🏢', title: 'Văn Phòng Hiện Đại', desc: 'Không gian làm việc mở Agile, khu vực nghỉ ngơi Play Zone và Pantry tiện nghi.' },
-        { icon: '📈', title: 'Cổ Phiếu ESOP', desc: 'Cơ hội nhận quyền mua cổ phiếu ưu đãi ESOP dành cho nhân sự đóng góp tốt.' },
-        { icon: '⏰', title: 'Linh Hoạt Thời Gian', desc: 'Chính sách làm việc kết hợp linh hoạt Hybrid Working (1-2 ngày WFH/tuần).' }
+        { icon: '<i class="fa-solid fa-money-bill-wave"></i>', title: 'Thu Nhập Hấp Dẫn', desc: '16 - 24 Triệu/tháng + Gói thưởng hiệu quả kinh doanh cuối năm.' },
+        { icon: '<i class="fa-regular fa-building"></i>', title: 'Văn Phòng Hiện Đại', desc: 'Không gian làm việc mở Agile, khu vực nghỉ ngơi Play Zone và Pantry tiện nghi.' },
+        { icon: '<i class="fa-solid fa-chart-line"></i>', title: 'Cổ Phiếu ESOP', desc: 'Cơ hội nhận quyền mua cổ phiếu ưu đãi ESOP dành cho nhân sự đóng góp tốt.' },
+        { icon: '<i class="fa-regular fa-clock"></i>', title: 'Linh Hoạt Thời Gian', desc: 'Chính sách làm việc kết hợp linh hoạt Hybrid Working (1-2 ngày WFH/tuần).' }
       ]
     }
   };
@@ -279,11 +279,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const currentCrumb = document.getElementById('crumbJobTitle');
     if (currentCrumb) currentCrumb.textContent = job.title;
 
-    // 3.2. Job Header Top
+    // 3.2. Job Header Top (Logo nền trắng theo QTTK Rule #3)
     const jobLogoBox = document.getElementById('jobLogoBox');
     if (jobLogoBox) {
       jobLogoBox.textContent = job.logo;
-      jobLogoBox.style.background = job.logoBg;
+      jobLogoBox.style.background = '#ffffff';
+      jobLogoBox.style.color = job.logoBg;
+      jobLogoBox.style.border = '1px solid var(--color-border)';
     }
 
     const jobTitleEl = document.getElementById('jobTitle');
@@ -292,10 +294,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const jobCompanyEl = document.getElementById('jobCompany');
     if (jobCompanyEl) {
       jobCompanyEl.innerHTML = `
-        <span>🏢</span>
+        <i class="fa-regular fa-building" aria-hidden="true"></i>
         <strong>${job.company}</strong>
-        ${job.verified ? '<span class="badge badge-verified" title="Doanh nghiệp đã kiểm duyệt">✓ Xác thực</span>' : ''}
-        ${job.isHot ? '<span class="badge badge-urgent">🔥 Tuyển Gấp</span>' : ''}
+        ${job.verified ? '<span class="badge badge-verified" title="Doanh nghiệp đã kiểm duyệt"><i class="fa-solid fa-circle-check"></i> Đã xác thực</span>' : ''}
+        ${job.isHot ? '<span class="badge badge-urgent"><i class="fa-solid fa-fire"></i> Tuyển Gấp</span>' : ''}
       `;
     }
 
@@ -303,12 +305,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const jobMetaPills = document.getElementById('jobMetaPills');
     if (jobMetaPills) {
       jobMetaPills.innerHTML = `
-        <span class="meta-pill meta-pill-salary">💰 ${job.salary}</span>
-        <span class="meta-pill">📍 ${job.location}</span>
-        <span class="meta-pill">💼 ${job.experience}</span>
-        <span class="meta-pill">⏰ ${job.workType}</span>
-        <span class="meta-pill">👁️ ${job.views} lượt xem</span>
-        <span class="meta-pill">🕒 Đăng ngày ${job.postedDate}</span>
+        <span class="meta-pill meta-pill-salary"><i class="fa-solid fa-money-bill-wave"></i> ${job.salary}</span>
+        <span class="meta-pill"><i class="fa-solid fa-location-dot"></i> ${job.location}</span>
+        <span class="meta-pill"><i class="fa-solid fa-briefcase"></i> ${job.experience}</span>
+        <span class="meta-pill"><i class="fa-regular fa-clock"></i> ${job.workType}</span>
+        <span class="meta-pill"><i class="fa-regular fa-eye"></i> ${job.views} lượt xem</span>
+        <span class="meta-pill"><i class="fa-regular fa-calendar"></i> Đăng ngày ${job.postedDate}</span>
       `;
     }
 
@@ -436,11 +438,11 @@ document.addEventListener('DOMContentLoaded', function () {
     applyBtns.forEach(btn => {
       if (isApplied) {
         btn.classList.add('is-applied');
-        btn.innerHTML = '<span>✓ ĐÃ NỘP HỒ SƠ ỨNG TUYỂN</span>';
+        btn.innerHTML = '<i class="fa-solid fa-circle-check" aria-hidden="true"></i><span>ĐÃ NỘP HỒ SƠ ỨNG TUYỂN</span>';
         btn.disabled = true;
       } else {
         btn.classList.remove('is-applied');
-        btn.innerHTML = '<span>ỨNG TUYỂN NGAY</span>';
+        btn.innerHTML = '<i class="fa-solid fa-paper-plane" aria-hidden="true"></i><span>ỨNG TUYỂN NGAY</span>';
         btn.disabled = false;
       }
     });
@@ -630,7 +632,7 @@ document.addEventListener('DOMContentLoaded', function () {
       // Hiệu ứng gửi hồ sơ (Loading simulation)
       if (btnSubmitApplication) {
         btnSubmitApplication.disabled = true;
-        btnSubmitApplication.innerHTML = '<span>Đang gửi hồ sơ... ⏳</span>';
+        btnSubmitApplication.innerHTML = '<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i><span>Đang gửi hồ sơ...</span>';
       }
 
       setTimeout(() => {
@@ -660,7 +662,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Khôi phục nút
         if (btnSubmitApplication) {
           btnSubmitApplication.disabled = false;
-          btnSubmitApplication.innerHTML = '<span>Xác Nhận Nộp Đơn ↗</span>';
+          btnSubmitApplication.innerHTML = '<i class="fa-solid fa-paper-plane" aria-hidden="true"></i><span>Xác Nhận Nộp Đơn</span>';
         }
 
         // Đóng modal
@@ -687,11 +689,11 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!btnBookmark) return;
     const isBookmarked = bookmarks.includes(job.id);
     if (isBookmarked) {
-      btnBookmark.innerHTML = '<span>❤️</span><span>Đã Lưu Tin</span>';
-      btnBookmark.style.borderColor = 'var(--color-danger)';
-      btnBookmark.style.color = 'var(--color-danger)';
+      btnBookmark.innerHTML = '<i class="fa-solid fa-bookmark"></i><span>Đã Lưu Tin</span>';
+      btnBookmark.style.borderColor = 'var(--color-primary)';
+      btnBookmark.style.color = 'var(--color-primary)';
     } else {
-      btnBookmark.innerHTML = '<span>🤍</span><span>Lưu Tin Tuyển Dụng</span>';
+      btnBookmark.innerHTML = '<i class="fa-regular fa-bookmark"></i><span>Lưu Tin Tuyển Dụng</span>';
       btnBookmark.style.borderColor = '';
       btnBookmark.style.color = '';
     }
@@ -765,21 +767,21 @@ document.addEventListener('DOMContentLoaded', function () {
         <article class="job-listing-item" style="padding: 16px 20px;">
           <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 6px;">
             <div style="display: flex; align-items: center; gap: 12px;">
-              <div class="company-logo-box" style="width: 40px; height: 40px; font-size: 0.95rem; background: ${sJob.logoBg}; color: #ffffff;">
+              <div class="company-logo-box" style="width: 40px; height: 40px; font-size: 0.9rem; background: #ffffff; color: ${sJob.logoBg}; border: 1px solid var(--color-border);">
                 ${sJob.logo}
               </div>
               <div>
                 <h4 style="font-size: 1.05rem; font-weight: 700; margin: 0 0 2px;">
                   <a href="./job-detail.html?id=${sJob.id}" style="color: var(--color-dark);">${sJob.title}</a>
                 </h4>
-                <div style="font-size: var(--text-xs); color: var(--color-muted);">🏢 ${sJob.company}</div>
+                <div style="font-size: var(--text-xs); color: var(--color-muted);"><i class="fa-regular fa-building" aria-hidden="true"></i> ${sJob.company}</div>
               </div>
             </div>
-            <span class="job-item-salary" style="font-size: 0.9rem; padding: 3px 8px;">💰 ${sJob.salary}</span>
+            <span class="job-item-salary" style="font-size: 0.9rem; padding: 3px 8px;"><i class="fa-solid fa-money-bill-wave" aria-hidden="true"></i> ${sJob.salary}</span>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: var(--text-xs); color: var(--color-muted); border-top: 1px solid var(--color-border-light); padding-top: 8px; margin-top: 6px;">
-            <span>📍 ${sJob.location} • 🕒 Hạn nộp: ${sJob.deadline}</span>
-            <a href="./job-detail.html?id=${sJob.id}" style="color: var(--color-primary); font-weight: 700;">Xem chi tiết →</a>
+            <span><i class="fa-solid fa-location-dot" aria-hidden="true"></i> ${sJob.location} • <i class="fa-regular fa-calendar" aria-hidden="true"></i> Hạn nộp: ${sJob.deadline}</span>
+            <a href="./job-detail.html?id=${sJob.id}" style="color: var(--color-primary); font-weight: 700;">Xem chi tiết <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
           </div>
         </article>
       `;

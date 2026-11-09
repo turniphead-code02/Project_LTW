@@ -23,19 +23,19 @@
     ) {
         const settings = {
             success: {
-                icon: "✓",
+                icon: '<i class="fa-solid fa-circle-check"></i>',
                 title: "Thành công"
             },
             error: {
-                icon: "✕",
+                icon: '<i class="fa-solid fa-circle-xmark"></i>',
                 title: "Đã xảy ra lỗi"
             },
             warning: {
-                icon: "⚠",
+                icon: '<i class="fa-solid fa-triangle-exclamation"></i>',
                 title: "Cảnh báo"
             },
             info: {
-                icon: "ℹ",
+                icon: '<i class="fa-solid fa-circle-info"></i>',
                 title: "Thông báo"
             }
         };
@@ -48,7 +48,7 @@
 
         const icon = document.createElement("span");
         icon.className = "toast-icon";
-        icon.textContent = config.icon;
+        icon.innerHTML = config.icon;
 
         const content = document.createElement("div");
         content.className = "toast-content";

@@ -570,8 +570,8 @@ document.addEventListener('DOMContentLoaded', function () {
           <!-- Phần đầu thẻ: Logo, Tiêu đề, Mức lương -->
           <div class="job-item-header">
             <div class="job-item-main">
-              <!-- Logo công ty -->
-              <div class="company-logo-box" style="background: ${job.logoBg}; color: #ffffff;" aria-hidden="true">
+              <!-- Logo công ty (Nền trắng tinh khiết theo QTTK Rule #3) -->
+              <div class="company-logo-box" style="background: #ffffff; color: ${job.logoBg}; border: 1px solid var(--color-border);" aria-hidden="true">
                 ${job.logo}
               </div>
 
@@ -581,17 +581,17 @@ document.addEventListener('DOMContentLoaded', function () {
                   <a href="./job-detail.html?id=${job.id}">${job.title}</a>
                 </h3>
                 <div class="job-item-company">
-                  <span>🏢</span>
+                  <i class="fa-regular fa-building" aria-hidden="true"></i>
                   <strong>${job.company}</strong>
-                  ${job.verified ? '<span class="badge badge-verified" title="Doanh nghiệp đã kiểm duyệt xác thực">✓ Xác thực</span>' : ''}
-                  ${job.isHot ? '<span class="badge badge-urgent">🔥 Tuyển Gấp</span>' : ''}
+                  ${job.verified ? '<span class="badge badge-verified" title="Doanh nghiệp đã kiểm duyệt xác thực"><i class="fa-solid fa-circle-check"></i> Đã xác thực</span>' : ''}
+                  ${job.isHot ? '<span class="badge badge-urgent"><i class="fa-solid fa-fire"></i> Tuyển Gấp</span>' : ''}
                 </div>
               </div>
             </div>
 
             <!-- Khối mức lương nổi bật (Màu Emerald - Chuẩn WCAG) -->
             <div class="job-item-salary" aria-label="Mức lương ${job.salary}">
-              💰 ${job.salary}
+              <i class="fa-solid fa-money-bill-wave" aria-hidden="true"></i> ${job.salary}
             </div>
           </div>
 
@@ -603,15 +603,15 @@ document.addEventListener('DOMContentLoaded', function () {
           <!-- Hàng Metadata thông số (Địa điểm, Kinh nghiệm, Hình thức) -->
           <div class="job-item-meta-row">
             <div class="job-item-meta-item">
-              <span aria-hidden="true">📍</span>
+              <i class="fa-solid fa-location-dot" style="color: var(--color-muted);" aria-hidden="true"></i>
               <span>${job.locationLabel}</span>
             </div>
             <div class="job-item-meta-item">
-              <span aria-hidden="true">💼</span>
+              <i class="fa-solid fa-briefcase" style="color: var(--color-muted);" aria-hidden="true"></i>
               <span>${job.experienceLabel}</span>
             </div>
             <div class="job-item-meta-item">
-              <span aria-hidden="true">🕒</span>
+              <i class="fa-regular fa-clock" style="color: var(--color-muted);" aria-hidden="true"></i>
               <span>${job.workTypeLabel}</span>
             </div>
           </div>
@@ -624,7 +624,7 @@ document.addEventListener('DOMContentLoaded', function () {
           <!-- Phần đáy thẻ: Thời gian đăng, Hạn nộp & Nút hành động -->
           <div class="job-item-footer">
             <div>
-              <span style="color: var(--color-muted);">🕒 Đăng ${job.postedText} • Hạn nộp: <strong>${job.deadlineText}</strong></span>
+              <span style="color: var(--color-muted);"><i class="fa-regular fa-calendar" aria-hidden="true"></i> Đăng ${job.postedText} • Hạn nộp: <strong>${job.deadlineText}</strong></span>
             </div>
 
             <div style="display: flex; align-items: center; gap: 12px;">
@@ -633,17 +633,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 type="button" 
                 class="btn-bookmark-job" 
                 data-id="${job.id}" 
-                style="background: transparent; border: none; font-size: 1.25rem; cursor: pointer; color: ${isBookmarked ? 'var(--color-danger)' : '#94a3b8'}; transition: transform 0.2s;"
+                style="background: transparent; border: 1px solid var(--color-border); width: 34px; height: 34px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.95rem; cursor: pointer; color: ${isBookmarked ? 'var(--color-primary)' : '#64748b'}; transition: all 0.2s;"
                 title="${isBookmarked ? 'Bỏ lưu tin tuyển dụng' : 'Lưu tin tuyển dụng này'}"
                 aria-label="${isBookmarked ? 'Bỏ lưu tin tuyển dụng' : 'Lưu tin tuyển dụng'}"
               >
-                ${isBookmarked ? '❤️' : '🤍'}
+                ${isBookmarked ? '<i class="fa-solid fa-bookmark"></i>' : '<i class="fa-regular fa-bookmark"></i>'}
               </button>
 
               <!-- CTA Xem chi tiết & Ứng tuyển -->
               <a href="./job-detail.html?id=${job.id}" class="job-item-action-link">
                 <span>Xem chi tiết &amp; Nộp hồ sơ</span>
-                <span aria-hidden="true">→</span>
+                <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
               </a>
             </div>
           </div>
@@ -943,16 +943,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (index > -1) {
           bookmarkedJobIds.splice(index, 1);
-          this.innerHTML = '🤍';
-          this.style.color = '#94a3b8';
+          this.innerHTML = '<i class="fa-regular fa-bookmark"></i>';
+          this.style.color = '#64748b';
           this.title = 'Lưu tin tuyển dụng này';
           if (window.showToast) {
             window.showToast(`Đã bỏ lưu tin "${job?.title || 'Việc làm'}"`, 'info');
           }
         } else {
           bookmarkedJobIds.push(jobId);
-          this.innerHTML = '❤️';
-          this.style.color = 'var(--color-danger)';
+          this.innerHTML = '<i class="fa-solid fa-bookmark"></i>';
+          this.style.color = 'var(--color-primary)';
           this.title = 'Bỏ lưu tin tuyển dụng';
           if (window.showToast) {
             window.showToast(`Đã lưu tin "${job?.title || 'Việc làm'}" vào danh sách yêu thích!`, 'success');

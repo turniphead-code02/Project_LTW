@@ -13,9 +13,7 @@
   right: 0;
   z-index: 1000;
   height: var(--header-height);
-  background-color: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background-color: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
   transition: box-shadow var(--transition-fast);
 }
@@ -47,13 +45,13 @@
 .brand-icon {
   width: 36px;
   height: 36px;
-  border-radius: 9px;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+  border-radius: 8px;
+  background-color: var(--color-primary);
   color: var(--color-surface);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 .brand-text {
@@ -289,7 +287,6 @@
 
 .job-card:hover {
   border-color: var(--color-primary-light);
-  transform: translateY(-4px);
   box-shadow: var(--shadow-hover);
 }
 
@@ -302,19 +299,21 @@
 }
 
 .company-logo-box {
-  width: 48px;
-  height: 48px;
-  border-radius: 10px;
-  background-color: var(--color-border-light);
+  width: 52px;
+  height: 52px;
+  border-radius: 8px;
+  background-color: var(--color-surface);
   border: 1px solid var(--color-border);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 800;
   color: var(--color-primary);
-  font-size: 1.1rem;
+  font-size: 0.95rem;
+  letter-spacing: -0.02em;
   flex-shrink: 0;
   overflow: hidden;
+  padding: 4px;
 }
 
 .company-logo-box img {
@@ -419,36 +418,36 @@
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-card);
-  padding: var(--space-24);
+  padding: var(--space-20);
   box-shadow: var(--shadow-xs);
   display: flex;
   align-items: center;
   gap: var(--space-16);
-  transition: var(--transition-normal);
+  transition: var(--transition-fast);
 }
 
 .category-card:hover {
   border-color: var(--color-primary-light);
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-hover);
+  background-color: #fcfdff;
+  box-shadow: var(--shadow-sm);
 }
 
 .category-icon-box {
-  width: 52px;
-  height: 52px;
-  border-radius: 12px;
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
   background-color: var(--color-primary-soft);
   color: var(--color-primary);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.4rem;
+  font-size: 1.25rem;
   flex-shrink: 0;
-  transition: transform var(--transition-fast);
 }
 
 .category-card:hover .category-icon-box {
-  transform: scale(1.08);
+  background-color: var(--color-primary);
+  color: #ffffff;
 }
 
 .category-title {

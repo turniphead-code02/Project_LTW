@@ -325,7 +325,7 @@ document.addEventListener('DOMContentLoaded', function () {
         <div class="education-item-content">
           <h3>${edu.school}</h3>
           <p class="education-major">${edu.major}</p>
-          <span class="education-years">📅 ${edu.startYear} — ${edu.endYear || 'Hiện tại'}</span>
+          <span class="education-years"><i class="fa-regular fa-calendar" aria-hidden="true"></i> ${edu.startYear} — ${edu.endYear || 'Hiện tại'}</span>
         </div>
         <button type="button" class="btn-delete-item btn-delete-edu" data-id="${edu.id}" title="Xóa học vấn này" aria-label="Xóa học vấn">
           <i class="fa-solid fa-trash-can"></i>
@@ -466,7 +466,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const suggestedWrap = document.createElement('div');
     suggestedWrap.className = 'suggested-skills';
     suggestedWrap.innerHTML = `
-      <p>💡 Gợi ý kỹ năng ngành IT:</p>
+      <p><i class="fa-regular fa-lightbulb" style="color: var(--color-primary);"></i> Gợi ý kỹ năng ngành IT:</p>
       <div>
         <button type="button" class="suggest-btn" data-skill="TypeScript">+ TypeScript</button>
         <button type="button" class="suggest-btn" data-skill="Node.js">+ Node.js</button>
@@ -512,7 +512,7 @@ document.addEventListener('DOMContentLoaded', function () {
               ${res.isDefault ? '<span class="badge-default-cv">✓ CV Mặc Định</span>' : ''}
             </h3>
             <div class="resume-sub-meta">
-              <span>📦 ${res.fileSize}</span> • <span>🕒 Tải lên: ${res.uploadDate}</span>
+              <span><i class="fa-solid fa-file-arrow-up" aria-hidden="true"></i> ${res.fileSize}</span> • <span><i class="fa-regular fa-calendar" aria-hidden="true"></i> Tải lên: ${res.uploadDate}</span>
             </div>
           </div>
         </div>
@@ -723,7 +723,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (pageHeadingDesc) pageHeadingDesc.textContent = 'Quản lý thông tin hồ sơ, học vấn, kỹ năng, CV và các liên kết chuyên môn.';
     } else if (tabId === 'tab-applications') {
       if (pageHeadingTitle) pageHeadingTitle.textContent = 'Theo dõi đơn ứng tuyển';
-      if (pageHeadingDesc) pageHeadingDesc.textContent = 'Trực quan hóa quy trình tuyển dụng 4 bước chuẩn mực theo đặc tả QTTK.html.';
+      if (pageHeadingDesc) pageHeadingDesc.textContent = 'Theo dõi trạng thái xét duyệt hồ sơ, lịch hẹn phỏng vấn và thông báo kết quả từ nhà tuyển dụng.';
       renderApplicationsList();
     } else if (tabId === 'tab-saved') {
       if (pageHeadingTitle) pageHeadingTitle.textContent = 'Việc làm đã lưu';
@@ -771,7 +771,8 @@ document.addEventListener('DOMContentLoaded', function () {
           <h3>Bạn chưa nộp đơn ứng tuyển nào!</h3>
           <p>Hãy khám phá ngay hơn 5.000+ vị trí việc làm IT hấp dẫn và nộp hồ sơ để bắt đầu hành trình nghề nghiệp.</p>
           <a href="./jobs.html" class="btn-primary" style="text-decoration:none;">
-            <span>🔍 Khám phá việc làm ngay</span>
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            <span>Khám phá việc làm ngay</span>
           </a>
         </div>
       `;
@@ -789,9 +790,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 <a href="./job-detail.html?id=${app.jobId}" style="color: inherit; text-decoration: none;">${app.jobTitle}</a>
               </h2>
               <div style="font-size: 0.875rem; color: var(--color-muted); display: flex; gap: 12px; flex-wrap: wrap;">
-                <span>🏢 <strong>${app.company}</strong></span>
-                <span>💰 ${app.salary || 'Thương lượng'}</span>
-                <span>📍 ${app.location || 'TP.HCM'}</span>
+                <span><i class="fa-regular fa-building" aria-hidden="true"></i> <strong>${app.company}</strong></span>
+                <span><i class="fa-solid fa-money-bill-wave" aria-hidden="true"></i> ${app.salary || 'Thương lượng'}</span>
+                <span><i class="fa-solid fa-location-dot" aria-hidden="true"></i> ${app.location || 'TP.HCM'}</span>
               </div>
             </div>
             <div>
@@ -802,8 +803,8 @@ document.addEventListener('DOMContentLoaded', function () {
           </div>
 
           <div style="background: var(--color-bg-page); border: 1px solid var(--color-border); border-radius: 8px; padding: 10px 14px; margin: 14px 0; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-            <span>📄 CV đã nộp: <strong>${app.fileName || 'CV_UngVien.pdf'}</strong> (${app.fileSize || '1.2 MB'})</span>
-            <span style="color: var(--color-muted);">🕒 Nộp lúc: ${app.appliedAt}</span>
+            <span><i class="fa-solid fa-file-pdf" style="color: var(--color-danger);"></i> CV đã nộp: <strong>${app.fileName || 'CV_UngVien.pdf'}</strong> (${app.fileSize || '1.2 MB'})</span>
+            <span style="color: var(--color-muted);"><i class="fa-regular fa-clock" aria-hidden="true"></i> Nộp lúc: ${app.appliedAt}</span>
           </div>
 
           <!-- THANH TIẾN TRÌNH 4 BƯỚC (STEPPER TIMELINE THEO WIREFRAME 5.4 QTTK) -->
@@ -847,7 +848,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
           ${app.feedback ? `
             <div style="background: #fffbeb; border: 1px solid #fef3c7; border-left: 4px solid var(--color-warning); padding: 12px 14px; border-radius: 6px; font-size: 0.85rem; color: #92400e; margin-bottom: 14px;">
-              <strong>💬 Phản hồi từ Nhà Tuyển Dụng:</strong> ${app.feedback}
+              <strong><i class="fa-regular fa-comment-dots" aria-hidden="true"></i> Phản hồi từ Nhà Tuyển Dụng:</strong> ${app.feedback}
             </div>
           ` : ''}
 
@@ -893,11 +894,12 @@ document.addEventListener('DOMContentLoaded', function () {
     if (bookmarkedIds.length === 0) {
       container.innerHTML = `
         <div class="empty-state-box">
-          <i class="fa-regular fa-heart" aria-hidden="true"></i>
+          <i class="fa-regular fa-bookmark" aria-hidden="true"></i>
           <h3>Bạn chưa lưu tin tuyển dụng nào!</h3>
-          <p>Khi tìm kiếm việc làm trên JobPortal, hãy bấm biểu tượng trái tim để lưu lại các công việc yêu thích và xem lại tại đây.</p>
+          <p>Khi tìm kiếm việc làm trên JobPortal, hãy bấm biểu tượng lưu tin để đánh dấu các công việc yêu thích và xem lại tại đây.</p>
           <a href="./jobs.html" class="btn-primary" style="text-decoration:none;">
-            <span>🔍 Đi đến sàn việc làm</span>
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            <span>Đi đến sàn việc làm</span>
           </a>
         </div>
       `;
@@ -912,8 +914,8 @@ document.addEventListener('DOMContentLoaded', function () {
             <div>
               <div style="display:flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
                 <span class="candidate-badge" style="background:#ecfdf5; color:#065f46;">Đang mở tuyển</span>
-                <button type="button" class="btn-remove-bookmark" data-id="${id}" style="background:none; border:none; color:var(--color-danger); cursor:pointer; font-size:1.1rem;" title="Bỏ lưu công việc này">
-                  ❤️
+                <button type="button" class="btn-remove-bookmark" data-id="${id}" style="background:none; border:none; color:var(--color-primary); cursor:pointer; font-size:1.1rem;" title="Bỏ lưu công việc này">
+                  <i class="fa-solid fa-bookmark"></i>
                 </button>
               </div>
               <h3 style="font-size: 1.05rem; font-weight:700; color:var(--color-dark); margin-bottom: 4px;">

@@ -7,6 +7,7 @@
     <meta name="description" content="Trang quản trị hệ thống JobPortal">
     <title>Quản trị hệ thống - JobPortal</title>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="./assets/css/variables.css">
     <link rel="stylesheet" href="./assets/css/base.css">
     <link rel="stylesheet" href="./assets/css/components.css">
@@ -54,27 +55,27 @@
             <p class="nav-heading">QUẢN LÝ</p>
 
             <button class="nav-item active" data-section="overview">
-                <span>▦</span> Tổng quan
+                <span><i class="fa-solid fa-chart-pie"></i></span> Tổng quan
             </button>
 
             <button class="nav-item" data-section="employers">
-                <span>▣</span> Duyệt doanh nghiệp
+                <span><i class="fa-regular fa-building"></i></span> Duyệt doanh nghiệp
                 <span class="nav-count" id="employer-count">0</span>
             </button>
 
             <button class="nav-item" data-section="jobs">
-                <span>▤</span> Kiểm duyệt tin tuyển dụng
+                <span><i class="fa-regular fa-file-lines"></i></span> Kiểm duyệt tin tuyển dụng
                 <span class="nav-count" id="job-count">0</span>
             </button>
 
             <p class="nav-heading">HỆ THỐNG</p>
 
             <button class="nav-item" data-section="settings">
-                <span>⚙</span> Cài đặt hệ thống
+                <span><i class="fa-solid fa-gear"></i></span> Cài đặt hệ thống
             </button>
 
             <a href="index.html" class="nav-item nav-link">
-                <span>←</span> Về trang chủ
+                <span><i class="fa-solid fa-arrow-left"></i></span> Về trang chủ
             </a>
 
         </nav>
@@ -118,34 +119,34 @@
                     <h2>Trung tâm quản trị JobPortal</h2>
                     <p>Theo dõi và kiểm soát hoạt động tuyển dụng.</p>
                 </div>
-                <span class="welcome-icon">📊</span>
+                <span class="welcome-icon"><i class="fa-solid fa-chart-line"></i></span>
             </div>
 
             <div class="stats-grid">
 
                 <article class="stat-card">
-                    <div class="stat-icon blue">🏢</div>
+                    <div class="stat-icon blue"><i class="fa-regular fa-building" style="color: #1e40af;"></i></div>
                     <p>Tổng doanh nghiệp</p>
                     <h3 id="total-employers">0</h3>
                     <small>Trong dữ liệu demo</small>
                 </article>
 
                 <article class="stat-card">
-                    <div class="stat-icon orange">⏳</div>
+                    <div class="stat-icon orange"><i class="fa-solid fa-hourglass-half" style="color: #d97706;"></i></div>
                     <p>Chờ duyệt doanh nghiệp</p>
                     <h3 id="pending-employers">0</h3>
                     <small>Cần xử lý</small>
                 </article>
 
                 <article class="stat-card">
-                    <div class="stat-icon purple">📋</div>
+                    <div class="stat-icon purple"><i class="fa-regular fa-file-lines" style="color: #6d28d9;"></i></div>
                     <p>Tổng tin tuyển dụng</p>
                     <h3 id="total-jobs">0</h3>
                     <small>Trong dữ liệu demo</small>
                 </article>
 
                 <article class="stat-card">
-                    <div class="stat-icon green">✓</div>
+                    <div class="stat-icon green"><i class="fa-solid fa-circle-check" style="color: #047857;"></i></div>
                     <p>Tin chờ kiểm duyệt</p>
                     <h3 id="pending-jobs">0</h3>
                     <small>Cần kiểm tra</small>
@@ -165,25 +166,25 @@
                 <div class="quick-actions">
 
                     <button class="quick-action" data-section="employers">
-                        <span>🏢</span>
+                        <span><i class="fa-regular fa-building" style="color: var(--color-primary);"></i></span>
                         <div>
                             <strong>Phê duyệt doanh nghiệp</strong>
                             <small id="overview-employer-count">
                                 0 yêu cầu đang chờ
                             </small>
                         </div>
-                        <span>→</span>
+                        <span><i class="fa-solid fa-arrow-right"></i></span>
                     </button>
 
                     <button class="quick-action" data-section="jobs">
-                        <span>📋</span>
+                        <span><i class="fa-regular fa-file-lines" style="color: var(--color-primary);"></i></span>
                         <div>
                             <strong>Kiểm duyệt tin tuyển dụng</strong>
                             <small id="overview-job-count">
                                 0 tin đang chờ
                             </small>
                         </div>
-                        <span>→</span>
+                        <span><i class="fa-solid fa-arrow-right"></i></span>
                     </button>
 
                 </div>
@@ -324,7 +325,7 @@
             <div class="admin-panel">
 
                 <div class="settings-heading">
-                    <div class="settings-icon">⚙️</div>
+                    <div class="settings-icon"><i class="fa-solid fa-gear" style="color: var(--color-primary);"></i></div>
                     <div>
                         <h2>Thông tin chung</h2>
                         <p>Cập nhật thông tin cơ bản của hệ thống.</p>
@@ -367,7 +368,7 @@
                         class="settings-save-btn"
                         id="save-settings"
                     >
-                        💾 Lưu cài đặt
+                        <i class="fa-regular fa-floppy-disk" style="margin-right: 6px;"></i> Lưu cài đặt
                     </button>
 
                 </div>
@@ -379,7 +380,7 @@
             <div class="admin-panel">
 
                 <div class="settings-heading">
-                    <div class="settings-icon">🛡️</div>
+                    <div class="settings-icon"><i class="fa-solid fa-shield-halved" style="color: var(--color-primary);"></i></div>
                     <div>
                         <h2>Cấu hình kiểm duyệt</h2>
                         <p>Thiết lập các yêu cầu kiểm duyệt nội dung.</p>
@@ -433,7 +434,7 @@
             <div class="admin-panel">
 
                 <div class="settings-heading">
-                    <div class="settings-icon">ℹ️</div>
+                    <div class="settings-icon"><i class="fa-solid fa-circle-info" style="color: var(--color-primary);"></i></div>
                     <div>
                         <h2>Thông tin hệ thống</h2>
                         <p>Thông tin phiên bản hiện tại.</p>

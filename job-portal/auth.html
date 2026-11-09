@@ -6,6 +6,7 @@
 
     <title>Đăng nhập - JobPortal</title>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="./assets/css/variables.css">
     <link rel="stylesheet" href="./assets/css/base.css">
     <link rel="stylesheet" href="./assets/css/components.css">
@@ -23,8 +24,8 @@
         body {
             margin: 0;
             min-height: 100vh;
-            font-family: Arial, sans-serif;
-            background: #f1f5f9;
+            font-family: var(--font-family-main);
+            background: var(--color-bg-page);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -38,13 +39,14 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             background: white;
-            border-radius: 18px;
+            border-radius: var(--radius-card);
+            border: 1px solid var(--color-border);
             overflow: hidden;
-            box-shadow: 0 15px 45px rgba(15, 23, 42, 0.12);
+            box-shadow: var(--shadow-md);
         }
 
         .auth-intro {
-            background: linear-gradient(145deg, #1d4ed8, #2563eb, #0ea5e9);
+            background: var(--color-primary);
             color: white;
             padding: 55px 45px;
             display: flex;
@@ -389,10 +391,10 @@
             </p>
 
             <div class="auth-features">
-                <div>✓ Tìm kiếm việc làm dễ dàng</div>
-                <div>✓ Kết nối với doanh nghiệp</div>
-                <div>✓ Quản lý hồ sơ chuyên nghiệp</div>
-                <div>✓ Cập nhật cơ hội nghề nghiệp mới</div>
+                <div><i class="fa-solid fa-check" style="margin-right: 8px; color: #6ee7b7;"></i>Tìm kiếm việc làm dễ dàng</div>
+                <div><i class="fa-solid fa-check" style="margin-right: 8px; color: #6ee7b7;"></i>Kết nối với doanh nghiệp</div>
+                <div><i class="fa-solid fa-check" style="margin-right: 8px; color: #6ee7b7;"></i>Quản lý hồ sơ chuyên nghiệp</div>
+                <div><i class="fa-solid fa-check" style="margin-right: 8px; color: #6ee7b7;"></i>Cập nhật cơ hội nghề nghiệp mới</div>
             </div>
 
         </section>
@@ -549,7 +551,7 @@
                 &times;
             </button>
 
-            <div class="forgot-icon">🔐</div>
+            <div class="forgot-icon"><i class="fa-solid fa-key" style="color: var(--color-primary);"></i></div>
 
             <h2>Quên mật khẩu?</h2>
 

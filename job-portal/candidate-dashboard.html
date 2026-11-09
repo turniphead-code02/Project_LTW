@@ -49,7 +49,7 @@
         <div class="container header-inner">
             <!-- Cụm Logo thương hiệu JobPortal UTH -->
             <a href="./index.html" class="header-brand" aria-label="Trang chủ JobPortal">
-                <div class="brand-icon" aria-hidden="true">💼</div>
+                <div class="brand-icon" aria-hidden="true"><i class="fa-solid fa-briefcase"></i></div>
                 <div class="brand-text">Job<span>Portal</span><span class="brand-badge">UTH</span></div>
             </a>
 
@@ -65,7 +65,7 @@
             <!-- Cụm thông tin tài khoản bên phải -->
             <div class="header-actions">
                 <a href="./employer-dashboard.html" class="btn-employer-slug" title="Dành cho nhà tuyển dụng đăng tin">
-                    <span>🏢</span>
+                    <i class="fa-regular fa-building" aria-hidden="true"></i>
                     <span>Nhà Tuyển Dụng</span>
                 </a>
 
@@ -81,7 +81,7 @@
                         aria-label="Mở menu điều hướng"
                         aria-expanded="false"
                         aria-controls="headerNav">
-                    ☰
+                    <i class="fa-solid fa-bars"></i>
                 </button>
             </div>
         </div>
@@ -120,13 +120,12 @@
                     <span class="sidebar-badge" id="sidebarAppCount">0</span>
                 </a>
 
-                <button type="button"
-                        class="sidebar-link"
-                        data-tab="tab-saved">
+                <a href="./saved-jobs.html"
+                   class="sidebar-link">
                     <i class="fa-regular fa-bookmark" aria-hidden="true"></i>
                     <span>Việc làm đã lưu</span>
                     <span class="sidebar-badge" id="sidebarSaveCount">0</span>
-                </button>
+                </a>
 
                 <a href="./jobs.html" class="sidebar-link">
                     <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
@@ -456,21 +455,22 @@
 
             <!-- =================================================================
                  TAB 2: THEO DÕI ĐƠN ỨNG TUYỂN & PROGRESS STEPPER 4 BƯỚC
-                 (ĐẶC TẢ WIREFRAME 5.4 TRONG QTTK.HTML)
+                 (ĐẶC TẢ WIREFRAME 5.4 & QUY TẮC #9 UX TRONG QTTK.HTML)
                  ================================================================= -->
             <div id="tab-applications" class="tab-content-panel">
                 <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-card); padding: 20px; margin-bottom: 20px;">
                     <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
                         <div>
                             <h2 style="font-size:1.15rem; font-weight:700; color:var(--color-dark); margin-bottom:4px;">
-                                Quy Trình Tuyển Dụng 4 Bước Trực Quan
+                                Trạng Thái Hồ Sơ Ứng Tuyển
                             </h2>
                             <p style="font-size:0.85rem; color:var(--color-muted); margin:0;">
-                                Ứng dụng Quy tắc #9 (UX - Trực quan hóa tiến trình): Giúp ứng viên theo dõi chính xác từng giai đoạn xử lý hồ sơ.
+                                Theo dõi trực tiếp tiến độ phản hồi từ doanh nghiệp qua 4 giai đoạn xét duyệt hồ sơ.
                             </p>
                         </div>
                         <a href="./jobs.html" class="btn-primary btn-sm" style="text-decoration:none;">
-                            <span>+ Nộp đơn công việc mới</span>
+                            <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                            <span>Nộp đơn công việc mới</span>
                         </a>
                     </div>
                 </div>
@@ -491,11 +491,12 @@
                                 Cơ Hội Việc Làm Đã Đánh Dấu Quan Tâm
                             </h2>
                             <p style="font-size:0.85rem; color:var(--color-muted); margin:0;">
-                                Các tin tuyển dụng bạn đã bấm biểu tượng trái tim từ trang Tra cứu việc làm.
+                                Các tin tuyển dụng bạn đã lưu lại từ trang Tra cứu việc làm.
                             </p>
                         </div>
                         <a href="./jobs.html" class="btn-outline btn-sm" style="text-decoration:none;">
-                            <span>🔎 Khám phá thêm việc làm</span>
+                            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                            <span>Khám phá thêm việc làm</span>
                         </a>
                     </div>
                 </div>

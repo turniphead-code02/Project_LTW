@@ -54,14 +54,17 @@ document.addEventListener("DOMContentLoaded", function () {
     // Tên ứng viên / tài khoản (có link dẫn đến Dashboard tương ứng)
     const accountName = document.createElement("a");
     accountName.className = "account-name";
-    accountName.textContent = "👤 " + displayName;
+    accountName.innerHTML = `<i class="fa-regular fa-circle-user" style="margin-right: 6px;"></i>`;
+    accountName.appendChild(document.createTextNode(displayName));
     accountName.href = session.role === "employer" 
         ? "./employer-dashboard.html" 
         : (session.role === "admin" ? "./admin-portal.html" : "./candidate-dashboard.html");
 
     accountName.style.fontWeight = "600";
-    accountName.style.color = "#2563eb";
+    accountName.style.color = "#1e40af";
     accountName.style.textDecoration = "none";
+    accountName.style.display = "inline-flex";
+    accountName.style.alignItems = "center";
     accountName.title = "Đến bảng điều khiển cá nhân";
 
     // Nút đăng xuất

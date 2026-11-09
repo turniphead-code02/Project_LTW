@@ -26,7 +26,7 @@
     min-height: 100vh;
     background: var(--admin-background);
     color: var(--admin-text);
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: var(--font-family-main);
 }
 
 button,
@@ -287,8 +287,8 @@ button {
     align-items: center;
     justify-content: space-between;
     gap: 20px;
-    border-radius: 16px;
-    background: linear-gradient(120deg, #234bb4, #3d82f5);
+    border-radius: var(--radius-card);
+    background: var(--color-primary);
     color: white;
     margin-bottom: 30px;
 }
@@ -419,7 +419,6 @@ button {
 .quick-action:hover {
     border-color: #4783ef;
     background: #f0f5ff;
-    transform: translateY(-2px);
 }
 
 .quick-action > span:first-child {

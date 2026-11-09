@@ -10,6 +10,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
+  <!-- Vector Icons (FontAwesome 6 — QTTK Rule #4) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
   <!-- Nạp tệp Stylesheet nền tảng & linh kiện theo kiến trúc module -->
   <link rel="stylesheet" href="./assets/css/variables.css" />
   <link rel="stylesheet" href="./assets/css/base.css" />
@@ -42,7 +45,7 @@
     <div class="container header-inner">
       <!-- Cụm Logo thương hiệu -->
       <a href="./index.html" class="header-brand" aria-label="Trang chủ JobPortal">
-        <div class="brand-icon" aria-hidden="true">💼</div>
+        <div class="brand-icon" aria-hidden="true"><i class="fa-solid fa-briefcase"></i></div>
         <div class="brand-text">Job<span>Portal</span><span class="brand-badge">UTH</span></div>
       </a>
 
@@ -58,7 +61,7 @@
       <!-- Cụm nút hành động bên phải -->
       <div class="header-actions">
         <a href="./employer-dashboard.html" class="btn-employer-slug" title="Dành cho nhà tuyển dụng đăng tin">
-          <span>🏢</span>
+          <i class="fa-regular fa-building" aria-hidden="true"></i>
           <span>Nhà Tuyển Dụng</span>
         </a>
         <a href="./auth.html?mode=login" class="btn btn-outline btn-sm">Đăng Nhập</a>
@@ -66,7 +69,7 @@
 
         <!-- Nút mở Menu trên Mobile -->
         <button class="mobile-toggle-btn" type="button" aria-expanded="false" aria-label="Mở menu điều hướng">
-          ☰
+          <i class="fa-solid fa-bars"></i>
         </button>
       </div>
     </div>
@@ -88,7 +91,7 @@
       <!-- Khối tìm kiếm nhanh ở đầu trang -->
       <form class="jobs-search-strip" id="topSearchForm" role="search" onsubmit="event.preventDefault();">
         <div class="search-strip-input-wrap">
-          <span style="font-size: 1.15rem; color: var(--color-muted);" aria-hidden="true">🔍</span>
+          <span style="font-size: 1rem; color: var(--color-muted);" aria-hidden="true"><i class="fa-solid fa-magnifying-glass"></i></span>
           <input 
             type="text" 
             id="topSearchInput" 
@@ -108,6 +111,7 @@
         </select>
 
         <button type="button" id="topSearchBtn" class="btn btn-primary" style="padding: 10px 22px;">
+          <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
           <span>Tìm Kiếm</span>
         </button>
       </form>
@@ -128,7 +132,7 @@
           <!-- Đầu Sidebar: Tiêu đề, nút đặt lại & nút đóng trên mobile -->
           <div class="sidebar-header">
             <div class="sidebar-title">
-              <span>⚙️</span>
+              <i class="fa-solid fa-sliders" style="color: var(--color-primary);"></i>
               <span>BỘ LỌC ĐA TIÊU CHÍ</span>
             </div>
             <div style="display: flex; align-items: center; gap: 8px;">
@@ -136,7 +140,7 @@
                 Đặt lại
               </button>
               <button type="button" class="btn-close-sidebar" id="btnCloseSidebarMobile" aria-label="Đóng bảng bộ lọc">
-                ✕
+                <i class="fa-solid fa-xmark"></i>
               </button>
             </div>
           </div>
@@ -144,7 +148,7 @@
           <!-- Nhóm 1: Địa Điểm (Location) -->
           <div class="filter-group">
             <h4 class="filter-group-title">
-              <span>📍 Địa Điểm Làm Việc</span>
+              <span><i class="fa-solid fa-location-dot" style="color: var(--color-primary); margin-right: 6px;"></i> Địa Điểm Làm Việc</span>
             </h4>
             <div class="filter-options-list">
               <label class="filter-label">
@@ -178,7 +182,7 @@
           <!-- Nhóm 2: Mức Lương (Salary Range) -->
           <div class="filter-group">
             <h4 class="filter-group-title">
-              <span>💰 Mức Lương Hàng Tháng</span>
+              <span><i class="fa-solid fa-money-bill-wave" style="color: var(--color-primary); margin-right: 6px;"></i> Mức Lương Hàng Tháng</span>
             </h4>
             <div class="filter-options-list">
               <label class="filter-label">
@@ -207,7 +211,7 @@
           <!-- Nhóm 3: Hình Thức Làm Việc (Work Type) -->
           <div class="filter-group">
             <h4 class="filter-group-title">
-              <span>⏰ Hình Thức Làm Việc</span>
+              <span><i class="fa-regular fa-clock" style="color: var(--color-primary); margin-right: 6px;"></i> Hình Thức Làm Việc</span>
             </h4>
             <div class="filter-options-list">
               <label class="filter-label">
@@ -236,7 +240,7 @@
           <!-- Nhóm 4: Kinh Nghiệm Làm Việc (Experience Level) -->
           <div class="filter-group">
             <h4 class="filter-group-title">
-              <span>💼 Kinh Nghiệm Yêu Cầu</span>
+              <span><i class="fa-solid fa-briefcase" style="color: var(--color-primary); margin-right: 6px;"></i> Kinh Nghiệm Yêu Cầu</span>
             </h4>
             <div class="filter-options-list">
               <label class="filter-label">
@@ -265,7 +269,7 @@
           <!-- Nhóm 5: Ngành Nghề Chuyên Môn (Category) -->
           <div class="filter-group">
             <h4 class="filter-group-title">
-              <span>💻 Lĩnh Vực Chuyên Môn</span>
+              <span><i class="fa-solid fa-layer-group" style="color: var(--color-primary); margin-right: 6px;"></i> Lĩnh Vực Chuyên Môn</span>
             </h4>
             <div class="filter-options-list">
               <label class="filter-label">
@@ -318,7 +322,7 @@
             <div style="display: flex; align-items: center; gap: 12px;">
               <!-- Nút mở drawer bộ lọc trên mobile -->
               <button type="button" id="btnMobileFilter" class="btn-mobile-filter" aria-label="Mở bảng bộ lọc tìm kiếm">
-                <span>⚙️</span>
+                <i class="fa-solid fa-sliders" aria-hidden="true"></i>
                 <span>Bộ Lọc</span>
               </button>
 
@@ -326,7 +330,7 @@
               <div class="results-sort-group">
                 <label for="sortSelect" class="sort-label">Sắp xếp theo:</label>
                 <select id="sortSelect" class="sort-select" aria-label="Sắp xếp việc làm">
-                  <option value="newest" selected>Mới nhất ▼</option>
+                  <option value="newest" selected>Mới nhất</option>
                   <option value="salary-desc">Mức lương cao nhất</option>
                   <option value="deadline-asc">Hạn nộp hồ sơ gần nhất</option>
                 </select>
@@ -346,7 +350,7 @@
 
           <!-- Khối trạng thái rỗng khi không có kết quả (Empty State) -->
           <div class="empty-state-box" id="emptyStateBox" role="status">
-            <div class="empty-state-icon" aria-hidden="true">🔍</div>
+            <div class="empty-state-icon" aria-hidden="true"><i class="fa-solid fa-magnifying-glass"></i></div>
             <h3 class="empty-state-title">Không Tìm Thấy Việc Làm Phù Hợp</h3>
             <p class="empty-state-desc">
               Rất tiếc, hiện tại không có tin tuyển dụng nào khớp với các tiêu chí lọc của bạn. Hãy thử thay đổi từ khóa hoặc đặt lại bộ lọc.
@@ -383,7 +387,7 @@
         <!-- Cột 1: Thông tin thương hiệu & Dự án Nhóm 6 -->
         <div>
           <div class="header-brand" style="margin-bottom: var(--space-16); color: #ffffff;">
-            <div class="brand-icon" style="background:#3b82f6;">💼</div>
+            <div class="brand-icon" style="background:#1e40af;"><i class="fa-solid fa-briefcase"></i></div>
             <div class="brand-text" style="color:#ffffff;">Job<span style="color:#60a5fa;">Portal</span></div>
           </div>
           <p style="font-size: var(--text-small); color: #94a3b8; line-height: 1.6; margin-bottom: var(--space-16);">
@@ -437,8 +441,8 @@
         </div>
         <div>
           <a href="../index.html" class="footer-back-hub" title="Quay về trang danh sách portfolio các thành viên">
-            <span>←</span>
-            <span>Quay lại Danh Bạ Portfolio Nhóm 6</span>
+            <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+            <span>Quay lại Danh Bạ Đồ Án Nhóm 6</span>
           </a>
         </div>
       </div>
@@ -448,5 +452,6 @@
   <!-- Nạp tệp kịch bản JavaScript điều khiển -->
   <script src="./assets/js/main.js"></script>
   <script src="./assets/js/jobs.js"></script>
+  <script src="./assets/js/account-nav.js"></script>
 </body>
 </html>

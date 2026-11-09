@@ -145,9 +145,9 @@ document.addEventListener('DOMContentLoaded', function () {
           step1: { title: '1. ĐÃ NỘP ĐƠN', date: '18/10 10:00', completed: true },
           step2: { title: '2. DOANH NGHIỆP ĐÃ XEM', date: '19/10 15:30', completed: true },
           step3: { title: '3. HẸN PHỎNG VẤN', date: '23/10 14:00', completed: true },
-          step4: { title: '4. KẾT QUẢ CUỐI CÙNG', date: '🎉 Trúng Tuyển', completed: true, isOffer: true }
+          step4: { title: '4. KẾT QUẢ CUỐI CÙNG', date: 'Trúng Tuyển', completed: true, isOffer: true }
         },
-        feedback: '🎉 CHÚC MỪNG BẠN! Hội đồng tuyển dụng Viettel Solutions trân trọng thông báo bạn đã xuất sắc vượt qua vòng phỏng vấn chuyên môn và được tiếp nhận vào chương trình Tài năng Kỹ sư Trẻ 2026. Thư mời nhận việc (Offer Letter) đã gửi qua Email của bạn.'
+        feedback: 'CHÚC MỪNG BẠN! Hội đồng tuyển dụng Viettel Solutions trân trọng thông báo bạn đã xuất sắc vượt qua vòng phỏng vấn chuyên môn và được tiếp nhận vào chương trình Tài năng Kỹ sư Trẻ 2026. Thư mời nhận việc (Offer Letter) đã gửi qua Email của bạn.'
       },
       {
         id: 'app-momo-04',
@@ -263,13 +263,14 @@ document.addEventListener('DOMContentLoaded', function () {
     if (filtered.length === 0) {
       applicationsContainer.innerHTML = `
         <div class="candidate-empty-state">
-          <div class="empty-state-icon">📂</div>
+          <div class="empty-state-icon"><i class="fa-regular fa-folder-open" style="color: var(--color-primary);"></i></div>
           <h3 class="empty-state-title">Không tìm thấy đơn ứng tuyển nào!</h3>
           <p class="empty-state-desc">
             ${searchKeyword ? `Không có kết quả khớp với từ khóa "${searchKeyword}". Hãy thử tìm kiếm từ khóa khác.` : 'Bạn chưa có hồ sơ nào ở danh mục này. Hãy tiếp tục ứng tuyển các vị trí việc làm IT đang mở!'}
           </p>
           <a href="./jobs.html" class="btn-primary" style="text-decoration: none;">
-            <span>🔍 Khám Phá Việc Làm Ngay</span>
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            <span>Khám Phá Việc Làm Ngay</span>
           </a>
         </div>
       `;
@@ -285,29 +286,29 @@ document.addEventListener('DOMContentLoaded', function () {
       // Xác định badge trạng thái
       let badgeHtml = '';
       if (app.status === 'submitted') {
-        badgeHtml = '<span class="status-badge" style="background:#dbeafe; color:#1e40af;">📨 Đã nộp đơn</span>';
+        badgeHtml = '<span class="status-badge" style="background:#dbeafe; color:#1e40af;"><i class="fa-regular fa-paper-plane"></i> Đã nộp đơn</span>';
       } else if (app.status === 'viewed') {
-        badgeHtml = '<span class="status-badge" style="background:#e0f2fe; color:#0369a1;">👁️ Đã xem hồ sơ</span>';
+        badgeHtml = '<span class="status-badge" style="background:#e0f2fe; color:#0369a1;"><i class="fa-regular fa-eye"></i> Đã xem hồ sơ</span>';
       } else if (app.status === 'interview') {
-        badgeHtml = '<span class="status-badge" style="background:#fef3c7; color:#b45309;">📅 Hẹn phỏng vấn</span>';
+        badgeHtml = '<span class="status-badge" style="background:#fef3c7; color:#b45309;"><i class="fa-regular fa-calendar-check"></i> Hẹn phỏng vấn</span>';
       } else if (isOffer) {
-        badgeHtml = '<span class="status-badge" style="background:#ecfdf5; color:#065f46;">🎉 Trúng tuyển</span>';
+        badgeHtml = '<span class="status-badge" style="background:#ecfdf5; color:#065f46;"><i class="fa-solid fa-award"></i> Trúng tuyển</span>';
       } else if (isRejected) {
-        badgeHtml = '<span class="status-badge" style="background:#fee2e2; color:#b91c1c;">✕ Chưa phù hợp</span>';
+        badgeHtml = '<span class="status-badge" style="background:#fee2e2; color:#b91c1c;"><i class="fa-solid fa-circle-xmark"></i> Chưa phù hợp</span>';
       }
 
       // Xác định ngày tháng từng bước
       const step1Date = (app.timeline && app.timeline.step1 && app.timeline.step1.date) || app.appliedAt.slice(0, 10);
       const step2Date = (app.timeline && app.timeline.step2 && app.timeline.step2.date) || (step >= 2 ? 'Đã xem' : 'Chờ duyệt');
       const step3Date = (app.timeline && app.timeline.step3 && app.timeline.step3.date) || (step >= 3 ? 'Đã xếp lịch' : 'Chờ xét');
-      const step4Date = (app.timeline && app.timeline.step4 && app.timeline.step4.date) || (isOffer ? '🎉 Trúng tuyển' : (isRejected ? 'Từ chối' : 'Đang đánh giá'));
+      const step4Date = (app.timeline && app.timeline.step4 && app.timeline.step4.date) || (isOffer ? 'Trúng tuyển' : (isRejected ? 'Từ chối' : 'Đang đánh giá'));
 
       return `
         <article class="application-card status-${app.status}" data-id="${app.id}">
           <!-- Phần đầu thẻ: Logo, Tên việc làm, Tên công ty, Mức lương -->
           <div class="app-card-header">
             <div class="app-job-info">
-              <div class="app-company-logo" style="background: ${app.companyLogoBg || '#1e40af'};" aria-hidden="true">
+              <div class="app-company-logo" style="background: #ffffff; color: ${app.companyLogoBg || '#1e40af'}; border: 1px solid var(--color-border);" aria-hidden="true">
                 ${app.companyLogo || app.company.charAt(0)}
               </div>
               <div class="app-job-details">
@@ -315,9 +316,9 @@ document.addEventListener('DOMContentLoaded', function () {
                   <a href="./job-detail.html?id=${app.jobId}">${app.jobTitle}</a>
                 </h2>
                 <div class="app-job-subinfo">
-                  <span>🏢 <strong>${app.company}</strong></span>
-                  <span>📍 ${app.location || 'TP.HCM'}</span>
-                  <span>💰 <strong>${app.salary || 'Thỏa thuận'}</strong></span>
+                  <span><i class="fa-regular fa-building" aria-hidden="true"></i> <strong>${app.company}</strong></span>
+                  <span><i class="fa-solid fa-location-dot" aria-hidden="true"></i> ${app.location || 'TP.HCM'}</span>
+                  <span><i class="fa-solid fa-money-bill-wave" aria-hidden="true"></i> <strong>${app.salary || 'Thỏa thuận'}</strong></span>
                 </div>
               </div>
             </div>
@@ -329,11 +330,11 @@ document.addEventListener('DOMContentLoaded', function () {
           <!-- Dải thông tin bản chụp CV bất biến (Immutable Snapshot) -->
           <div class="app-snapshot-strip">
             <div class="snapshot-file-badge">
-              <span>📄</span>
+              <i class="fa-solid fa-file-pdf" style="color: var(--color-danger);"></i>
               <span>Bản chụp CV: <strong>${app.fileName || 'CV_UngVien.pdf'}</strong> (${app.fileSize || '1.25 MB'})</span>
             </div>
             <div style="display: flex; align-items: center; gap: 12px;">
-              <span style="color: var(--color-muted); font-size: 0.8rem;">🕒 Nộp lúc: <strong>${app.appliedAt}</strong></span>
+              <span style="color: var(--color-muted); font-size: 0.8rem;"><i class="fa-regular fa-clock" aria-hidden="true"></i> Nộp lúc: <strong>${app.appliedAt}</strong></span>
               <button type="button" class="btn-outline btn-sm btn-download-snapshot" data-file="${app.fileName}" title="Tải xuống bản sao CV này">
                 <i class="fa-solid fa-download"></i> Tải CV
               </button>
@@ -353,7 +354,7 @@ document.addEventListener('DOMContentLoaded', function () {
               <!-- BƯỚC 1: ĐÃ NỘP ĐƠN -->
               <div class="step-node ${step >= 1 ? 'completed' : 'pending'}">
                 <div class="step-icon-bubble">
-                  ${step >= 1 ? '✓' : '1'}
+                  ${step >= 1 ? '<i class="fa-solid fa-check"></i>' : '1'}
                 </div>
                 <div class="step-label-title">1. ĐÃ NỘP ĐƠN</div>
                 <div class="step-label-desc">${step1Date}</div>
@@ -364,7 +365,7 @@ document.addEventListener('DOMContentLoaded', function () {
               <!-- BƯỚC 2: DOANH NGHIỆP ĐÃ XEM -->
               <div class="step-node ${step > 2 ? 'completed' : (step === 2 ? 'active' : 'pending')}">
                 <div class="step-icon-bubble">
-                  ${step > 2 ? '✓' : (step === 2 ? '2' : '2')}
+                  ${step > 2 ? '<i class="fa-solid fa-check"></i>' : (step === 2 ? '2' : '2')}
                 </div>
                 <div class="step-label-title">2. ĐÃ XEM CV</div>
                 <div class="step-label-desc">${step2Date}</div>
@@ -375,7 +376,7 @@ document.addEventListener('DOMContentLoaded', function () {
               <!-- BƯỚC 3: HẸN PHỎNG VẤN -->
               <div class="step-node ${step > 3 ? 'completed' : (step === 3 ? 'active' : 'pending')}">
                 <div class="step-icon-bubble">
-                  ${step > 3 ? '✓' : (step === 3 ? '3' : '3')}
+                  ${step > 3 ? '<i class="fa-solid fa-check"></i>' : (step === 3 ? '3' : '3')}
                 </div>
                 <div class="step-label-title">3. HẸN PHỎNG VẤN</div>
                 <div class="step-label-desc">${step3Date}</div>
@@ -386,7 +387,7 @@ document.addEventListener('DOMContentLoaded', function () {
               <!-- BƯỚC 4: KẾT QUẢ CUỐI CÙNG -->
               <div class="step-node ${isOffer ? 'completed' : (isRejected ? 'rejected' : (step === 4 ? 'active' : 'pending'))}">
                 <div class="step-icon-bubble">
-                  ${isOffer ? '🏆' : (isRejected ? '✕' : '4')}
+                  ${isOffer ? '<i class="fa-solid fa-award"></i>' : (isRejected ? '<i class="fa-solid fa-xmark"></i>' : '4')}
                 </div>
                 <div class="step-label-title">4. KẾT QUẢ</div>
                 <div class="step-label-desc">${step4Date}</div>
