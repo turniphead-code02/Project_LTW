@@ -8,16 +8,32 @@
    -------------------------------------------------------------------------- */
 .hero-section {
   position: relative;
-  background: linear-gradient(180deg, rgba(15, 23, 42, 0.78) 0%, rgba(15, 23, 42, 0.88) 100%),
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.84) 0%, rgba(15, 23, 42, 0.94) 100%),
               url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
   color: var(--color-surface);
-  padding: 64px 0 72px;
+  padding: 68px 0 76px;
   overflow: hidden;
   border-bottom: 1px solid #1e293b;
 }
 
+/* Lưới tọa độ kỹ thuật vi điểm trên nền Hero (Architectural Tech Grid Signature) */
+.hero-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 28px 28px, 112px 112px, 112px 112px;
+  pointer-events: none;
+  opacity: 0.75;
+}
+
 .hero-content {
-  max-width: 960px;
+  position: relative;
+  z-index: 2;
+  max-width: 980px;
   margin: 0 auto;
 }
 
@@ -54,7 +70,7 @@
   background: var(--color-surface);
   border-radius: 10px;
   padding: 8px;
-  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.28);
+  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.35);
   display: grid;
   grid-template-columns: 2fr 1.25fr 1.25fr auto;
   gap: 8px;
@@ -68,6 +84,7 @@
   padding: 10px 14px;
   border-right: 1px solid var(--color-border);
   color: var(--color-body);
+  position: relative;
 }
 
 .search-field:nth-child(3) {
@@ -77,6 +94,19 @@
 .search-icon {
   color: var(--color-primary);
   font-size: 1.15rem;
+  flex-shrink: 0;
+}
+
+.search-cmd-hint {
+  font-family: var(--font-family-mono);
+  font-size: 0.72rem;
+  color: var(--color-muted);
+  background: var(--color-bg-page);
+  border: 1px solid var(--color-border);
+  padding: 1px 6px;
+  border-radius: var(--radius-xs);
+  letter-spacing: 0.02em;
+  font-weight: 700;
   flex-shrink: 0;
 }
 

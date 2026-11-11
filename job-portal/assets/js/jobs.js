@@ -583,6 +583,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <div class="job-item-company">
                   <i class="fa-regular fa-building" aria-hidden="true"></i>
                   <strong>${job.company}</strong>
+                  <span class="job-code-badge"><i class="fa-solid fa-hashtag"></i> ${job.id.toUpperCase()}</span>
                   ${job.verified ? '<span class="badge badge-verified" title="Doanh nghiệp đã kiểm duyệt xác thực"><i class="fa-solid fa-circle-check"></i> Đã xác thực</span>' : ''}
                   ${job.isHot ? '<span class="badge badge-urgent"><i class="fa-solid fa-fire"></i> Tuyển Gấp</span>' : ''}
                 </div>

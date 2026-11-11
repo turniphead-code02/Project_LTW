@@ -47,7 +47,7 @@
       <!-- Cụm Logo thương hiệu -->
       <a href="./index.html" class="header-brand" aria-label="Trang chủ JobPortal">
         <div class="brand-icon" aria-hidden="true"><i class="fa-solid fa-briefcase"></i></div>
-        <div class="brand-text">Job<span>Portal</span><span class="brand-badge">UTH</span></div>
+        <div class="brand-text">Job<span>Portal</span><span class="brand-badge">UTH TALENT</span></div>
       </a>
 
       <!-- Menu điều hướng chính -->
@@ -111,6 +111,7 @@
               placeholder="Chức danh, kỹ năng (vd: Node.js, React, Fresher...)" 
               aria-label="Từ khóa tìm kiếm việc làm"
             />
+            <span class="search-cmd-hint" title="Nhấn phím / để tìm nhanh">[/]</span>
           </div>
 
           <!-- Trường 2: Tỉnh / Thành phố -->
@@ -160,22 +161,49 @@
     </section>
 
     <!-- -----------------------------------------------------------------------
-         3. KHỐI THỐNG KÊ NHANH (QUICK STATS COUNTER GRID)
+         3. KHỐI CHỈ SỐ THỊ TRƯỜNG IT THỜI GIAN THỰC (LIVE TELEMETRY STRIP SIGNATURE)
          ----------------------------------------------------------------------- -->
-    <div class="stats-section-wrap" aria-label="Thống kê hệ thống">
+    <div class="stats-section-wrap" aria-label="Chỉ số thị trường việc làm IT thời gian thực">
       <div class="container">
-        <div class="stats-grid">
-          <div class="stat-box">
-            <div class="stat-number" data-target="5200">5.200+</div>
-            <div class="stat-label">Việc Làm Đang Tuyển Dụng</div>
+        <div class="telemetry-strip">
+          <!-- Chỉ số 1: Tin tuyển dụng IT đang hoạt động -->
+          <div class="telemetry-box">
+            <div class="telemetry-header">
+              <span>ACTIVE OPENINGS</span>
+              <span class="pulse-indicator"><span class="pulse-dot"></span> LIVE</span>
+            </div>
+            <div class="telemetry-number stat-number" data-target="5200">5.200+</div>
+            <div class="telemetry-label">Việc Làm IT Đang Mở Tuyển</div>
           </div>
-          <div class="stat-box">
-            <div class="stat-number" data-target="850">850+</div>
-            <div class="stat-label">Doanh Nghiệp Đã Xác Thực</div>
+
+          <!-- Chỉ số 2: Doanh nghiệp công nghệ đối tác -->
+          <div class="telemetry-box">
+            <div class="telemetry-header">
+              <span>ENTERPRISE HUB</span>
+              <span class="telemetry-tag">VERIFIED</span>
+            </div>
+            <div class="telemetry-number stat-number" data-target="850">850+</div>
+            <div class="telemetry-label">Doanh Nghiệp Đã Xác Thực</div>
           </div>
-          <div class="stat-box">
-            <div class="stat-number" data-target="12000">12.000+</div>
-            <div class="stat-label">Ứng Viên Nộp Hồ Sơ Thành Công</div>
+
+          <!-- Chỉ số 3: Lương trung vị khởi điểm theo khảo sát ngành -->
+          <div class="telemetry-box">
+            <div class="telemetry-header">
+              <span>MEDIAN STARTING</span>
+              <span class="telemetry-tag">MARKET</span>
+            </div>
+            <div class="telemetry-number">18.5M</div>
+            <div class="telemetry-label">Lương Trung Vị Kỹ Sư Mới</div>
+          </div>
+
+          <!-- Chỉ số 4: Tỷ lệ phản hồi hồ sơ -->
+          <div class="telemetry-box">
+            <div class="telemetry-header">
+              <span>SUCCESS RATE</span>
+              <span class="telemetry-tag">PLACEMENT</span>
+            </div>
+            <div class="telemetry-number">94.2%</div>
+            <div class="telemetry-label">Tỷ Lệ Phản Hồi Hồ Sơ UTH</div>
           </div>
         </div>
       </div>
@@ -188,6 +216,7 @@
       <div class="container">
         <div class="section-header-bar">
           <div>
+            <span class="section-kicker"><i class="fa-solid fa-terminal"></i> // SEC_01 // DISCIPLINES</span>
             <h2 class="section-title">Danh Mục Nghề Nghiệp Trọng Điểm</h2>
             <p class="section-desc">Phân loại vị trí tuyển dụng theo nhóm chuyên môn kỹ thuật và nghiệp vụ.</p>
           </div>
@@ -280,6 +309,7 @@
       <div class="container">
         <div class="section-header-bar">
           <div>
+            <span class="section-kicker"><i class="fa-solid fa-terminal"></i> // SEC_02 // OPPORTUNITIES</span>
             <h2 class="section-title">Việc Làm Nổi Bật &amp; Tuyển Gấp</h2>
             <p class="section-desc">Các vị trí tuyển dụng mới nhất từ những doanh nghiệp đối tác hàng đầu.</p>
           </div>
@@ -303,7 +333,10 @@
                 <div class="company-logo-box">
                   <span style="color:#ea580c;">FPT</span>
                 </div>
-                <span class="badge badge-urgent"><i class="fa-solid fa-fire" aria-hidden="true"></i> Tuyển gấp</span>
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <span class="job-code-badge"><i class="fa-solid fa-hashtag"></i> JP-01</span>
+                  <span class="badge badge-urgent"><i class="fa-solid fa-fire" aria-hidden="true"></i> Tuyển gấp</span>
+                </div>
               </div>
               <h3 class="job-card-title">
                 <a href="./job-detail.html?id=fpt-backend-nodejs">Kỹ Sư Backend Node.js (Fresher / Junior)</a>
@@ -337,7 +370,10 @@
                 <div class="company-logo-box">
                   <span style="color:#ea580c;">VNG</span>
                 </div>
-                <span class="badge badge-urgent"><i class="fa-solid fa-fire" aria-hidden="true"></i> Tuyển gấp</span>
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <span class="job-code-badge"><i class="fa-solid fa-hashtag"></i> JP-02</span>
+                  <span class="badge badge-urgent"><i class="fa-solid fa-fire" aria-hidden="true"></i> Tuyển gấp</span>
+                </div>
               </div>
               <h3 class="job-card-title">
                 <a href="./job-detail.html?id=vng-frontend-react">Frontend ReactJS Developer (Junior)</a>
@@ -371,7 +407,10 @@
                 <div class="company-logo-box">
                   <span style="color:#1e40af;">TMA</span>
                 </div>
-                <span class="badge" style="background:#dbeafe; color:#1e40af;"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> Sinh viên</span>
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <span class="job-code-badge"><i class="fa-solid fa-hashtag"></i> JP-03</span>
+                  <span class="badge" style="background:#dbeafe; color:#1e40af;"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> Sinh viên</span>
+                </div>
               </div>
               <h3 class="job-card-title">
                 <a href="./job-detail.html?id=tma-intern-web">Thực Tập Sinh Lập Trình Web (Có Trợ Cấp)</a>
@@ -405,7 +444,10 @@
                 <div class="company-logo-box">
                   <span style="color:#db2777;">MOMO</span>
                 </div>
-                <span class="badge badge-urgent"><i class="fa-solid fa-fire" aria-hidden="true"></i> Tuyển gấp</span>
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <span class="job-code-badge"><i class="fa-solid fa-hashtag"></i> JP-04</span>
+                  <span class="badge badge-urgent"><i class="fa-solid fa-fire" aria-hidden="true"></i> Tuyển gấp</span>
+                </div>
               </div>
               <h3 class="job-card-title">
                 <a href="./job-detail.html?id=momo-uiux-designer">UI / UX Product Designer (Fintech App)</a>
@@ -439,7 +481,10 @@
                 <div class="company-logo-box">
                   <span style="color:#dc2626;">VIETTEL</span>
                 </div>
-                <span class="badge badge-urgent"><i class="fa-solid fa-fire" aria-hidden="true"></i> Tuyển gấp</span>
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <span class="job-code-badge"><i class="fa-solid fa-hashtag"></i> JP-05</span>
+                  <span class="badge badge-urgent"><i class="fa-solid fa-fire" aria-hidden="true"></i> Tuyển gấp</span>
+                </div>
               </div>
               <h3 class="job-card-title">
                 <a href="./job-detail.html?id=viettel-soc-analyst">Kỹ Sư An Toàn Thông Tin (SOC Analyst L1)</a>
@@ -473,7 +518,10 @@
                 <div class="company-logo-box">
                   <span style="color:#0284c7;">VNPT</span>
                 </div>
-                <span class="badge" style="background:#e0f2fe; color:#0369a1;"><i class="fa-solid fa-bolt" aria-hidden="true"></i> Mới đăng</span>
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <span class="job-code-badge"><i class="fa-solid fa-hashtag"></i> JP-06</span>
+                  <span class="badge" style="background:#e0f2fe; color:#0369a1;"><i class="fa-solid fa-bolt" aria-hidden="true"></i> Mới đăng</span>
+                </div>
               </div>
               <h3 class="job-card-title">
                 <a href="./job-detail.html?id=vnpt-data-analyst">Thực Tập Sinh Phân Tích Dữ Liệu (Data Analyst)</a>
@@ -523,6 +571,7 @@
       <div class="container">
         <div class="section-header-bar">
           <div>
+            <span class="section-kicker"><i class="fa-solid fa-terminal"></i> // SEC_03 // PIPELINE &amp; SPECS</span>
             <h2 class="section-title">Nền Tảng Ứng Tuyển Minh Bạch Cho Kỹ Sư Trẻ</h2>
             <p class="section-desc">Tối ưu hóa trải nghiệm tìm việc và quản lý hồ sơ ứng tuyển dành cho sinh viên công nghệ.</p>
           </div>
@@ -566,6 +615,7 @@
       <div class="container">
         <div class="section-header-bar">
           <div>
+            <span class="section-kicker"><i class="fa-solid fa-terminal"></i> // SEC_04 // PARTNERS</span>
             <h2 class="section-title">Doanh Nghiệp Tuyển Dụng Hàng Đầu</h2>
             <p class="section-desc">Các tập đoàn và công ty công nghệ đang tích cực tuyển dụng sinh viên và kỹ sư UTH.</p>
           </div>

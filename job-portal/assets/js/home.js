@@ -85,6 +85,19 @@ document.addEventListener('DOMContentLoaded', function () {
         window.location.href = `./jobs.html?${params.toString()}`;
       }, 600);
     });
+
+    // 2.1. PHÍM TẮT "/" ĐỂ FOCUS NHANH VÀO Ô TÌM KIẾM
+    const searchInput = document.getElementById('searchKeyword');
+    if (searchInput) {
+      document.addEventListener('keydown', function (e) {
+        const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
+        if (e.key === '/' && activeTag !== 'input' && activeTag !== 'textarea' && activeTag !== 'select') {
+          e.preventDefault();
+          searchInput.focus();
+          searchInput.select();
+        }
+      });
+    }
   }
 
   // 3. CHUYỂN TAB VIỆC LÀM TRÊN TRANG CHỦ (JOBS FILTER TABS)

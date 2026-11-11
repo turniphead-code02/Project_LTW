@@ -344,6 +344,10 @@
   gap: var(--space-12);
 }
 
+.job-listing-item:has(.badge-urgent) {
+  border-left-color: var(--color-warning);
+}
+
 .job-listing-item:hover {
   border-left-color: var(--color-primary-light);
   border-top-color: var(--color-primary-light);
@@ -391,13 +395,16 @@
 }
 
 .job-item-salary {
-  font-size: 1.05rem;
+  font-family: var(--font-family-mono);
+  font-size: 0.95rem;
   font-weight: 700;
   color: #047857; /* Emerald Dark - Tương phản WCAG */
   background: var(--color-accent-soft);
   padding: 4px 10px;
   border-radius: var(--radius-btn);
+  border: 1px solid rgba(16, 185, 129, 0.25);
   white-space: nowrap;
+  letter-spacing: -0.01em;
 }
 
 .job-item-meta-row {
@@ -426,11 +433,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-top: 1px solid var(--color-border-light);
+  border-top: 1px dashed var(--color-border);
   padding-top: var(--space-12);
   margin-top: var(--space-4);
   font-size: var(--text-xs);
   color: var(--color-muted);
+  font-family: var(--font-family-mono);
 }
 
 .job-item-action-link {
