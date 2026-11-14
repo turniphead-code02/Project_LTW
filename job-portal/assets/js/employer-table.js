@@ -46,11 +46,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Dữ liệu mẫu — sau này thay bằng API thông báo
   var notifications = [
-    { id: 'n1', icon: '📄', title: 'Hồ sơ mới', text: 'Nguyễn Minh Khoa vừa ứng tuyển vị trí Frontend Developer (React).', time: '10 phút trước', href: './candidate-management.html' },
-    { id: 'n2', icon: '📄', title: 'Hồ sơ mới', text: 'Trần Thu Hà vừa ứng tuyển vị trí Backend Developer (Node.js).', time: '1 giờ trước', href: './candidate-management.html' },
-    { id: 'n3', icon: '⏰', title: 'Tin sắp hết hạn', text: 'Tin "Backend Developer (Node.js)" hết hạn nộp vào 12/11/2026.', time: '3 giờ trước', href: './employer-dashboard.html' },
-    { id: 'n4', icon: '✅', title: 'Tin đã được duyệt', text: 'Tin "Frontend Developer (React)" đã được quản trị viên duyệt.', time: 'Hôm qua', href: './employer-dashboard.html', read: true },
-    { id: 'n5', icon: '📅', title: 'Lịch phỏng vấn', text: 'Lê Quốc Bảo đã xác nhận lịch phỏng vấn QA/Tester.', time: 'Hôm qua', href: './candidate-management.html', read: true }
+    { id: 'n1', icon: '<i class="fa-regular fa-file-lines" style="color: var(--color-primary);"></i>', title: 'Hồ sơ mới', text: 'Nguyễn Minh Khoa vừa ứng tuyển vị trí Frontend Developer (React).', time: '10 phút trước', href: './candidate-management.html' },
+    { id: 'n2', icon: '<i class="fa-regular fa-file-lines" style="color: var(--color-primary);"></i>', title: 'Hồ sơ mới', text: 'Trần Thu Hà vừa ứng tuyển vị trí Backend Developer (Node.js).', time: '1 giờ trước', href: './candidate-management.html' },
+    { id: 'n3', icon: '<i class="fa-regular fa-clock" style="color: var(--color-warning);"></i>', title: 'Tin sắp hết hạn', text: 'Tin "Backend Developer (Node.js)" hết hạn nộp vào 12/11/2026.', time: '3 giờ trước', href: './employer-dashboard.html' },
+    { id: 'n4', icon: '<i class="fa-solid fa-circle-check" style="color: var(--color-accent);"></i>', title: 'Tin đã được duyệt', text: 'Tin "Frontend Developer (React)" đã được quản trị viên duyệt.', time: 'Hôm qua', href: './employer-dashboard.html', read: true },
+    { id: 'n5', icon: '<i class="fa-regular fa-calendar-check" style="color: var(--color-primary);"></i>', title: 'Lịch phỏng vấn', text: 'Lê Quốc Bảo đã xác nhận lịch phỏng vấn QA/Tester.', time: 'Hôm qua', href: './candidate-management.html', read: true }
   ];
 
   // Nhớ trạng thái đã đọc giữa các trang (an toàn khi trình duyệt chặn storage)
@@ -377,7 +377,7 @@ document.addEventListener('DOMContentLoaded', function () {
       '<div class="info-row"><span>Điện thoại</span><strong>' + esc(c.phone) + '</strong></div>' +
       '<div class="info-row"><span>Ngày nộp</span><strong>' + c.date + '</strong></div>' +
       '<div class="info-row"><span>Trạng thái</span><span class="status ' + st.cls + '">' + st.text + '</span></div>' +
-      '<div class="cv-box"><span>📄 ' + esc(c.cv) + '</span><button type="button" class="btn btn-ghost btn-sm" id="btnDownloadCv">Tải về</button></div>' +
+      '<div class="cv-box"><span><i class="fa-solid fa-file-pdf" style="color: var(--color-danger);"></i> ' + esc(c.cv) + '</span><button type="button" class="btn btn-ghost btn-sm" id="btnDownloadCv">Tải về</button></div>' +
       '<div><div class="emp-label-text" style="margin-bottom:6px;">Thư giới thiệu</div><div class="letter-box">' + (c.letter ? esc(c.letter) : 'Ứng viên không gửi thư giới thiệu.') + '</div></div>';
     modal.classList.add('is-open');
     document.getElementById('btnCloseCv').focus();
