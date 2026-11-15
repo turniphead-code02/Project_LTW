@@ -1,3 +1,4 @@
+
 -- ============================================================================
 -- DỰ ÁN: CỔNG THÔNG TIN VIỆC LÀM & TUYỂN DỤNG TRỰC TUYẾN (JOB PORTAL)
 -- HỌC PHẦN: LẬP TRÌNH WEBSITE (WEB PROGRAMMING) — NHÓM 6 UTH
@@ -62,28 +63,29 @@ INSERT INTO `skills` (`skill_id`, `skill_name`, `slug`) VALUES
 
 -- ----------------------------------------------------------------------------
 -- 4. NẠP DỮ LIỆU BẢNG: users (Người dùng: Admin, Tuyển dụng, Ứng viên)
--- Mật khẩu băm mẫu là bcrypt cho chuỗi "123456" ($2y$10$eACCYoNOHEqgkPz9vjU0UeW5r.zB4a1W4GqXzD3Nl8q2V9Y2mE6mO)
+-- Mật khẩu mặc định của 13 tài khoản mẫu: 123456
+-- Hash bcrypt được tạo bằng bcryptjs, cost factor 10.
 -- ----------------------------------------------------------------------------
 TRUNCATE TABLE `users`;
 INSERT INTO `users` (`user_id`, `full_name`, `email`, `password_hash`, `phone`, `role`, `status`, `created_at`) VALUES
 -- Quản trị viên tối cao (Admin)
-(1, 'Quản Trị Viên Hệ Thống', 'admin@jobportal.vn', '$2y$10$eACCYoNOHEqgkPz9vjU0UeW5r.zB4a1W4GqXzD3Nl8q2V9Y2mE6mO', '0901234567', 'admin', 'active', NOW()),
+(1, 'Quản Trị Viên Hệ Thống', 'admin@jobportal.vn', '$2a$10$5hF8xnvdokAe1hzYSAdUeuM6GJZs8bJKSqqmvFvUiSiWRysgg19Ai', '0901234567', 'admin', 'active', NOW()),
 
 -- Đại diện Nhà tuyển dụng (Employer HR)
-(2, 'Trần Thị Mai Anh (VNG HR)', 'hr@vng.com.vn', '$2y$10$eACCYoNOHEqgkPz9vjU0UeW5r.zB4a1W4GqXzD3Nl8q2V9Y2mE6mO', '0912345678', 'employer', 'active', NOW()),
-(3, 'Nguyễn Hoàng Khang (FPT Software)', 'recruitment@fpt.com', '$2y$10$eACCYoNOHEqgkPz9vjU0UeW5r.zB4a1W4GqXzD3Nl8q2V9Y2mE6mO', '0923456789', 'employer', 'active', NOW()),
-(4, 'Đoàn Thanh Tùng (Viettel Solutions)', 'talent@viettelsolutions.vn', '$2y$10$eACCYoNOHEqgkPz9vjU0UeW5r.zB4a1W4GqXzD3Nl8q2V9Y2mE6mO', '0934567890', 'employer', 'active', NOW()),
-(5, 'Lê Thùy Dương (MoMo HR)', 'duong.le@mservice.com.vn', '$2y$10$eACCYoNOHEqgkPz9vjU0UeW5r.zB4a1W4GqXzD3Nl8q2V9Y2mE6mO', '0945678901', 'employer', 'active', NOW()),
-(6, 'Phan Bích Ngọc (Shopee HR)', 'careers@shopee.vn', '$2y$10$eACCYoNOHEqgkPz9vjU0UeW5r.zB4a1W4GqXzD3Nl8q2V9Y2mE6mO', '0956789012', 'employer', 'active', NOW()),
-(7, 'Võ Quốc Bảo (KMS Technology)', 'recruiter@kms-technology.com', '$2y$10$eACCYoNOHEqgkPz9vjU0UeW5r.zB4a1W4GqXzD3Nl8q2V9Y2mE6mO', '0967890123', 'employer', 'active', NOW()),
+(2, 'Trần Thị Mai Anh (VNG HR)', 'hr@vng.com.vn', '$2a$10$5hF8xnvdokAe1hzYSAdUeuM6GJZs8bJKSqqmvFvUiSiWRysgg19Ai', '0912345678', 'employer', 'active', NOW()),
+(3, 'Nguyễn Hoàng Khang (FPT Software)', 'recruitment@fpt.com', '$2a$10$5hF8xnvdokAe1hzYSAdUeuM6GJZs8bJKSqqmvFvUiSiWRysgg19Ai', '0923456789', 'employer', 'active', NOW()),
+(4, 'Đoàn Thanh Tùng (Viettel Solutions)', 'talent@viettelsolutions.vn', '$2a$10$5hF8xnvdokAe1hzYSAdUeuM6GJZs8bJKSqqmvFvUiSiWRysgg19Ai', '0934567890', 'employer', 'active', NOW()),
+(5, 'Lê Thùy Dương (MoMo HR)', 'duong.le@mservice.com.vn', '$2a$10$5hF8xnvdokAe1hzYSAdUeuM6GJZs8bJKSqqmvFvUiSiWRysgg19Ai', '0945678901', 'employer', 'active', NOW()),
+(6, 'Phan Bích Ngọc (Shopee HR)', 'careers@shopee.vn', '$2a$10$5hF8xnvdokAe1hzYSAdUeuM6GJZs8bJKSqqmvFvUiSiWRysgg19Ai', '0956789012', 'employer', 'active', NOW()),
+(7, 'Võ Quốc Bảo (KMS Technology)', 'recruiter@kms-technology.com', '$2a$10$5hF8xnvdokAe1hzYSAdUeuM6GJZs8bJKSqqmvFvUiSiWRysgg19Ai', '0967890123', 'employer', 'active', NOW()),
 
 -- Ứng viên tìm việc (Candidates)
-(8, 'Trần Hữu Thành', 'thanh.tran@student.ut.edu.vn', '$2y$10$eACCYoNOHEqgkPz9vjU0UeW5r.zB4a1W4GqXzD3Nl8q2V9Y2mE6mO', '0812345678', 'candidate', 'active', NOW()),
-(9, 'Nguyễn Lê Gia Hân', 'giahan.nguyen@student.ut.edu.vn', '$2y$10$eACCYoNOHEqgkPz9vjU0UeW5r.zB4a1W4GqXzD3Nl8q2V9Y2mE6mO', '0823456789', 'candidate', 'active', NOW()),
-(10, 'Hồ Trúc Gia Hân', 'giahan.ho@student.ut.edu.vn', '$2y$10$eACCYoNOHEqgkPz9vjU0UeW5r.zB4a1W4GqXzD3Nl8q2V9Y2mE6mO', '0834567890', 'candidate', 'active', NOW()),
-(11, 'Nguyễn Phú Quang', 'quang.nguyen@student.ut.edu.vn', '$2y$10$eACCYoNOHEqgkPz9vjU0UeW5r.zB4a1W4GqXzD3Nl8q2V9Y2mE6mO', '0845678901', 'candidate', 'active', NOW()),
-(12, 'Đinh Duy Diện', 'dien.dinh@student.ut.edu.vn', '$2y$10$eACCYoNOHEqgkPz9vjU0UeW5r.zB4a1W4GqXzD3Nl8q2V9Y2mE6mO', '0856789012', 'candidate', 'active', NOW()),
-(13, 'Lê Hoàng Thiên Hương', 'thienhuong.le@student.ut.edu.vn', '$2y$10$eACCYoNOHEqgkPz9vjU0UeW5r.zB4a1W4GqXzD3Nl8q2V9Y2mE6mO', '0867890123', 'candidate', 'active', NOW());
+(8, 'Trần Hữu Thành', 'thanh.tran@student.ut.edu.vn', '$2a$10$5hF8xnvdokAe1hzYSAdUeuM6GJZs8bJKSqqmvFvUiSiWRysgg19Ai', '0812345678', 'candidate', 'active', NOW()),
+(9, 'Nguyễn Lê Gia Hân', 'giahan.nguyen@student.ut.edu.vn', '$2a$10$5hF8xnvdokAe1hzYSAdUeuM6GJZs8bJKSqqmvFvUiSiWRysgg19Ai', '0823456789', 'candidate', 'active', NOW()),
+(10, 'Hồ Trúc Gia Hân', 'giahan.ho@student.ut.edu.vn', '$2a$10$5hF8xnvdokAe1hzYSAdUeuM6GJZs8bJKSqqmvFvUiSiWRysgg19Ai', '0834567890', 'candidate', 'active', NOW()),
+(11, 'Nguyễn Phú Quang', 'quang.nguyen@student.ut.edu.vn', '$2a$10$5hF8xnvdokAe1hzYSAdUeuM6GJZs8bJKSqqmvFvUiSiWRysgg19Ai', '0845678901', 'candidate', 'active', NOW()),
+(12, 'Đinh Duy Diện', 'dien.dinh@student.ut.edu.vn', '$2a$10$5hF8xnvdokAe1hzYSAdUeuM6GJZs8bJKSqqmvFvUiSiWRysgg19Ai', '0856789012', 'candidate', 'active', NOW()),
+(13, 'Lê Hoàng Thiên Hương', 'thienhuong.le@student.ut.edu.vn', '$2a$10$5hF8xnvdokAe1hzYSAdUeuM6GJZs8bJKSqqmvFvUiSiWRysgg19Ai', '0867890123', 'candidate', 'active', NOW());
 
 -- ----------------------------------------------------------------------------
 -- 5. NẠP DỮ LIỆU BẢNG: companies (Doanh nghiệp tuyển dụng hàng đầu)
