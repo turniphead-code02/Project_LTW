@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
       title: 'Frontend React Developer (Junior / Middle)',
       company: 'Công Ty Cổ Phần Công Nghệ VNG',
       logo: 'VNG',
-      logoBg: 'linear-gradient(135deg, #ff6b4a 0%, #ff8e53 100%)',
+      logoBg: '#ea580c',
       verified: true,
       salary: '15 - 22 Triệu',
       salaryNum: 22,
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
       title: 'Junior Backend Node.js / NestJS Engineer',
       company: 'FPT Software Global',
       logo: 'FPT',
-      logoBg: 'linear-gradient(135deg, #0284c7 0%, #2563eb 100%)',
+      logoBg: '#0284c7',
       verified: true,
       salary: '14 - 20 Triệu',
       salaryNum: 20,
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
       title: 'Thực Tập Sinh Lập Trình Java / Spring Boot (Có Phụ Cấp)',
       company: 'Viettel Solutions (Tập Đoàn Viễn Thông Quân Đội)',
       logo: 'VT',
-      logoBg: 'linear-gradient(135deg, #dc2626 0%, #ef4444 100%)',
+      logoBg: '#b91c1c',
       verified: true,
       salary: '6 - 8 Triệu (Hỗ trợ)',
       salaryNum: 8,
@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function () {
       title: 'Chuyên Viên Phân Tích Dữ Liệu (Data Analyst)',
       company: 'MoMo (Công Ty Cổ Phần Dịch Vụ Di Động Trực Tuyến)',
       logo: 'MM',
-      logoBg: 'linear-gradient(135deg, #be185d 0%, #ec4899 100%)',
+      logoBg: '#9d174d',
       verified: true,
       salary: '16 - 24 Triệu',
       salaryNum: 24,
@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function () {
       title: 'UI/UX Product Designer (Mobile & Web App)',
       company: 'Shopee Vietnam',
       logo: 'SP',
-      logoBg: 'linear-gradient(135deg, #ea580c 0%, #f97316 100%)',
+      logoBg: '#c2410c',
       verified: true,
       salary: '18 - 28 Triệu',
       salaryNum: 28,
@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function () {
       title: 'DevOps & Cloud Engineer (AWS / Kubernetes)',
       company: 'KMS Technology Vietnam',
       logo: 'KMS',
-      logoBg: 'linear-gradient(135deg, #059669 0%, #10b981 100%)',
+      logoBg: '#047857',
       verified: true,
       salary: '25 - 38 Triệu',
       salaryNum: 38,
@@ -199,7 +199,7 @@ document.addEventListener('DOMContentLoaded', function () {
       title: 'Mobile Flutter Developer (Fintech App - Remote)',
       company: 'ZaloPay FinTech Group',
       logo: 'ZP',
-      logoBg: 'linear-gradient(135deg, #0284c7 0%, #38bdf8 100%)',
+      logoBg: '#0369a1',
       verified: true,
       salary: '20 - 32 Triệu',
       salaryNum: 32,
@@ -226,7 +226,7 @@ document.addEventListener('DOMContentLoaded', function () {
       title: 'Kỹ Sư An Toàn Thông Tin & Giám Sát SOC (SecOps)',
       company: 'Tập Đoàn Bưu Chính Viễn Thông Việt Nam (VNPT IT)',
       logo: 'VNPT',
-      logoBg: 'linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%)',
+      logoBg: '#1e40af',
       verified: true,
       salary: '18 - 26 Triệu',
       salaryNum: 26,
@@ -253,7 +253,7 @@ document.addEventListener('DOMContentLoaded', function () {
       title: 'Fullstack Web Developer (.NET Core 8 & Angular)',
       company: 'Axon Active Vietnam',
       logo: 'AA',
-      logoBg: 'linear-gradient(135deg, #b91c1c 0%, #f43f5e 100%)',
+      logoBg: '#991b1b',
       verified: true,
       salary: '22 - 35 Triệu',
       salaryNum: 35,
@@ -280,7 +280,7 @@ document.addEventListener('DOMContentLoaded', function () {
       title: 'Thực Tập Sinh Kiểm Thử Phần Mềm (QA / Manual Tester)',
       company: 'NashTech Vietnam',
       logo: 'NT',
-      logoBg: 'linear-gradient(135deg, #0f766e 0%, #14b8a6 100%)',
+      logoBg: '#0f766e',
       verified: true,
       salary: '5 - 7 Triệu (Trợ cấp)',
       salaryNum: 7,
@@ -307,7 +307,7 @@ document.addEventListener('DOMContentLoaded', function () {
       title: 'AI / Machine Learning Engineer (Fresher / Junior)',
       company: 'One Mount Group (Vingroup Tech)',
       logo: 'OM',
-      logoBg: 'linear-gradient(135deg, #7c3aed 0%, #a855f7 100%)',
+      logoBg: '#1e3a8a',
       verified: true,
       salary: '18 - 27 Triệu',
       salaryNum: 27,
@@ -334,7 +334,7 @@ document.addEventListener('DOMContentLoaded', function () {
       title: 'Kỹ Sư Phần Mềm Nhúng (Embedded C/C++ Developer)',
       company: 'Renesas Design Vietnam',
       logo: 'RN',
-      logoBg: 'linear-gradient(135deg, #334155 0%, #64748b 100%)',
+      logoBg: '#334155',
       verified: true,
       salary: '13 - 18 Triệu',
       salaryNum: 18,
@@ -570,8 +570,8 @@ document.addEventListener('DOMContentLoaded', function () {
           <!-- Phần đầu thẻ: Logo, Tiêu đề, Mức lương -->
           <div class="job-item-header">
             <div class="job-item-main">
-              <!-- Logo công ty -->
-              <div class="company-logo-box" style="background: ${job.logoBg}; color: #ffffff;" aria-hidden="true">
+              <!-- Logo công ty (Nền trắng tinh khiết theo QTTK Rule #3) -->
+              <div class="company-logo-box" style="background: #ffffff; color: ${job.logoBg}; border: 1px solid var(--color-border);" aria-hidden="true">
                 ${job.logo}
               </div>
 
@@ -581,17 +581,18 @@ document.addEventListener('DOMContentLoaded', function () {
                   <a href="./job-detail.html?id=${job.id}">${job.title}</a>
                 </h3>
                 <div class="job-item-company">
-                  <span>🏢</span>
+                  <i class="fa-regular fa-building" aria-hidden="true"></i>
                   <strong>${job.company}</strong>
-                  ${job.verified ? '<span class="badge badge-verified" title="Doanh nghiệp đã kiểm duyệt xác thực">✓ Xác thực</span>' : ''}
-                  ${job.isHot ? '<span class="badge badge-urgent">🔥 Tuyển Gấp</span>' : ''}
+                  <span class="job-code-badge"><i class="fa-solid fa-hashtag"></i> ${job.id.toUpperCase()}</span>
+                  ${job.verified ? '<span class="badge badge-verified" title="Doanh nghiệp đã kiểm duyệt xác thực"><i class="fa-solid fa-circle-check"></i> Đã xác thực</span>' : ''}
+                  ${job.isHot ? '<span class="badge badge-urgent"><i class="fa-solid fa-fire"></i> Tuyển Gấp</span>' : ''}
                 </div>
               </div>
             </div>
 
             <!-- Khối mức lương nổi bật (Màu Emerald - Chuẩn WCAG) -->
             <div class="job-item-salary" aria-label="Mức lương ${job.salary}">
-              💰 ${job.salary}
+              <i class="fa-solid fa-money-bill-wave" aria-hidden="true"></i> ${job.salary}
             </div>
           </div>
 
@@ -603,15 +604,15 @@ document.addEventListener('DOMContentLoaded', function () {
           <!-- Hàng Metadata thông số (Địa điểm, Kinh nghiệm, Hình thức) -->
           <div class="job-item-meta-row">
             <div class="job-item-meta-item">
-              <span aria-hidden="true">📍</span>
+              <i class="fa-solid fa-location-dot" style="color: var(--color-muted);" aria-hidden="true"></i>
               <span>${job.locationLabel}</span>
             </div>
             <div class="job-item-meta-item">
-              <span aria-hidden="true">💼</span>
+              <i class="fa-solid fa-briefcase" style="color: var(--color-muted);" aria-hidden="true"></i>
               <span>${job.experienceLabel}</span>
             </div>
             <div class="job-item-meta-item">
-              <span aria-hidden="true">🕒</span>
+              <i class="fa-regular fa-clock" style="color: var(--color-muted);" aria-hidden="true"></i>
               <span>${job.workTypeLabel}</span>
             </div>
           </div>
@@ -624,7 +625,7 @@ document.addEventListener('DOMContentLoaded', function () {
           <!-- Phần đáy thẻ: Thời gian đăng, Hạn nộp & Nút hành động -->
           <div class="job-item-footer">
             <div>
-              <span style="color: var(--color-muted);">🕒 Đăng ${job.postedText} • Hạn nộp: <strong>${job.deadlineText}</strong></span>
+              <span style="color: var(--color-muted);"><i class="fa-regular fa-calendar" aria-hidden="true"></i> Đăng ${job.postedText} • Hạn nộp: <strong>${job.deadlineText}</strong></span>
             </div>
 
             <div style="display: flex; align-items: center; gap: 12px;">
@@ -633,17 +634,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 type="button" 
                 class="btn-bookmark-job" 
                 data-id="${job.id}" 
-                style="background: transparent; border: none; font-size: 1.25rem; cursor: pointer; color: ${isBookmarked ? 'var(--color-danger)' : '#94a3b8'}; transition: transform 0.2s;"
+                style="background: transparent; border: 1px solid var(--color-border); width: 34px; height: 34px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.95rem; cursor: pointer; color: ${isBookmarked ? 'var(--color-primary)' : '#64748b'}; transition: all 0.2s;"
                 title="${isBookmarked ? 'Bỏ lưu tin tuyển dụng' : 'Lưu tin tuyển dụng này'}"
                 aria-label="${isBookmarked ? 'Bỏ lưu tin tuyển dụng' : 'Lưu tin tuyển dụng'}"
               >
-                ${isBookmarked ? '❤️' : '🤍'}
+                ${isBookmarked ? '<i class="fa-solid fa-bookmark"></i>' : '<i class="fa-regular fa-bookmark"></i>'}
               </button>
 
               <!-- CTA Xem chi tiết & Ứng tuyển -->
               <a href="./job-detail.html?id=${job.id}" class="job-item-action-link">
                 <span>Xem chi tiết &amp; Nộp hồ sơ</span>
-                <span aria-hidden="true">→</span>
+                <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
               </a>
             </div>
           </div>
@@ -943,16 +944,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (index > -1) {
           bookmarkedJobIds.splice(index, 1);
-          this.innerHTML = '🤍';
-          this.style.color = '#94a3b8';
+          this.innerHTML = '<i class="fa-regular fa-bookmark"></i>';
+          this.style.color = '#64748b';
           this.title = 'Lưu tin tuyển dụng này';
           if (window.showToast) {
             window.showToast(`Đã bỏ lưu tin "${job?.title || 'Việc làm'}"`, 'info');
           }
         } else {
           bookmarkedJobIds.push(jobId);
-          this.innerHTML = '❤️';
-          this.style.color = 'var(--color-danger)';
+          this.innerHTML = '<i class="fa-solid fa-bookmark"></i>';
+          this.style.color = 'var(--color-primary)';
           this.title = 'Bỏ lưu tin tuyển dụng';
           if (window.showToast) {
             window.showToast(`Đã lưu tin "${job?.title || 'Việc làm'}" vào danh sách yêu thích!`, 'success');

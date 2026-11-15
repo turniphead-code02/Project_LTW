@@ -1,631 +1,762 @@
 
-/* =========================================
-   RESPONSIVE CHUNG CHO TOÀN BỘ PROJECT
-   index.html     -> Trang bìa
-   portfolio.html -> Portfolio cũ
-========================================= */
-
-/* =========================================
-   1. DESKTOP - 1536px
-========================================= */
-@media (max-width: 1536px) {
-
-    /* PORTFOLIO CŨ */
-    .container {
-        max-width: 1440px;
-    }
-}
+/* ========================================
+   RESPONSIVE CSS
+   Portfolio - Nguyễn Phú Quang
+======================================== */
 
 
-/* =========================================
-   2. DESKTOP NHỎ - 1440px
-========================================= */
-@media (max-width: 1440px) {
+/* ========================================
+   1. TABLET & SMALL LAPTOP
+   Màn hình từ 1100px trở xuống
+======================================== */
 
-    /* PORTFOLIO CŨ */
-    .container {
-        max-width: 1028px;
-    }
+@media (max-width: 1100px) {
 
-    .softSkills_badge {
-        position: static !important;
-        transform: none !important;
-    }
+    /* ===== HEADER ===== */
 
-    .softSkills__book_icons {
-        display: none;
-    }
-
-    /* TRANG BÌA */
-    .hero-content,
-    .personal-info {
-        width: 58%;
-    }
-}
-
-
-/* =========================================
-   3. LAPTOP NHỎ - 1280px
-========================================= */
-@media (max-width: 1280px) {
-
-    /* PORTFOLIO CŨ */
-    .container {
-        max-width: 1024px;
-    }
-
-    section {
-        margin-top: 80px;
-    }
-
-    .header__container {
-        flex-direction: column;
-        align-items: center;
-        gap: 30px;
-    }
-
-    .header__column--left,
-    .header__column--right {
-        max-width: 100%;
-    }
-
-    /* TRANG BÌA */
-    .hero-content,
-    .personal-info {
-        width: 65%;
-    }
-
-    .hero-content h1 {
-        font-size: clamp(44px, 6vw, 76px);
-    }
-
-    .nav-links {
-        gap: 14px;
-    }
-}
-
-
-/* =========================================
-   4. TABLET - 1024px
-========================================= */
-@media (max-width: 1024px) {
-
-    /* PORTFOLIO CŨ */
-    .container {
-        width: 100%;
-        max-width: 900px;
-        padding-left: 24px;
-        padding-right: 24px;
-    }
-
-    .header__column--left,
-    .header__column--right {
-        width: 100%;
-    }
-
-    /* TRANG BÌA */
-    .cover {
-        background-position: 40% center;
-    }
-
-    .hero-content {
-        width: 100%;
-        max-width: 650px;
-        margin-left: auto;
-        margin-right: auto;
-        text-align: center;
-    }
-
-    .description {
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .hero-buttons {
-        justify-content: center;
-    }
-
-    .personal-info {
-        width: 100%;
-        max-width: 700px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .overview {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .overview-card:last-child {
-        grid-column: 1 / -1;
-    }
-}
-
-
-/* =========================================
-   5. TABLET NHỎ - 768px
-========================================= */
-@media (max-width: 768px) {
-
-    /* PORTFOLIO CŨ */
-    .container {
-        max-width: 640px;
-        padding-left: 20px;
-        padding-right: 20px;
-    }
-
-    .aboutMe__section > img {
-        display: none;
-    }
-
-    .skills__grid_container {
-        grid-template-columns: minmax(0, 1fr);
-        grid-template-rows: auto;
-    }
-
-    .skills__grid_item {
-        grid-column: auto !important;
-        grid-row: auto !important;
-        min-width: 0;
-    }
-
-    /* TRANG BÌA */
-    .cover {
-        background-position: 38% center;
-    }
-
-    .hero-content h1 {
-        font-size: clamp(40px, 7vw, 60px);
-    }
-
-    .personal-info {
-        padding: 12px;
-    }
-}
-
-
-/* =========================================
-   6. PHONE - 640px
-========================================= */
-@media (max-width: 640px) {
-
-    /* PORTFOLIO CŨ */
-    :root {
-        font-size: 14px;
-    }
-
-    .container {
-        width: 100%;
-        max-width: 100%;
-        padding-left: 16px;
-        padding-right: 16px;
-    }
-
-    .header__column--left {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .header__badge_container {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-
-    .aboutMe__container {
-        width: 94%;
-    }
-
-    .skills__grid_container {
-        grid-template-columns: minmax(0, 1fr);
-    }
-
-    .softSkills_badge {
-        position: static !important;
-        transform: none !important;
-    }
-
-    /* TRANG BÌA */
-    .cover {
-        min-height: 100svh;
-        padding: 90px 16px 24px;
-        background-position: 35% center;
-    }
-
-    /* Menu thu gọn */
-    .menu-toggle {
-        display: block;
+    .header-container {
+        min-height: 72px;
     }
 
     .navbar {
-        left: 16px;
-        right: 16px;
-    }
-
-    .nav-links {
-        display: none;
         position: absolute;
-        top: 55px;
+        top: 100%;
         left: 0;
         right: 0;
-        z-index: 20;
 
+        display: none;
         flex-direction: column;
         align-items: stretch;
         gap: 0;
 
-        padding: 12px;
-        border-radius: 16px;
-        background: rgba(8, 20, 35, 0.96);
+        padding: 12px 24px 20px;
+
+        background-color: var(--bg-color);
+        border-bottom: 1px solid var(--button-bg);
     }
 
-    .nav-links.active {
+    .navbar.active {
         display: flex;
     }
 
-    .nav-links a {
-        padding: 12px;
-        text-align: center;
+    .nav-link {
+        padding: 14px 16px;
+        margin: 3px 0;
     }
 
-    /* Nội dung đè lên ảnh */
-    .hero-content {
-        width: 100%;
-        max-width: 100%;
-        margin: auto 0 24px;
-        padding-top: 120px;
-        text-align: center;
-    }
-
-    .hero-content h1 {
-        font-size: clamp(34px, 10vw, 48px);
-    }
-
-    .hero-content h2 {
-        font-size: 17px;
-    }
-
-    .description {
-        font-size: 14px;
-        line-height: 1.6;
-    }
-
-    .hero-buttons {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .hero-buttons a {
-        width: 100%;
-        max-width: 280px;
-    }
-
-    /* 4 thông tin -> 2 cột */
-    .personal-info {
-        width: 100%;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .personal-info > div:nth-child(2) {
-        border-right: none;
-    }
-
-    .personal-info > div:nth-child(-n+2) {
-        border-bottom: 1px solid #ffffff33;
-    }
-
-    /* 3 thẻ -> 1 cột */
-    .overview {
-        grid-template-columns: minmax(0, 1fr);
-        padding: 16px;
-    }
-
-    .overview-card {
-        min-height: 150px;
-    }
-
-    .overview-card:last-child {
-        grid-column: auto;
-    }
-}
-
-
-/* =========================================
-   7. PHONE RẤT NHỎ - 380px
-========================================= */
-@media (max-width: 380px) {
-
-    .container {
-        padding-left: 12px;
-        padding-right: 12px;
-    }
-
-    .hero-content h1 {
-        font-size: 34px;
-    }
-
-    .description {
-        font-size: 13px;
-    }
-
-    .personal-info strong {
-        font-size: 14px;
-    }
-}
-
-/* ==========================================
-   RESPONSIVE CHO TRANG BÌA MỚI
-   Chỉ áp dụng khi body có class cover-page
-========================================== */
-
-/* DESKTOP NHỎ */
-@media (max-width: 1440px) {
-
-    .cover-page .hero-content,
-    .cover-page .personal-info {
-        width: 58%;
-    }
-
-    .cover-page .nav-links {
-        gap: 2px;
-    }
-}
-
-/* LAPTOP NHỎ */
-@media (max-width: 1280px) {
-
-    .cover-page .hero-content,
-    .cover-page .personal-info {
-        width: 65%;
-    }
-
-    .cover-page .hero-content h1 {
-        font-size: clamp(46px, 6vw, 76px);
-    }
-
-    .cover-page .nav-links a {
-        padding: 10px 12px;
-    }
-}
-
-/* TABLET */
-@media (max-width: 1024px) {
-
-    .cover-page .cover {
-        background-image:
-            linear-gradient(
-                to bottom,
-                rgba(4, 12, 24, 0.15) 0%,
-                rgba(4, 12, 24, 0.4) 40%,
-                rgba(4, 12, 24, 0.9) 100%
-            ),
-            url("../assets/cover.jpg");
-
-        background-position: 40% center;
-    }
-
-    .cover-page .hero-content {
-        width: 100%;
-        max-width: 650px;
-        margin: auto auto 30px;
-        padding-top: 160px;
-        text-align: center;
-    }
-
-    .cover-page .hero-line {
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .cover-page .hero-description {
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .cover-page .hero-buttons {
-        justify-content: center;
-    }
-
-    .cover-page .personal-info {
-        width: 100%;
-        max-width: 700px;
-        margin: 0 auto;
-    }
-
-    .cover-page .overview {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .cover-page .overview-card:last-child {
-        grid-column: 1 / -1;
-    }
-}
-
-/* TABLET NHỎ */
-@media (max-width: 768px) {
-
-    .cover-page .navbar {
-        left: 4%;
-        right: 4%;
-    }
-
-    .cover-page .nav-links {
-        gap: 0;
-        padding: 8px;
-    }
-
-    .cover-page .nav-links a {
-        padding: 10px;
-        font-size: 12px;
-    }
-
-    .cover-page .cover {
-        background-position: 38% center;
-    }
-
-    .cover-page .hero-content h1 {
-        font-size: clamp(42px, 7vw, 58px);
-    }
-
-    .cover-page .hero-description {
-        font-size: 15px;
-    }
-
-    .cover-page .info-item strong {
-        font-size: 15px;
-    }
-}
-
-/* PHONE */
-@media (max-width: 640px) {
-
-    .cover-page .cover {
-        min-height: 850px;
-        min-height: 100svh;
-        padding: 85px 16px 24px;
-
-        background-image:
-            linear-gradient(
-                to bottom,
-                rgba(4, 12, 24, 0.15) 0%,
-                rgba(4, 12, 24, 0.25) 25%,
-                rgba(4, 12, 24, 0.82) 70%,
-                rgba(4, 12, 24, 0.96) 100%
-            ),
-            url("../assets/cover.jpg");
-
-        background-position: 35% center;
-    }
-
-    /* MENU */
-    .cover-page .navbar {
-        top: 16px;
-        left: 16px;
-        right: 16px;
-    }
-
-    .cover-page .menu-toggle {
-        display: block;
-    }
-
-    .cover-page .nav-links {
-        display: none;
-        position: absolute;
-        top: 55px;
-        left: 0;
-        right: 0;
-        z-index: 20;
-
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0;
-
-        padding: 12px;
-        border-radius: 16px;
-        background: rgba(8, 20, 35, 0.97);
-    }
-
-    .cover-page .nav-links.active {
+    .menu-toggle {
         display: flex;
     }
 
-    .cover-page .nav-links a {
-        padding: 13px;
-        font-size: 14px;
-        text-align: center;
+
+    /* ===== ABOUT ME ===== */
+
+    .about-content {
+        gap: 35px;
     }
 
-    /* CHỮ TRÊN ẢNH */
-    .cover-page .hero-content {
-        width: 100%;
-        max-width: 100%;
-        margin: auto 0 24px;
-        padding-top: 150px;
-        text-align: center;
+    .about-info h3 {
+        font-size: 29px;
     }
 
-    .cover-page .greeting {
-        font-size: 12px;
-        letter-spacing: 3px;
-    }
-
-    .cover-page .hero-content h1 {
-        font-size: clamp(34px, 10vw, 48px);
-        letter-spacing: -1px;
-    }
-
-    .cover-page .hero-content h2 {
-        font-size: 17px;
-    }
-
-    .cover-page .hero-description {
-        font-size: 14px;
-        line-height: 1.6;
-    }
-
-    .cover-page .hero-buttons {
-        flex-direction: column;
-        align-items: center;
+    .about-highlights {
         gap: 12px;
     }
 
-    .cover-page .hero-buttons .btn {
-        width: 100%;
-        max-width: 280px;
+    .about-highlight {
+        padding: 15px;
     }
 
-    /* THÔNG TIN 2 CỘT */
-    .cover-page .personal-info {
-        width: 100%;
+    /* Cột trái: Liên hệ và ảnh */
+    .about-left {
+        gap: 14px;
+    }
+
+    .about-contact {
+        padding: 18px;
+        gap: 14px;
+    }
+
+    .about-contact h3 {
+        font-size: 20px;
+    }
+
+    .about-contact-links {
+        gap: 12px;
+    }
+
+    .about-contact-links a {
+        width: 46px;
+        height: 46px;
+        font-size: 20px;
+    }
+
+
+    /* ===== SKILLS ===== */
+
+    .skills-section {
+        padding: 80px 24px;
+    }
+
+    .skills-accordion {
+        gap: 14px;
+    }
+
+    .skill-group-header {
+        padding: 22px;
+    }
+
+    .skill-children {
+        gap: 14px;
+    }
+
+    .skill-child {
+        padding: 20px;
+    }
+
+
+    /* ===== PROJECTS ===== */
+
+    .projects-section {
+        padding: 80px 24px;
+    }
+
+    .projects-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        padding: 10px;
-    }
-
-    .cover-page .info-item {
-        padding: 12px 6px;
-    }
-
-    .cover-page .info-item:nth-child(2) {
-        border-right: none;
-    }
-
-    .cover-page .info-item:nth-child(-n+2) {
-        border-bottom: 1px solid #ffffff33;
-    }
-
-    /* 3 THẺ XẾP DỌC */
-    .cover-page .overview {
-        grid-template-columns: minmax(0, 1fr);
-        gap: 16px;
-        padding: 16px;
-    }
-
-    .cover-page .overview-card {
-        min-height: 190px;
-        padding: 24px;
-    }
-
-    .cover-page .overview-card:last-child {
-        grid-column: auto;
+        gap: 18px;
     }
 }
 
-/* PHONE RẤT NHỎ */
-@media (max-width: 380px) {
 
-    .cover-page .cover {
-        padding-left: 12px;
-        padding-right: 12px;
+/* ========================================
+   2. TABLET
+   Màn hình từ 768px trở xuống
+======================================== */
+
+@media (max-width: 768px) {
+
+    /* ===== ABOUT ME ===== */
+
+    .about-section {
+        padding: 70px 20px;
     }
 
-    .cover-page .hero-content h1 {
-        font-size: 34px;
+    .about-heading {
+        margin-bottom: 40px;
     }
 
-    .cover-page .hero-description {
+    .about-heading h2 {
+        font-size: 30px;
+    }
+
+    /* Chuyển 2 cột thành 1 cột */
+    .about-content {
+        grid-template-columns: 1fr;
+        gap: 35px;
+    }
+
+    /* Cột trái */
+    .about-left {
+        width: 100%;
+        max-width: 450px;
+        margin: 0 auto;
+
+        grid-template-rows: auto auto;
+        gap: 16px;
+    }
+
+    /* Hàng 1: Liên hệ */
+    .about-contact {
+        min-height: 150px;
+        padding: 20px;
+    }
+
+    .about-contact h3 {
+        font-size: 20px;
+    }
+
+    /* Hàng 2 + 3: Ảnh */
+    .about-image {
+        width: 100%;
+        height: 450px;
+        max-width: none;
+    }
+
+    .about-image img {
+        width: 100%;
+        height: 100%;
+        max-height: none;
+        object-fit: cover;
+    }
+
+    /* Nội dung bên phải */
+    .about-info h3 {
+        font-size: 28px;
+    }
+
+    .about-description {
+        line-height: 1.8;
+    }
+
+    .about-highlights {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .about-highlight {
+        min-height: 145px;
+    }
+
+
+    /* ===== SKILLS ===== */
+
+    .skills-section {
+        padding: 70px 20px;
+    }
+
+    .skills-heading {
+        margin-bottom: 40px;
+    }
+
+    .skills-heading h2 {
+        font-size: 30px;
+    }
+
+    .skills-heading p {
+        font-size: calc(14px * var(--font-scale));
+    }
+
+    .skill-group-header {
+        padding: 20px;
+    }
+
+    .skill-group-header span {
+        font-size: calc(18px * var(--font-scale));
+    }
+
+    .skill-children {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        padding: 16px;
+    }
+
+    .skill-child {
+        padding: 18px;
+    }
+
+    .skill-child h3 {
+        font-size: calc(17px * var(--font-scale));
+    }
+
+    .skill-child p {
+        font-size: calc(13px * var(--font-scale));
+    }
+
+
+    /* ===== PROJECTS ===== */
+
+    .projects-section {
+        padding: 70px 20px;
+    }
+
+    .projects-heading h2 {
+        font-size: 30px;
+    }
+
+    .projects-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+    }
+
+    .project-content {
+        padding: 18px;
+    }
+
+    .project-content h3 {
+        font-size: calc(18px * var(--font-scale));
+    }
+
+    .project-content p {
+        font-size: calc(13px * var(--font-scale));
+    }
+}
+
+
+/* ========================================
+   3. MOBILE
+   Màn hình từ 600px trở xuống
+======================================== */
+
+@media (max-width: 600px) {
+
+    /* ===== HEADER ===== */
+
+    .logo {
+        gap: 8px;
+    }
+
+    .logo-avatar {
+        width: 45px;
+        height: 45px;
+    }
+
+    .logo-name {
+        font-size: 15px;
+    }
+
+    .logo-tags {
+        display: none;
+    }
+
+
+    /* ===== ABOUT ME ===== */
+
+    .about-section {
+        padding: 60px 20px;
+    }
+
+    .about-heading h2 {
+        font-size: 28px;
+    }
+
+    .about-info h3 {
+        font-size: 26px;
+    }
+
+    .about-description {
+        font-size: calc(14px * var(--font-scale));
+    }
+
+    /* Khung bên trái */
+    .about-left {
+        max-width: 100%;
+        gap: 14px;
+    }
+
+    .about-contact {
+        min-height: 140px;
+        padding: 20px;
+    }
+
+    .about-contact h3 {
+        font-size: 19px;
+    }
+
+    .about-image {
+        height: 400px;
+    }
+
+    /* Thông tin bên phải */
+    .about-highlights {
+        grid-template-columns: 1fr;
+    }
+
+    .about-highlight {
+        min-height: auto;
+    }
+
+
+    /* ===== SKILLS ===== */
+
+    .skills-section {
+        padding: 60px 20px;
+    }
+
+    .skills-heading h2 {
+        font-size: 28px;
+    }
+
+    .skill-children {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 16px;
+    }
+
+    .skill-group-header {
+        gap: 14px;
+        padding: 18px;
+    }
+
+    .skill-group-header span {
+        font-size: calc(17px * var(--font-scale));
+    }
+
+    .skill-group-header > i:first-child {
+        font-size: 22px;
+    }
+
+    .skill-child {
+        padding: 18px;
+    }
+
+
+    /* ===== PROJECTS ===== */
+
+    .projects-section {
+        padding: 60px 20px;
+    }
+
+    .projects-heading h2 {
+        font-size: 28px;
+    }
+
+    .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .project-content {
+        padding: 20px;
+    }
+
+    .project-content h3 {
+        font-size: calc(20px * var(--font-scale));
+    }
+}
+
+
+/* ========================================
+   4. SMALL MOBILE
+   Màn hình từ 480px trở xuống
+======================================== */
+
+@media (max-width: 480px) {
+
+    /* ===== HEADER ===== */
+
+    .header-container {
+        padding: 12px 16px;
+        gap: 8px;
+    }
+
+    .header-actions {
+        gap: 8px;
+        flex-shrink: 0;
+    }
+
+    .logo {
+        min-width: 0;
+    }
+
+    .logo-info {
+        min-width: 0;
+    }
+
+    .logo-name {
+        font-size: 14px;
+        overflow-wrap: anywhere;
+    }
+
+    .cv-button {
+        padding: 10px;
+    }
+
+    .cv-button span {
+        display: none;
+    }
+
+    .icon-button {
+        width: 38px;
+        height: 38px;
+        flex-shrink: 0;
+    }
+
+
+    /* ===== ABOUT ME ===== */
+
+    .about-section {
+        padding: 55px 16px;
+    }
+
+    .about-heading {
+        margin-bottom: 35px;
+    }
+
+    .about-heading h2 {
+        font-size: 26px;
+    }
+
+    .about-content {
+        gap: 25px;
+    }
+
+    /* Cột trái */
+    .about-left {
+        gap: 12px;
+    }
+
+    .about-contact {
+        min-height: 130px;
+        padding: 16px;
+        gap: 12px;
+        border-radius: 16px;
+    }
+
+    .about-contact h3 {
+        font-size: 18px;
+    }
+
+    .about-contact-links {
+        gap: 12px;
+    }
+
+    .about-contact-links a {
+        width: 44px;
+        height: 44px;
+        font-size: 19px;
+    }
+
+    /* Ảnh */
+    .about-image {
+        height: 350px;
+        border-radius: 18px;
+    }
+
+    .about-image-caption {
+        left: 12px;
+        bottom: 12px;
+        padding: 10px 12px;
+        font-size: 11px;
+    }
+
+    /* Nội dung bên phải */
+    .about-info h3 {
+        font-size: 25px;
+    }
+
+    .about-role {
+        font-size: calc(14px * var(--font-scale));
+        line-height: 1.7;
+    }
+
+    .about-description {
+        font-size: calc(14px * var(--font-scale));
+        line-height: 1.8;
+    }
+
+    .about-highlights {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .about-highlight {
+        min-height: auto;
+        padding: 16px;
+    }
+
+    .about-highlight span {
+        overflow-wrap: anywhere;
+    }
+
+    .about-button {
+        padding: 12px 18px;
         font-size: 13px;
     }
 
-    .cover-page .info-item strong {
+
+    /* ===== SKILLS ===== */
+
+    .skills-section {
+        padding: 55px 16px;
+    }
+
+    .skills-heading {
+        margin-bottom: 35px;
+    }
+
+    .skills-heading h2 {
+        font-size: 26px;
+    }
+
+    .skills-heading p {
+        font-size: calc(13px * var(--font-scale));
+        line-height: 1.7;
+    }
+
+    .skill-group {
+        border-radius: 12px;
+    }
+
+    .skill-group-header {
+        gap: 12px;
+        padding: 18px 14px;
+    }
+
+    .skill-group-header span {
+        font-size: calc(16px * var(--font-scale));
+        line-height: 1.5;
+    }
+
+    .skill-group-header > i:first-child {
+        width: 25px;
+        font-size: 20px;
+    }
+
+    .skill-arrow {
         font-size: 14px;
+    }
+
+    .skill-children {
+        grid-template-columns: 1fr;
+        padding: 14px;
+        gap: 12px;
+    }
+
+    .skill-child {
+        padding: 16px;
+        border-radius: 10px;
+    }
+
+    .skill-child h3 {
+        font-size: calc(16px * var(--font-scale));
+        margin-bottom: 8px;
+    }
+
+    .skill-child p {
+        font-size: calc(13px * var(--font-scale));
+        line-height: 1.7;
+    }
+
+
+    /* ===== PROJECTS ===== */
+
+    .projects-section {
+        padding: 55px 16px;
+    }
+
+    .projects-heading h2 {
+        font-size: 26px;
+    }
+
+    .projects-heading p {
+        font-size: calc(13px * var(--font-scale));
+    }
+
+    .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .project-content {
+        padding: 16px;
+    }
+
+    .project-content h3 {
+        font-size: calc(17px * var(--font-scale));
+    }
+
+    .project-content p {
+        font-size: calc(13px * var(--font-scale));
+    }
+
+    .project-tags span {
+        font-size: 11px;
+    }
+}
+
+
+/* ========================================
+   PROJECT CARD - CLICKABLE ENTIRE CARD
+   Compatible with <a class="project-card">
+======================================== */
+
+.project-card {
+    color: var(--text-color);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.project-card:visited {
+    color: var(--text-color);
+}
+
+.project-card:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 4px;
+}
+
+.project-card .project-content,
+.project-card .project-content h3 {
+    color: var(--text-color);
+}
+
+/* ========================================
+   FONT CONTROL RESPONSIVE
+======================================== */
+
+/* Tablet */
+@media (max-width: 768px) {
+
+    .font-toggle {
+        width: 40px;
+        height: 40px;
+        font-size: 17px;
+    }
+
+    .font-panel {
+        width: 260px;
+        padding: 18px;
+    }
+
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+
+    .font-toggle {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+    }
+
+    .font-panel {
+        width: 230px;
+        right: -40px;
+        padding: 16px;
+    }
+
+    .font-panel-header {
+        font-size: 13px;
+    }
+
+    .font-slider-row {
+        gap: 8px;
+    }
+
+    .font-reset {
+        padding: 10px;
+    }
+
+}
+
+
+/* ========================================
+   5. BINARY BACKGROUND RESPONSIVE
+   Keep original Dark / Light background colors
+======================================== */
+
+@media (max-width: 768px) {
+    #binary-background {
+        opacity: 0.25;
+    }
+
+    body.light-mode #binary-background {
+        opacity: 0.85;
+    }
+}
+
+@media (max-width: 480px) {
+    #binary-background {
+        opacity: 0.18;
+    }
+
+    body.light-mode #binary-background {
+        opacity: 0.85;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #binary-background {
+        display: none;
     }
 }

@@ -1,116 +1,16 @@
 
 /* =========================================
-   JOBPORTAL - ADMIN MANAGEMENT
+   JOBPORTAL - ADMIN MANAGEMENT (API REAL)
+   Đồng bộ với Shared API Client
 ========================================= */
 
-"use strict";
+const API = window.JobPortalAPI;
 
-const EMPLOYER_KEY = "jobportal_employers";
-const USER_KEY = "jobportal_users";
-const JOB_KEY = "jobportal_jobs";
-const SETTINGS_KEY = "jobportal_settings";
-
-const DEFAULT_EMPLOYERS = [
-    {
-        id: 1,
-        name: "Công ty TNHH ABC Technology",
-        email: "contact@abc.com",
-        date: "08/11/2026",
-        status: "pending"
-    },
-    {
-        id: 2,
-        name: "Công ty Cổ phần FPT",
-        email: "hr@fpt.com",
-        date: "07/11/2026",
-        status: "pending"
-    },
-    {
-        id: 3,
-        name: "Công ty TNHH Tech Solutions",
-        email: "hr@techsolutions.com",
-        date: "05/11/2026",
-        status: "approved"
-    }
-];
-
-const DEFAULT_JOBS = [
-    {
-        id: 1,
-        title: "Frontend Developer",
-        company: "ABC Technology",
-        salary: "15 - 20 triệu",
-        status: "pending"
-    },
-    {
-        id: 2,
-        title: "Backend Developer",
-        company: "FPT",
-        salary: "20 - 30 triệu",
-        status: "pending"
-    },
-    {
-        id: 3,
-        title: "UI/UX Designer",
-        company: "Tech Solutions",
-        salary: "12 - 18 triệu",
-        status: "approved"
-    }
-];
-
-const DEFAULT_SETTINGS = {
-    systemName: "JobPortal",
-    adminEmail: "admin@jobportal.com",
-    description: "Nền tảng kết nối nhà tuyển dụng và ứng viên.",
-    approveEmployer: true,
-    approveJob: true
-};
+let employers = [];
+let jobs = [];
 
 /* =========================================
-   1. LOCAL STORAGE
-========================================= */
-
-function readStorage(key, fallback) {
-    try {
-        const value = localStorage.getItem(key);
-        return value === null ? fallback : JSON.parse(value);
-    } catch (error) {
-        console.error("Lỗi đọc Local Storage:", key, error);
-        return fallback;
-    }
-}
-
-function writeStorage(key, value) {
-    try {
-        localStorage.setItem(key, JSON.stringify(value));
-        return true;
-    } catch (error) {
-        console.error("Lỗi lưu Local Storage:", key, error);
-        showToast("Không thể lưu dữ liệu!", "error");
-        return false;
-    }
-}
-
-let employers = readStorage(EMPLOYER_KEY, null);
-let jobs = readStorage(JOB_KEY, null);
-let settings = readStorage(SETTINGS_KEY, null);
-
-if (!Array.isArray(employers)) {
-    employers = JSON.parse(JSON.stringify(DEFAULT_EMPLOYERS));
-    writeStorage(EMPLOYER_KEY, employers);
-}
-
-if (!Array.isArray(jobs)) {
-    jobs = JSON.parse(JSON.stringify(DEFAULT_JOBS));
-    writeStorage(JOB_KEY, jobs);
-}
-
-if (!settings || typeof settings !== "object") {
-    settings = { ...DEFAULT_SETTINGS };
-}
-
-/* =========================================
-   2. TOAST
+   1. THÔNG BÁO TOAST
 ========================================= */
 
 function showToast(message, type = "success") {
@@ -124,7 +24,7 @@ function showToast(message, type = "success") {
             position: "fixed",
             top: "25px",
             right: "25px",
-            zIndex: "999999",
+            zIndex: "99999",
             display: "flex",
             flexDirection: "column",
             gap: "10px"
@@ -135,23 +35,22 @@ function showToast(message, type = "success") {
 
     const toast = document.createElement("div");
 
-    const colors = {
-        success: "#16a34a",
-        error: "#dc2626",
-        warning: "#d97706"
-    };
+    const background =
+        type === "error" ? "#dc2626" :
+        type === "warning" ? "#d97706" :
+        "#16a34a";
 
     Object.assign(toast.style, {
-        background: colors[type] || colors.success,
+        background,
         color: "#fff",
         padding: "15px 22px",
         borderRadius: "10px",
         fontSize: "14px",
         fontWeight: "600",
-        boxShadow: "0 5px 20px rgba(0,0,0,.15)",
+        boxShadow: "0 5px 20px rgba(0,0,0,0.15)",
         opacity: "0",
         transform: "translateY(-10px)",
-        transition: "all .25s ease"
+        transition: "all 0.25s ease"
     });
 
     toast.textContent = message;
@@ -165,12 +64,13 @@ function showToast(message, type = "success") {
     setTimeout(() => {
         toast.style.opacity = "0";
         toast.style.transform = "translateY(-10px)";
+
         setTimeout(() => toast.remove(), 300);
-    }, 2500);
+    }, 3000);
 }
 
 /* =========================================
-   3. HÀM HỖ TRỢ
+   2. HÀM HỖ TRỢ
 ========================================= */
 
 function escapeHTML(value) {
@@ -183,269 +83,211 @@ function escapeHTML(value) {
     })[char]);
 }
 
-function getStatusText(status) {
-    return {
+function getStatusBadge(status) {
+    const labels = {
         pending: "Chờ duyệt",
         approved: "Đã duyệt",
-        rejected: "Đã từ chối"
-    }[status] || "Chờ duyệt";
-}
+        rejected: "Đã từ chối",
+        locked: "Đã khóa",
+        active: "Hoạt động",
+        closed: "Đã đóng"
+    };
 
-function getStatusBadge(status) {
     return `
         <span class="status-badge status-${escapeHTML(status)}">
-            ${escapeHTML(getStatusText(status))}
+            ${escapeHTML(labels[status] || status)}
         </span>
     `;
 }
 
-function normalizeStatus(status) {
-    const value = String(status || "").toLowerCase();
-
-    if (["approved", "active", "accepted"].includes(value)) {
-        return "approved";
-    }
-
-    if (["rejected", "declined", "denied"].includes(value)) {
-        return "rejected";
-    }
-
-    return "pending";
-}
-
-function getEmployerName(user) {
-    return user.companyName ||
-        user.company ||
-        user.businessName ||
-        user.fullName ||
-        user.name ||
-        user.email ||
-        "Doanh nghiệp chưa có tên";
-}
-
-function getUserRole(user) {
-    return String(user.role || user.accountType || user.type || "")
-        .toLowerCase();
+function getErrorMessage(error) {
+    return error?.message || "Đã xảy ra lỗi khi xử lý yêu cầu.";
 }
 
 /* =========================================
-   4. ĐỒNG BỘ DOANH NGHIỆP ĐĂNG KÝ
+   3. KIỂM TRA PHIÊN ADMIN
 ========================================= */
 
-function syncRegisteredEmployers() {
-    const users = readStorage(USER_KEY, []);
+function checkAdminSession() {
+    const token = localStorage.getItem("jobportal_access_token");
 
-    if (!Array.isArray(users)) return;
+    let session = null;
 
-    let changed = false;
-
-    users.forEach(user => {
-        if (!user || typeof user !== "object") return;
-
-        const role = getUserRole(user);
-
-        // Chỉ lấy tài khoản nhà tuyển dụng/doanh nghiệp.
-        if (
-            !["employer", "company", "business", "nhatuyendung"]
-                .includes(role)
-        ) {
-            return;
-        }
-
-        const email = String(user.email || "").trim().toLowerCase();
-
-        if (!email) return;
-
-        let employer = employers.find(item =>
-            String(item.email || "").trim().toLowerCase() === email
+    try {
+        session = JSON.parse(
+            localStorage.getItem("jobportal_session")
         );
-
-        if (!employer) {
-            employer = {
-                id: user.id ?? `user_${email}`,
-                userId: user.id ?? null,
-                name: getEmployerName(user),
-                email: email,
-                date: user.date || user.createdAt || new Date().toLocaleDateString("vi-VN"),
-                status: normalizeStatus(user.status || user.approvalStatus),
-                reason: user.reason || user.rejectionReason || ""
-            };
-
-            employers.push(employer);
-            changed = true;
-        } else {
-            // Đồng bộ thông tin tài khoản nhưng không ghi đè trạng thái
-            // đã được quản trị viên duyệt/từ chối.
-            employer.userId = user.id ?? employer.userId;
-            employer.name = getEmployerName(user);
-            employer.email = email;
-            changed = true;
-        }
-    });
-
-    if (changed) {
-        writeStorage(EMPLOYER_KEY, employers);
+    } catch (error) {
+        console.error("Không đọc được phiên đăng nhập:", error);
     }
+
+    if (!token || !session) {
+        alert("Phiên đăng nhập không tồn tại. Vui lòng đăng nhập lại!");
+        window.location.replace("./auth.html");
+        return false;
+    }
+
+    if (session.role !== "admin") {
+        alert("Bạn không có quyền truy cập trang quản trị!");
+
+        window.location.replace("./index.html");
+        return false;
+    }
+
+    if (!API) {
+        alert("Không tải được API Client. Vui lòng kiểm tra api.js!");
+        return false;
+    }
+
+    return true;
 }
 
 /* =========================================
-   5. ĐỒNG BỘ TRẠNG THÁI VỀ TÀI KHOẢN
+   4. XỬ LÝ PHIÊN HẾT HẠN
 ========================================= */
 
-function updateUserEmployerStatus(employer, status, reason = "") {
-    const users = readStorage(USER_KEY, []);
+function handleApiError(error) {
+    console.error("Lỗi Admin API:", error);
 
-    if (!Array.isArray(users)) return;
+    const code = Number(error?.code);
 
-    let changed = false;
+    if (code === 401) {
+        API.clearAuthSession();
 
-    users.forEach(user => {
-        if (!user) return;
+        alert("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại!");
 
-        const sameEmail =
-            String(user.email || "").trim().toLowerCase() ===
-            String(employer.email || "").trim().toLowerCase();
+        window.location.replace("./auth.html");
+        return;
+    }
 
-        const sameId =
-            employer.userId != null &&
-            String(user.id) === String(employer.userId);
+    if (code === 403) {
+        showToast("Tài khoản không có quyền quản trị.", "error");
+        return;
+    }
 
-        if (!sameEmail && !sameId) return;
+    showToast(getErrorMessage(error), "error");
+}
 
-        user.status = status;
-        user.approvalStatus = status;
+/* =========================================
+   5. LẤY DỮ LIỆU QUẢN TRỊ TỪ DATABASE
+========================================= */
 
-        if (status === "rejected") {
-            user.reason = reason;
-            user.rejectionReason = reason;
-        } else {
-            delete user.reason;
-            delete user.rejectionReason;
+async function fetchAdminOverview() {
+    try {
+        const result = await API.get("/admin/overview");
+
+        if (!result || !result.success || !result.data) {
+            throw new Error(
+                result?.message || "Không thể tải dữ liệu quản trị."
+            );
         }
 
-        changed = true;
-    });
+        const data = result.data;
 
-    if (changed) {
-        writeStorage(USER_KEY, users);
+        employers = (data.employers || []).map(emp => ({
+            id: emp.company_id || emp.user_id,
+            userId: emp.user_id,
+            name: emp.company_name || emp.full_name || "Chưa có tên",
+            email: emp.email || "",
+            date: emp.created_at
+                ? new Date(emp.created_at).toLocaleDateString("vi-VN")
+                : "Chưa có dữ liệu",
+            status: emp.user_status === "locked" ? "locked" : "active"
+        }));
+
+        jobs = (data.jobs || []).map(job => ({
+            id: job.job_id,
+            title: job.title || "Chưa có tiêu đề",
+            company: job.company_name || "Chưa có doanh nghiệp",
+            salary: `${job.salary_min || 0} - ${job.salary_max || 0} triệu`,
+            status: job.status,
+            reject_reason: job.reject_reason
+        }));
+
+        renderEmployers();
+        renderJobs();
+        updateStatistics();
+
+    } catch (error) {
+        handleApiError(error);
     }
 }
 
 /* =========================================
-   6. THỐNG KÊ
+   6. CẬP NHẬT THỐNG KÊ
 ========================================= */
 
 function updateStatistics() {
-    const pendingEmployers =
-        employers.filter(item => item.status === "pending").length;
+    const lockedEmployers = employers.filter(
+        item => item.status === "locked"
+    ).length;
 
-    const pendingJobs =
-        jobs.filter(item => item.status === "pending").length;
+    const pendingJobs = jobs.filter(
+        item => item.status === "pending"
+    ).length;
 
-    const values = {
+    const statistics = {
         "total-employers": employers.length,
-        "pending-employers": pendingEmployers,
+        "pending-employers": lockedEmployers,
         "total-jobs": jobs.length,
-        "pending-jobs": pendingJobs,
-        "employer-count": pendingEmployers,
-        "job-count": pendingJobs
+        "pending-jobs": pendingJobs
     };
 
-    Object.entries(values).forEach(([id, value]) => {
+    Object.entries(statistics).forEach(([id, value]) => {
         const element = document.getElementById(id);
-        if (element) element.textContent = value;
+
+        if (element) {
+            element.textContent = value;
+        }
     });
-
-    const employerOverview =
-        document.getElementById("overview-employer-count");
-
-    const jobOverview =
-        document.getElementById("overview-job-count");
-
-    if (employerOverview) {
-        employerOverview.textContent =
-            `${pendingEmployers} yêu cầu đang chờ`;
-    }
-
-    if (jobOverview) {
-        jobOverview.textContent =
-            `${pendingJobs} tin đang chờ`;
-    }
 }
 
 /* =========================================
-   7. HIỂN THỊ DOANH NGHIỆP
+   7. HIỂN THỊ DOANH NGHIỆP / NGƯỜI DÙNG
 ========================================= */
 
 function renderEmployers() {
     const tbody = document.getElementById("employer-table-body");
+
     if (!tbody) return;
 
-    const keyword = (
-        document.getElementById("employer-search")?.value || ""
-    ).trim().toLowerCase();
+    const searchInput = document.getElementById("employer-search");
 
-    const filter =
-        document.getElementById("employer-filter")?.value || "all";
+    const keyword = searchInput
+        ? searchInput.value.toLowerCase().trim()
+        : "";
 
-    const filtered = employers.filter(item => {
-        const name = String(item.name || "").toLowerCase();
-        const email = String(item.email || "").toLowerCase();
+    const filtered = employers.filter(item =>
+        item.name.toLowerCase().includes(keyword) ||
+        item.email.toLowerCase().includes(keyword)
+    );
 
-        return (
-            (name.includes(keyword) || email.includes(keyword)) &&
-            (filter === "all" || item.status === filter)
-        );
-    });
+    tbody.innerHTML = filtered.map(item => `
+        <tr>
+            <td>
+                <strong>${escapeHTML(item.name)}</strong>
+            </td>
 
-    tbody.innerHTML = filtered.map(item => {
-        const canApprove = item.status !== "approved";
-        const canReject = item.status !== "rejected";
+            <td>${escapeHTML(item.email)}</td>
 
-        return `
-            <tr>
-                <td><strong>${escapeHTML(item.name)}</strong></td>
-                <td>${escapeHTML(item.email)}</td>
-                <td>${escapeHTML(item.date)}</td>
-                <td>
-                    ${getStatusBadge(item.status)}
-                    ${
-                        item.reason
-                            ? `<small class="rejection-reason">Lý do: ${escapeHTML(item.reason)}</small>`
-                            : ""
-                    }
-                </td>
-                <td>
-                    <div class="action-buttons">
-                        <button
-                            type="button"
-                            class="action-btn approve-btn"
-                            data-type="employer"
-                            data-id="${escapeHTML(item.id)}"
-                            data-action="approved"
-                            ${canApprove ? "" : "disabled"}
-                        >
-                            ${item.status === "rejected" ? "Duyệt lại" : "Duyệt"}
-                        </button>
+            <td>${escapeHTML(item.date)}</td>
 
-                        <button
-                            type="button"
-                            class="action-btn reject-btn"
-                            data-type="employer"
-                            data-id="${escapeHTML(item.id)}"
-                            data-action="rejected"
-                            ${canReject ? "" : "disabled"}
-                        >
-                            Từ chối
-                        </button>
-                    </div>
-                </td>
-            </tr>
-        `;
-    }).join("");
+            <td>${getStatusBadge(item.status)}</td>
 
-    const empty = document.getElementById("employer-empty");
-    if (empty) empty.hidden = filtered.length !== 0;
+            <td>
+                <div class="action-buttons">
+                    <button
+                        class="action-btn ${item.status === "locked" ? "approve-btn" : "reject-btn"}"
+                        data-type="user"
+                        data-id="${item.userId}"
+                        data-action="${item.status === "locked" ? "active" : "locked"}">
+
+                        ${item.status === "locked" ? "Mở khóa" : "Khóa"}
+                    </button>
+                </div>
+            </td>
+        </tr>
+    `).join("");
 }
 
 /* =========================================
@@ -454,169 +296,152 @@ function renderEmployers() {
 
 function renderJobs() {
     const tbody = document.getElementById("job-table-body");
+
     if (!tbody) return;
 
-    const keyword = (
-        document.getElementById("job-search")?.value || ""
-    ).trim().toLowerCase();
+    const searchInput = document.getElementById("job-search");
 
-    const filter =
-        document.getElementById("job-filter")?.value || "all";
+    const keyword = searchInput
+        ? searchInput.value.toLowerCase().trim()
+        : "";
 
-    const filtered = jobs.filter(item => {
-        const title = String(item.title || "").toLowerCase();
-        const company = String(item.company || "").toLowerCase();
+    const filtered = jobs.filter(item =>
+        item.title.toLowerCase().includes(keyword) ||
+        item.company.toLowerCase().includes(keyword)
+    );
 
-        return (
-            (title.includes(keyword) || company.includes(keyword)) &&
-            (filter === "all" || item.status === filter)
-        );
-    });
+    tbody.innerHTML = filtered.map(item => `
+        <tr>
+            <td>
+                <strong>${escapeHTML(item.title)}</strong>
+            </td>
 
-    tbody.innerHTML = filtered.map(item => {
-        const canApprove = item.status !== "approved";
-        const canReject = item.status !== "rejected";
+            <td>${escapeHTML(item.company)}</td>
 
-        return `
-            <tr>
-                <td><strong>${escapeHTML(item.title)}</strong></td>
-                <td>${escapeHTML(item.company)}</td>
-                <td>${escapeHTML(item.salary)}</td>
-                <td>${getStatusBadge(item.status)}</td>
-                <td>
-                    <div class="action-buttons">
-                        <button
-                            type="button"
-                            class="action-btn approve-btn"
-                            data-type="job"
-                            data-id="${escapeHTML(item.id)}"
-                            data-action="approved"
-                            ${canApprove ? "" : "disabled"}
-                        >
-                            ${item.status === "rejected" ? "Duyệt lại" : "Duyệt"}
-                        </button>
+            <td>${escapeHTML(item.salary)}</td>
 
-                        <button
-                            type="button"
-                            class="action-btn reject-btn"
-                            data-type="job"
-                            data-id="${escapeHTML(item.id)}"
-                            data-action="rejected"
-                            ${canReject ? "" : "disabled"}
-                        >
-                            Từ chối
-                        </button>
-                    </div>
-                </td>
-            </tr>
-        `;
-    }).join("");
+            <td>${getStatusBadge(item.status)}</td>
 
-    const empty = document.getElementById("job-empty");
-    if (empty) empty.hidden = filtered.length !== 0;
+            <td>
+                <div class="action-buttons">
+
+                    <button
+                        class="action-btn approve-btn"
+                        data-type="job"
+                        data-id="${item.id}"
+                        data-action="approved"
+                        ${item.status === "approved" ? "disabled" : ""}>
+                        Duyệt
+                    </button>
+
+                    <button
+                        class="action-btn reject-btn"
+                        data-type="job"
+                        data-id="${item.id}"
+                        data-action="rejected"
+                        ${item.status === "rejected" ? "disabled" : ""}>
+                        Từ chối
+                    </button>
+
+                </div>
+            </td>
+        </tr>
+    `).join("");
 }
 
 /* =========================================
-   9. DUYỆT / TỪ CHỐI
+   9. DUYỆT TIN / KHÓA TÀI KHOẢN
 ========================================= */
 
-function handleModeration(event) {
-    const button = event.target.closest("button[data-action]");
+async function handleModeration(event) {
+    const button = event.target.closest("[data-action]");
 
     if (!button || button.disabled) return;
 
     const type = button.dataset.type;
-    const id = button.dataset.id;
+    const id = Number(button.dataset.id);
     const action = button.dataset.action;
 
-    if (!["employer", "job"].includes(type)) return;
-    if (!["approved", "rejected"].includes(action)) return;
+    if (!id || !action) return;
 
-    const list = type === "employer" ? employers : jobs;
+    button.disabled = true;
 
-    const item = list.find(record =>
-        String(record.id) === String(id)
-    );
+    try {
+        if (type === "job") {
+            let reject_reason = null;
 
-    if (!item) {
-        showToast("Không tìm thấy dữ liệu!", "error");
-        return;
-    }
+            if (action === "rejected") {
+                reject_reason = prompt(
+                    "Nhập lý do từ chối bài đăng này:"
+                );
 
-    if (item.status === action) {
-        showToast(
-            action === "approved"
-                ? "Doanh nghiệp đã được duyệt trước đó!"
-                : "Mục này đã bị từ chối trước đó!",
-            "warning"
-        );
-        return;
-    }
+                if (reject_reason === null) {
+                    button.disabled = false;
+                    return;
+                }
 
-    let reason = "";
+                reject_reason = reject_reason.trim() ||
+                    "Không đạt yêu cầu kiểm duyệt.";
+            }
 
-    if (action === "rejected") {
-        reason = window.prompt(
-            "Nhập lý do từ chối (có thể để trống):",
-            ""
-        );
+            const result = await API.patch(
+                `/admin/jobs/${id}/status`,
+                {
+                    status: action,
+                    reject_reason
+                }
+            );
 
-        if (reason === null) return;
+            showToast(
+                result.message || "Cập nhật tin tuyển dụng thành công."
+            );
 
-        reason = reason.trim();
-    }
+            await fetchAdminOverview();
 
-    const previousStatus = item.status;
-    const previousReason = item.reason;
+        } else if (type === "user") {
+            const confirmText = action === "locked"
+                ? "Bạn có chắc chắn muốn khóa tài khoản này?"
+                : "Bạn có chắc chắn muốn mở khóa tài khoản này?";
 
-    item.status = action;
+            if (!confirm(confirmText)) {
+                button.disabled = false;
+                return;
+            }
 
-    if (action === "rejected") {
-        item.reason = reason;
-    } else {
-        item.reason = "";
-    }
+            const result = await API.patch(
+                `/admin/users/${id}/status`,
+                {
+                    status: action
+                }
+            );
 
-    const key = type === "employer" ? EMPLOYER_KEY : JOB_KEY;
+            showToast(
+                result.message || "Cập nhật tài khoản thành công."
+            );
 
-    if (!writeStorage(key, list)) {
-        item.status = previousStatus;
-        item.reason = previousReason;
-        return;
-    }
+            await fetchAdminOverview();
+        }
 
-    if (type === "employer") {
-        updateUserEmployerStatus(item, action, reason);
-    }
-
-    renderEmployers();
-    renderJobs();
-    updateStatistics();
-
-    if (action === "approved") {
-        showToast("Duyệt thành công!", "success");
-    } else {
-        showToast("Đã từ chối!", "warning");
+    } catch (error) {
+        handleApiError(error);
+        button.disabled = false;
     }
 }
 
 /* =========================================
-   10. CHUYỂN MỤC QUẢN TRỊ
+   10. CHUYỂN TAB ADMIN
 ========================================= */
 
 function switchSection(sectionId) {
     const target = document.getElementById(sectionId);
 
-    if (!target || !target.classList.contains("admin-section")) {
-        showToast("Không tìm thấy mục quản trị!", "error");
-        return;
-    }
+    if (!target) return;
 
     document.querySelectorAll(".admin-section").forEach(section => {
         section.classList.remove("active");
     });
 
-    document.querySelectorAll(".nav-item[data-section]").forEach(item => {
+    document.querySelectorAll(".nav-item").forEach(item => {
         item.classList.remove("active");
     });
 
@@ -626,162 +451,48 @@ function switchSection(sectionId) {
         `.nav-item[data-section="${sectionId}"]`
     );
 
-    if (navItem) navItem.classList.add("active");
-
-    const titles = {
-        overview: "Tổng quan hệ thống",
-        employers: "Phê duyệt doanh nghiệp",
-        jobs: "Kiểm duyệt tin tuyển dụng",
-        settings: "Cài đặt hệ thống"
-    };
-
-    const pageTitle = document.getElementById("page-title");
-
-    if (pageTitle) {
-        pageTitle.textContent = titles[sectionId] || "Quản trị hệ thống";
-    }
-
-    if (sectionId === "settings") loadSettings();
-
-    window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
-/* =========================================
-   11. CÀI ĐẶT
-========================================= */
-
-function loadSettings() {
-    const systemName = document.getElementById("system-name");
-    const adminEmail = document.getElementById("admin-email");
-    const description = document.getElementById("system-description");
-    const approveEmployer = document.getElementById("approve-employer");
-    const approveJob = document.getElementById("approve-job");
-
-    if (systemName) systemName.value = settings.systemName || "";
-    if (adminEmail) adminEmail.value = settings.adminEmail || "";
-    if (description) description.value = settings.description || "";
-
-    if (approveEmployer) {
-        approveEmployer.checked = settings.approveEmployer !== false;
-    }
-
-    if (approveJob) {
-        approveJob.checked = settings.approveJob !== false;
-    }
-
-    updateSystemInfo();
-}
-
-function saveSettings() {
-    const systemName =
-        document.getElementById("system-name")?.value.trim() || "";
-
-    const adminEmail =
-        document.getElementById("admin-email")?.value.trim() || "";
-
-    const description =
-        document.getElementById("system-description")?.value.trim() || "";
-
-    const approveEmployer =
-        document.getElementById("approve-employer")?.checked ?? true;
-
-    const approveJob =
-        document.getElementById("approve-job")?.checked ?? true;
-
-    if (!systemName) {
-        showToast("Vui lòng nhập tên hệ thống!", "error");
-        return;
-    }
-
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(adminEmail)) {
-        showToast("Email quản trị viên không hợp lệ!", "error");
-        return;
-    }
-
-    settings = {
-        systemName,
-        adminEmail,
-        description,
-        approveEmployer,
-        approveJob
-    };
-
-    if (!writeStorage(SETTINGS_KEY, settings)) return;
-
-    updateSystemInfo();
-    showToast("Lưu cài đặt thành công!");
-}
-
-function updateSystemInfo() {
-    const info = document.querySelector(".system-info > div strong");
-
-    if (info) {
-        info.textContent = settings.systemName || "JobPortal";
-    }
-}
-
-function saveModerationSettings() {
-    settings = {
-        ...settings,
-        approveEmployer:
-            document.getElementById("approve-employer")?.checked ?? true,
-        approveJob:
-            document.getElementById("approve-job")?.checked ?? true
-    };
-
-    if (writeStorage(SETTINGS_KEY, settings)) {
-        showToast("Đã cập nhật cấu hình kiểm duyệt!");
+    if (navItem) {
+        navItem.classList.add("active");
     }
 }
 
 /* =========================================
-   12. KHỞI ĐỘNG
+   11. KHỞI TẠO ADMIN PORTAL
 ========================================= */
 
 document.addEventListener("DOMContentLoaded", function () {
-    // Đồng bộ tài khoản nhà tuyển dụng đã đăng ký.
-    syncRegisteredEmployers();
 
-    // Điều hướng các mục quản trị.
+    // Kiểm tra quyền Admin trước khi tải dữ liệu
+    if (!checkAdminSession()) return;
+
+    // Chuyển tab
     document.querySelectorAll("[data-section]").forEach(button => {
         button.addEventListener("click", function () {
             switchSection(this.dataset.section);
         });
     });
 
-    // Tìm kiếm doanh nghiệp.
-    document.getElementById("employer-search")
-        ?.addEventListener("input", renderEmployers);
+    // Xử lý duyệt tin và khóa tài khoản
+    const adminMain = document.querySelector(".admin-main");
 
-    document.getElementById("employer-filter")
-        ?.addEventListener("change", renderEmployers);
+    if (adminMain) {
+        adminMain.addEventListener("click", handleModeration);
+    }
 
-    // Tìm kiếm việc làm.
-    document.getElementById("job-search")
-        ?.addEventListener("input", renderJobs);
+    // Tìm kiếm tin tuyển dụng
+    const jobSearch = document.getElementById("job-search");
 
-    document.getElementById("job-filter")
-        ?.addEventListener("change", renderJobs);
+    if (jobSearch) {
+        jobSearch.addEventListener("input", renderJobs);
+    }
 
-    // Ủy quyền sự kiện: hoạt động cả khi bảng được render lại.
-    document.querySelector(".admin-main")
-        ?.addEventListener("click", handleModeration);
+    // Tìm kiếm doanh nghiệp
+    const employerSearch = document.getElementById("employer-search");
 
-    // Lưu cài đặt.
-    document.getElementById("save-settings")
-        ?.addEventListener("click", saveSettings);
+    if (employerSearch) {
+        employerSearch.addEventListener("input", renderEmployers);
+    }
 
-    document.getElementById("approve-employer")
-        ?.addEventListener("change", saveModerationSettings);
-
-    document.getElementById("approve-job")
-        ?.addEventListener("change", saveModerationSettings);
-
-    // Tải dữ liệu giao diện.
-    loadSettings();
-    renderEmployers();
-    renderJobs();
-    updateStatistics();
-
-    console.log("JobPortal Admin đã khởi động thành công!");
+    // Tải dữ liệu từ Backend
+    fetchAdminOverview();
 });

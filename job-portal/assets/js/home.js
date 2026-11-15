@@ -85,6 +85,19 @@ document.addEventListener('DOMContentLoaded', function () {
         window.location.href = `./jobs.html?${params.toString()}`;
       }, 600);
     });
+
+    // 2.1. PHÍM TẮT "/" ĐỂ FOCUS NHANH VÀO Ô TÌM KIẾM
+    const searchInput = document.getElementById('searchKeyword');
+    if (searchInput) {
+      document.addEventListener('keydown', function (e) {
+        const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
+        if (e.key === '/' && activeTag !== 'input' && activeTag !== 'textarea' && activeTag !== 'select') {
+          e.preventDefault();
+          searchInput.focus();
+          searchInput.select();
+        }
+      });
+    }
   }
 
   // 3. CHUYỂN TAB VIỆC LÀM TRÊN TRANG CHỦ (JOBS FILTER TABS)
@@ -122,13 +135,13 @@ document.addEventListener('DOMContentLoaded', function () {
       const jobTitle = btn.closest('.job-card').querySelector('.job-card-title').textContent.trim();
 
       if (isSaved) {
-        btn.innerHTML = '❤️';
+        btn.innerHTML = '<i class="fa-solid fa-bookmark"></i>';
         btn.setAttribute('aria-label', 'Bỏ lưu việc làm');
         if (window.showToast) {
           window.showToast(`Đã lưu "${jobTitle}" vào danh sách theo dõi!`, 'success');
         }
       } else {
-        btn.innerHTML = '🤍';
+        btn.innerHTML = '<i class="fa-regular fa-bookmark"></i>';
         btn.setAttribute('aria-label', 'Lưu việc làm này');
         if (window.showToast) {
           window.showToast(`Đã bỏ lưu "${jobTitle}"!`, 'warning');

@@ -1,213 +1,469 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Trần Hữu Thành — Portfolio Cá Nhân | MSSV: 044206000003</title>
+  <title>Tran Huu Thanh — Portfolio | Editorial Edition</title>
 
-  <!-- Google Fonts: Plus Jakarta Sans (Tiêu đề) và Inter (Nội dung) -->
+  <!--
+      PHẦN 1: TÍCH HỢP FONT CHỮ (GOOGLE FONTS)
+      - Newsreader: Font Serif quang học cao cấp dùng cho tiêu đề chính
+      - Plus Jakarta Sans: Font Sans-serif hiện đại, dễ đọc cho nội dung văn bản
+      - Space Mono: Font Monospace hiển thị thông số và nhãn kỹ thuật
+      -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
 
-  <!-- Liên kết file CSS bằng đường dẫn tương đối ./ -->
+  <!-- Thư viện biểu tượng Font Awesome (Facebook, TikTok, GitHub, Email) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+  <!-- Tệp định kiểu CSS cục bộ -->
   <link rel="stylesheet" href="./style.css" />
 </head>
-<body>
+<body class="editorial-body">
 
-  <!-- ================= BỐ CỤC CHIA ĐÔI MÀN HÌNH (SPLIT-SCREEN) ================= -->
-  <div class="container page-layout">
+  <!-- 
+      PHẦN 2: NỀN KHÔNG GIAN ĐỘNG (SAO BĂNG VÀ ĐOM ĐÓM VÀNG)
+      - Hoạt cảnh chạy ngầm bằng CSS @keyframes, vị trí fixed cố định, không che chữ
+      -->
+  <div class="celestial-canvas" aria-hidden="true">
+    <!-- Quầng sáng ambient tạo chiều sâu nền -->
+    <div class="ambient-glow glow-top"></div>
+    <div class="ambient-glow glow-bottom"></div>
 
-    <!-- 1. CỘT TRÁI CỐ ĐỊNH (STICKY SIDEBAR - ĐỨNG YÊN KHI CUỘN) -->
-    <aside class="sidebar">
-      <div class="sidebar-top">
-        <a href="../../index.html" class="back-btn">← Trang chủ nhóm</a>
-        <button id="themeBtn" class="theme-btn">☀️ Đổi nền</button>
+    <!-- 3 vệt Sao băng lướt qua bầu trời đêm -->
+    <span class="star-trace trace-1"></span>
+    <span class="star-trace trace-2"></span>
+    <span class="star-trace trace-3"></span>
+
+    <!-- 6 đốm Đom đóm vàng bay lơ lửng -->
+    <span class="ember e-1"></span>
+    <span class="ember e-2"></span>
+    <span class="ember e-3"></span>
+    <span class="ember e-4"></span>
+    <span class="ember e-5"></span>
+    <span class="ember e-6"></span>
+  </div>
+
+  <!--
+      PHẦN 3: THANH MASTHEAD ĐẦU TRANG (TIỆN ÍCH TRÊN CÙNG)
+      - Nút quay lại Trang chủ nhóm (Team Directory)
+      - Thông tin ấn bản học thuật
+      - Đèn báo trạng thái hoạt động thực tế
+      - Nút chuyển đổi giao diện Sáng / Tối (Theme Switcher)
+      -->
+  <header class="masthead-bar">
+    <div class="masthead-container">
+      <!-- Cụm bên trái: Đường dẫn quay lại danh bạ nhóm -->
+      <div class="masthead-left">
+        <a href="../../index.html" class="hub-back-slug">
+          <span class="slug-arrow">←</span>
+          <span class="slug-text">Team Directory</span>
+        </a>
       </div>
 
-      <div class="profile-box">
-        <img src="./images/tht2.jpg" alt="Chân dung Trần Hữu Thành" class="avatar-img" />
-        <span class="tag-badge">MSSV: 044206000003</span>
-        <h1 class="profile-name">Trần Hữu Thành</h1>
-        <p class="profile-role">Sinh viên CNTT • ĐH GTVT TP.HCM (UTH)</p>
+      <!-- Cụm ở giữa: Tiêu đề định danh đồ án nhóm -->
+      <div class="masthead-center">
+        <span class="masthead-serial">PROJECT_LTW · JOB PORTAL SPECIFICATION</span>
       </div>
 
-      <!-- Menu dọc điều hướng nhanh -->
-      <nav class="side-nav">
-        <a href="#gioi-thieu" class="nav-item">01. Câu chuyện của mình</a>
-        <a href="#ky-nang" class="nav-item">02. Kỹ năng &amp; Thế mạnh</a>
-        <a href="#du-an" class="nav-item">03. Dự án đã tham gia</a>
-        <a href="#lien-he" class="nav-item">04. Liên hệ &amp; Kết nối</a>
-      </nav>
-
-      <!-- Thông tin liên hệ nhanh ở đáy cột trái -->
-      <div class="sidebar-footer">
-        <p><strong>Email:</strong> tomshel216@gmail.com</p>
-        <p><strong>GitHub:</strong> <a href="https://github.com/turniphead-code02" target="_blank">turniphead-code02</a></p>
+      <!-- Cụm bên phải: Nút đổi giao diện Sáng / Tối -->
+      <div class="masthead-right">
+        <button id="themeBtn" class="editorial-theme-btn" type="button" aria-label="Đổi giao diện Sáng / Tối">
+          <span class="theme-icon">◐</span>
+          <span class="theme-label">Theme</span>
+        </button>
       </div>
-    </aside>
+    </div>
+  </header>
 
-    <!-- 2. CỘT PHẢI CUỘN MƯỢT (MAIN CONTENT) -->
-    <main class="main-content">
+  <!--
+      PHẦN 4: BỐ CỤC CHÍNH 2 CỘT DẠNG TẠP CHÍ
+      - Cột trái: Cột hồ sơ cố định (Sticky Dossier Column)
+      - Cột phải: Cột nội dung diễn giải (Narrative Column)
+      -->
+  <div class="editorial-spread">
 
-      <!-- MỤC 01: GIỚI THIỆU BẢN THÂN & ĐỊNH HƯỚNG (Gần gũi, chân thật) -->
-      <section id="gioi-thieu" class="content-section">
-        <div class="intro-banner card">
-          <span class="section-tag">01 / ĐÔI NÉT VỀ MÌNH</span>
-          <h2>
-            Học hỏi mỗi ngày, làm việc có trách nhiệm và <span class="highlight">tận hưởng hành trình.</span>
-          </h2>
-          <p class="intro-text">
-            Chào bạn! Mình là <strong>Trần Hữu Thành</strong>, hiện đang theo học ngành Công nghệ Thông tin tại Trường Đại học Giao thông vận tải TP.HCM. Với mình, lập trình không chỉ là những dòng code khô khan mà là cách biến một ý tưởng trên giấy thành sản phẩm hữu ích, nhìn thấy được và chạm vào được.
+    <!--  CỘT TRÁI (ASIDE): CHÂN DUNG, THÔNG TIN VÀ MỤC LỤC TỰ ĐỘNG SÁNG (SCROLL-SPY) -->
+    <aside class="dossier-column">
+      <div class="dossier-sticky">
+
+        <!-- Khung ảnh chân dung với tem mã lưu trữ kỹ thuật -->
+        <div class="portrait-card">
+          <div class="portrait-frame">
+            <img src="./images/tht2.jpg" alt="Ảnh chân dung Trần Hữu Thành" class="portrait-img" />
+            <div class="portrait-plate">
+              <span class="plate-code">THT-044206000003</span>
+              <span class="plate-geo">UTH · HCM CITY</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Khối định danh cá nhân kèm hiệu ứng chữ gõ tự động -->
+        <div class="identity-block">
+          <span class="dossier-kicker">Candidate Profile &amp; Dossier</span>
+          <h1 class="dossier-name">Tran Huu Thanh</h1>
+          <p class="dossier-typing">
+            <span class="typing-prefix">Discipline:</span>
+            <span id="typingText" class="typing-output"></span><span class="cursor-pipe">|</span>
           </p>
         </div>
 
-        <div class="grid-2">
-          <div class="card">
-            <span class="card-badge">Định hướng tương lai</span>
-            <h3>Đi từng bước vững chắc</h3>
-            <p>
-              Hiện tại mình tập trung trau dồi nền tảng phát triển Web từ giao diện đến dữ liệu. Xa hơn, mình muốn mở rộng sang mảng Fullstack, AI và Data Science để có thể tự tay xây dựng những sản phẩm hoàn chỉnh.
+        <!-- Mục lục đánh số La Mã, tự động sáng theo vị trí cuộn trang (Scroll-Spy) -->
+        <nav class="editorial-index" aria-label="Mục lục các phần">
+          <a href="#prologue" class="index-link active">
+            <span class="index-num">I.</span>
+            <span class="index-title">Prologue &amp; Thesis</span>
+          </a>
+          <a href="#work" class="index-link">
+            <span class="index-num">II.</span>
+            <span class="index-title">Selected Projects</span>
+          </a>
+          <a href="#competencies" class="index-link">
+            <span class="index-num">III.</span>
+            <span class="index-title">Core Competencies</span>
+          </a>
+          <a href="#connections" class="index-link">
+            <span class="index-num">IV.</span>
+            <span class="index-title">Direct Inquiries</span>
+          </a>
+        </nav>
+
+        <!-- Bảng thông số tóm tắt của sinh viên (Vị trí, Trường học) -->
+        <div class="dossier-meta-footer">
+          <div class="meta-row">
+            <span class="meta-k">Location</span>
+            <span class="meta-v">Ho Chi Minh City, VN</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-k">Institution</span>
+            <span class="meta-v">Univ. of Transport (UTH)</span>
+          </div>
+        </div>
+
+      </div>
+    </aside>
+
+    <!-- CỘT PHẢI (MAIN): NỘI DUNG DIỄN GIẢI 4 PHẦN CỦA PORTFOLIO -->
+    <main class="narrative-column">
+
+    <!-- SECTION I: LỜI MỞ ĐẦU -->
+      <section id="prologue" class="editorial-section">
+        <header class="section-kicker-header">
+          <span class="kicker-index">Section I</span>
+          <span class="kicker-line"></span>
+          <span class="kicker-name">Prologue &amp; Engineering Thesis</span>
+        </header>
+
+        <div class="hero-manifesto">
+          <h2 class="editorial-headline">
+            Engineering resilient digital systems through <em>architectural clarity</em>, structured logic, and measured restraint.
+          </h2>
+          <div class="lead-story-grid">
+            <p class="lead-paragraph">
+             Welcome! I am <strong>Tran Huu Thanh</strong>, an Information Technology scholar at the University of Transport Ho Chi Minh City (UTH).
+            </p>
+            <p class="lead-subparagraph">
+             Build what the market demands not what we have. <strong>Lose? I don't lose, I win. That's my job.</strong>
             </p>
           </div>
+        </div>
 
-          <div class="card">
-            <span class="card-badge">Ngoài giờ học</span>
-            <h3>Âm nhạc, Thể thao &amp; Bạn bè</h3>
-            <p>
-              Khi rời màn hình máy tính, mình thích nghe nhạc để thư giãn đầu óc, rèn luyện thể thao để giữ năng lượng tích cực và cùng anh em trong nhóm ngồi lại bàn bạc, tháo gỡ từng bài toán khó.
+        <!-- Hai trụ cột định hướng phát triển và phương châm làm việc -->
+        <div class="pillars-grid">
+          <article class="pillar-card">
+            <div class="pillar-header">
+              <span class="pillar-symbol">✦</span>
+              <span class="pillar-tag">Strategic Direction</span>
+            </div>
+            <h3 class="pillar-title">Fullstack Architecture &amp; Data Intelligence</h3>
+            <p class="pillar-text">
+              Mastering foundational relational modeling (PostgreSQL/SQL Server) and modern web primitives today, while systematically expanding toward scalable fullstack backends, machine intelligence, and predictive data pipelines.
             </p>
-          </div>
+          </article>
+
+          <article class="pillar-card">
+            <div class="pillar-header">
+              <span class="pillar-symbol">✦</span>
+              <span class="pillar-tag">Operating Philosophy</span>
+            </div>
+            <h3 class="pillar-title">Discipline, Synergy &amp; Work Ethic</h3>
+            <p class="pillar-text">
+              Maintaining intellectual sharpness through athletic endurance and music, combined with an open, collaborative ethos that turns team project sprints into dependable, well-documented outcomes.
+            </p>
+          </article>
         </div>
       </section>
 
-      <!-- MỤC 02: KỸ NĂNG & THẾ MẠNH (Cân bằng giữa Chuyên môn, Tư duy & Kỹ năng mềm) -->
-      <section id="ky-nang" class="content-section">
-        <div class="section-header">
-          <span class="section-tag">02 / KỸ NĂNG &amp; THẾ MẠNH</span>
-          <h2>Những điều mình đang tích lũy</h2>
+      <!-- SECTION II: DANH MỤC DỰ ÁN TIÊU BIỂU (EXHIBITION CATALOGUE) -->
+      <section id="work" class="editorial-section">
+        <header class="section-kicker-header">
+          <span class="kicker-index">Section II</span>
+          <span class="kicker-line"></span>
+          <span class="kicker-name">Selected Projects &amp; Contributions</span>
+        </header>
+
+        <div class="catalogue-intro">
+          <h2 class="section-display-title">Exhibition Catalogue</h2>
+          <p class="section-display-desc">Key engineering deliverables from university research and collaborative software lab modules.</p>
         </div>
 
-        <!-- Nút lọc nhóm kỹ năng (Xử lý trong script.js) -->
-        <div class="filter-group">
-          <button class="filter-btn active" data-type="all">Tất cả</button>
-          <button class="filter-btn" data-type="tech">Chuyên môn IT</button>
-          <button class="filter-btn" data-type="mindset">Tư duy &amp; Công việc</button>
-          <button class="filter-btn" data-type="soft">Kỹ năng mềm</button>
-        </div>
+        <div class="catalogue-list">
 
-        <div class="grid-2">
-          <div class="card skill-item" data-type="tech">
-            <span class="card-badge">Phát triển Web</span>
-            <h3>Xây dựng Giao diện &amp; Tương tác</h3>
-            <p>Sử dụng HTML, CSS và JavaScript để chuyển hóa ý tưởng thành trang web gọn gàng, dễ nhìn và thân thiện trên cả máy tính lẫn điện thoại.</p>
-          </div>
-
-          <div class="card skill-item" data-type="tech">
-            <span class="card-badge">Nền tảng Lập trình</span>
-            <h3>Tư duy Logic &amp; Cơ sở dữ liệu</h3>
-            <p>Rèn luyện tư duy lập trình qua C++, Java và cách tổ chức bảng biểu, truy vấn dữ liệu có hệ thống với SQL (PostgreSQL, SQL Server).</p>
-          </div>
-
-          <div class="card skill-item" data-type="mindset">
-            <span class="card-badge">Cách tiếp cận bài toán</span>
-            <h3>Lên kế hoạch trước khi bắt tay làm</h3>
-            <p>Thói quen phác thảo cấu trúc tổng thể, thống nhất quy ước chung và chia nhỏ công việc thành từng bước rõ ràng trước khi viết code.</p>
-          </div>
-
-          <div class="card skill-item" data-type="mindset">
-            <span class="card-badge">Thích nghi &amp; Tự học</span>
-            <h3>Chủ động tìm tòi cái mới</h3>
-            <p>Biết cách tra cứu tài liệu, tận dụng các công cụ hỗ trợ hiện đại (Git, Figma, AI) và kiên nhẫn tìm nguyên nhân để xử lý khi gặp lỗi.</p>
-          </div>
-
-          <div class="card skill-item" data-type="soft">
-            <span class="card-badge">Tinh thần đồng đội</span>
-            <h3>Phối hợp &amp; Làm việc nhóm</h3>
-            <p>Biết lắng nghe góc nhìn của các thành viên, chủ động kết nối công việc chung qua GitHub để cả nhóm đi cùng nhau đúng tiến độ.</p>
-          </div>
-
-          <div class="card skill-item" data-type="soft">
-            <span class="card-badge">Thái độ cá nhân</span>
-            <h3>Kỷ luật &amp; Cân bằng cuộc sống</h3>
-            <p>Giữ sự tập trung và trách nhiệm với phần việc đã nhận, đồng thời duy trì nhịp sống lành mạnh giữa việc học trên giảng đường và thể thao.</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- MỤC 03: DỰ ÁN HỌC TẬP -->
-      <section id="du-an" class="content-section">
-        <div class="section-header">
-          <span class="section-tag">03 / DẤU ẤN HỌC TẬP</span>
-          <h2>Các dự án đã tham gia</h2>
-        </div>
-
-        <div class="project-list">
-          <div class="card project-row">
-            <div class="project-info">
-              <span class="card-badge">Đồ án Lập Trình Web</span>
-              <h3>Cổng Thông Tin Việc Làm (Job Portal)</h3>
-              <p>Dự án nhóm xây dựng nền tảng kết nối ứng viên và nhà tuyển dụng. Mình cùng nhóm lên đặc tả hệ thống, thiết kế cơ sở dữ liệu và phát triển giao diện.</p>
+          <!-- Dự án 01: Cổng thông tin việc làm (Job Portal) -->
+          <article class="catalogue-entry">
+            <div class="catalogue-aside">
+              <span class="entry-index">№ 01</span>
+              <span class="entry-year">2026</span>
             </div>
-            <a href="https://github.com/turniphead-code02/Project_LTW" target="_blank" class="btn btn-outline">GitHub →</a>
-          </div>
-
-          <div class="card project-row">
-            <div class="project-info">
-              <span class="card-badge">Công nghệ Phần mềm</span>
-              <h3>Hệ thống Quản lý Dự án (Project_CNPM)</h3>
-              <p>Tìm hiểu quy trình làm phần mềm thực tế: từ khâu lấy yêu cầu, vẽ sơ đồ Use Case, ERD đến phối hợp nhóm theo mô hình Agile.</p>
-            </div>
-            <a href="https://github.com/turniphead-code02/Project_CNPM" target="_blank" class="btn btn-outline">GitHub →</a>
-          </div>
-
-          <div class="card project-row">
-            <div class="project-info">
-              <span class="card-badge">Dự án nhóm</span>
-              <h3>Hệ thống Quản lý Phát thải (GreenShift)</h3>
-              <p>Xây dựng ứng dụng theo dõi và tổng hợp báo cáo dữ liệu phát thải cho doanh nghiệp theo hướng trực quan, dễ tra cứu.</p>
-            </div>
-            <a href="https://github.com/turniphead-code02/GreenShift" target="_blank" class="btn btn-outline">GitHub →</a>
-          </div>
-        </div>
-      </section>
-
-      <!-- MỤC 04: LIÊN HỆ -->
-      <section id="lien-he" class="content-section">
-        <div class="section-header">
-          <span class="section-tag">04 / KẾT NỐI VỚI MÌNH</span>
-          <h2>Để lại lời nhắn cho Thành</h2>
-        </div>
-
-        <div class="card">
-          <form id="contactForm" class="contact-form">
-            <div class="grid-2 form-row">
-              <div class="form-group">
-                <label for="fullName">Họ và tên của bạn</label>
-                <input type="text" id="fullName" placeholder="Nhập họ và tên..." />
+            <div class="catalogue-main">
+              <div class="entry-heading-group">
+                <span class="entry-category">Web Programming &amp; Relational Architecture</span>
+                <h3 class="entry-title">Job Portal Platform</h3>
               </div>
-
-              <div class="form-group">
-                <label for="email">Địa chỉ Email</label>
-                <input type="email" id="email" placeholder="Nhập địa chỉ email..." />
+              <p class="entry-summary">
+                A dual-sided recruitment infrastructure connecting job seekers with verified employers. Responsible for technical specification authoring, 3NF database schema architecture, candidate workflow diagrams, and team web portal integration.
+              </p>
+              <div class="entry-specs">
+                <span class="spec-pill">PostgreSQL / SQL</span>
+                <span class="spec-pill">HTML5 &amp; Modern CSS</span>
+                <span class="spec-pill">Vanilla JS</span>
+                <span class="spec-pill">ERD &amp; 3NF</span>
               </div>
             </div>
-
-            <div class="form-group">
-              <label for="message">Nội dung chia sẻ</label>
-              <textarea id="message" rows="4" placeholder="Bạn muốn nhắn điều gì với mình..."></textarea>
+            <div class="catalogue-action">
+              <a href="https://github.com/turniphead-code02/Project_LTW" target="_blank" rel="noopener noreferrer" class="catalogue-cta">
+                <span>View Source</span>
+                <span class="cta-arrow">↗</span>
+              </a>
             </div>
+          </article>
 
-            <button type="submit" class="btn btn-primary">Gửi lời nhắn</button>
-            <p id="formNotice" class="form-notice"></p>
-          </form>
+          <!-- Dự án 02: Hệ thống quản lý dự án (Project Management System) -->
+          <article class="catalogue-entry">
+            <div class="catalogue-aside">
+              <span class="entry-index">№ 02</span>
+              <span class="entry-year">2025</span>
+            </div>
+            <div class="catalogue-main">
+              <div class="entry-heading-group">
+                <span class="entry-category">Software Engineering &amp; System Design</span>
+                <h3 class="entry-title">Project Management System</h3>
+              </div>
+              <p class="entry-summary">
+                Comprehensive system engineering blueprint modeled after enterprise issue-tracking platforms. Crafted complete UML suite, Use Case workflows, relational entity models, and agile sprint decomposition.
+              </p>
+              <div class="entry-specs">
+                <span class="spec-pill">Software Architecture</span>
+                <span class="spec-pill">UML / Use Cases</span>
+                <span class="spec-pill">Relational Modeling</span>
+                <span class="spec-pill">Agile Workflow</span>
+              </div>
+            </div>
+            <div class="catalogue-action">
+              <a href="https://github.com/turniphead-code02/Project_CNPM" target="_blank" rel="noopener noreferrer" class="catalogue-cta">
+                <span>View Source</span>
+                <span class="cta-arrow">↗</span>
+              </a>
+            </div>
+          </article>
+
+          <!-- Dự án 03: Công cụ theo dõi khí thải carbon (GreenShift Tracker) -->
+          <article class="catalogue-entry">
+            <div class="catalogue-aside">
+              <span class="entry-index">№ 03</span>
+              <span class="entry-year">2026</span>
+            </div>
+            <div class="catalogue-main">
+              <div class="entry-heading-group">
+                <span class="entry-category">Sustainability &amp; Analytical Dashboard</span>
+                <h3 class="entry-title">GreenShift Emission Tracker</h3>
+              </div>
+              <p class="entry-summary">
+                Enterprise carbon calculation and emission telemetry console. Provides structured metric tracking, historical carbon reduction benchmarks, and comparative compliance reporting.
+              </p>
+              <div class="entry-specs">
+                <span class="spec-pill">Data Dashboard</span>
+                <span class="spec-pill">Metric Telemetry</span>
+                <span class="spec-pill">UI Analytics</span>
+                <span class="spec-pill">System Analysis</span>
+              </div>
+            </div>
+            <div class="catalogue-action">
+              <a href="https://github.com/turniphead-code02/GreenShift" target="_blank" rel="noopener noreferrer" class="catalogue-cta">
+                <span>View Source</span>
+                <span class="cta-arrow">↗</span>
+              </a>
+            </div>
+          </article>
+
         </div>
+      </section>
+
+      <!--  SECTION III: BẢNG KỸ NĂNG & BỘ LỌC CHUYÊN MÔN (TECHNICAL INDEX) -->
+      <section id="competencies" class="editorial-section">
+        <header class="section-kicker-header">
+          <span class="kicker-index">Section III</span>
+          <span class="kicker-line"></span>
+          <span class="kicker-name">Core Competencies &amp; Technical Discipline</span>
+        </header>
+
+        <div class="catalogue-intro">
+          <h2 class="section-display-title">Technical Index</h2>
+          <p class="section-display-desc">Taxonomy of capabilities organized by architectural domain.</p>
+        </div>
+
+        <!-- Ruy-băng nút lọc chuyên môn (All, Data & Systems, Web Interface, Discipline) -->
+        <div class="taxonomy-ribbon" role="tablist">
+          <button class="ribbon-btn active" data-type="all">All Domains</button>
+          <button class="ribbon-btn" data-type="database">Data &amp; Systems</button>
+          <button class="ribbon-btn" data-type="web">Web Interface</button>
+          <button class="ribbon-btn" data-type="discipline">Discipline &amp; Method</button>
+        </div>
+
+        <!-- Lưới thẻ kỹ năng (sẽ được ẩn/hiện bằng JavaScript thông qua data-type) -->
+        <div class="taxonomy-grid">
+
+          <article class="taxonomy-card" data-type="database">
+            <span class="tax-index">01</span>
+            <div class="tax-content">
+              <span class="tax-category">Data Architecture</span>
+              <h4 class="tax-title">Relational Schema &amp; SQL</h4>
+              <p class="tax-desc">PostgreSQL &amp; SQL Server schema design, foreign key integrity, 3NF normalisation, and complex query structuring.</p>
+            </div>
+          </article>
+
+          <article class="taxonomy-card" data-type="web">
+            <span class="tax-index">02</span>
+            <div class="tax-content">
+              <span class="tax-category">Interface Engineering</span>
+              <h4 class="tax-title">Semantic Web &amp; Layout Systems</h4>
+              <p class="tax-desc">Responsive layouts with Flexbox and CSS Grid, accessible semantic markup, and fluid typographic hierarchies.</p>
+            </div>
+          </article>
+
+          <article class="taxonomy-card" data-type="database">
+            <span class="tax-index">03</span>
+            <div class="tax-content">
+              <span class="tax-category">Computational Core</span>
+              <h4 class="tax-title">OOP &amp; Algorithmic Logic</h4>
+              <p class="tax-desc">Solid object-oriented foundation in C++ and Java; disciplined abstraction, data structures, and memory comprehension.</p>
+            </div>
+          </article>
+
+          <article class="taxonomy-card" data-type="web">
+            <span class="tax-index">04</span>
+            <div class="tax-content">
+              <span class="tax-category">Interactivity</span>
+              <h4 class="tax-title">Modern Vanilla JavaScript</h4>
+              <p class="tax-desc">DOM event orchestration, reactive state rendering, asynchronous data handling, and lightweight animation loops.</p>
+            </div>
+          </article>
+
+          <article class="taxonomy-card" data-type="discipline">
+            <span class="tax-index">05</span>
+            <div class="tax-content">
+              <span class="tax-category">Engineering Rigor</span>
+              <h4 class="tax-title">Version Control &amp; Git Hygiene</h4>
+              <p class="tax-desc">Clean branch topologies, structured atomic commits, merge conflict resolution, and collaborative pull requests.</p>
+            </div>
+          </article>
+
+          <article class="taxonomy-card" data-type="discipline">
+            <span class="tax-index">06</span>
+            <div class="tax-content">
+              <span class="tax-category">Execution Philosophy</span>
+              <h4 class="tax-title">Analytical Specification</h4>
+              <p class="tax-desc">Authoring clear technical blueprints, breaking down ambiguous requirements, and delivering on schedule.</p>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- SECTION IV: KÊNH LIÊN HỆ TRỰC TIẾP & BẢN QUYỀN -->
+      <section id="connections" class="editorial-section">
+        <header class="section-kicker-header">
+          <span class="kicker-index">Section IV</span>
+          <span class="kicker-line"></span>
+          <span class="kicker-name">Direct Inquiries &amp; Channels</span>
+        </header>
+
+        <div class="catalogue-intro">
+          <h2 class="section-display-title">Let's Connect</h2>
+          <p class="section-display-desc">Direct communication channels for academic, project, or professional inquiries.</p>
+        </div>
+
+        <!-- Danh sách 4 liên kết mạng xã hội và email cá nhân -->
+        <div class="directory-list">
+
+          <!-- Kênh 1: Facebook cá nhân -->
+          <a href="https://www.facebook.com/tran.huu.thanh.426383" target="_blank" rel="noopener noreferrer" class="directory-row">
+            <div class="row-channel">
+              <i class="fa-brands fa-facebook-f row-icon"></i>
+              <div>
+                <span class="channel-name">Facebook</span>
+                <span class="channel-handle">Tran Huu Thanh</span>
+              </div>
+            </div>
+            <span class="row-arrow">↗</span>
+          </a>
+
+          <!-- Kênh 2: TikTok cá nhân -->
+          <a href="https://www.tiktok.com/@thtanhn" target="_blank" rel="noopener noreferrer" class="directory-row">
+            <div class="row-channel">
+              <i class="fa-brands fa-tiktok row-icon"></i>
+              <div>
+                <span class="channel-name">TikTok</span>
+                <span class="channel-handle">@thtanhn</span>
+              </div>
+            </div>
+            <span class="row-arrow">↗</span>
+          </a>
+
+          <!-- Kênh 3: GitHub cá nhân -->
+          <a href="https://github.com/turniphead-code02" target="_blank" rel="noopener noreferrer" class="directory-row">
+            <div class="row-channel">
+              <i class="fa-brands fa-github row-icon"></i>
+              <div>
+                <span class="channel-name">GitHub</span>
+                <span class="channel-handle">@turniphead-code02</span>
+              </div>
+            </div>
+            <span class="row-arrow">↗</span>
+          </a>
+
+          <!-- Kênh 4: Email trực tiếp -->
+          <a href="mailto:tomshel216@gmail.com" class="directory-row">
+            <div class="row-channel">
+              <i class="fa-solid fa-envelope row-icon"></i>
+              <div>
+                <span class="channel-name">Direct Email</span>
+                <span class="channel-handle">tomshel216@gmail.com</span>
+              </div>
+            </div>
+            <span class="row-arrow">↗</span>
+          </a>
+
+        </div>
+
+        <!-- Footer xuất bản Colophon và liên kết quay lại trang chủ nhóm -->
+        <footer class="editorial-colophon">
+          <div class="colophon-left">
+            <p>© 2026 Tran Huu Thanh. All rights reserved.</p>
+          </div>
+          <div class="colophon-right">
+            <a href="../../index.html" class="colophon-back-link">← Return to Team Directory</a>
+          </div>
+        </footer>
+
       </section>
 
     </main>
   </div>
 
-  <!-- Liên kết file JavaScript -->
+  <!-- Nạp tệp mã JavaScript cục bộ -->
   <script src="./script.js"></script>
 </body>
 </html>
