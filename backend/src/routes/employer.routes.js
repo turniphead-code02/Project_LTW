@@ -2,7 +2,7 @@
  * ============================================================================
  * MODULE 4: KHÔNG GIAN NHÀ TUYỂN DỤNG (HR CONSOLE), ĐĂNG TIN & DUYỆT HỒ SƠ
  * Thành viên phụ trách: ĐINH DUY DIỄN (MSSV: 051206000952)
- * Nhánh Git: dinh_dien / module_4_DinhDuyDien
+ * Nhánh Git: dinh_dien / 
  * Bảng CSDL sử dụng: companies, jobs, applications, users, categories, locations
  * Giao diện kết nối: employer-dashboard.html, post-job.html, candidate-management.html
  * ============================================================================
