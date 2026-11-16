@@ -9,7 +9,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <link rel="stylesheet" href="./assets/css/variables.css" />
   <link rel="stylesheet" href="./assets/css/base.css" />
   <link rel="stylesheet" href="./assets/css/components.css" />
@@ -37,31 +36,31 @@
     <!-- ===================== SIDEBAR MENU TRÁI (CO GIÃN) ===================== -->
     <aside class="emp-sidebar" id="empSidebar" aria-label="Menu quản trị tuyển dụng">
       <a href="./index.html" class="header-brand emp-brand" aria-label="Về trang chủ JobPortal">
-        <div class="brand-icon" aria-hidden="true"><i class="fa-solid fa-briefcase"></i></div>
+        <div class="brand-icon" aria-hidden="true">💼</div>
         <div class="brand-text">Job<span>Portal</span></div>
       </a>
 
       <nav class="emp-menu" aria-label="Điều hướng nhà tuyển dụng">
         <a href="./employer-dashboard.html" class="emp-menu-link active" aria-current="page">
-          <span class="emp-menu-icon" aria-hidden="true"><i class="fa-solid fa-chart-pie"></i></span><span class="emp-label">Tổng quan</span>
+          <span class="emp-menu-icon" aria-hidden="true">📊</span><span class="emp-label">Tổng quan</span>
         </a>
         <a href="./post-job.html" class="emp-menu-link">
-          <span class="emp-menu-icon" aria-hidden="true"><i class="fa-regular fa-pen-to-square"></i></span><span class="emp-label">Đăng tin mới</span>
+          <span class="emp-menu-icon" aria-hidden="true">📝</span><span class="emp-label">Đăng tin mới</span>
         </a>
         <a href="./candidate-management.html" class="emp-menu-link">
-          <span class="emp-menu-icon" aria-hidden="true"><i class="fa-solid fa-user-group"></i></span><span class="emp-label">Quản lý ứng viên</span>
+          <span class="emp-menu-icon" aria-hidden="true">👥</span><span class="emp-label">Quản lý ứng viên</span>
         </a>
         <a href="./jobs.html" class="emp-menu-link">
-          <span class="emp-menu-icon" aria-hidden="true"><i class="fa-solid fa-magnifying-glass"></i></span><span class="emp-label">Xem cổng việc làm</span>
+          <span class="emp-menu-icon" aria-hidden="true">🔎</span><span class="emp-label">Xem cổng việc làm</span>
         </a>
       </nav>
 
       <div class="emp-sidebar-foot">
         <a href="../index.html" class="emp-menu-link" title="Quay về trang danh sách portfolio các thành viên">
-          <span class="emp-menu-icon" aria-hidden="true"><i class="fa-solid fa-arrow-left"></i></span><span class="emp-label">Danh Bạ Portfolio Nhóm 6</span>
+          <span class="emp-menu-icon" aria-hidden="true">←</span><span class="emp-label">Danh Bạ Portfolio Nhóm 6</span>
         </a>
         <a href="./auth.html?mode=login" class="emp-menu-link">
-          <span class="emp-menu-icon" aria-hidden="true"><i class="fa-solid fa-right-from-bracket"></i></span><span class="emp-label">Đăng xuất</span>
+          <span class="emp-menu-icon" aria-hidden="true">🚪</span><span class="emp-label">Đăng xuất</span>
         </a>
       </div>
     </aside>
@@ -72,13 +71,13 @@
       <!-- Topbar: nút thu/mở menu, thông báo, tài khoản -->
       <header class="emp-topbar">
         <div class="emp-topbar-left">
-          <button type="button" class="emp-icon-btn emp-toggle" id="btnToggleSidebar" aria-label="Mở menu điều hướng" aria-controls="empSidebar" aria-expanded="false"><i class="fa-solid fa-bars"></i></button>
+          <button type="button" class="emp-icon-btn emp-toggle" id="btnToggleSidebar" aria-label="Mở menu điều hướng" aria-controls="empSidebar" aria-expanded="false">☰</button>
           <span class="cell-strong">Nhà tuyển dụng</span>
         </div>
         <div class="emp-topbar-right">
           <div class="emp-notif-wrap">
             <button type="button" class="emp-icon-btn" id="btnNotif" aria-label="Thông báo" aria-haspopup="true" aria-expanded="false" aria-controls="notifPanel">
-              <span aria-hidden="true"><i class="fa-regular fa-bell"></i></span>
+              <span aria-hidden="true">🔔</span>
               <span class="emp-notif-dot" id="notifCount">0</span>
             </button>
             <div class="notif-panel" id="notifPanel" role="region" aria-label="Danh sách thông báo" hidden>
@@ -111,23 +110,23 @@
         <section class="kpi-grid" aria-label="Chỉ số tuyển dụng">
           <article class="kpi-card">
             <div class="kpi-label">Tin đang chạy</div>
-            <div class="kpi-value" data-count="8">0</div>
-            <div class="kpi-note">2 tin sắp hết hạn trong 7 ngày</div>
+            <div class="kpi-value" id="kpiActive">0</div>
+            <div class="kpi-note">Đã duyệt và còn hạn nộp</div>
           </article>
           <article class="kpi-card is-accent">
-            <div class="kpi-label">CV mới nhận</div>
-            <div class="kpi-value" data-count="47">0</div>
-            <div class="kpi-note">Trong 7 ngày qua</div>
+            <div class="kpi-label">Tổng CV nhận được</div>
+            <div class="kpi-value" id="kpiTotalCv">0</div>
+            <div class="kpi-note">Trên tất cả tin của công ty</div>
           </article>
           <article class="kpi-card is-warning">
-            <div class="kpi-label">Buổi phỏng vấn</div>
-            <div class="kpi-value" data-count="5">0</div>
-            <div class="kpi-note">Đã hẹn trong tuần này</div>
+            <div class="kpi-label">Lịch phỏng vấn</div>
+            <div class="kpi-value" id="kpiInterview">0</div>
+            <div class="kpi-note">Hồ sơ đang ở bước phỏng vấn</div>
           </article>
           <article class="kpi-card">
-            <div class="kpi-label">Lượt xem tin</div>
-            <div class="kpi-value" data-count="1280">0</div>
-            <div class="kpi-note">Tổng 30 ngày gần nhất</div>
+            <div class="kpi-label">Tin chờ duyệt</div>
+            <div class="kpi-value" id="kpiPending">0</div>
+            <div class="kpi-note">Đang chờ quản trị viên duyệt</div>
           </article>
         </section>
 
@@ -172,26 +171,7 @@
                   <th scope="col">Trạng thái</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td data-label="Chức danh"><div class="cell-strong">Frontend Developer (React)</div><div class="cell-sub">TP. Hồ Chí Minh</div></td>
-                  <td data-label="Hạn nộp">25/11/2026</td>
-                  <td data-label="Hồ sơ">18</td>
-                  <td data-label="Trạng thái"><span class="status status-approved">Đang hiển thị</span></td>
-                </tr>
-                <tr>
-                  <td data-label="Chức danh"><div class="cell-strong">Backend Developer (Node.js)</div><div class="cell-sub">Hà Nội</div></td>
-                  <td data-label="Hạn nộp">12/11/2026</td>
-                  <td data-label="Hồ sơ">21</td>
-                  <td data-label="Trạng thái"><span class="status status-interview">Sắp hết hạn</span></td>
-                </tr>
-                <tr>
-                  <td data-label="Chức danh"><div class="cell-strong">Thực tập sinh QA/Tester</div><div class="cell-sub">Remote</div></td>
-                  <td data-label="Hạn nộp">30/11/2026</td>
-                  <td data-label="Hồ sơ">8</td>
-                  <td data-label="Trạng thái"><span class="status status-new">Chờ duyệt</span></td>
-                </tr>
-              </tbody>
+              <tbody id="jobsTableBody"><!-- Render bằng employer-table.js --></tbody>
             </table>
           </div>
         </section>
