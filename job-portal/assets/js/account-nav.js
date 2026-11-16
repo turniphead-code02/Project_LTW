@@ -1,91 +1,145 @@
 
 document.addEventListener("DOMContentLoaded", function () {
+    const API = window.JobPortalAPI;
+
     const SESSION_KEY = "jobportal_session";
-    const headerActions = document.querySelector(".header-actions");
+    const TOKEN_KEY = "jobportal_access_token";
 
-    if (!headerActions) return;
-
-    // Đọc phiên đăng nhập
-    let session = null;
-
-    try {
-        session = JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
-    } catch (error) {
-        console.error("Không đọc được phiên đăng nhập:", error);
+    function getSession() {
+        try {
+            const raw = localStorage.getItem(SESSION_KEY);
+            return raw ? JSON.parse(raw) : null;
+        } catch (error) {
+            console.error("Không đọc được phiên đăng nhập:", error);
+            return null;
+        }
     }
 
-    // Xóa thanh tài khoản cũ nếu có
-    const oldNav = document.getElementById("accountNav");
+    function logout() {
+        if (API && typeof API.clearAuthSession === "function") {
+            API.clearAuthSession();
+        } else {
+            localStorage.removeItem(SESSION_KEY);
+            localStorage.removeItem(TOKEN_KEY);
+        }
 
-    if (oldNav) {
-        oldNav.remove();
+        window.location.href = "./auth.html";
     }
 
-    // Chưa đăng nhập: giữ nguyên nút Đăng nhập và Đăng ký
-    if (!session || !session.email) {
+    function createLink(text, href) {
+        const link = document.createElement("a");
+        link.textContent = text;
+        link.href = href;
+        link.className = "nav-link";
+        return link;
+    }
+
+    function renderAccountNav() {
+        const session = getSession();
+
+        const headerNav = document.querySelector(".header-nav");
+        const headerActions = document.querySelector(".header-actions");
+
+        if (!headerNav || !headerActions) {
+            console.warn("Không tìm thấy khu vực menu.");
+            return;
+        }
+
+        // Xóa menu tài khoản và menu vai trò cũ
+        document.getElementById("roleNavLink")?.remove();
+        document.getElementById("accountNav")?.remove();
+
+        // Lấy nút dành cho nhà tuyển dụng
+        const employerButton = headerActions.querySelector(
+            ".btn-employer-slug"
+        );
+
+        // Khôi phục các nút đăng nhập, đăng ký
         headerActions.querySelectorAll('a[href*="auth.html"]').forEach(link => {
             link.style.display = "";
         });
 
-        return;
+        // Nếu chưa đăng nhập
+        if (!session) {
+            if (employerButton) {
+                employerButton.style.display = "";
+            }
+            return;
+        }
+
+        const role = String(session.role || "").toLowerCase();
+
+        const accountName =
+            session.fullName ||
+            session.name ||
+            session.username ||
+            session.email ||
+            "User";
+
+        const isCandidate = role === "candidate";
+        const isEmployer = role === "employer" || role === "hr";
+        const isAdmin = role === "admin";
+
+        // Ẩn nút Nhà tuyển dụng đối với Candidate
+        if (employerButton) {
+            employerButton.style.display = isCandidate ? "none" : "";
+        }
+
+        // Ẩn nút đăng nhập và đăng ký
+        headerActions.querySelectorAll('a[href*="auth.html"]').forEach(link => {
+            link.style.display = "none";
+        });
+
+        // Tạo menu theo vai trò
+        let roleLink = null;
+
+        if (isEmployer) {
+            roleLink = createLink(
+                "Nhà tuyển dụng",
+                "./employer-dashboard.html"
+            );
+        } else if (isAdmin) {
+            roleLink = createLink(
+                "Trang Quản Trị",
+                "./admin-portal.html"
+            );
+        }
+
+        if (roleLink) {
+            roleLink.id = "roleNavLink";
+            headerNav.appendChild(roleLink);
+        }
+
+        // Tạo khu vực tài khoản
+        const accountNav = document.createElement("div");
+        accountNav.id = "accountNav";
+
+        const nameElement = document.createElement("span");
+        nameElement.className = "account-name";
+        nameElement.textContent = accountName;
+
+        const logoutButton = document.createElement("button");
+        logoutButton.type = "button";
+        logoutButton.id = "logoutButton";
+        logoutButton.className = "logout-button";
+        logoutButton.textContent = "Đăng xuất";
+        logoutButton.addEventListener("click", logout);
+
+        accountNav.appendChild(nameElement);
+        accountNav.appendChild(logoutButton);
+
+        headerActions.appendChild(accountNav);
     }
 
-    // Lấy tên người dùng
-    const displayName =
-        session.fullName ||
-        session.name ||
-        session.companyName ||
-        session.email;
+    renderAccountNav();
 
-    // Ẩn nút đăng nhập và đăng ký
-    headerActions.querySelectorAll('a[href*="auth.html"]').forEach(link => {
-        link.style.display = "none";
-    });
-
-    // Tạo khu vực tài khoản
-    const accountNav = document.createElement("div");
-    accountNav.id = "accountNav";
-
-    accountNav.style.display = "flex";
-    accountNav.style.alignItems = "center";
-    accountNav.style.gap = "12px";
-    accountNav.style.flexWrap = "wrap";
-
-    // Tên ứng viên / tài khoản (có link dẫn đến Dashboard tương ứng)
-    const accountName = document.createElement("a");
-    accountName.className = "account-name";
-    accountName.textContent = "👤 " + displayName;
-    accountName.href = session.role === "employer" 
-        ? "./employer-dashboard.html" 
-        : (session.role === "admin" ? "./admin-portal.html" : "./candidate-dashboard.html");
-
-    accountName.style.fontWeight = "600";
-    accountName.style.color = "#2563eb";
-    accountName.style.textDecoration = "none";
-    accountName.title = "Đến bảng điều khiển cá nhân";
-
-    // Nút đăng xuất
-    const logoutButton = document.createElement("button");
-    logoutButton.type = "button";
-    logoutButton.textContent = "Đăng xuất";
-    logoutButton.className = "logout-button";
-
-    logoutButton.style.padding = "9px 15px";
-    logoutButton.style.border = "1px solid #2563eb";
-    logoutButton.style.borderRadius = "7px";
-    logoutButton.style.background = "#ffffff";
-    logoutButton.style.color = "#2563eb";
-    logoutButton.style.cursor = "pointer";
-    logoutButton.style.fontWeight = "600";
-
-    accountNav.appendChild(accountName);
-    accountNav.appendChild(logoutButton);
-
-    headerActions.appendChild(accountNav);
-
-    // Đăng xuất
-    logoutButton.addEventListener("click", function () {
-        localStorage.removeItem(SESSION_KEY);
-        window.location.href = "./index.html";
+    // Đồng bộ khi đăng nhập hoặc đăng xuất ở tab khác
+    window.addEventListener("storage", function (event) {
+        if (
+            event.key === SESSION_KEY ||
+            event.key === TOKEN_KEY
+        ) {
+            window.location.reload();
+        }
     });
 });

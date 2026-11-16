@@ -33,10 +33,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
       // Đổi biểu tượng icon
       if (!isExpanded) {
-        mobileToggleBtn.innerHTML = '✕';
+        mobileToggleBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
         mobileToggleBtn.setAttribute('aria-label', 'Đóng menu điều hướng');
       } else {
-        mobileToggleBtn.innerHTML = '☰';
+        mobileToggleBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
         mobileToggleBtn.setAttribute('aria-label', 'Mở menu điều hướng');
       }
     });
@@ -60,9 +60,9 @@ window.showToast = function (message, type = 'success') {
   const toast = document.createElement('div');
   toast.className = `toast toast-${type}`;
 
-  let icon = '✓';
-  if (type === 'warning') icon = '⚠️';
-  if (type === 'error') icon = '✕';
+  let icon = '<i class="fa-solid fa-circle-check" style="color: #10b981;"></i>';
+  if (type === 'warning') icon = '<i class="fa-solid fa-triangle-exclamation" style="color: #f59e0b;"></i>';
+  if (type === 'error') icon = '<i class="fa-solid fa-circle-xmark" style="color: #ef4444;"></i>';
 
   toast.innerHTML = `
     <span style="font-size: 1.1rem; flex-shrink: 0;">${icon}</span>

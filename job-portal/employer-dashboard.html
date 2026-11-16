@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <link rel="stylesheet" href="./assets/css/variables.css" />
   <link rel="stylesheet" href="./assets/css/base.css" />
   <link rel="stylesheet" href="./assets/css/components.css" />
@@ -36,31 +37,31 @@
     <!-- ===================== SIDEBAR MENU TRÁI (CO GIÃN) ===================== -->
     <aside class="emp-sidebar" id="empSidebar" aria-label="Menu quản trị tuyển dụng">
       <a href="./index.html" class="header-brand emp-brand" aria-label="Về trang chủ JobPortal">
-        <div class="brand-icon" aria-hidden="true">💼</div>
+        <div class="brand-icon" aria-hidden="true"><i class="fa-solid fa-briefcase"></i></div>
         <div class="brand-text">Job<span>Portal</span></div>
       </a>
 
       <nav class="emp-menu" aria-label="Điều hướng nhà tuyển dụng">
         <a href="./employer-dashboard.html" class="emp-menu-link active" aria-current="page">
-          <span class="emp-menu-icon" aria-hidden="true">📊</span><span class="emp-label">Tổng quan</span>
+          <span class="emp-menu-icon" aria-hidden="true"><i class="fa-solid fa-chart-pie"></i></span><span class="emp-label">Tổng quan</span>
         </a>
         <a href="./post-job.html" class="emp-menu-link">
-          <span class="emp-menu-icon" aria-hidden="true">📝</span><span class="emp-label">Đăng tin mới</span>
+          <span class="emp-menu-icon" aria-hidden="true"><i class="fa-regular fa-pen-to-square"></i></span><span class="emp-label">Đăng tin mới</span>
         </a>
         <a href="./candidate-management.html" class="emp-menu-link">
-          <span class="emp-menu-icon" aria-hidden="true">👥</span><span class="emp-label">Quản lý ứng viên</span>
+          <span class="emp-menu-icon" aria-hidden="true"><i class="fa-solid fa-user-group"></i></span><span class="emp-label">Quản lý ứng viên</span>
         </a>
         <a href="./jobs.html" class="emp-menu-link">
-          <span class="emp-menu-icon" aria-hidden="true">🔎</span><span class="emp-label">Xem cổng việc làm</span>
+          <span class="emp-menu-icon" aria-hidden="true"><i class="fa-solid fa-magnifying-glass"></i></span><span class="emp-label">Xem cổng việc làm</span>
         </a>
       </nav>
 
       <div class="emp-sidebar-foot">
         <a href="../index.html" class="emp-menu-link" title="Quay về trang danh sách portfolio các thành viên">
-          <span class="emp-menu-icon" aria-hidden="true">←</span><span class="emp-label">Danh Bạ Portfolio Nhóm 6</span>
+          <span class="emp-menu-icon" aria-hidden="true"><i class="fa-solid fa-arrow-left"></i></span><span class="emp-label">Danh Bạ Portfolio Nhóm 6</span>
         </a>
         <a href="./auth.html?mode=login" class="emp-menu-link">
-          <span class="emp-menu-icon" aria-hidden="true">🚪</span><span class="emp-label">Đăng xuất</span>
+          <span class="emp-menu-icon" aria-hidden="true"><i class="fa-solid fa-right-from-bracket"></i></span><span class="emp-label">Đăng xuất</span>
         </a>
       </div>
     </aside>
@@ -71,13 +72,13 @@
       <!-- Topbar: nút thu/mở menu, thông báo, tài khoản -->
       <header class="emp-topbar">
         <div class="emp-topbar-left">
-          <button type="button" class="emp-icon-btn emp-toggle" id="btnToggleSidebar" aria-label="Mở menu điều hướng" aria-controls="empSidebar" aria-expanded="false">☰</button>
+          <button type="button" class="emp-icon-btn emp-toggle" id="btnToggleSidebar" aria-label="Mở menu điều hướng" aria-controls="empSidebar" aria-expanded="false"><i class="fa-solid fa-bars"></i></button>
           <span class="cell-strong">Nhà tuyển dụng</span>
         </div>
         <div class="emp-topbar-right">
           <div class="emp-notif-wrap">
             <button type="button" class="emp-icon-btn" id="btnNotif" aria-label="Thông báo" aria-haspopup="true" aria-expanded="false" aria-controls="notifPanel">
-              <span aria-hidden="true">🔔</span>
+              <span aria-hidden="true"><i class="fa-regular fa-bell"></i></span>
               <span class="emp-notif-dot" id="notifCount">0</span>
             </button>
             <div class="notif-panel" id="notifPanel" role="region" aria-label="Danh sách thông báo" hidden>

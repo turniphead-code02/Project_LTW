@@ -163,7 +163,7 @@ CREATE TABLE `applications` (
   `resume_id` INT NULL DEFAULT NULL COMMENT 'Tham chiếu CV gốc (ON DELETE SET NULL khi ứng viên xóa CV)',
   `resume_snapshot_url` VARCHAR(500) NOT NULL COMMENT 'Bản sao đường dẫn file PDF đóng băng tại thời điểm nộp',
   `cover_letter` TEXT NULL DEFAULT NULL COMMENT 'Tâm thư / Lời giới thiệu gửi nhà tuyển dụng',
-  `status` ENUM('pending', 'viewed', 'interview', 'accepted', 'rejected') NOT NULL DEFAULT 'pending' COMMENT 'Tiến trình: Đã nộp → Đã xem → Phỏng vấn → Kết quả',
+  `status` ENUM('pending', 'viewed', 'interview', 'accepted', 'rejected', 'withdrawn') NOT NULL DEFAULT 'pending' COMMENT 'Tiến trình: Đã nộp → Đã xem → Phỏng vấn → Kết quả / Đã rút',
   `applied_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Thời điểm ứng viên bấm nộp hồ sơ',
   `viewed_at` DATETIME NULL DEFAULT NULL COMMENT 'Thời điểm Nhà tuyển dụng mở xem CV lần đầu tiên',
   

@@ -8,19 +8,22 @@
  * Thiết kế chuẩn: Wireframe Mục 5.4 Phân Hệ Ứng Viên (QTTK.html)
  * 
  * TÍNH NĂNG CHÍNH:
- *   1. Quản lý thông tin cá nhân (Họ tên, SĐT, Email, Địa điểm, Chức danh, Bio)
+ *   1. Quản lý thông tin cá nhân (Đồng bộ MySQL qua /api/v1/candidate/profile)
  *   2. Quản lý học vấn (Thêm, xóa, hiển thị danh sách trường học)
  *   3. Quản lý kỹ năng (Thêm, xóa thẻ kỹ năng, gợi ý tag nhanh)
- *   4. Quản lý kho CV (Upload file PDF <= 5MB, đặt CV mặc định, xóa CV)
+ *   4. Quản lý kho CV (Upload file PDF thật qua /candidate/resumes, đặt CV mặc định, xóa CV và file đĩa)
  *   5. Quản lý liên kết cá nhân (Portfolio, GitHub)
  *   6. Tính toán % độ hoàn thiện hồ sơ động (Profile Completion Engine)
- *   7. Theo dõi vòng đời đơn ứng tuyển với Stepper 4 bước (Recruitment Timeline)
- *   8. Xem & quản lý việc làm đã lưu (Bookmarks Sync)
+ *   7. Theo dõi vòng đời đơn ứng tuyển với Stepper 4 bước (/candidate/applications)
+ *   8. Xem & quản lý việc làm đã lưu (/candidate/saved-jobs)
+ *   9. Cơ chế Graceful Fallback: Ưu tiên API Backend, tự động fallback LocalStorage nếu offline
  * ==========================================================================
  */
 
 document.addEventListener('DOMContentLoaded', function () {
   'use strict';
+
+  const API = window.JobPortalAPI;
 
   // --------------------------------------------------------------------------
   // 1. STORAGE KEYS & CẤU HÌNH DỮ LIỆU
@@ -36,7 +39,10 @@ document.addEventListener('DOMContentLoaded', function () {
     BOOKMARKS: 'jobportal_bookmarks'
   };
 
-  // Helper đọc LocalStorage an toàn
+  function hasAuth() {
+    return Boolean(API && typeof API.getToken === 'function' && API.getToken());
+  }
+
   function getStorage(key, fallback) {
     try {
       const val = localStorage.getItem(key);
@@ -47,7 +53,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // Helper ghi LocalStorage
   function setStorage(key, val) {
     try {
       localStorage.setItem(key, JSON.stringify(val));
@@ -56,9 +61,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // Toast helper (dùng chung main.js hoặc fallback)
   function notify(msg, type = 'success') {
-    if (window.showToast) {
+    if (typeof window.showToast === 'function') {
       window.showToast(msg, type);
     } else {
       alert(msg);
@@ -66,13 +70,12 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // --------------------------------------------------------------------------
-  // 2. KHỞI TẠO DỮ LIỆU MẶC ĐỊNH CHO NGUYỄN PHÚ QUANG
+  // 2. KHỞI TẠO DỮ LIỆU MẶC ĐỊNH
   // --------------------------------------------------------------------------
   const session = getStorage(STORAGE_KEYS.SESSION, null);
   const initialName = (session && (session.fullName || session.name)) || 'Nguyễn Phú Quang';
   const initialEmail = (session && session.email) || 'quang.np@student.ut.edu.vn';
 
-  // Dữ liệu Profile mặc định
   let profile = getStorage(STORAGE_KEYS.PROFILE, {
     fullName: initialName,
     email: initialEmail,
@@ -82,7 +85,6 @@ document.addEventListener('DOMContentLoaded', function () {
     bio: 'Sinh viên CNTT trường ĐH Giao Thông Vận Tải TP.HCM (UTH). Đam mê lập trình Web hiện đại với HTML5, CSS3, JavaScript và React.'
   });
 
-  // Dữ liệu Học vấn mặc định
   let educations = getStorage(STORAGE_KEYS.EDUCATION, [
     {
       id: 'edu-1',
@@ -93,12 +95,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   ]);
 
-  // Dữ liệu Kỹ năng mặc định
   let skills = getStorage(STORAGE_KEYS.SKILLS, [
     'HTML5 Semantic', 'CSS3 Modern', 'JavaScript ES6+', 'ReactJS', 'Responsive Web Design', 'Git / GitHub', 'Figma', 'Bootstrap 5'
   ]);
 
-  // Dữ liệu CV mặc định
   let resumes = getStorage(STORAGE_KEYS.RESUMES, [
     {
       id: 'res-1',
@@ -110,53 +110,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   ]);
 
-  // Dữ liệu Liên kết cá nhân mặc định
   let links = getStorage(STORAGE_KEYS.LINKS, {
     portfolio: '../portfolios/NguyenPhuQuang/index.html',
     github: 'https://github.com/nguyenphuquang'
   });
 
-  // Khởi tạo mẫu ứng tuyển nếu chưa có (để hiển thị Stepper 4 bước chuẩn mục 5.4 QTTK)
-  let applications = getStorage(STORAGE_KEYS.APPLICATIONS, null);
-  if (!applications || !Array.isArray(applications) || applications.length === 0) {
-    applications = [
-      {
-        id: 'app-sample-1',
-        jobId: 'job-02',
-        jobTitle: 'Junior Backend Node.js / NestJS Engineer',
-        company: 'FPT Software Global',
-        salary: '14 - 20 Triệu',
-        location: 'TP. Thủ Đức, TP.HCM',
-        applicantName: profile.fullName,
-        applicantEmail: profile.email,
-        fileName: 'CV_NguyenPhuQuang_Backend.pdf',
-        fileSize: '1.25 MB',
-        appliedAt: '24/10/2026 08:30',
-        status: 'interview', // submitted -> viewed -> interview -> offer
-        statusText: 'Hẹn phỏng vấn',
-        stepIndex: 3, // Bước 3/4
-        feedback: 'Chúc mừng bạn! FPT Software mời bạn tham gia vòng phỏng vấn kỹ thuật online vào lúc 09:30 ngày 15/11/2026 qua Microsoft Teams. Link phòng họp đã gửi qua Email của bạn.'
-      },
-      {
-        id: 'app-sample-2',
-        jobId: 'job-01',
-        jobTitle: 'Frontend React Developer (Junior / Middle)',
-        company: 'Công Ty Cổ Phần Công Nghệ VNG',
-        salary: '15 - 22 Triệu',
-        location: 'Quận 7, TP.HCM',
-        applicantName: profile.fullName,
-        applicantEmail: profile.email,
-        fileName: 'CV_NguyenPhuQuang_Frontend_2026.pdf',
-        fileSize: '1.45 MB',
-        appliedAt: '25/10/2026 14:15',
-        status: 'viewed',
-        statusText: 'Doanh nghiệp đã xem hồ sơ',
-        stepIndex: 2, // Bước 2/4
-        feedback: 'Bộ phận Tuyển dụng VNG đã mở xem CV của bạn lúc 10:20 ngày 26/10/2026 và đang tiến hành đánh giá chuyên môn.'
-      }
-    ];
-    setStorage(STORAGE_KEYS.APPLICATIONS, applications);
-  }
+  let applications = getStorage(STORAGE_KEYS.APPLICATIONS, []);
 
   // --------------------------------------------------------------------------
   // 3. ĐỒNG BỘ HIỂN THỊ PROFILE & HEADER
@@ -175,7 +134,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (sidebarAvatar) sidebarAvatar.textContent = firstChar;
     if (headerAvatar) headerAvatar.textContent = firstChar;
 
-    // Form inputs
     const fullNameInput = document.getElementById('fullName');
     const emailInput = document.getElementById('email');
     const phoneInput = document.getElementById('phone');
@@ -188,41 +146,24 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // --------------------------------------------------------------------------
-  // 4. TÍNH TOÁN ĐỘ HOÀN THIỆN HỒ SƠ (PROFILE COMPLETION ENGINE)
+  // 4. TÍNH TOÁN ĐỘ HOÀN THIỆN HỒ SƠ
   // --------------------------------------------------------------------------
   function updateProfileCompletion() {
     let score = 0;
 
-    // 1. Thông tin cá nhân (25%)
     if (profile.fullName && profile.phone && profile.location) {
       score += 25;
     } else if (profile.fullName) {
       score += 15;
     }
 
-    // 2. Học vấn (20%)
-    if (educations && educations.length > 0) {
-      score += 20;
-    }
+    if (educations && educations.length > 0) score += 20;
+    if (skills && skills.length >= 3) score += 20;
+    else if (skills && skills.length > 0) score += 10;
 
-    // 3. Kỹ năng (20%)
-    if (skills && skills.length >= 3) {
-      score += 20;
-    } else if (skills && skills.length > 0) {
-      score += 10;
-    }
+    if (resumes && resumes.length > 0) score += 25;
+    if (links && (links.portfolio || links.github)) score += 10;
 
-    // 4. Có CV tải lên (25%)
-    if (resumes && resumes.length > 0) {
-      score += 25;
-    }
-
-    // 5. Liên kết Portfolio hoặc GitHub (10%)
-    if (links && (links.portfolio || links.github)) {
-      score += 10;
-    }
-
-    // Giới hạn max 100%
     score = Math.min(score, 100);
 
     const completionPercent = document.getElementById('completionPercent');
@@ -235,7 +176,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // --------------------------------------------------------------------------
-  // 5. XỬ LÝ CHỈNH SỬA & LƯU THÔNG TIN CÁ NHÂN
+  // 5. CHỈNH SỬA & LƯU THÔNG TIN CÁ NHÂN (PROFILE)
   // --------------------------------------------------------------------------
   const editProfileBtn = document.getElementById('editProfileBtn');
   const profileForm = document.getElementById('profileForm');
@@ -272,7 +213,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   if (profileForm) {
-    profileForm.addEventListener('submit', function (e) {
+    profileForm.addEventListener('submit', async function (e) {
       e.preventDefault();
 
       const fullName = document.getElementById('fullName').value.trim();
@@ -290,11 +231,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
       setStorage(STORAGE_KEYS.PROFILE, profile);
 
-      // Cập nhật session nếu có
       if (session) {
         session.fullName = fullName;
         session.name = fullName;
         setStorage(STORAGE_KEYS.SESSION, session);
+      }
+
+      // Đồng bộ sang API Backend nếu có đăng nhập
+      if (hasAuth()) {
+        try {
+          await API.put('/candidate/profile', { full_name: fullName, phone });
+        } catch (apiErr) {
+          console.warn('[API] Lưu hồ sơ lên máy chủ thất bại:', apiErr.message);
+        }
       }
 
       renderProfileHeader();
@@ -305,7 +254,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // --------------------------------------------------------------------------
-  // 6. XỬ LÝ HỌC VẤN (EDUCATION MANAGEMENT)
+  // 6. XỬ LÝ HỌC VẤN (EDUCATION)
   // --------------------------------------------------------------------------
   const educationList = document.getElementById('educationList');
   const addEducationBtn = document.getElementById('addEducationBtn');
@@ -325,7 +274,7 @@ document.addEventListener('DOMContentLoaded', function () {
         <div class="education-item-content">
           <h3>${edu.school}</h3>
           <p class="education-major">${edu.major}</p>
-          <span class="education-years">📅 ${edu.startYear} — ${edu.endYear || 'Hiện tại'}</span>
+          <span class="education-years"><i class="fa-regular fa-calendar" aria-hidden="true"></i> ${edu.startYear} — ${edu.endYear || 'Hiện tại'}</span>
         </div>
         <button type="button" class="btn-delete-item btn-delete-edu" data-id="${edu.id}" title="Xóa học vấn này" aria-label="Xóa học vấn">
           <i class="fa-solid fa-trash-can"></i>
@@ -333,7 +282,6 @@ document.addEventListener('DOMContentLoaded', function () {
       </div>
     `).join('');
 
-    // Gắn sự kiện xóa
     educationList.querySelectorAll('.btn-delete-edu').forEach(btn => {
       btn.addEventListener('click', function () {
         const id = this.getAttribute('data-id');
@@ -377,15 +325,13 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
       }
 
-      const newEdu = {
+      educations.push({
         id: 'edu-' + Date.now(),
         school,
         major,
         startYear,
         endYear: endYear || 'Hiện tại'
-      };
-
-      educations.push(newEdu);
+      });
       setStorage(STORAGE_KEYS.EDUCATION, educations);
 
       educationForm.reset();
@@ -399,7 +345,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // --------------------------------------------------------------------------
-  // 7. XỬ LÝ KỸ NĂNG (SKILLS MANAGEMENT)
+  // 7. XỬ LÝ KỸ NĂNG (SKILLS)
   // --------------------------------------------------------------------------
   const skillsList = document.getElementById('skillsList');
   const skillForm = document.getElementById('skillForm');
@@ -422,7 +368,6 @@ document.addEventListener('DOMContentLoaded', function () {
       </span>
     `).join('');
 
-    // Sự kiện xóa tag kỹ năng
     skillsList.querySelectorAll('.skill-chip-delete').forEach(btn => {
       btn.addEventListener('click', function () {
         const index = parseInt(this.getAttribute('data-index'), 10);
@@ -438,7 +383,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const trimmed = newSkill.trim();
     if (!trimmed) return;
 
-    // Kiểm tra trùng
     const exists = skills.some(s => s.toLowerCase() === trimmed.toLowerCase());
     if (exists) {
       notify(`Kỹ năng "${trimmed}" đã có trong danh sách!`, 'warning');
@@ -460,13 +404,12 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Thêm gợi ý kỹ năng nhanh bên dưới form kỹ năng
   const skillsSection = document.getElementById('skillsSection');
   if (skillsSection) {
     const suggestedWrap = document.createElement('div');
     suggestedWrap.className = 'suggested-skills';
     suggestedWrap.innerHTML = `
-      <p>💡 Gợi ý kỹ năng ngành IT:</p>
+      <p><i class="fa-regular fa-lightbulb" style="color: var(--color-primary);"></i> Gợi ý kỹ năng ngành IT:</p>
       <div>
         <button type="button" class="suggest-btn" data-skill="TypeScript">+ TypeScript</button>
         <button type="button" class="suggest-btn" data-skill="Node.js">+ Node.js</button>
@@ -486,7 +429,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // --------------------------------------------------------------------------
-  // 8. XỬ LÝ KHO CV & UPLOAD CV MẶC ĐỊNH (RESUME MANAGEMENT)
+  // 8. XỬ LÝ KHO CV & UPLOAD TỆP PDF QUA REST API
   // --------------------------------------------------------------------------
   const resumeList = document.getElementById('resumeList');
   const uploadResumeBtn = document.getElementById('uploadResumeBtn');
@@ -512,7 +455,7 @@ document.addEventListener('DOMContentLoaded', function () {
               ${res.isDefault ? '<span class="badge-default-cv">✓ CV Mặc Định</span>' : ''}
             </h3>
             <div class="resume-sub-meta">
-              <span>📦 ${res.fileSize}</span> • <span>🕒 Tải lên: ${res.uploadDate}</span>
+              <span><i class="fa-solid fa-file-arrow-up" aria-hidden="true"></i> ${res.fileSize || 'PDF'}</span> • <span><i class="fa-regular fa-calendar" aria-hidden="true"></i> Tải lên: ${res.uploadDate || 'Mới đây'}</span>
             </div>
           </div>
         </div>
@@ -522,7 +465,7 @@ document.addEventListener('DOMContentLoaded', function () {
               Đặt làm mặc định
             </button>
           ` : ''}
-          <button type="button" class="btn-outline btn-sm btn-download-cv" data-id="${res.id}" title="Tải CV về máy">
+          <button type="button" class="btn-outline btn-sm btn-download-cv" data-id="${res.id}" data-url="${res.fileUrl || ''}" title="Tải CV về máy">
             <i class="fa-solid fa-download"></i>
           </button>
           <button type="button" class="btn-delete-item btn-delete-cv" data-id="${res.id}" title="Xóa CV này">
@@ -532,51 +475,118 @@ document.addEventListener('DOMContentLoaded', function () {
       </div>
     `).join('');
 
-    // Đặt mặc định
+    // Đặt CV mặc định qua API
     resumeList.querySelectorAll('.btn-set-default').forEach(btn => {
-      btn.addEventListener('click', function () {
+      btn.addEventListener('click', async function () {
         const id = this.getAttribute('data-id');
-        resumes.forEach(r => { r.isDefault = (r.id === id); });
+
+        // Nếu đã đăng nhập: Đồng bộ trực tiếp với CSDL máy chủ
+        if (hasAuth()) {
+          if (!isNaN(Number(id))) {
+            const originalText = btn.textContent;
+            try {
+              btn.disabled = true;
+              btn.textContent = 'Đang lưu...';
+              await API.patch(`/candidate/resumes/${id}/default`);
+              resumes.forEach(r => { r.isDefault = (String(r.id) === String(id)); });
+              setStorage(STORAGE_KEYS.RESUMES, resumes);
+              renderResumes();
+              notify('Đã cập nhật CV mặc định trên máy chủ thành công!', 'success');
+            } catch (err) {
+              console.warn('[API] Lỗi đổi CV mặc định:', err.message);
+              notify('Lỗi đặt CV mặc định: ' + (err.message || 'Không thể kết nối máy chủ'), 'error');
+              btn.disabled = false;
+              btn.textContent = originalText;
+            }
+          } else {
+            notify('CV này chưa được lưu trên hệ thống máy chủ.', 'warning');
+          }
+          return;
+        }
+
+        // Chế độ ngoại tuyến (chưa đăng nhập)
+        resumes.forEach(r => { r.isDefault = (String(r.id) === String(id)); });
         setStorage(STORAGE_KEYS.RESUMES, resumes);
         renderResumes();
         notify('Đã cập nhật CV mặc định để nộp đơn tuyển dụng!', 'success');
       });
     });
 
-    // Tải về mô phỏng
+    // Tải về / Mở file PDF (Kèm Token xác thực để truy cập API bảo mật /uploads/cv)
     resumeList.querySelectorAll('.btn-download-cv').forEach(btn => {
       btn.addEventListener('click', function () {
         const id = this.getAttribute('data-id');
-        const r = resumes.find(item => item.id === id);
-        notify(`Đang tải xuống tệp: ${r ? r.title : 'CV.pdf'}...`, 'info');
+        const url = this.getAttribute('data-url');
+        const r = resumes.find(item => String(item.id) === String(id));
+        if (url) {
+          let fullUrl = url.startsWith('http') ? url : (API ? API.BASE_URL.replace('/api/v1', '') + url : url);
+          const token = (typeof API !== 'undefined' && API.getToken) ? API.getToken() : (localStorage.getItem('jobportal_access_token') || '');
+          if (token) {
+            const sep = fullUrl.includes('?') ? '&' : '?';
+            fullUrl = `${fullUrl}${sep}token=${encodeURIComponent(token)}`;
+          }
+          window.open(fullUrl, '_blank');
+        } else {
+          notify(`Đang tải xuống tệp: ${r ? r.title : 'CV.pdf'}...`, 'info');
+        }
       });
     });
 
-    // Xóa CV
+    // Xóa CV qua API (có xóa file vật lý trên server)
     resumeList.querySelectorAll('.btn-delete-cv').forEach(btn => {
-      btn.addEventListener('click', function () {
+      btn.addEventListener('click', async function () {
         const id = this.getAttribute('data-id');
-        if (confirm('Bạn có chắc chắn muốn xóa tệp CV này khỏi kho hồ sơ?')) {
-          resumes = resumes.filter(item => item.id !== id);
-          // Nếu xóa mất CV mặc định, gán cho cái đầu tiên còn lại
-          if (resumes.length > 0 && !resumes.some(r => r.isDefault)) {
-            resumes[0].isDefault = true;
+        if (!confirm('Bạn có chắc chắn muốn xóa tệp CV này khỏi kho hồ sơ?')) return;
+
+        // Nếu đã đăng nhập: Gọi API xóa trên máy chủ thật
+        if (hasAuth()) {
+          if (!isNaN(Number(id))) {
+            try {
+              btn.disabled = true;
+              const res = await API.delete(`/candidate/resumes/${id}`);
+              resumes = resumes.filter(item => String(item.id) !== String(id));
+
+              // Nếu máy chủ tự động chuyển CV khác làm mặc định (khi xóa CV mặc định)
+              if (res && res.data && res.data.new_default_resume_id) {
+                resumes.forEach(r => {
+                  r.isDefault = (String(r.id) === String(res.data.new_default_resume_id));
+                });
+              } else if (resumes.length > 0 && !resumes.some(r => r.isDefault)) {
+                resumes[0].isDefault = true;
+              }
+
+              setStorage(STORAGE_KEYS.RESUMES, resumes);
+              renderResumes();
+              updateProfileCompletion();
+              notify('Đã xóa CV khỏi kho hồ sơ máy chủ thành công.', 'warning');
+            } catch (err) {
+              console.warn('[API] Lỗi xóa CV trên máy chủ:', err.message);
+              notify('Lỗi xóa CV: ' + (err.message || 'Không thể xóa CV trên máy chủ'), 'error');
+              btn.disabled = false;
+            }
+          } else {
+            notify('CV này không tồn tại trên hệ thống máy chủ.', 'warning');
           }
-          setStorage(STORAGE_KEYS.RESUMES, resumes);
-          renderResumes();
-          updateProfileCompletion();
-          notify('Đã xóa CV khỏi kho hồ sơ.', 'warning');
+          return;
         }
+
+        // Chế độ ngoại tuyến (chưa đăng nhập)
+        resumes = resumes.filter(item => String(item.id) !== String(id));
+        if (resumes.length > 0 && !resumes.some(r => r.isDefault)) {
+          resumes[0].isDefault = true;
+        }
+        setStorage(STORAGE_KEYS.RESUMES, resumes);
+        renderResumes();
+        updateProfileCompletion();
+        notify('Đã xóa CV khỏi kho hồ sơ.', 'warning');
       });
     });
   }
 
-  // Upload trigger
   if (uploadResumeBtn && resumeFileInput) {
     uploadResumeBtn.addEventListener('click', () => resumeFileInput.click());
   }
 
-  // File selection validation
   if (resumeFileInput) {
     resumeFileInput.addEventListener('change', function () {
       if (this.files && this.files.length > 0) {
@@ -585,7 +595,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Drag & drop upload
   if (resumeUploadArea) {
     ['dragenter', 'dragover'].forEach(name => {
       resumeUploadArea.addEventListener(name, (e) => {
@@ -602,49 +611,101 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     resumeUploadArea.addEventListener('drop', (e) => {
-      if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      e.preventDefault();
+      resumeUploadArea.classList.remove('is-dragover');
+      if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
         handleResumeUpload(e.dataTransfer.files[0]);
       }
     });
   }
 
-  function handleResumeUpload(file) {
+  async function handleResumeUpload(file) {
     const fileName = file.name.toLowerCase();
     if (!fileName.endsWith('.pdf')) {
       notify('Hệ thống chỉ chấp nhận tệp hồ sơ định dạng PDF chuẩn (.pdf)!', 'error');
+      if (resumeFileInput) resumeFileInput.value = '';
       return;
     }
 
     const maxSize = 5 * 1024 * 1024; // 5MB
     if (file.size > maxSize) {
       notify('Dung lượng tệp vượt quá 5MB. Vui lòng nén nhỏ lại trước khi tải lên!', 'error');
+      if (resumeFileInput) resumeFileInput.value = '';
       return;
     }
 
     const sizeMb = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
     if (resumeFileName) {
-      resumeFileName.textContent = `Đã chọn: ${file.name} (${sizeMb})`;
+      resumeFileName.textContent = `Đang tải: ${file.name} (${sizeMb})...`;
     }
 
-    // Tự động tạo bản ghi CV mới
-    const newResume = {
-      id: 'res-' + Date.now(),
-      title: file.name,
-      fileName: file.name,
-      fileSize: sizeMb,
-      uploadDate: new Date().toLocaleDateString('vi-VN'),
-      isDefault: resumes.length === 0 // Nếu là cái đầu tiên thì tự làm default
-    };
+    // Nếu đã đăng nhập: Gọi API tải lên máy chủ thật
+    if (hasAuth()) {
+      try {
+        if (uploadResumeBtn) uploadResumeBtn.disabled = true;
+        const formData = new FormData();
+        formData.append('cvFile', file);
+        formData.append('resume_title', file.name);
 
-    resumes.unshift(newResume);
-    setStorage(STORAGE_KEYS.RESUMES, resumes);
-    renderResumes();
-    updateProfileCompletion();
-    notify(`Tải lên thành công: ${file.name}!`, 'success');
+        const res = await API.upload('/candidate/resumes', formData);
+        if (res && res.data) {
+          const serverCv = {
+            id: res.data.resume_id,
+            title: res.data.resume_title || file.name,
+            fileName: file.name,
+            fileUrl: res.data.file_url,
+            fileSize: sizeMb,
+            uploadDate: new Date().toLocaleDateString('vi-VN'),
+            isDefault: Boolean(res.data.is_default)
+          };
+
+          if (serverCv.isDefault) {
+            resumes.forEach(r => { r.isDefault = false; });
+          }
+          resumes.unshift(serverCv);
+          setStorage(STORAGE_KEYS.RESUMES, resumes);
+          renderResumes();
+          updateProfileCompletion();
+          if (resumeFileName) resumeFileName.textContent = `Đã tải lên: ${file.name}`;
+          notify(`Đã tải lên và thẩm định tệp PDF thành công: ${file.name}!`, 'success');
+        } else {
+          throw new Error(res?.message || 'Không nhận được dữ liệu phản hồi từ máy chủ.');
+        }
+      } catch (err) {
+        console.warn('[API] Upload CV lỗi:', err.message);
+        if (resumeFileName) resumeFileName.textContent = `Tải lên thất bại: ${file.name}`;
+        notify('Lỗi tải CV lên máy chủ: ' + (err.message || 'Không thể tải lên'), 'error');
+      } finally {
+        if (uploadResumeBtn) uploadResumeBtn.disabled = false;
+        if (resumeFileInput) resumeFileInput.value = '';
+      }
+      return; // Bắt buộc return để không rơi xuống fallback ngoại tuyến
+    }
+
+    // Fallback nếu chưa kết nối Backend (chưa đăng nhập)
+    try {
+      const newResume = {
+        id: 'res-' + Date.now(),
+        title: file.name,
+        fileName: file.name,
+        fileSize: sizeMb,
+        uploadDate: new Date().toLocaleDateString('vi-VN'),
+        isDefault: resumes.length === 0
+      };
+
+      resumes.unshift(newResume);
+      setStorage(STORAGE_KEYS.RESUMES, resumes);
+      renderResumes();
+      updateProfileCompletion();
+      if (resumeFileName) resumeFileName.textContent = `Đã chọn: ${file.name} (${sizeMb})`;
+      notify(`Tải lên thành công: ${file.name}!`, 'success');
+    } finally {
+      if (resumeFileInput) resumeFileInput.value = '';
+    }
   }
 
   // --------------------------------------------------------------------------
-  // 9. XỬ LÝ LIÊN KẾT CÁ NHÂN (PORTFOLIO & GITHUB)
+  // 9. LIÊN KẾT CÁ NHÂN (PORTFOLIO & GITHUB)
   // --------------------------------------------------------------------------
   const portfolioUrlInput = document.getElementById('portfolioUrl');
   const githubUrlInput = document.getElementById('githubUrl');
@@ -693,14 +754,12 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // --------------------------------------------------------------------------
-  // 10. TÍCH HỢP TABS ĐIỀU HƯỚNG TRONG CANDIDATE DASHBOARD
-  // Giải quyết triệt để lỗi 404 cho "my-applications.html" và "saved-jobs.html"
+  // 10. TABS ĐIỀU HƯỚNG TRONG CANDIDATE DASHBOARD
   // --------------------------------------------------------------------------
   const sidebarLinks = document.querySelectorAll('.sidebar-link[data-tab]');
   const tabPanels = document.querySelectorAll('.tab-content-panel');
 
   function switchTab(tabId) {
-    // Cập nhật trạng thái active sidebar
     sidebarLinks.forEach(link => {
       const active = (link.getAttribute('data-tab') === tabId);
       link.classList.toggle('active', active);
@@ -708,13 +767,11 @@ document.addEventListener('DOMContentLoaded', function () {
       else link.removeAttribute('aria-current');
     });
 
-    // Cập nhật panel hiển thị
     tabPanels.forEach(panel => {
       const active = (panel.id === tabId);
       panel.classList.toggle('active', active);
     });
 
-    // Đổi tiêu đề đầu trang
     const pageHeadingTitle = document.querySelector('.page-heading h1');
     const pageHeadingDesc = document.querySelector('.page-heading p');
 
@@ -723,15 +780,14 @@ document.addEventListener('DOMContentLoaded', function () {
       if (pageHeadingDesc) pageHeadingDesc.textContent = 'Quản lý thông tin hồ sơ, học vấn, kỹ năng, CV và các liên kết chuyên môn.';
     } else if (tabId === 'tab-applications') {
       if (pageHeadingTitle) pageHeadingTitle.textContent = 'Theo dõi đơn ứng tuyển';
-      if (pageHeadingDesc) pageHeadingDesc.textContent = 'Trực quan hóa quy trình tuyển dụng 4 bước chuẩn mực theo đặc tả QTTK.html.';
-      renderApplicationsList();
+      if (pageHeadingDesc) pageHeadingDesc.textContent = 'Theo dõi trạng thái xét duyệt hồ sơ, lịch hẹn phỏng vấn và thông báo kết quả từ nhà tuyển dụng.';
+      loadAndRenderApplications();
     } else if (tabId === 'tab-saved') {
       if (pageHeadingTitle) pageHeadingTitle.textContent = 'Việc làm đã lưu';
       if (pageHeadingDesc) pageHeadingDesc.textContent = 'Danh sách các cơ hội nghề nghiệp bạn đã đánh dấu quan tâm.';
-      renderSavedJobsList();
+      loadAndRenderSavedJobs();
     }
 
-    // Cập nhật URL hash
     window.location.hash = tabId.replace('tab-', '');
   }
 
@@ -743,7 +799,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // Hỗ trợ URL hash khi vào trang (vd: candidate-dashboard.html#applications)
   if (window.location.hash) {
     const hash = window.location.hash.replace('#', '');
     if (hash === 'applications') switchTab('tab-applications');
@@ -752,15 +807,60 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // --------------------------------------------------------------------------
-  // 11. RENDER TIẾN TRÌNH 4 BƯỚC TUYỂN DỤNG (RECRUITMENT 4-STEP STEPPER)
+  // 11. TIẾN TRÌNH 4 BƯỚC TUYỂN DỤNG & STEPPER TIMELINE (MỤC 5.4 QTTK)
   // --------------------------------------------------------------------------
+  const stepConfig = {
+    pending: { stepIndex: 1, text: 'Đã nộp đơn', badgeColor: '#1e40af', badgeBg: '#eff6ff' },
+    viewed: { stepIndex: 2, text: 'Doanh nghiệp đã xem', badgeColor: '#0369a1', badgeBg: '#e0f2fe' },
+    interview: { stepIndex: 3, text: 'Hẹn phỏng vấn', badgeColor: '#b45309', badgeBg: '#fef3c7' },
+    accepted: { stepIndex: 4, text: 'Trúng tuyển', badgeColor: '#065f46', badgeBg: '#ecfdf5' },
+    rejected: { stepIndex: 4, text: 'Chưa phù hợp', badgeColor: '#b91c1c', badgeBg: '#fee2e2' },
+    withdrawn: { stepIndex: 1, text: 'Đã rút đơn', badgeColor: '#64748b', badgeBg: '#f1f5f9' }
+  };
+
+  async function loadAndRenderApplications() {
+    const container = document.getElementById('applicationsContainer');
+    if (!container) return;
+
+    if (hasAuth()) {
+      try {
+        const res = await API.get('/candidate/applications');
+        if (res && Array.isArray(res.data)) {
+          applications = res.data.map(item => {
+            const conf = stepConfig[item.status] || stepConfig.pending;
+            return {
+              id: item.application_id,
+              jobId: item.job_id,
+              jobTitle: item.job_title,
+              company: item.company_name,
+              salary: (item.salary_min && item.salary_max)
+                ? `${Math.round(item.salary_min / 1e6)} - ${Math.round(item.salary_max / 1e6)} Triệu`
+                : 'Thỏa thuận',
+              location: item.location_name || 'Toàn quốc',
+              appliedAt: new Date(item.applied_at).toLocaleString('vi-VN'),
+              status: item.status,
+              statusText: conf.text,
+              stepIndex: conf.stepIndex,
+              snapshotUrl: item.resume_snapshot_url,
+              coverLetter: item.cover_letter
+            };
+          });
+          setStorage(STORAGE_KEYS.APPLICATIONS, applications);
+        }
+      } catch (err) {
+        console.warn('[API] Lỗi tải danh sách đơn ứng tuyển:', err.message);
+      }
+    }
+
+    renderApplicationsList();
+  }
+
   function renderApplicationsList() {
     const container = document.getElementById('applicationsContainer');
     if (!container) return;
 
-    applications = getStorage(STORAGE_KEYS.APPLICATIONS, []);
+    applications = getStorage(STORAGE_KEYS.APPLICATIONS, applications);
 
-    // Cập nhật badge số lượng ở sidebar
     const appBadge = document.getElementById('sidebarAppCount');
     if (appBadge) appBadge.textContent = applications.length;
 
@@ -771,7 +871,8 @@ document.addEventListener('DOMContentLoaded', function () {
           <h3>Bạn chưa nộp đơn ứng tuyển nào!</h3>
           <p>Hãy khám phá ngay hơn 5.000+ vị trí việc làm IT hấp dẫn và nộp hồ sơ để bắt đầu hành trình nghề nghiệp.</p>
           <a href="./jobs.html" class="btn-primary" style="text-decoration:none;">
-            <span>🔍 Khám phá việc làm ngay</span>
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            <span>Khám phá việc làm ngay</span>
           </a>
         </div>
       `;
@@ -779,7 +880,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     container.innerHTML = applications.map(app => {
-      const step = app.stepIndex || 1; // 1: Submitted, 2: Viewed, 3: Interview, 4: Offer/Rejected
+      const step = app.stepIndex || 1;
+      const conf = stepConfig[app.status] || stepConfig.pending;
 
       return `
         <article class="dashboard-card" style="margin-bottom: 20px;">
@@ -789,27 +891,26 @@ document.addEventListener('DOMContentLoaded', function () {
                 <a href="./job-detail.html?id=${app.jobId}" style="color: inherit; text-decoration: none;">${app.jobTitle}</a>
               </h2>
               <div style="font-size: 0.875rem; color: var(--color-muted); display: flex; gap: 12px; flex-wrap: wrap;">
-                <span>🏢 <strong>${app.company}</strong></span>
-                <span>💰 ${app.salary || 'Thương lượng'}</span>
-                <span>📍 ${app.location || 'TP.HCM'}</span>
+                <span><i class="fa-regular fa-building" aria-hidden="true"></i> <strong>${app.company}</strong></span>
+                <span><i class="fa-solid fa-money-bill-wave" aria-hidden="true"></i> ${app.salary || 'Thương lượng'}</span>
+                <span><i class="fa-solid fa-location-dot" aria-hidden="true"></i> ${app.location || 'TP.HCM'}</span>
               </div>
             </div>
             <div>
-              <span class="candidate-badge" style="background:#eff6ff; color:#1e40af;">
+              <span class="candidate-badge" style="background:${conf.badgeBg}; color:${conf.badgeColor};">
                 ${app.statusText || 'Đã nộp đơn'}
               </span>
             </div>
           </div>
 
           <div style="background: var(--color-bg-page); border: 1px solid var(--color-border); border-radius: 8px; padding: 10px 14px; margin: 14px 0; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-            <span>📄 CV đã nộp: <strong>${app.fileName || 'CV_UngVien.pdf'}</strong> (${app.fileSize || '1.2 MB'})</span>
-            <span style="color: var(--color-muted);">🕒 Nộp lúc: ${app.appliedAt}</span>
+            <span><i class="fa-solid fa-file-pdf" style="color: var(--color-danger);"></i> Bản chụp CV bất biến: <strong>${app.fileName || 'CV_Snapshot.pdf'}</strong></span>
+            <span style="color: var(--color-muted);"><i class="fa-regular fa-clock" aria-hidden="true"></i> Nộp lúc: ${app.appliedAt}</span>
           </div>
 
-          <!-- THANH TIẾN TRÌNH 4 BƯỚC (STEPPER TIMELINE THEO WIREFRAME 5.4 QTTK) -->
+          <!-- STEPPER 4 BƯỚC -->
           <div class="stepper-timeline-box">
             <div class="stepper-track">
-              <!-- BƯỚC 1 -->
               <div class="step-node ${step >= 1 ? 'completed' : 'pending'}">
                 <div class="step-icon-bubble">${step >= 1 ? '✓' : '1'}</div>
                 <div class="step-label-title">1. ĐÃ NỘP ĐƠN</div>
@@ -818,7 +919,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
               <div class="step-line ${step >= 2 ? 'completed' : ''}"></div>
 
-              <!-- BƯỚC 2 -->
               <div class="step-node ${step >= 2 ? (step === 2 ? 'active' : 'completed') : 'pending'}">
                 <div class="step-icon-bubble">${step > 2 ? '✓' : '2'}</div>
                 <div class="step-label-title">2. ĐÃ XEM CV</div>
@@ -827,7 +927,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
               <div class="step-line ${step >= 3 ? 'completed' : ''}"></div>
 
-              <!-- BƯỚC 3 -->
               <div class="step-node ${step >= 3 ? (step === 3 ? 'active' : 'completed') : 'pending'}">
                 <div class="step-icon-bubble">${step > 3 ? '✓' : '3'}</div>
                 <div class="step-label-title">3. PHỎNG VẤN</div>
@@ -836,28 +935,33 @@ document.addEventListener('DOMContentLoaded', function () {
 
               <div class="step-line ${step >= 4 ? 'completed' : ''}"></div>
 
-              <!-- BƯỚC 4 -->
               <div class="step-node ${step >= 4 ? 'completed' : 'pending'}">
                 <div class="step-icon-bubble">${step >= 4 ? '✓' : '4'}</div>
                 <div class="step-label-title">4. KẾT QUẢ</div>
-                <div class="step-label-desc">${step >= 4 ? 'Hoàn tất' : 'Đang duyệt'}</div>
+                <div class="step-label-desc">${step >= 4 ? (app.status === 'accepted' ? 'Trúng tuyển' : 'Hoàn tất') : 'Đang duyệt'}</div>
               </div>
             </div>
           </div>
 
-          ${app.feedback ? `
-            <div style="background: #fffbeb; border: 1px solid #fef3c7; border-left: 4px solid var(--color-warning); padding: 12px 14px; border-radius: 6px; font-size: 0.85rem; color: #92400e; margin-bottom: 14px;">
-              <strong>💬 Phản hồi từ Nhà Tuyển Dụng:</strong> ${app.feedback}
+          ${app.coverLetter ? `
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 10px 14px; border-radius: 6px; font-size: 0.85rem; color: #334155; margin-bottom: 14px;">
+              <strong><i class="fa-regular fa-envelope" aria-hidden="true"></i> Thư giới thiệu:</strong> ${app.coverLetter}
             </div>
           ` : ''}
 
-          <div style="display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid var(--color-border-light); padding-top: 12px;">
+          <div style="display: flex; justify-content: flex-end; align-items: center; gap: 10px; border-top: 1px solid var(--color-border-light); padding-top: 12px;">
             <a href="./job-detail.html?id=${app.jobId}" class="btn-outline btn-sm" style="text-decoration:none;">
               Xem lại tin tuyển dụng
             </a>
-            <button type="button" class="btn-delete-item btn-withdraw-app" data-id="${app.id}" style="color:var(--color-danger); border:1px solid #fee2e2; padding:4px 10px; border-radius:6px; font-size:0.8rem; cursor:pointer;">
-              Rút đơn ứng tuyển
-            </button>
+            ${app.status !== 'withdrawn' && app.status !== 'accepted' && app.status !== 'rejected' ? `
+              <button type="button" class="btn-delete-item btn-withdraw-app" data-id="${app.id}" style="color:var(--color-danger); border:1px solid #fee2e2; padding:4px 10px; border-radius:6px; font-size:0.8rem; cursor:pointer;">
+                Rút đơn ứng tuyển
+              </button>
+            ` : (app.status === 'withdrawn' ? `
+              <span style="font-size:0.8rem; color:#64748b; font-weight:600; padding:4px 8px; background:#f1f5f9; border-radius:6px;">
+                <i class="fa-solid fa-ban"></i> Đã rút hồ sơ
+              </span>
+            ` : '')}
           </div>
         </article>
       `;
@@ -865,64 +969,141 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Sự kiện rút đơn
     container.querySelectorAll('.btn-withdraw-app').forEach(btn => {
-      btn.addEventListener('click', function () {
+      btn.addEventListener('click', async function () {
         const id = this.getAttribute('data-id');
-        if (confirm('Bạn có chắc chắn muốn rút đơn ứng tuyển này không? Hành động này không thể hoàn tác.')) {
-          applications = applications.filter(a => a.id !== id);
-          setStorage(STORAGE_KEYS.APPLICATIONS, applications);
-          renderApplicationsList();
-          notify('Đã rút đơn ứng tuyển thành công.', 'warning');
+        if (!confirm('Bạn có chắc chắn muốn rút đơn ứng tuyển này không? Hành động này không thể hoàn tác.')) return;
+
+        if (hasAuth()) {
+          if (!isNaN(Number(id))) {
+            const originalText = btn.textContent;
+            try {
+              btn.disabled = true;
+              btn.textContent = 'Đang rút...';
+              await API.delete(`/candidate/applications/${id}`);
+              const target = applications.find(a => String(a.id) === String(id));
+              if (target) {
+                target.status = 'withdrawn';
+                target.statusText = 'Đã rút đơn';
+              }
+              setStorage(STORAGE_KEYS.APPLICATIONS, applications);
+              renderApplicationsList();
+              notify('Đã rút đơn ứng tuyển thành công. Đơn được lưu vào lịch sử.', 'warning');
+            } catch (err) {
+              console.warn('[API] Rút đơn thất bại:', err.message);
+              notify('Lỗi rút đơn ứng tuyển: ' + (err.message || 'Không thể rút đơn trên máy chủ'), 'error');
+              btn.disabled = false;
+              btn.textContent = originalText;
+            }
+          } else {
+            notify('Đơn ứng tuyển không hợp lệ trên máy chủ.', 'warning');
+          }
+          return;
         }
+
+        // Chế độ ngoại tuyến (chưa đăng nhập) - cập nhật trạng thái withdrawn để lưu giữ lịch sử
+        const target = applications.find(a => String(a.id) === String(id));
+        if (target) {
+          target.status = 'withdrawn';
+          target.statusText = 'Đã rút đơn';
+        }
+        setStorage(STORAGE_KEYS.APPLICATIONS, applications);
+        renderApplicationsList();
+        notify('Đã rút đơn ứng tuyển thành công. Đơn được lưu vào lịch sử.', 'warning');
       });
     });
   }
 
   // --------------------------------------------------------------------------
-  // 12. RENDER VIỆC LÀM ĐÃ LƯU (SAVED JOBS / BOOKMARKS)
+  // 12. VIỆC LÀM ĐÃ LƯU (SAVED JOBS)
   // --------------------------------------------------------------------------
+  let savedJobsData = [];
+
+  async function loadAndRenderSavedJobs() {
+    const container = document.getElementById('savedJobsContainer');
+    if (!container) return;
+
+    if (hasAuth()) {
+      try {
+        const res = await API.get('/candidate/saved-jobs');
+        if (res && Array.isArray(res.data)) {
+          savedJobsData = res.data.map(item => ({
+            id: item.job_id,
+            title: item.title,
+            slug: item.slug,
+            company: item.company_name,
+            logoUrl: item.logo_url,
+            location: item.location_name,
+            salary: (item.salary_min && item.salary_max)
+              ? `${Math.round(item.salary_min / 1e6)} - ${Math.round(item.salary_max / 1e6)} Triệu`
+              : 'Thỏa thuận',
+            employmentType: item.employment_type === 'full_time' ? 'Toàn thời gian' : item.employment_type,
+            deadline: item.deadline ? new Date(item.deadline).toLocaleDateString('vi-VN') : 'Hạn nộp mở'
+          }));
+          const bookmarkedIds = savedJobsData.map(j => j.id);
+          setStorage(STORAGE_KEYS.BOOKMARKS, bookmarkedIds);
+        }
+      } catch (err) {
+        console.warn('[API] Lỗi tải việc làm đã lưu:', err.message);
+      }
+    }
+
+    renderSavedJobsList();
+  }
+
   function renderSavedJobsList() {
     const container = document.getElementById('savedJobsContainer');
     if (!container) return;
 
     const bookmarkedIds = getStorage(STORAGE_KEYS.BOOKMARKS, []);
-
-    // Cập nhật badge số lượng ở sidebar
     const saveBadge = document.getElementById('sidebarSaveCount');
-    if (saveBadge) saveBadge.textContent = bookmarkedIds.length;
+    if (saveBadge) saveBadge.textContent = savedJobsData.length || bookmarkedIds.length;
 
-    if (bookmarkedIds.length === 0) {
+    if (savedJobsData.length === 0 && bookmarkedIds.length === 0) {
       container.innerHTML = `
         <div class="empty-state-box">
-          <i class="fa-regular fa-heart" aria-hidden="true"></i>
+          <i class="fa-regular fa-bookmark" aria-hidden="true"></i>
           <h3>Bạn chưa lưu tin tuyển dụng nào!</h3>
-          <p>Khi tìm kiếm việc làm trên JobPortal, hãy bấm biểu tượng trái tim để lưu lại các công việc yêu thích và xem lại tại đây.</p>
+          <p>Khi tìm kiếm việc làm trên JobPortal, hãy bấm biểu tượng lưu tin để đánh dấu các công việc yêu thích và xem lại tại đây.</p>
           <a href="./jobs.html" class="btn-primary" style="text-decoration:none;">
-            <span>🔍 Đi đến sàn việc làm</span>
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            <span>Đi đến sàn việc làm</span>
           </a>
         </div>
       `;
       return;
     }
 
-    // Hiển thị danh sách thẻ việc làm đã lưu
+    const itemsToRender = savedJobsData.length > 0 ? savedJobsData : bookmarkedIds.map(id => ({
+      id,
+      title: `Vị trí việc làm (#${id})`,
+      company: 'Doanh nghiệp IT',
+      location: 'TP.HCM',
+      salary: 'Thỏa thuận',
+      deadline: 'Đang mở'
+    }));
+
     container.innerHTML = `
       <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px;">
-        ${bookmarkedIds.map(id => `
+        ${itemsToRender.map(job => `
           <div class="dashboard-card" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
             <div>
               <div style="display:flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
                 <span class="candidate-badge" style="background:#ecfdf5; color:#065f46;">Đang mở tuyển</span>
-                <button type="button" class="btn-remove-bookmark" data-id="${id}" style="background:none; border:none; color:var(--color-danger); cursor:pointer; font-size:1.1rem;" title="Bỏ lưu công việc này">
-                  ❤️
+                <button type="button" class="btn-remove-bookmark" data-id="${job.id}" style="background:none; border:none; color:var(--color-primary); cursor:pointer; font-size:1.1rem;" title="Bỏ lưu công việc này">
+                  <i class="fa-solid fa-bookmark"></i>
                 </button>
               </div>
               <h3 style="font-size: 1.05rem; font-weight:700; color:var(--color-dark); margin-bottom: 4px;">
-                <a href="./job-detail.html?id=${id}" style="color:inherit; text-decoration:none;">Vị trí việc làm (#${id})</a>
+                <a href="./job-detail.html?id=${job.id}" style="color:inherit; text-decoration:none;">${job.title}</a>
               </h3>
-              <p style="font-size: 0.85rem; color: var(--color-muted); margin-bottom: 12px;">Đã lưu vào danh bạ việc làm yêu thích của bạn.</p>
+              <p style="font-size: 0.85rem; color: var(--color-muted); margin-bottom: 8px;"><i class="fa-regular fa-building"></i> ${job.company}</p>
+              <div style="font-size: 0.85rem; color: var(--color-body); display: flex; gap: 10px; flex-wrap: wrap;">
+                <span><i class="fa-solid fa-money-bill-wave"></i> ${job.salary}</span>
+                <span><i class="fa-solid fa-location-dot"></i> ${job.location}</span>
+              </div>
             </div>
             <div style="display: flex; gap: 8px; margin-top: 12px; border-top: 1px solid var(--color-border-light); padding-top: 12px;">
-              <a href="./job-detail.html?id=${id}" class="btn-primary btn-sm" style="flex:1; text-align:center; text-decoration:none; justify-content:center;">
+              <a href="./job-detail.html?id=${job.id}" class="btn-primary btn-sm" style="flex:1; text-align:center; text-decoration:none; justify-content:center;">
                 Ứng tuyển ngay
               </a>
             </div>
@@ -931,12 +1112,35 @@ document.addEventListener('DOMContentLoaded', function () {
       </div>
     `;
 
-    // Sự kiện bỏ lưu
     container.querySelectorAll('.btn-remove-bookmark').forEach(btn => {
-      btn.addEventListener('click', function () {
+      btn.addEventListener('click', async function () {
         const id = this.getAttribute('data-id');
+        if (hasAuth()) {
+          if (!isNaN(Number(id))) {
+            try {
+              btn.disabled = true;
+              await API.delete(`/candidate/saved-jobs/${id}`);
+              savedJobsData = savedJobsData.filter(j => String(j.id) !== String(id));
+              let currentBookmarks = getStorage(STORAGE_KEYS.BOOKMARKS, []);
+              currentBookmarks = currentBookmarks.filter(item => String(item) !== String(id));
+              setStorage(STORAGE_KEYS.BOOKMARKS, currentBookmarks);
+              renderSavedJobsList();
+              notify('Đã bỏ lưu tin việc làm này thành công.', 'info');
+            } catch (err) {
+              console.warn('[API] Lỗi bỏ lưu việc làm:', err.message);
+              notify('Lỗi bỏ lưu việc làm: ' + (err.message || 'Không thể bỏ lưu việc làm'), 'error');
+              btn.disabled = false;
+            }
+          } else {
+            notify('Mã việc làm không hợp lệ trên máy chủ.', 'warning');
+          }
+          return;
+        }
+
+        // Chế độ ngoại tuyến (chưa đăng nhập)
+        savedJobsData = savedJobsData.filter(j => String(j.id) !== String(id));
         let currentBookmarks = getStorage(STORAGE_KEYS.BOOKMARKS, []);
-        currentBookmarks = currentBookmarks.filter(item => item !== id);
+        currentBookmarks = currentBookmarks.filter(item => String(item) !== String(id));
         setStorage(STORAGE_KEYS.BOOKMARKS, currentBookmarks);
         renderSavedJobsList();
         notify('Đã bỏ lưu tin việc làm này.', 'info');
@@ -945,13 +1149,17 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // --------------------------------------------------------------------------
-  // 13. ĐĂNG XUẤT (LOGOUT ACTION)
+  // 13. ĐĂNG XUẤT
   // --------------------------------------------------------------------------
   const logoutBtn = document.getElementById('logoutBtn');
   if (logoutBtn) {
     logoutBtn.addEventListener('click', function () {
       if (confirm('Bạn có chắc chắn muốn đăng xuất khỏi JobPortal?')) {
-        localStorage.removeItem(STORAGE_KEYS.SESSION);
+        if (API && typeof API.clearAuthSession === 'function') {
+          API.clearAuthSession();
+        } else {
+          localStorage.removeItem(STORAGE_KEYS.SESSION);
+        }
         notify('Đã đăng xuất thành công!', 'info');
         setTimeout(() => {
           window.location.href = './index.html';
@@ -960,7 +1168,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Menu mobile toggle
+  // Mobile menu
   const mobileMenuBtn = document.getElementById('mobileMenuBtn');
   const candidateSidebar = document.querySelector('.candidate-sidebar');
   if (mobileMenuBtn && candidateSidebar) {
@@ -972,7 +1180,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // --------------------------------------------------------------------------
-  // 14. KHỞI TẠO TOÀN DIỆN (INITIALIZE RUN)
+  // 14. KHỞI TẠO & ĐỒNG BỘ VỚI BACKEND API
   // --------------------------------------------------------------------------
   renderProfileHeader();
   renderEducations();
@@ -981,11 +1189,53 @@ document.addEventListener('DOMContentLoaded', function () {
   renderLinks();
   updateProfileCompletion();
 
-  // Cập nhật số lượng ban đầu ở sidebar
-  const initialApps = getStorage(STORAGE_KEYS.APPLICATIONS, []);
-  const initialSaves = getStorage(STORAGE_KEYS.BOOKMARKS, []);
-  const appBadge = document.getElementById('sidebarAppCount');
-  const saveBadge = document.getElementById('sidebarSaveCount');
-  if (appBadge) appBadge.textContent = initialApps.length;
-  if (saveBadge) saveBadge.textContent = initialSaves.length;
+  // Tải dữ liệu thật từ Backend API nếu đã đăng nhập
+  async function syncFromBackend() {
+    if (!hasAuth()) return;
+
+    try {
+      // 1. Đồng bộ Profile
+      const profileRes = await API.get('/candidate/profile');
+      if (profileRes && profileRes.data) {
+        const u = profileRes.data;
+        profile.fullName = u.full_name || profile.fullName;
+        profile.email = u.email || profile.email;
+        profile.phone = u.phone || profile.phone;
+        setStorage(STORAGE_KEYS.PROFILE, profile);
+        renderProfileHeader();
+      }
+
+      // 2. Đồng bộ Kho CV
+      const resumesRes = await API.get('/candidate/resumes');
+      if (resumesRes && Array.isArray(resumesRes.data)) {
+        resumes = resumesRes.data.map(item => ({
+          id: item.resume_id,
+          title: item.resume_title,
+          fileName: item.resume_title,
+          fileUrl: item.file_url,
+          fileSize: 'PDF',
+          uploadDate: new Date(item.created_at).toLocaleDateString('vi-VN'),
+          isDefault: Boolean(item.is_default)
+        }));
+        setStorage(STORAGE_KEYS.RESUMES, resumes);
+        renderResumes();
+      }
+
+      // 3. Đồng bộ Thống kê Dashboard
+      const statsRes = await API.get('/candidate/stats');
+      if (statsRes && statsRes.data) {
+        const { totalApplications, totalSavedJobs } = statsRes.data;
+        const appBadge = document.getElementById('sidebarAppCount');
+        const saveBadge = document.getElementById('sidebarSaveCount');
+        if (appBadge) appBadge.textContent = totalApplications;
+        if (saveBadge) saveBadge.textContent = totalSavedJobs;
+      }
+
+      updateProfileCompletion();
+    } catch (err) {
+      console.warn('[CANDIDATE] Đồng bộ Backend API:', err.message);
+    }
+  }
+
+  syncFromBackend();
 });
