@@ -133,3 +133,22 @@ npm run dev
 * **Kiểm tra trạng thái API:** `http://localhost:5000/api/v1/health`
 * **API Trang chủ:** `http://localhost:5000/api/v1/home/overview`
 * **API Danh sách việc làm:** `http://localhost:5000/api/v1/jobs`
+
+---
+
+## 4. Bảng Cập Nhật Tiến Độ Thực Tế (Cập Nhật Ngày 17/11/2026)
+
+| STT | Thành Viên | Phân Hệ Phụ Trách | File Backend Phụ Trách | Trạng Thái Tiến Độ | Vị Trí Nhánh Git | Ghi Chú Tích Hợp |
+| :---: | :--- | :--- | :--- | :---: | :--- | :--- |
+| **1** | **Trần Hữu Thành** *(Lead)* | **Core System & Trang Chủ** | `server.js`, `db.js`, `home.routes.js`, Middleware | **HOÀN THÀNH 100%** | `main` *(Commit 6a69ee0)* | Khung sườn Express, MySQL pool, JWT RBAC, PDF Magic Bytes, Response Wrapper và API `/home/overview` đã chạy ổn định. |
+| **2** | **Nguyễn Lê Gia Hân** | **Module 1: Tìm kiếm & Lọc việc làm** | `backend/src/routes/jobs.routes.js` | **HOÀN THÀNH 100%** | `origin/feature/module1-giahan` *(Commit e96fb05 ngày 15/11)* | Đã viết xong toàn bộ API lọc đa tiêu chí + phân trang và nối vào `jobs.js`. Nhánh orphan 3 files, chờ Lead tích hợp vào `main`. |
+| **3** | **Hồ Trúc Gia Hân** | **Module 2: Chi tiết việc làm & Nộp CV** | `backend/src/routes/jobDetail.routes.js` | **HOÀN THÀNH 100%** | `origin/module_3_NguyenPhuQuang` *(Commit a36f6ef ngày 16/11)* | Đã hiện thực hóa đầy đủ API `/job-detail/:id`, nộp đơn có kiểm tra trùng lặp, lưu snapshot CV PDF vật lý trong Transaction MySQL. |
+| **4** | **Nguyễn Phú Quang** | **Module 3: Quản lý Ứng viên & CV** | `backend/src/routes/candidate.routes.js` | **HOÀN THÀNH 100%** | `origin/module_3_NguyenPhuQuang` *(Commit a36f6ef ngày 16/11)* | Đã viết 661 dòng code API quản lý hồ sơ, kho CV, nộp đơn 4 bước, việc làm đã lưu, kèm middleware bảo vệ file CV. |
+| **5** | **Đinh Duy Diễn** | **Module 4: Quản lý Tuyển dụng & HR** | `backend/src/routes/employer.routes.js` | **HOÀN THÀNH 100%** | `main` *(Commit 7422d1d ngày 16/11)* | Đã hoàn thành và đẩy trực tiếp lên `main`: API dashboard KPI, đăng tin mới tự sinh slug, đổi trạng thái ứng viên theo quy trình. |
+| **6** | **Lê Hoàng Thiên Hương** | **Module 5: Xác thực & Quản trị Admin** | `backend/src/routes/authAdmin.routes.js` | **HOÀN THÀNH 100%** | `main` *(Commit c7dced0 ngày 15/11)* | Đã hoàn thành và đẩy trực tiếp lên `main`: 857 dòng code Auth, OTP email Nodemailer, Admin KPI, duyệt tin và khóa tài khoản. |
+
+> **ĐÁNH GIÁ CHUNG GIAI ĐOẠN 2:**
+> Tính đến ngày **17/11/2026**, toàn bộ **6/6 thành viên** đã hoàn thành 100% khối lượng lập trình Backend và kết nối Frontend cho các phân hệ được giao!
+> - Đã tích hợp chính thức trên nhánh `main`: **Core (Trần Hữu Thành)**, **Module 4 (Đinh Duy Diễn)**, **Module 5 (Lê Hoàng Thiên Hương)**.
+> - Đang sẵn sàng trên các nhánh tính năng: **Module 1 (Nguyễn Lê Gia Hân)**, **Module 2 & 3 (Hồ Trúc Gia Hân & Nguyễn Phú Quang)**.
+> - Bước kế tiếp: Nhóm trưởng thực hiện hợp nhất (merge) các file của Module 1, 2, 3 vào nhánh `main` để hoàn tất toàn bộ sản phẩm trước hạn nộp.
