@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi Tiết Công Việc</title>
+    <link rel="stylesheet" href="assets/css/job-detail.css">
+</head>
+<body>
+    <div class="job-detail-container">
+        <!-- Cột trái (70%): Nội dung JD chi tiết -->
+        <main class="job-main-content">
+            <h1 id="job-title">Đang tải tiêu đề...</h1>
+            <div id="company-info-inline"></div>
+            <section>
+                <h3>Mô tả công việc</h3>
+                <div id="job-description"></div>
+            </section>
+            <section>
+                <h3>Yêu cầu kỹ năng</h3>
+                <ul id="job-skills-list"></ul>
+            </section>
+        </main>
+
+        <!-- Cột phải (30%): Sticky Sidebar chứa thông tin & nút CTA -->
+        <aside class="job-sidebar-sticky">
+            <div class="card-summary">
+                <h3 id="job-salary">Mức lương: Đang cập nhật</h3>
+                <p id="job-location">Địa điểm: ...</p>
+                <button id="btn-open-modal" class="cta-button">Ứng Tuyển Ngay</button>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Modal Nộp Hồ Sơ (apply-modal) -->
+    <div id="apply-modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <h2>Nộp Hồ Sơ Ứng Tuyển</h2>
+            <form id="apply-form">
+                <label>Tải lên CV (PDF, tối đa 5MB):</label>
+                <input type="file" id="cv-file" accept=".pdf" required>
+
+                <label>Thư giới thiệu (Cover Letter):</label>
+                <textarea id="cover-letter" rows="4" placeholder="Viết giới thiệu ngắn gọn..."></textarea>
+
+                <button type="submit" class="btn-submit">Gửi Hồ Sơ</button>
+                <button type="button" id="btn-close-modal">Đóng</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="assets/js/job-detail.js"></script>
+</body>
+</html>

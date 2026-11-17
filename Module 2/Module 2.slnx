@@ -1,0 +1,17 @@
+<Solution>
+  <Folder Name="/backend/" />
+  <Folder Name="/backend/src/" />
+  <Folder Name="/backend/src/routes/">
+    <File Path="jobDetail.routes.js" />
+  </Folder>
+  <Folder Name="/job-portal/">
+    <File Path="job-detail.html" />
+  </Folder>
+  <Folder Name="/job-portal/assets/" />
+  <Folder Name="/job-portal/assets/css/">
+    <File Path="job-detail.css" />
+  </Folder>
+  <Folder Name="/job-portal/assets/js/">
+    <File Path="job-detail.js" />
+  </Folder>
+</Solution>
