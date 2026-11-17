@@ -25,7 +25,7 @@ const employerRoutes = require('./routes/employer.routes');   // Module 4: Đinh
 const authAdminRoutes = require('./routes/authAdmin.routes'); // Module 5: Lê Hoàng Thiên Hương
 
 const app = express();
-const PORT = Number(process.env.PORT) || 5000;
+const PORT = Number(process.env.PORT) || 5001;
 
 // 1. Cấu hình Middleware cơ bản & Security Headers (Mục 2.2 Đặc tả kỹ thuật)
 app.use(cors({ origin: true, credentials: true }));

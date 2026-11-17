@@ -7,7 +7,13 @@
  */
 
 (function () {
-  var API_BASE_URL = window.JOBPORTAL_API_BASE || 'http://localhost:5000/api/v1';
+  var defaultBase = 'http://localhost:5001/api/v1';
+  if (typeof window !== 'undefined' && window.location && window.location.origin && window.location.origin.startsWith('http')) {
+    if (window.location.port === '5001' || window.location.port === '5000') {
+      defaultBase = window.location.origin + '/api/v1';
+    }
+  }
+  var API_BASE_URL = window.JOBPORTAL_API_BASE || defaultBase;
   var TOKEN_KEY = 'jobportal_access_token';
   var SESSION_KEY = 'jobportal_session';
 
