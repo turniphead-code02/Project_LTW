@@ -39,7 +39,13 @@ router.get('/overview', async (req, res) => {
       SELECT j.job_id, j.title, j.slug, j.salary_min, j.salary_max, j.currency,
              j.employment_type, j.experience_level, j.deadline, j.created_at,
              c.company_id, c.company_name, c.logo_url,
-             l.location_name, cat.category_name
+             l.location_name, cat.category_name, cat.slug AS category_slug,
+             (
+               SELECT GROUP_CONCAT(DISTINCT s.skill_name ORDER BY s.skill_name SEPARATOR ', ')
+               FROM job_skills js
+               INNER JOIN skills s ON s.skill_id = js.skill_id
+               WHERE js.job_id = j.job_id
+             ) AS skills
       FROM jobs j
       INNER JOIN companies c ON j.company_id = c.company_id
       INNER JOIN locations l ON j.location_id = l.location_id
