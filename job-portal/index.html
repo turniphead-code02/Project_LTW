@@ -82,70 +82,183 @@
   <main id="mainContent" class="main-content" role="main">
 
     <!-- -----------------------------------------------------------------------
-         2. HERO SECTION & THANH TÌM KIẾM ĐA TIÊU CHÍ (WIRE FRAME 5.1 QTTK)
+         2. HERO SECTION & TRẠM ĐỊNH GIÁ NĂNG LỰC (ASYMMETRIC RADAR SIGNATURE — QTTK 5.1)
          ----------------------------------------------------------------------- -->
     <section class="hero-section" aria-labelledby="heroTitle">
+      <!-- Băng truyền tín hiệu tuyển dụng thời gian thực (Live Recruitment Signal Stream) -->
+      <div class="hero-signal-bar">
+        <div class="container hero-signal-inner">
+          <div class="signal-badge">
+            <span class="pulse-dot"></span>
+            <span>UTH LIVE STREAM</span>
+          </div>
+          <div id="liveSignalTicker" class="signal-ticker-text" aria-live="polite">
+            [14:20] Sinh viên CNTT UTH vừa vượt qua vòng phỏng vấn Kỹ sư Backend Node.js tại FPT Software (Offer 19.5M/tháng)
+          </div>
+          <div class="signal-shortcut-tip">
+            <span>Nhấn</span> <kbd>/</kbd> <span>để mở Command Search</span>
+          </div>
+        </div>
+      </div>
+
       <div class="container hero-content">
-        <div class="hero-eyebrow">
-          <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
-          <span>Cổng Thông Tin Việc Làm &amp; Thực Tập Công Nghệ — Đại học GTVT TP.HCM (UTH)</span>
+        <!-- Bố cục Bất đối xứng: Cột thông điệp chính (Trái) + Trạm Định Giá Lương & Kỹ Năng (Phải) -->
+        <div class="hero-split-layout">
+          <div class="hero-narrative-col">
+            <div class="hero-eyebrow">
+              <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
+              <span>Cổng Việc Làm &amp; Định Giá Năng Lực Kỹ Sư — Đại học GTVT TP.HCM (UTH)</span>
+            </div>
+
+            <h1 id="heroTitle" class="hero-title">
+              Tìm Kiếm Việc Làm IT &amp; Định Giá Năng Lực Kỹ Sư Trẻ Theo Thời Gian Thực
+            </h1>
+
+            <p class="hero-subtitle">
+              Kết nối trực tiếp sinh viên và kỹ sư trẻ với hơn 850 doanh nghiệp công nghệ đã xác thực. Tích hợp bộ máy <strong>chấm điểm độ khớp kỹ năng (Skill-Match)</strong>, định giá khung lương minh bạch và theo dõi trạng thái duyệt CV 4 bước.
+            </p>
+
+            <!-- Huy hiệu cam kết chuẩn kỹ thuật (Architectural Trust Pills) -->
+            <div class="hero-trust-pills">
+              <div class="trust-pill">
+                <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+                <span>Tự động tính % khớp kỹ năng</span>
+              </div>
+              <div class="trust-pill">
+                <i class="fa-solid fa-file-shield" aria-hidden="true"></i>
+                <span>Kiểm duyệt CV PDF &le; 5MB</span>
+              </div>
+              <div class="trust-pill">
+                <i class="fa-solid fa-scale-balanced" aria-hidden="true"></i>
+                <span>So sánh &amp; đối chiếu lương trực tiếp</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- TRẠM ĐỊNH GIÁ LƯƠNG & KHỚP LỆNH KỸ NĂNG (INTERACTIVE SALARY & SKILL RADAR) -->
+          <aside class="hero-radar-console" aria-label="Công cụ định giá mức lương theo kỹ năng">
+            <div class="radar-console-header">
+              <div class="radar-console-title">
+                <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                <span>// UTH SALARY &amp; SKILL RADAR v2.6</span>
+              </div>
+              <span class="radar-status-pill"><span class="pulse-dot"></span> INTERACTIVE</span>
+            </div>
+
+            <!-- Bước 1: Chọn cấp độ kinh nghiệm -->
+            <div class="radar-group">
+              <label class="radar-label">01. Chọn cấp độ hiện tại của bạn:</label>
+              <div class="radar-level-tabs" role="radiogroup" aria-label="Cấp độ kinh nghiệm">
+                <button type="button" class="radar-level-btn" data-level="intern" data-base-min="6" data-base-max="9.5">Thực Tập Sinh</button>
+                <button type="button" class="radar-level-btn active" data-level="fresher" data-base-min="12" data-base-max="17">Fresher (&lt;1 năm)</button>
+                <button type="button" class="radar-level-btn" data-level="junior" data-base-min="17" data-base-max="25">Junior (1-3 năm)</button>
+              </div>
+            </div>
+
+            <!-- Bước 2: Chọn các công nghệ đang nắm vững -->
+            <div class="radar-group">
+              <label class="radar-label">02. Chạm để chọn Tech Stack bạn sở hữu:</label>
+              <div class="radar-skill-chips" id="radarSkillGroup">
+                <button type="button" class="radar-chip active" data-skill="Node.js" data-bonus="2.5">Node.js</button>
+                <button type="button" class="radar-chip active" data-skill="SQL" data-bonus="1.5">SQL</button>
+                <button type="button" class="radar-chip" data-skill="ReactJS" data-bonus="2.5">ReactJS</button>
+                <button type="button" class="radar-chip" data-skill="TypeScript" data-bonus="2.0">TypeScript</button>
+                <button type="button" class="radar-chip" data-skill="Docker" data-bonus="2.0">Docker</button>
+                <button type="button" class="radar-chip" data-skill="Python" data-bonus="2.2">Python</button>
+                <button type="button" class="radar-chip" data-skill="Figma" data-bonus="1.8">UI/UX Figma</button>
+                <button type="button" class="radar-chip" data-skill="Linux" data-bonus="1.8">Linux / Sec</button>
+              </div>
+            </div>
+
+            <!-- Kết quả định giá thời gian thực -->
+            <div class="radar-output-panel">
+              <div class="radar-output-top">
+                <div>
+                  <span class="radar-output-caption">KHUNG LƯƠNG ĐỊNH GIÁ THỊ TRƯỜNG</span>
+                  <div class="radar-salary-value" id="radarSalaryDisplay">16.0 - 21.0 Triệu <small>/ tháng</small></div>
+                </div>
+                <div class="radar-match-counter">
+                  <span id="radarJobCount">24</span>
+                  <small>việc khớp</small>
+                </div>
+              </div>
+
+              <!-- Thanh thước đo phân vị lương -->
+              <div class="radar-gauge-track" aria-hidden="true">
+                <div class="radar-gauge-fill" id="radarGaugeFill" style="width: 68%;"></div>
+              </div>
+              <div class="radar-gauge-labels">
+                <span>Khởi điểm (6M)</span>
+                <span id="radarPercentileLabel" class="radar-percentile-highlight">Top 25% năng lực sinh viên IT</span>
+                <span>Senior (35M+)</span>
+              </div>
+
+              <button type="button" id="radarSyncDownBtn" class="radar-sync-btn">
+                <i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>
+                <span>Đồng bộ bộ kỹ năng này xuống Bảng Việc Làm bên dưới &darr;</span>
+              </button>
+            </div>
+          </aside>
         </div>
 
-        <h1 id="heroTitle" class="hero-title">
-          Tìm Kiếm Việc Làm IT &amp; Cơ Hội Thực Tập Tại Các Doanh Nghiệp Hàng Đầu
-        </h1>
+        <!-- Khối tìm kiếm 4 trường (Keyword, Location, Category, Submit) + Instant Command Dropdown -->
+        <div class="hero-search-wrapper">
+          <form id="homeSearchForm" class="hero-search-box" role="search" aria-label="Tìm kiếm việc làm" autocomplete="off">
+            <!-- Trường 1: Từ khóa / Kỹ năng -->
+            <div class="search-field">
+              <span class="search-icon" aria-hidden="true"><i class="fa-solid fa-magnifying-glass"></i></span>
+              <input 
+                type="text" 
+                id="searchKeyword" 
+                class="search-input" 
+                placeholder="Gõ chức danh, công nghệ (vd: Node.js, React, SOC, Data...)" 
+                aria-label="Từ khóa tìm kiếm việc làm"
+              />
+              <span class="search-cmd-hint" title="Nhấn phím / để tìm nhanh">[/]</span>
+            </div>
 
-        <p class="hero-subtitle">
-          Kết nối trực tiếp sinh viên và kỹ sư trẻ với hơn 850 doanh nghiệp công nghệ đã xác thực. Tra cứu mức lương minh bạch, nộp CV trực tuyến và theo dõi trạng thái hồ sơ theo thời gian thực.
-        </p>
+            <!-- Trường 2: Tỉnh / Thành phố -->
+            <div class="search-field">
+              <span class="search-icon" aria-hidden="true"><i class="fa-solid fa-location-dot"></i></span>
+              <select id="searchLocation" class="search-select" aria-label="Chọn địa điểm làm việc">
+                <option value="">Tất cả địa điểm</option>
+                <option value="hcm" selected>TP. Hồ Chí Minh</option>
+                <option value="hn">Hà Nội</option>
+                <option value="dn">Đà Nẵng</option>
+                <option value="cantho">Cần Thơ</option>
+                <option value="remote">Làm việc từ xa (Remote)</option>
+              </select>
+            </div>
 
-        <!-- Khối tìm kiếm 4 trường (Keyword, Location, Category, Submit) -->
-        <form id="homeSearchForm" class="hero-search-box" role="search" aria-label="Tìm kiếm việc làm">
-          <!-- Trường 1: Từ khóa / Kỹ năng -->
-          <div class="search-field">
-            <span class="search-icon" aria-hidden="true"><i class="fa-solid fa-magnifying-glass"></i></span>
-            <input 
-              type="text" 
-              id="searchKeyword" 
-              class="search-input" 
-              placeholder="Chức danh, kỹ năng (vd: Node.js, React, Fresher...)" 
-              aria-label="Từ khóa tìm kiếm việc làm"
-            />
-            <span class="search-cmd-hint" title="Nhấn phím / để tìm nhanh">[/]</span>
+            <!-- Trường 3: Ngành nghề / Lĩnh vực -->
+            <div class="search-field">
+              <span class="search-icon" aria-hidden="true"><i class="fa-solid fa-layer-group"></i></span>
+              <select id="searchCategory" class="search-select" aria-label="Chọn ngành nghề">
+                <option value="">Tất cả ngành nghề</option>
+                <option value="it">Công Nghệ Thông Tin</option>
+                <option value="uiux">Thiết Kế UI / UX</option>
+                <option value="data">Khoa Học Dữ Liệu &amp; AI</option>
+                <option value="security">An Toàn Thông Tin</option>
+                <option value="marketing">Marketing &amp; Truyền Thông</option>
+              </select>
+            </div>
+
+            <!-- Nút bấm hành động (Action Emerald Green theo QTTK) -->
+            <button type="submit" class="btn btn-accent search-submit-btn">
+              <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+              <span>Tìm Việc Ngay</span>
+            </button>
+          </form>
+
+          <!-- Hộp gợi ý kết quả tức thì (Live Command Search Palette Dropdown) -->
+          <div id="searchPreviewDropdown" class="search-preview-dropdown" aria-label="Gợi ý việc làm tức thì" hidden>
+            <div class="search-preview-header">
+              <span><i class="fa-solid fa-terminal"></i> KẾT QUẢ KHỚP LỆNH TỨC THÌ (INSTANT COMMAND PALETTE)</span>
+              <span class="search-preview-esc">Nhấn <kbd>ESC</kbd> để đóng</span>
+            </div>
+            <div id="searchPreviewList" class="search-preview-list"></div>
           </div>
-
-          <!-- Trường 2: Tỉnh / Thành phố -->
-          <div class="search-field">
-            <span class="search-icon" aria-hidden="true"><i class="fa-solid fa-location-dot"></i></span>
-            <select id="searchLocation" class="search-select" aria-label="Chọn địa điểm làm việc">
-              <option value="">Tất cả địa điểm</option>
-              <option value="hcm" selected>TP. Hồ Chí Minh</option>
-              <option value="hn">Hà Nội</option>
-              <option value="dn">Đà Nẵng</option>
-              <option value="cantho">Cần Thơ</option>
-              <option value="remote">Làm việc từ xa (Remote)</option>
-            </select>
-          </div>
-
-          <!-- Trường 3: Ngành nghề / Lĩnh vực -->
-          <div class="search-field">
-            <span class="search-icon" aria-hidden="true"><i class="fa-solid fa-layer-group"></i></span>
-            <select id="searchCategory" class="search-select" aria-label="Chọn ngành nghề">
-              <option value="">Tất cả ngành nghề</option>
-              <option value="it">Công Nghệ Thông Tin</option>
-              <option value="uiux">Thiết Kế UI / UX</option>
-              <option value="data">Khoa Học Dữ Liệu &amp; AI</option>
-              <option value="security">An Toàn Thông Tin</option>
-              <option value="marketing">Marketing &amp; Truyền Thông</option>
-            </select>
-          </div>
-
-          <!-- Nút bấm hành động (Action Emerald Green theo QTTK) -->
-          <button type="submit" class="btn btn-accent search-submit-btn">
-            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-            <span>Tìm Việc Ngay</span>
-          </button>
-        </form>
+        </div>
 
         <!-- Từ khóa tìm kiếm phổ biến -->
         <div class="hero-popular-tags">

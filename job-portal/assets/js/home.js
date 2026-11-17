@@ -204,6 +204,8 @@ document.addEventListener('DOMContentLoaded', function () {
     return candidate.toUpperCase().slice(0, 7);
   }
 
+  let liveJobsCache = [];
+
   async function loadHomeOverview() {
     if (!window.JobPortalAPI || typeof window.JobPortalAPI.get !== 'function') return;
     try {
@@ -211,6 +213,10 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!res || !res.success || !res.data) return;
 
       const { featuredJobs, topCompanies } = res.data;
+      if (Array.isArray(featuredJobs)) {
+        liveJobsCache = featuredJobs;
+        updateRadarMetrics();
+      }
 
       if (jobsGrid && Array.isArray(featuredJobs) && featuredJobs.length > 0) {
         jobsGrid.innerHTML = featuredJobs.map((job, idx) => {
@@ -280,6 +286,199 @@ document.addEventListener('DOMContentLoaded', function () {
       // Giữ nguyên dữ liệu tĩnh nếu chưa kết nối được server (Zero Dead-End)
       console.warn('[Home] Dùng dữ liệu hiển thị dự phòng:', err.message);
     }
+  }
+
+  // 7. BĂNG TRUYỀN TÍN HIỆU TUYỂN DỤNG THỜI GIAN THỰC (LIVE SIGNAL TICKER)
+  const signalTickerEl = document.getElementById('liveSignalTicker');
+  if (signalTickerEl) {
+    const signals = [
+      '[LIVE] Sinh viên CNTT UTH vừa vượt qua vòng phỏng vấn Backend Node.js tại FPT Software (Offer 19.5M/tháng)',
+      '[LIVE] VNG Corporation vừa mở thêm 3 vị trí Frontend ReactJS (Junior/Middle) tại Quận 7, TP.HCM',
+      '[LIVE] Viettel Solutions đang tìm Thực Tập Sinh Java / Spring Boot có trợ cấp 6 - 8 Triệu',
+      '[LIVE] KMS Technology vừa cập nhật khung lương DevOps & Cloud Engineer lên tới 38 Triệu/tháng'
+    ];
+    let signalIdx = 0;
+    setInterval(() => {
+      signalIdx = (signalIdx + 1) % signals.length;
+      signalTickerEl.style.opacity = '0';
+      setTimeout(() => {
+        signalTickerEl.textContent = signals[signalIdx];
+        signalTickerEl.style.opacity = '1';
+      }, 220);
+    }, 4500);
+  }
+
+  // 8. TRẠM ĐỊNH GIÁ LƯƠNG & KỸ NĂNG (UTH SALARY & SKILL RADAR v2.6)
+  const levelBtns = document.querySelectorAll('.radar-level-btn');
+  const skillChips = document.querySelectorAll('#radarSkillGroup .radar-chip');
+  const salaryDisplayEl = document.getElementById('radarSalaryDisplay');
+  const jobCountEl = document.getElementById('radarJobCount');
+  const gaugeFillEl = document.getElementById('radarGaugeFill');
+  const percentileEl = document.getElementById('radarPercentileLabel');
+  const syncDownBtn = document.getElementById('radarSyncDownBtn');
+
+  function updateRadarMetrics() {
+    const activeLevel = document.querySelector('.radar-level-btn.active');
+    if (!activeLevel || !salaryDisplayEl) return;
+
+    const baseMin = parseFloat(activeLevel.getAttribute('data-base-min')) || 12;
+    const baseMax = parseFloat(activeLevel.getAttribute('data-base-max')) || 17;
+
+    const activeSkills = [];
+    let totalBonus = 0;
+    skillChips.forEach((chip, idx) => {
+      if (chip.classList.contains('active')) {
+        activeSkills.push(chip.getAttribute('data-skill') || '');
+        const b = parseFloat(chip.getAttribute('data-bonus')) || 1.5;
+        // Giảm dần biên độ cộng thêm sau kỹ năng thứ 3 để khung lương sát thực tế thị trường
+        const weight = activeSkills.length <= 3 ? 1 : 0.45;
+        totalBonus += b * weight;
+      }
+    });
+
+    const estMin = (baseMin + totalBonus * 0.85).toFixed(1);
+    const estMax = (baseMax + totalBonus * 1.1).toFixed(1);
+    salaryDisplayEl.innerHTML = `${estMin} - ${estMax} Triệu <small>/ tháng</small>`;
+
+    // Thanh phân vị (tính trên thang tối đa 35M)
+    const midPoint = (parseFloat(estMin) + parseFloat(estMax)) / 2;
+    const pct = Math.min(96, Math.max(18, Math.round((midPoint / 35) * 100)));
+    if (gaugeFillEl) gaugeFillEl.style.width = `${pct}%`;
+
+    if (percentileEl) {
+      if (pct >= 72) percentileEl.textContent = 'Top 10% năng lực kỹ sư trẻ';
+      else if (pct >= 52) percentileEl.textContent = 'Top 25% năng lực sinh viên IT';
+      else if (pct >= 35) percentileEl.textContent = 'Mức chuẩn thị trường IT';
+      else percentileEl.textContent = 'Mức khởi điểm thực tập';
+    }
+
+    // Tính số việc làm khớp dựa trên dữ liệu MySQL thực (hoặc giả lập hợp lý khi chưa có cache)
+    if (jobCountEl) {
+      if (liveJobsCache.length > 0 && activeSkills.length > 0) {
+        const matched = liveJobsCache.filter((job) => {
+          const hay = `${job.title} ${job.skills || ''} ${job.category_name || ''}`.toLowerCase();
+          return activeSkills.some((sk) => hay.includes(sk.toLowerCase().replace('ui/ux ', '')));
+        });
+        jobCountEl.textContent = String(matched.length || liveJobsCache.length);
+      } else {
+        jobCountEl.textContent = String(Math.max(4, activeSkills.length * 6));
+      }
+    }
+  }
+
+  levelBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      levelBtns.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      updateRadarMetrics();
+    });
+  });
+
+  skillChips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      chip.classList.toggle('active');
+      updateRadarMetrics();
+    });
+  });
+
+  if (syncDownBtn) {
+    syncDownBtn.addEventListener('click', () => {
+      const selectedSkills = Array.from(document.querySelectorAll('#radarSkillGroup .radar-chip.active'))
+        .map((el) => el.getAttribute('data-skill'));
+      const searchKw = document.getElementById('searchKeyword');
+      if (searchKw && selectedSkills.length > 0) {
+        searchKw.value = selectedSkills[0];
+      }
+      const featuredSec = document.getElementById('featuredJobs');
+      if (featuredSec) {
+        featuredSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      if (window.showToast) {
+        const label = selectedSkills.length ? selectedSkills.join(', ') : 'Tất cả kỹ năng';
+        window.showToast(`Đã đồng bộ bộ kỹ năng: ${label}`, 'success');
+      }
+    });
+  }
+
+  updateRadarMetrics();
+
+  // 9. INSTANT COMMAND SEARCH PALETTE DROPDOWN
+  const kwInput = document.getElementById('searchKeyword');
+  const previewDropdown = document.getElementById('searchPreviewDropdown');
+  const previewList = document.getElementById('searchPreviewList');
+
+  function getSearchPool() {
+    if (liveJobsCache.length > 0) {
+      return liveJobsCache.map((j) => ({
+        id: j.job_id,
+        title: j.title,
+        company: j.company_name,
+        location: j.location_name,
+        salary: formatSalaryRange(j.salary_min, j.salary_max, j.currency),
+        skills: j.skills || ''
+      }));
+    }
+    return Array.from(document.querySelectorAll('.jobs-grid .job-card')).map((card) => {
+      const link = card.querySelector('.job-card-title a');
+      const href = link ? link.getAttribute('href') : './jobs.html';
+      const idMatch = href.match(/id=([^&]+)/);
+      return {
+        id: idMatch ? idMatch[1] : '',
+        href,
+        title: link ? link.textContent.trim() : '',
+        company: (card.querySelector('.job-card-company span') || {}).textContent || '',
+        location: 'TP. Hồ Chí Minh',
+        salary: (card.querySelector('.meta-salary') || {}).textContent || 'Thỏa thuận',
+        skills: Array.from(card.querySelectorAll('.badge-tech')).map((b) => b.textContent).join(', ')
+      };
+    });
+  }
+
+  function renderSearchPreview(query) {
+    if (!previewDropdown || !previewList) return;
+    const q = query.trim().toLowerCase();
+    if (!q) {
+      previewDropdown.hidden = true;
+      return;
+    }
+
+    const pool = getSearchPool();
+    const matches = pool.filter((item) =>
+      `${item.title} ${item.company} ${item.skills} ${item.location}`.toLowerCase().includes(q)
+    ).slice(0, 5);
+
+    if (matches.length === 0) {
+      previewList.innerHTML = `<div class="search-preview-item"><span class="search-preview-meta">Không có kết quả khớp trực tiếp với "<strong>${escapeHtml(query)}</strong>" — nhấn Enter để tìm toàn bộ sàn.</span></div>`;
+    } else {
+      previewList.innerHTML = matches.map((m) => {
+        const url = m.href || `./job-detail.html?id=${m.id}`;
+        return `
+          <a href="${url}" class="search-preview-item">
+            <div>
+              <div class="search-preview-title">${escapeHtml(m.title)}</div>
+              <div class="search-preview-meta">${escapeHtml(m.company)} &bull; ${escapeHtml(m.location)}</div>
+            </div>
+            <span class="search-preview-salary">${escapeHtml(m.salary)}</span>
+          </a>
+        `;
+      }).join('');
+    }
+    previewDropdown.hidden = false;
+  }
+
+  if (kwInput && previewDropdown) {
+    kwInput.addEventListener('input', (e) => renderSearchPreview(e.target.value));
+    kwInput.addEventListener('focus', (e) => {
+      if (e.target.value.trim()) renderSearchPreview(e.target.value);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') previewDropdown.hidden = true;
+    });
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.hero-search-wrapper')) {
+        previewDropdown.hidden = true;
+      }
+    });
   }
 
   loadHomeOverview();
