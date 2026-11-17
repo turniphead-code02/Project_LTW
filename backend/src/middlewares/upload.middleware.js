@@ -48,11 +48,62 @@ function validatePdfMagicBytes(req, res, next) {
   fs.writeFileSync(fullPath, req.file.buffer);
 
   req.savedCvUrl = `/uploads/cv/${safeFileName}`;
+  req.savedCvPath = fullPath;
   req.savedCvOriginalName = req.file.originalname;
   return next();
 }
 
+/**
+ * Middleware nhận file CV và bắt lỗi kích thước vượt quá 5MB của Multer
+ * Trả về JSON lỗi HTTP 413 thay vì để chạy vào Global Error Handler (500)
+ */
+function handleCvUpload(req, res, next) {
+  const upload = uploadMemory.single('cvFile');
+  upload(req, res, function (err) {
+    if (err) {
+      if (err instanceof multer.MulterError && err.code === 'LIMIT_FILE_SIZE') {
+        return sendError(res, {
+          code: 413,
+          message: 'Dung lượng tệp CV vượt quá giới hạn 5MB. Vui lòng nén hoặc chọn tệp nhỏ hơn.'
+        });
+      }
+      if (err instanceof multer.MulterError) {
+        return sendError(res, {
+          code: 400,
+          message: 'Lỗi tải tệp: ' + err.message
+        });
+      }
+      return sendError(res, {
+        code: 400,
+        message: 'Lỗi tải tệp: ' + (err.message || 'Tệp không hợp lệ.')
+      });
+    }
+    return next();
+  });
+}
+
+/**
+ * Middleware bắt lỗi Multer ở cấp độ Express Error Handler
+ */
+function handleMulterError(err, req, res, next) {
+  if (err instanceof multer.MulterError) {
+    if (err.code === 'LIMIT_FILE_SIZE') {
+      return sendError(res, {
+        code: 413,
+        message: 'Dung lượng tệp vượt quá giới hạn 5MB. Vui lòng nén hoặc chọn tệp nhỏ hơn.'
+      });
+    }
+    return sendError(res, {
+      code: 400,
+      message: 'Lỗi tải tệp: ' + err.message
+    });
+  }
+  return next(err);
+}
+
 module.exports = {
   uploadMemory,
-  validatePdfMagicBytes
+  validatePdfMagicBytes,
+  handleCvUpload,
+  handleMulterError
 };

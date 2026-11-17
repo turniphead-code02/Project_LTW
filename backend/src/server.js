@@ -13,6 +13,8 @@ require('dotenv').config();
 
 const { checkDatabaseConnection } = require('./config/db');
 const { sendError } = require('./utils/response');
+const { handleMulterError } = require('./middlewares/upload.middleware');
+const { serveSecureCv } = require('./middlewares/secureCv.middleware');
 
 // Import 6 phân hệ Route tương ứng với 6 thành viên trong nhóm
 const homeRoutes = require('./routes/home.routes');           // Core: Trần Hữu Thành
@@ -38,7 +40,14 @@ app.use((req, res, next) => {
   next();
 });
 
-// 2. Phục vụ tệp CV tải lên và giao diện Frontend tĩnh (job-portal/)
+// 2. Bảo mật tệp CV cá nhân: Chặn truy cập công khai qua express.static
+// Tất cả yêu cầu xem/tải tệp CV đều bắt buộc xác thực JWT và kiểm tra quyền sở hữu (RBAC)
+app.get('/uploads/cv/:fileName', serveSecureCv);
+app.all('/uploads/cv*', (req, res) => {
+  return sendError(res, { code: 403, message: 'Từ chối truy cập trực tiếp vào thư mục CV.' });
+});
+
+// Phục vụ tệp tĩnh công khai (logo công ty, banner, giao diện Frontend tĩnh)
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 app.use('/job-portal', express.static(path.join(__dirname, '../../job-portal')));
 app.use('/', express.static(path.join(__dirname, '../../job-portal')));
@@ -66,7 +75,10 @@ app.use('/api/*', (req, res) => {
   return sendError(res, { code: 404, message: `Không tìm thấy API endpoint: ${req.originalUrl}` });
 });
 
-// 6. Global Error Handler
+// 6. Middleware bắt lỗi tải file Multer (trả về 413 hoặc 400)
+app.use(handleMulterError);
+
+// 7. Global Error Handler
 app.use((err, req, res, next) => {
   console.error('[ERROR]', err);
   return sendError(res, {

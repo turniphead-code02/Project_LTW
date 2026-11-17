@@ -7,29 +7,32 @@
  * Thiết kế chuẩn mực: Wireframe Phân Hệ Ứng Viên & Đồng bộ hệ thống JobPortal
  * 
  * PHẠM VI CHỨC NĂNG:
- *   1. Quản lý danh sách việc làm đã lưu (Đọc/Ghi LocalStorage: jobportal_bookmarks)
+ *   1. Quản lý danh sách việc làm đã lưu (Đồng bộ MySQL qua /api/v1/candidate/saved-jobs)
  *   2. Đồng bộ trạng thái nộp đơn với đơn ứng tuyển (jobportal_applied_jobs)
  *   3. Bộ đếm chỉ số KPI thống kê việc làm đã lưu: Tổng số, Đang mở, Sắp hết hạn, Đã nộp
  *   4. Bộ lọc đa tiêu chí: Tìm kiếm từ khóa, Lọc theo khu vực, Hình thức, Tab nhanh
  *   5. Sắp xếp thông minh: Mới lưu gần đây, Lương cao nhất, Hạn nộp gần nhất
  *   6. Thao tác Bỏ lưu từng công việc & Xóa toàn bộ danh sách kèm Modal xác nhận an toàn
  *   7. Cập nhật Badge số lượng thời gian thực trên thanh điều hướng Sidebar
+ *   8. Cơ chế Graceful Fallback đảm bảo giao diện luôn mượt mà cả khi offline
  * ==========================================================================
  */
 
 document.addEventListener('DOMContentLoaded', function () {
   'use strict';
 
-  // --------------------------------------------------------------------------
-  // 1. CẤU HÌNH STORAGE KEYS & DỮ LIỆU PHIÊN ĐĂNG NHẬP
-  // --------------------------------------------------------------------------
+  const API = window.JobPortalAPI;
+
   const STORAGE_KEYS = {
     BOOKMARKS: 'jobportal_bookmarks',
     APPLICATIONS: 'jobportal_applied_jobs',
     SESSION: 'jobportal_session'
   };
 
-  // Helper đọc LocalStorage an toàn
+  function hasAuth() {
+    return Boolean(API && typeof API.getToken === 'function' && API.getToken());
+  }
+
   function getStorage(key, fallback) {
     try {
       const data = localStorage.getItem(key);
@@ -40,7 +43,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // Helper ghi LocalStorage
   function setStorage(key, value) {
     try {
       localStorage.setItem(key, JSON.stringify(value));
@@ -49,7 +51,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // Hiển thị thông báo Toast
   function notify(msg, type = 'success') {
     if (typeof window.showToast === 'function') {
       window.showToast(msg, type);
@@ -59,9 +60,9 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // --------------------------------------------------------------------------
-  // 2. KHO DỮ LIỆU VIỆC LÀM CHUẨN CỦA HỆ THỐNG JOBPORTAL (12 JOBS IT MẪU)
+  // 2. KHO DỮ LIỆU VIỆC LÀM CHUẨN CỦA HỆ THỐNG JOBPORTAL
   // --------------------------------------------------------------------------
-  const ALL_JOBS_DB = [
+  let ALL_JOBS_DB = [
     {
       id: 'job-01',
       title: 'Frontend React Developer (Junior / Middle)',
@@ -217,173 +218,16 @@ document.addEventListener('DOMContentLoaded', function () {
       isHot: true,
       isUrgent: true,
       description: 'Quản trị hạ tầng Cloud AWS quy mô lớn cho đối tác Mỹ. Tự động hóa quy trình triển khai phần mềm không gián đoạn Zero-Downtime Deployment.'
-    },
-    {
-      id: 'job-07',
-      title: 'Mobile Flutter Developer (Fintech App - Remote)',
-      company: 'ZaloPay FinTech Group',
-      logo: 'ZP',
-      logoBg: '#0369a1',
-      verified: true,
-      salary: '20 - 32 Triệu',
-      salaryNum: 32,
-      location: 'remote',
-      locationLabel: 'Làm từ xa (Remote 100%)',
-      workType: 'remote',
-      workTypeLabel: 'Làm việc từ xa',
-      experience: '1-3',
-      experienceLabel: '1 - 3 năm',
-      category: 'software',
-      categoryLabel: 'Lập trình phần mềm',
-      tags: ['Flutter', 'Dart', 'BLoC', 'REST API', 'Payment Gateway'],
-      postedText: '4 ngày trước',
-      postedDaysAgo: 4,
-      deadlineText: '18/11/2026',
-      deadlineDaysLeft: 9,
-      isHot: false,
-      isUrgent: false,
-      description: 'Lập trình module thanh toán mã QR và tích hợp cổng thanh toán ngân hàng trực tuyến. Cho phép làm việc linh hoạt từ mọi tỉnh thành.'
-    },
-    {
-      id: 'job-08',
-      title: 'Kỹ Sư An Toàn Thông Tin & Giám Sát SOC (SecOps)',
-      company: 'Tập Đoàn Bưu Chính Viễn Thông Việt Nam (VNPT IT)',
-      logo: 'VNPT',
-      logoBg: '#1e40af',
-      verified: true,
-      salary: '18 - 26 Triệu',
-      salaryNum: 26,
-      location: 'hanoi',
-      locationLabel: 'Đống Đa, Hà Nội',
-      workType: 'fulltime',
-      workTypeLabel: 'Toàn thời gian',
-      experience: '1-3',
-      experienceLabel: '1 - 3 năm',
-      category: 'security',
-      categoryLabel: 'An toàn thông tin',
-      tags: ['SOC', 'SIEM', 'Network Security', 'Penetration Testing', 'Linux'],
-      postedText: '4 ngày trước',
-      postedDaysAgo: 4,
-      deadlineText: '10/12/2026',
-      deadlineDaysLeft: 31,
-      isHot: false,
-      isUrgent: false,
-      description: 'Theo dõi, phân tích nhật ký log hệ thống mạng viễn thông quốc gia. Ứng phó sự cố an ninh mạng và rà quét lỗ hổng định kỳ theo chuẩn ISO 27001.'
-    },
-    {
-      id: 'job-09',
-      title: 'Fullstack Web Developer (.NET Core 8 & Angular)',
-      company: 'Axon Active Vietnam',
-      logo: 'AA',
-      logoBg: '#991b1b',
-      verified: true,
-      salary: '22 - 35 Triệu',
-      salaryNum: 35,
-      location: 'cantho',
-      locationLabel: 'Ninh Kiều, Cần Thơ',
-      workType: 'fulltime',
-      workTypeLabel: 'Toàn thời gian',
-      experience: '3-5',
-      experienceLabel: '3+ năm',
-      category: 'software',
-      categoryLabel: 'Lập trình phần mềm',
-      tags: ['.NET Core', 'C#', 'Angular', 'SQL Server', 'Scrum Agile'],
-      postedText: '5 ngày trước',
-      postedDaysAgo: 5,
-      deadlineText: '12/12/2026',
-      deadlineDaysLeft: 33,
-      isHot: true,
-      isUrgent: false,
-      description: 'Làm việc trong môi trường Scrum Thụy Sĩ tiêu chuẩn quốc tế. Giao tiếp tiếng Anh hàng ngày với khách hàng châu Âu.'
-    },
-    {
-      id: 'job-10',
-      title: 'Thực Tập Sinh Kiểm Thử Phần Mềm (QA / Manual Tester)',
-      company: 'NashTech Vietnam',
-      logo: 'NT',
-      logoBg: '#0f766e',
-      verified: true,
-      salary: '5 - 7 Triệu (Trợ cấp)',
-      salaryNum: 7,
-      location: 'hcm',
-      locationLabel: 'Tân Bình, TP.HCM',
-      workType: 'internship',
-      workTypeLabel: 'Thực tập sinh',
-      experience: 'fresher',
-      experienceLabel: 'Fresher / Sinh viên năm cuối',
-      category: 'software',
-      categoryLabel: 'Lập trình phần mềm',
-      tags: ['Manual Testing', 'Test Case', 'Postman', 'Jira', 'SQL'],
-      postedText: '5 ngày trước',
-      postedDaysAgo: 5,
-      deadlineText: '22/11/2026',
-      deadlineDaysLeft: 13,
-      isHot: false,
-      isUrgent: true,
-      description: 'Viết tài liệu Test Plan, Test Case và báo cáo Bug trên Jira. Được Mentor kèm cặp 1-1 và cấp chứng nhận thực tập hoàn thành.'
-    },
-    {
-      id: 'job-11',
-      title: 'AI / Machine Learning Engineer (Fresher / Junior)',
-      company: 'One Mount Group (Vingroup Tech)',
-      logo: 'OM',
-      logoBg: '#1e3a8a',
-      verified: true,
-      salary: '18 - 27 Triệu',
-      salaryNum: 27,
-      location: 'hanoi',
-      locationLabel: 'Hai Bà Trưng, Hà Nội',
-      workType: 'fulltime',
-      workTypeLabel: 'Toàn thời gian',
-      experience: 'fresher',
-      experienceLabel: 'Fresher / 1 năm',
-      category: 'data-ai',
-      categoryLabel: 'Dữ liệu & AI',
-      tags: ['Python', 'PyTorch', 'Computer Vision', 'NLP', 'TensorFlow'],
-      postedText: '6 ngày trước',
-      postedDaysAgo: 6,
-      deadlineText: '01/12/2026',
-      deadlineDaysLeft: 22,
-      isHot: true,
-      isUrgent: false,
-      description: 'Tham gia nghiên cứu và ứng dụng mô hình Deep Learning cho hệ sinh thái VinID & VinShop. Xây dựng hệ thống gợi ý sản phẩm tự động.'
-    },
-    {
-      id: 'job-12',
-      title: 'Kỹ Sư Phần Mềm Nhúng (Embedded C/C++ Developer)',
-      company: 'Renesas Design Vietnam',
-      logo: 'RN',
-      logoBg: '#334155',
-      verified: true,
-      salary: '13 - 18 Triệu',
-      salaryNum: 18,
-      location: 'hcm',
-      locationLabel: 'Quận 7 (KCX Tân Thuận), TP.HCM',
-      workType: 'fulltime',
-      workTypeLabel: 'Toàn thời gian',
-      experience: 'fresher',
-      experienceLabel: 'Fresher / 1 năm',
-      category: 'software',
-      categoryLabel: 'Lập trình phần mềm',
-      tags: ['C/C++', 'Microcontroller', 'RTOS', 'CAN Bus', 'Git'],
-      postedText: '1 tuần trước',
-      postedDaysAgo: 7,
-      deadlineText: '20/12/2026',
-      deadlineDaysLeft: 41,
-      isHot: false,
-      isUrgent: false,
-      description: 'Phát triển Driver và Firmware nhúng trên vi điều khiển bán dẫn cho xe ô tô tự hành và thiết bị IoT. Cơ hội đào tạo tại Nhật Bản.'
     }
   ];
 
   // --------------------------------------------------------------------------
-  // 3. KHỞI TẠO DANH SÁCH VIỆC LÀM ĐÃ LƯU TỪ LOCALSTORAGE
+  // 3. KHỞI TẠO DANH SÁCH VIỆC LÀM ĐÃ LƯU
   // --------------------------------------------------------------------------
   const rawBookmarks = localStorage.getItem(STORAGE_KEYS.BOOKMARKS);
   let bookmarkedIds;
 
   if (rawBookmarks === null) {
-    // Khởi tạo 3 việc làm mẫu được yêu thích sẵn để giao diện trực quan và dễ chấm điểm đồ án
     bookmarkedIds = ['job-01', 'job-04', 'job-05'];
     setStorage(STORAGE_KEYS.BOOKMARKS, bookmarkedIds);
   } else {
@@ -395,15 +239,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // Đọc danh sách đơn đã nộp để kiểm tra trạng thái ứng tuyển chéo
   const appliedList = getStorage(STORAGE_KEYS.APPLICATIONS, []);
-  const appliedJobIds = new Set(appliedList.map(app => app.jobId));
+  const appliedJobIds = new Set(appliedList.map(app => String(app.jobId || app.job_id)));
 
-  // Đọc thông tin phiên đăng nhập
   const session = getStorage(STORAGE_KEYS.SESSION, null);
   const currentUserName = (session && (session.fullName || session.name)) || 'Nguyễn Phú Quang';
 
-  // Hiển thị tên tài khoản lên Navbar và Sidebar
   const headerUserName = document.getElementById('headerUserName');
   const sidebarUserName = document.getElementById('sidebarUserName');
   if (headerUserName) headerUserName.textContent = currentUserName;
@@ -416,7 +257,7 @@ document.addEventListener('DOMContentLoaded', function () {
   let currentLocation = 'all';
   let currentWorkType = 'all';
   let currentSort = 'default';
-  let currentQuickFilter = 'all'; // 'all', 'not-applied', 'applied', 'urgent'
+  let currentQuickFilter = 'all';
 
   const savedJobsListEl = document.getElementById('savedJobsList');
   const emptyStateBox = document.getElementById('emptyStateBox');
@@ -425,14 +266,12 @@ document.addEventListener('DOMContentLoaded', function () {
   const emptyStateCta = document.getElementById('emptyStateCta');
   const savedCountEl = document.getElementById('savedCount');
 
-  // Input & Select Elements
   const searchInput = document.getElementById('savedSearchInput');
   const locationSelect = document.getElementById('savedLocationFilter');
   const workTypeSelect = document.getElementById('savedWorkTypeFilter');
   const sortSelect = document.getElementById('savedSortSelect');
   const quickPills = document.querySelectorAll('.app-filter-pill[data-filter]');
 
-  // Modal Elements
   const btnClearAll = document.getElementById('btnClearAllSaved');
   const clearModal = document.getElementById('clearModal');
   const btnCancelClear = document.getElementById('btnCancelClear');
@@ -443,16 +282,13 @@ document.addEventListener('DOMContentLoaded', function () {
   // 5. CẬP NHẬT CÁC CHỈ SỐ KPI VÀ BADGE SIDEBAR
   // --------------------------------------------------------------------------
   function updateKPIsAndBadges() {
-    // Lấy danh sách việc làm đã lưu hiện có
-    const savedJobs = ALL_JOBS_DB.filter(j => bookmarkedIds.includes(j.id));
+    const savedJobs = ALL_JOBS_DB.filter(j => bookmarkedIds.map(String).includes(String(j.id)));
 
-    // Thống kê
     const totalCount = savedJobs.length;
-    const activeCount = totalCount; // Tất cả việc làm trong DB mẫu đều đang tuyển
-    const expiringSoonCount = savedJobs.filter(j => j.deadlineDaysLeft <= 15).length;
-    const appliedCount = savedJobs.filter(j => appliedJobIds.has(j.id)).length;
+    const activeCount = totalCount;
+    const expiringSoonCount = savedJobs.filter(j => (j.deadlineDaysLeft != null && j.deadlineDaysLeft <= 15)).length;
+    const appliedCount = savedJobs.filter(j => appliedJobIds.has(String(j.id))).length;
 
-    // Cập nhật DOM KPI
     const statTotalEl = document.getElementById('statTotalSaved');
     const statActiveEl = document.getElementById('statActive');
     const statExpiringEl = document.getElementById('statExpiringSoon');
@@ -463,21 +299,19 @@ document.addEventListener('DOMContentLoaded', function () {
     if (statExpiringEl) statExpiringEl.textContent = expiringSoonCount;
     if (statAppliedEl) statAppliedEl.textContent = appliedCount;
 
-    // Cập nhật Badge trên Sidebar
     const sidebarSaveBadge = document.getElementById('sidebarSaveCount');
     const sidebarAppBadge = document.getElementById('sidebarAppCount');
 
     if (sidebarSaveBadge) sidebarSaveBadge.textContent = totalCount;
     if (sidebarAppBadge) sidebarAppBadge.textContent = appliedList.length;
 
-    // Cập nhật Pill count trên thanh lọc
     const pillAllCount = document.getElementById('pillAllCount');
     const pillNotAppliedCount = document.getElementById('pillNotAppliedCount');
     const pillAppliedCount = document.getElementById('pillAppliedCount');
     const pillUrgentCount = document.getElementById('pillUrgentCount');
 
     if (pillAllCount) pillAllCount.textContent = totalCount;
-    if (pillNotAppliedCount) pillNotAppliedCount.textContent = totalCount - appliedCount;
+    if (pillNotAppliedCount) pillNotAppliedCount.textContent = Math.max(0, totalCount - appliedCount);
     if (pillAppliedCount) pillAppliedCount.textContent = appliedCount;
     if (pillUrgentCount) pillUrgentCount.textContent = expiringSoonCount;
   }
@@ -486,50 +320,43 @@ document.addEventListener('DOMContentLoaded', function () {
   // 6. LỌC VÀ SẮP XẾP DANH SÁCH VIỆC LÀM ĐÃ LƯU
   // --------------------------------------------------------------------------
   function getFilteredJobs() {
-    // Lấy các job có ID nằm trong bookmarkedIds
-    let list = ALL_JOBS_DB.filter(job => bookmarkedIds.includes(job.id));
+    let list = ALL_JOBS_DB.filter(job => bookmarkedIds.map(String).includes(String(job.id)));
 
-    // Lọc theo từ khóa
     if (currentKeyword.trim() !== '') {
       const q = currentKeyword.toLowerCase().trim();
       list = list.filter(job => {
         return (
           job.title.toLowerCase().includes(q) ||
           job.company.toLowerCase().includes(q) ||
-          job.tags.some(tag => tag.toLowerCase().includes(q)) ||
-          job.description.toLowerCase().includes(q)
+          (job.tags && job.tags.some(tag => tag.toLowerCase().includes(q))) ||
+          (job.description && job.description.toLowerCase().includes(q))
         );
       });
     }
 
-    // Lọc theo địa điểm
     if (currentLocation !== 'all') {
-      list = list.filter(job => job.location === currentLocation);
+      list = list.filter(job => job.location === currentLocation || (job.locationLabel && job.locationLabel.toLowerCase().includes(currentLocation.toLowerCase())));
     }
 
-    // Lọc theo hình thức làm việc
     if (currentWorkType !== 'all') {
       list = list.filter(job => job.workType === currentWorkType);
     }
 
-    // Lọc theo Quick Filter Tab
     if (currentQuickFilter === 'not-applied') {
-      list = list.filter(job => !appliedJobIds.has(job.id));
+      list = list.filter(job => !appliedJobIds.has(String(job.id)));
     } else if (currentQuickFilter === 'applied') {
-      list = list.filter(job => appliedJobIds.has(job.id));
+      list = list.filter(job => appliedJobIds.has(String(job.id)));
     } else if (currentQuickFilter === 'urgent') {
-      list = list.filter(job => job.deadlineDaysLeft <= 15);
+      list = list.filter(job => job.deadlineDaysLeft != null && job.deadlineDaysLeft <= 15);
     }
 
-    // Sắp xếp
     if (currentSort === 'salary-desc') {
-      list.sort((a, b) => b.salaryNum - a.salaryNum);
+      list.sort((a, b) => (b.salaryNum || 0) - (a.salaryNum || 0));
     } else if (currentSort === 'deadline-asc') {
-      list.sort((a, b) => a.deadlineDaysLeft - b.deadlineDaysLeft);
+      list.sort((a, b) => (a.deadlineDaysLeft || 999) - (b.deadlineDaysLeft || 999));
     } else if (currentSort === 'default') {
-      // Giữ thứ tự lưu gần đây (dựa theo index trong mảng bookmarkedIds)
       list.sort((a, b) => {
-        return bookmarkedIds.indexOf(b.id) - bookmarkedIds.indexOf(a.id);
+        return bookmarkedIds.map(String).indexOf(String(b.id)) - bookmarkedIds.map(String).indexOf(String(a.id));
       });
     }
 
@@ -537,7 +364,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // --------------------------------------------------------------------------
-  // 7. RENDER DANH SÁCH THẺ VIỆC LÀM (JOB-LISTING-ITEM CHUẨN WIREFRAME)
+  // 7. RENDER DANH SÁCH THẺ VIỆC LÀM
   // --------------------------------------------------------------------------
   function renderSavedJobs() {
     updateKPIsAndBadges();
@@ -548,13 +375,11 @@ document.addEventListener('DOMContentLoaded', function () {
       savedCountEl.textContent = filtered.length;
     }
 
-    // Nếu không có việc làm nào
     if (filtered.length === 0) {
       savedJobsListEl.style.display = 'none';
       emptyStateBox.style.display = 'flex';
 
       if (bookmarkedIds.length === 0) {
-        // Chưa lưu việc nào
         emptyStateTitle.textContent = 'Bạn chưa lưu cơ hội việc làm nào!';
         emptyStateDesc.textContent = 'Khám phá hàng trăm tin tuyển dụng IT chất lượng trên JobPortal và bấm biểu tượng trái tim để lưu lại theo dõi.';
         if (emptyStateCta) {
@@ -563,7 +388,6 @@ document.addEventListener('DOMContentLoaded', function () {
           emptyStateCta.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i> Khám phá việc làm ngay';
         }
       } else {
-        // Có lưu nhưng bị lọc hết
         emptyStateTitle.textContent = 'Không tìm thấy việc làm phù hợp!';
         emptyStateDesc.textContent = 'Không có công việc đã lưu nào khớp với tiêu chí tìm kiếm hoặc bộ lọc hiện tại của bạn.';
         if (emptyStateCta) {
@@ -579,25 +403,21 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
 
-    // Nếu có dữ liệu
     savedJobsListEl.style.display = 'flex';
     emptyStateBox.style.display = 'none';
 
     savedJobsListEl.innerHTML = filtered.map(job => {
-      const isApplied = appliedJobIds.has(job.id);
-      const isUrgentDeadline = job.deadlineDaysLeft <= 15;
+      const isApplied = appliedJobIds.has(String(job.id));
+      const isUrgentDeadline = job.deadlineDaysLeft != null && job.deadlineDaysLeft <= 15;
 
       return `
         <article class="job-listing-item" data-id="${job.id}" style="position: relative;">
-          <!-- Phần đầu thẻ: Logo, Tên công ty, Tiêu đề, Mức lương -->
           <div class="job-item-header">
             <div style="display: flex; gap: 16px; align-items: flex-start;">
-              <!-- Logo Công ty (Nền trắng theo QTTK Rule #3) -->
-              <div class="company-logo-badge" style="background: #ffffff; color: ${job.logoBg}; border: 1px solid var(--color-border); width: 52px; height: 52px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.05rem; flex-shrink: 0; box-shadow: var(--shadow-sm);">
-                ${job.logo}
+              <div class="company-logo-badge" style="background: #ffffff; color: ${job.logoBg || '#1e40af'}; border: 1px solid var(--color-border); width: 52px; height: 52px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.05rem; flex-shrink: 0; box-shadow: var(--shadow-sm);">
+                ${job.logo || 'IT'}
               </div>
 
-              <!-- Tiêu đề & Công ty -->
               <div>
                 <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 4px;">
                   <span style="font-size: 0.85rem; font-weight: 600; color: var(--color-muted);"><i class="fa-regular fa-building" aria-hidden="true"></i> ${job.company}</span>
@@ -621,7 +441,6 @@ document.addEventListener('DOMContentLoaded', function () {
               </div>
             </div>
 
-            <!-- Mức lương & Nút bỏ lưu -->
             <div style="display: flex; align-items: center; gap: 12px; flex-shrink: 0;">
               <span class="job-salary-pill" style="background: var(--color-accent-soft); color: #047857; border: 1px solid rgba(16,185,129,0.25); padding: 6px 14px; border-radius: 999px; font-weight: 700; font-size: 0.95rem; white-space: nowrap;">
                 <i class="fa-solid fa-money-bill-wave" aria-hidden="true"></i> ${job.salary}
@@ -640,37 +459,33 @@ document.addEventListener('DOMContentLoaded', function () {
             </div>
           </div>
 
-          <!-- Đoạn mô tả vắn tắt -->
           <p style="font-size: 0.9rem; color: var(--color-body); line-height: 1.55; margin: 4px 0 8px;">
-            ${job.description}
+            ${job.description || ''}
           </p>
 
-          <!-- Danh sách Kỹ năng & Thẻ tags -->
-          <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px;">
-            ${job.tags.map(tag => `
-              <span style="background: var(--color-bg-page); border: 1px solid var(--color-border); color: var(--color-dark); font-size: 0.775rem; padding: 3px 10px; border-radius: 6px; font-weight: 500;">
-                #${tag}
-              </span>
-            `).join('')}
-          </div>
+          ${job.tags && job.tags.length ? `
+            <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px;">
+              ${job.tags.map(tag => `
+                <span style="background: var(--color-bg-page); border: 1px solid var(--color-border); color: var(--color-dark); font-size: 0.775rem; padding: 3px 10px; border-radius: 6px; font-weight: 500;">
+                  #${tag}
+                </span>
+              `).join('')}
+            </div>
+          ` : ''}
 
-          <!-- Thông tin bổ sung: Địa điểm, Hình thức, Kinh nghiệm -->
           <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap; font-size: 0.85rem; color: var(--color-muted); padding-top: 8px; border-top: 1px dashed var(--color-border-light);">
-            <span><i class="fa-solid fa-location-dot" style="color: var(--color-primary); margin-right: 4px;"></i> ${job.locationLabel}</span>
-            <span><i class="fa-regular fa-clock" style="color: var(--color-primary); margin-right: 4px;"></i> ${job.workTypeLabel}</span>
-            <span><i class="fa-solid fa-briefcase" style="color: var(--color-primary); margin-right: 4px;"></i> ${job.experienceLabel}</span>
+            <span><i class="fa-solid fa-location-dot" style="color: var(--color-primary); margin-right: 4px;"></i> ${job.locationLabel || 'Toàn quốc'}</span>
+            <span><i class="fa-regular fa-clock" style="color: var(--color-primary); margin-right: 4px;"></i> ${job.workTypeLabel || 'Toàn thời gian'}</span>
+            <span><i class="fa-solid fa-briefcase" style="color: var(--color-primary); margin-right: 4px;"></i> ${job.experienceLabel || 'Có kinh nghiệm'}</span>
           </div>
 
-          <!-- Chân thẻ: Hạn nộp, Trạng thái đã nộp và CTA Actions -->
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 8px; padding-top: 12px; border-top: 1px solid var(--color-border-light);">
             <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-              <!-- Hạn chót nộp -->
               <span style="font-size: 0.825rem; font-weight: 600; color: ${isUrgentDeadline ? 'var(--color-danger)' : 'var(--color-muted)'}; display: flex; align-items: center; gap: 4px;">
                 <i class="fa-regular fa-calendar-xmark"></i>
-                Hạn nộp: ${job.deadlineText} ${isUrgentDeadline ? `(Còn ${job.deadlineDaysLeft} ngày)` : ''}
+                Hạn nộp: ${job.deadlineText || 'Mở'} ${isUrgentDeadline ? `(Còn ${job.deadlineDaysLeft} ngày)` : ''}
               </span>
 
-              <!-- Huy hiệu trạng thái đã nộp -->
               ${isApplied ? `
                 <span class="candidate-badge" style="background: #e0f2fe; color: #0284c7; font-size: 0.8rem; font-weight: 600; padding: 3px 10px;">
                   <i class="fa-solid fa-paper-plane"></i> Đã nộp hồ sơ
@@ -682,7 +497,6 @@ document.addEventListener('DOMContentLoaded', function () {
               `}
             </div>
 
-            <!-- Cụm nút hành động -->
             <div style="display: flex; gap: 8px; align-items: center;">
               <a href="./job-detail.html?id=${job.id}" class="btn-outline btn-sm" style="text-decoration: none;">
                 Xem Chi Tiết
@@ -697,25 +511,44 @@ document.addEventListener('DOMContentLoaded', function () {
       `;
     }).join('');
 
-    // Gắn sự kiện click bỏ lưu từng thẻ
     attachRemoveButtons();
   }
 
   // --------------------------------------------------------------------------
-  // 8. XỬ LÝ SỰ KIỆN BỎ LƯU TỪNG TIN (REMOVE BOOKMARK)
+  // 8. BỎ LƯU TỪNG TIN QUA REST API
   // --------------------------------------------------------------------------
   function attachRemoveButtons() {
     const removeBtns = document.querySelectorAll('.btn-remove-saved');
     removeBtns.forEach(btn => {
-      btn.addEventListener('click', function (e) {
+      btn.addEventListener('click', async function (e) {
         e.preventDefault();
         e.stopPropagation();
 
         const jobId = this.getAttribute('data-id');
-        const targetJob = ALL_JOBS_DB.find(j => j.id === jobId);
+        const targetJob = ALL_JOBS_DB.find(j => String(j.id) === String(jobId));
 
-        // Xóa khỏi danh sách bookmarkedIds
-        bookmarkedIds = bookmarkedIds.filter(id => id !== jobId);
+        if (hasAuth()) {
+          if (!isNaN(Number(jobId))) {
+            try {
+              btn.disabled = true;
+              await API.delete(`/candidate/saved-jobs/${jobId}`);
+              bookmarkedIds = bookmarkedIds.filter(id => String(id) !== String(jobId));
+              setStorage(STORAGE_KEYS.BOOKMARKS, bookmarkedIds);
+              notify(`Đã bỏ lưu công việc "${targetJob ? targetJob.title : 'Việc làm'}" thành công.`, 'info');
+              renderSavedJobs();
+            } catch (err) {
+              console.warn('[API] Lỗi bỏ lưu việc làm:', err.message);
+              notify('Lỗi bỏ lưu việc làm: ' + (err.message || 'Không thể xóa trên máy chủ'), 'error');
+              btn.disabled = false;
+            }
+          } else {
+            notify('Mã việc làm không hợp lệ trên máy chủ.', 'warning');
+          }
+          return;
+        }
+
+        // Chế độ ngoại tuyến (chưa đăng nhập)
+        bookmarkedIds = bookmarkedIds.filter(id => String(id) !== String(jobId));
         setStorage(STORAGE_KEYS.BOOKMARKS, bookmarkedIds);
 
         notify(`Đã bỏ lưu công việc "${targetJob ? targetJob.title : 'Việc làm'}"`, 'info');
@@ -725,7 +558,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // --------------------------------------------------------------------------
-  // 9. XỬ LÝ XÓA TẤT CẢ VIỆC LÀM ĐÃ LƯU KÈM MODAL XÁC NHẬN
+  // 9. XÓA TẤT CẢ VIỆC LÀM ĐÃ LƯU
   // --------------------------------------------------------------------------
   if (btnClearAll) {
     btnClearAll.addEventListener('click', function () {
@@ -755,7 +588,45 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   if (btnConfirmClear) {
-    btnConfirmClear.addEventListener('click', function () {
+    btnConfirmClear.addEventListener('click', async function () {
+      if (hasAuth()) {
+        btnConfirmClear.disabled = true;
+        btnConfirmClear.textContent = 'Đang xóa...';
+        const failedIds = [];
+        const successIds = [];
+
+        for (const id of bookmarkedIds) {
+          if (!isNaN(Number(id))) {
+            try {
+              await API.delete(`/candidate/saved-jobs/${id}`);
+              successIds.push(id);
+            } catch (err) {
+              console.warn(`[API] Lỗi xóa việc làm #${id}:`, err.message);
+              failedIds.push(id);
+            }
+          } else {
+            successIds.push(id);
+          }
+        }
+
+        btnConfirmClear.disabled = false;
+        btnConfirmClear.textContent = 'Xác nhận xóa';
+
+        // Chỉ xóa khỏi danh sách các ID đã xóa thành công trên máy chủ
+        bookmarkedIds = bookmarkedIds.filter(id => !successIds.includes(id));
+        setStorage(STORAGE_KEYS.BOOKMARKS, bookmarkedIds);
+        closeClearModal();
+        renderSavedJobs();
+
+        if (failedIds.length > 0) {
+          notify(`Đã xóa ${successIds.length} việc làm. Còn ${failedIds.length} việc làm xóa thất bại trên máy chủ!`, 'warning');
+        } else {
+          notify('Đã xóa toàn bộ việc làm đã lưu khỏi danh sách thành công!', 'success');
+        }
+        return;
+      }
+
+      // Ngoại tuyến (chưa đăng nhập)
       bookmarkedIds = [];
       setStorage(STORAGE_KEYS.BOOKMARKS, bookmarkedIds);
       closeClearModal();
@@ -786,7 +657,6 @@ document.addEventListener('DOMContentLoaded', function () {
     renderSavedJobs();
   }
 
-  // Lắng nghe sự kiện ô tìm kiếm với Debounce
   let debounceTimeout = null;
   if (searchInput) {
     searchInput.addEventListener('input', function () {
@@ -798,7 +668,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Lắng nghe Dropdown Lọc
   if (locationSelect) {
     locationSelect.addEventListener('change', function () {
       currentLocation = this.value;
@@ -820,7 +689,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Lắng nghe Quick Filter Pills
   quickPills.forEach(pill => {
     pill.addEventListener('click', function () {
       quickPills.forEach(p => p.classList.remove('active'));
@@ -831,13 +699,17 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // --------------------------------------------------------------------------
-  // 11. ĐĂNG XUẤT (LOGOUT)
+  // 11. ĐĂNG XUẤT
   // --------------------------------------------------------------------------
   const logoutBtn = document.getElementById('logoutBtn');
   if (logoutBtn) {
     logoutBtn.addEventListener('click', function () {
       if (confirm('Bạn có chắc chắn muốn đăng xuất khỏi JobPortal?')) {
-        localStorage.removeItem(STORAGE_KEYS.SESSION);
+        if (API && typeof API.clearAuthSession === 'function') {
+          API.clearAuthSession();
+        } else {
+          localStorage.removeItem(STORAGE_KEYS.SESSION);
+        }
         notify('Đã đăng xuất thành công!', 'info');
         setTimeout(() => {
           window.location.href = './index.html';
@@ -847,7 +719,71 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // --------------------------------------------------------------------------
-  // 12. KHỞI CHẠY LẦN ĐẦU
+  // 12. ĐỒNG BỘ DỮ LIỆU TỪ BACKEND MYSQL
   // --------------------------------------------------------------------------
-  renderSavedJobs();
+  async function syncSavedJobsFromBackend() {
+    if (!hasAuth()) {
+      renderSavedJobs();
+      return;
+    }
+
+    try {
+      const res = await API.get('/candidate/saved-jobs');
+      if (res && Array.isArray(res.data)) {
+        const dbJobs = res.data.map(item => {
+          const salaryNum = item.salary_max ? Math.round(item.salary_max / 1e6) : 0;
+          const salaryStr = (item.salary_min && item.salary_max)
+            ? `${Math.round(item.salary_min / 1e6)} - ${Math.round(item.salary_max / 1e6)} Triệu`
+            : 'Thương lượng';
+
+          const daysLeft = item.deadline
+            ? Math.ceil((new Date(item.deadline) - new Date()) / (1000 * 60 * 60 * 24))
+            : 30;
+
+          return {
+            id: String(item.job_id),
+            title: item.title,
+            company: item.company_name,
+            logo: (item.company_name || 'C').charAt(0),
+            logoBg: '#1e40af',
+            verified: true,
+            salary: salaryStr,
+            salaryNum,
+            location: item.location_name ? item.location_name.toLowerCase() : 'all',
+            locationLabel: item.location_name || 'Toàn quốc',
+            workType: item.employment_type || 'fulltime',
+            workTypeLabel: item.employment_type === 'full_time' ? 'Toàn thời gian' : 'Linh hoạt',
+            experience: item.experience_level || 'junior',
+            experienceLabel: item.experience_level || 'Có kinh nghiệm',
+            category: 'software',
+            categoryLabel: 'Lập trình phần mềm',
+            tags: ['IT', 'Developer'],
+            postedText: 'Gần đây',
+            postedDaysAgo: 1,
+            deadlineText: item.deadline ? new Date(item.deadline).toLocaleDateString('vi-VN') : 'Đang mở',
+            deadlineDaysLeft: daysLeft,
+            isHot: false,
+            isUrgent: daysLeft <= 15,
+            description: `${item.title} tại ${item.company_name}. Vị trí việc làm chất lượng cao.`
+          };
+        });
+
+        // Hợp nhất việc làm từ MySQL vào ALL_JOBS_DB
+        dbJobs.forEach(dj => {
+          if (!ALL_JOBS_DB.some(j => String(j.id) === String(dj.id))) {
+            ALL_JOBS_DB.unshift(dj);
+          }
+        });
+
+        bookmarkedIds = dbJobs.map(j => String(j.id));
+        setStorage(STORAGE_KEYS.BOOKMARKS, bookmarkedIds);
+      }
+    } catch (err) {
+      console.warn('[SAVED JOBS] Đồng bộ API:', err.message);
+    }
+
+    renderSavedJobs();
+  }
+
+  syncSavedJobsFromBackend();
 });

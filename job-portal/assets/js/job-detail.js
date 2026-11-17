@@ -680,14 +680,19 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // --------------------------------------------------------------------------
-  // 8. TÍNH NĂNG LƯU TIN (BOOKMARK JOB)
+  // 8. TÍNH NĂNG LƯU TIN (BOOKMARK JOB QUA REST API)
   // --------------------------------------------------------------------------
+  const API = window.JobPortalAPI;
+  function hasAuth() {
+    return Boolean(API && typeof API.getToken === 'function' && API.getToken());
+  }
+
   const btnBookmark = document.getElementById('btnBookmarkJob');
   let bookmarks = JSON.parse(localStorage.getItem('jobportal_bookmarks') || '[]');
 
   function updateBookmarkUI() {
     if (!btnBookmark) return;
-    const isBookmarked = bookmarks.includes(job.id);
+    const isBookmarked = bookmarks.map(String).includes(String(job.id));
     if (isBookmarked) {
       btnBookmark.innerHTML = '<i class="fa-solid fa-bookmark"></i><span>Đã Lưu Tin</span>';
       btnBookmark.style.borderColor = 'var(--color-primary)';
@@ -701,17 +706,53 @@ document.addEventListener('DOMContentLoaded', function () {
 
   if (btnBookmark) {
     updateBookmarkUI();
-    btnBookmark.addEventListener('click', function () {
-      const idx = bookmarks.indexOf(job.id);
-      if (idx > -1) {
-        bookmarks.splice(idx, 1);
+
+    // Đồng bộ trạng thái đã lưu từ Backend nếu đã đăng nhập
+    if (hasAuth()) {
+      API.get('/candidate/saved-jobs').then(res => {
+        if (res && Array.isArray(res.data)) {
+          bookmarks = res.data.map(item => String(item.job_id));
+          localStorage.setItem('jobportal_bookmarks', JSON.stringify(bookmarks));
+          updateBookmarkUI();
+        }
+      }).catch(err => {
+        console.warn('[API] Không thể đồng bộ việc làm đã lưu:', err.message);
+      });
+    }
+
+    btnBookmark.addEventListener('click', async function () {
+      const idx = bookmarks.map(String).indexOf(String(job.id));
+      const isSaving = (idx === -1);
+
+      if (hasAuth() && !isNaN(Number(job.id))) {
+        try {
+          btnBookmark.disabled = true;
+          if (isSaving) {
+            await API.post(`/candidate/saved-jobs/${job.id}`);
+          } else {
+            await API.delete(`/candidate/saved-jobs/${job.id}`);
+          }
+        } catch (err) {
+          console.warn('[API] Lỗi lưu/bỏ lưu việc làm:', err.message);
+          if (window.showToast) {
+            window.showToast((isSaving ? 'Lỗi lưu việc làm: ' : 'Lỗi bỏ lưu việc làm: ') + (err.message || 'Không thể kết nối máy chủ'), 'error');
+          }
+          btnBookmark.disabled = false;
+          return;
+        } finally {
+          btnBookmark.disabled = false;
+        }
+      }
+
+      if (isSaving) {
+        bookmarks.push(String(job.id));
         if (window.showToast) {
-          window.showToast(`Đã bỏ lưu tin "${job.title}"`, 'info');
+          window.showToast(`Đã lưu tin "${job.title}" vào danh sách yêu thích!`, 'success');
         }
       } else {
-        bookmarks.push(job.id);
+        bookmarks = bookmarks.filter(id => String(id) !== String(job.id));
         if (window.showToast) {
-          window.showToast(`Đã lưu tin "${job.title}" vào danh sách quan tâm!`, 'success');
+          window.showToast(`Đã bỏ lưu tin "${job.title}"`, 'info');
         }
       }
       localStorage.setItem('jobportal_bookmarks', JSON.stringify(bookmarks));

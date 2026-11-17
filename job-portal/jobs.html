@@ -18,6 +18,16 @@
   <link rel="stylesheet" href="./assets/css/base.css" />
   <link rel="stylesheet" href="./assets/css/components.css" />
   <link rel="stylesheet" href="./assets/css/jobs.css" />
+  <style>
+    .module1-filter-control{display:block;width:100%;min-height:42px;margin-top:8px;padding:10px 12px;border:1px solid var(--color-border);border-radius:8px;background:var(--color-surface);color:var(--color-dark);font:inherit;font-size:14px;}
+    .module1-filter-control:focus{outline:2px solid var(--color-primary-light);outline-offset:1px;}
+    .module1-field-label{display:block;margin-top:12px;color:var(--color-body);font-size:13px;font-weight:600;}
+    .module1-filter-hint{margin:8px 0 0;color:var(--color-muted);font-size:11px;line-height:1.5;}
+    .module1-status{margin:8px 0 14px;padding:12px 14px;border-radius:8px;background:var(--color-surface);color:var(--color-muted);font-size:13px;}
+    .module1-status-error{color:#b91c1c;background:#fef2f2;}
+    .jobs-list[aria-busy="true"]{opacity:.55;pointer-events:none;}
+  </style>
+
 </head>
 <body>
 
@@ -103,11 +113,6 @@
 
         <select id="topLocationSelect" class="search-strip-select" aria-label="Địa điểm làm việc">
           <option value="">Tất cả địa điểm</option>
-          <option value="hcm">TP. Hồ Chí Minh</option>
-          <option value="hanoi">Hà Nội</option>
-          <option value="danang">Đà Nẵng</option>
-          <option value="cantho">Cần Thơ</option>
-          <option value="remote">Toàn quốc (Remote)</option>
         </select>
 
         <button type="button" id="topSearchBtn" class="btn btn-primary" style="padding: 10px 22px;">
@@ -129,183 +134,76 @@
              CỘT TRÁI: BỘ LỌC ĐA TIÊU CHÍ (SIDEBAR MULTI-CRITERIA FILTERS)
              ------------------------------------------------------------------- -->
         <aside class="jobs-filter-sidebar" id="jobsFilterSidebar" aria-label="Bộ lọc tìm kiếm việc làm">
-          <!-- Đầu Sidebar: Tiêu đề, nút đặt lại & nút đóng trên mobile -->
           <div class="sidebar-header">
             <div class="sidebar-title">
               <i class="fa-solid fa-sliders" style="color: var(--color-primary);"></i>
               <span>BỘ LỌC ĐA TIÊU CHÍ</span>
             </div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <button type="button" class="btn-reset-filters" id="btnResetAll" title="Xóa tất cả tiêu chí đã chọn">
-                Đặt lại
-              </button>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <button type="button" class="btn-reset-filters" id="btnResetAll">Đặt lại</button>
               <button type="button" class="btn-close-sidebar" id="btnCloseSidebarMobile" aria-label="Đóng bảng bộ lọc">
                 <i class="fa-solid fa-xmark"></i>
               </button>
             </div>
           </div>
 
-          <!-- Nhóm 1: Địa Điểm (Location) -->
           <div class="filter-group">
-            <h4 class="filter-group-title">
-              <span><i class="fa-solid fa-location-dot" style="color: var(--color-primary); margin-right: 6px;"></i> Địa Điểm Làm Việc</span>
-            </h4>
-            <div class="filter-options-list">
-              <label class="filter-label">
-                <input type="checkbox" name="filterLocation" value="hcm" class="filter-checkbox" />
-                <span>TP. Hồ Chí Minh</span>
-                <span class="filter-count">(0)</span>
-              </label>
-              <label class="filter-label">
-                <input type="checkbox" name="filterLocation" value="hanoi" class="filter-checkbox" />
-                <span>Hà Nội</span>
-                <span class="filter-count">(0)</span>
-              </label>
-              <label class="filter-label">
-                <input type="checkbox" name="filterLocation" value="danang" class="filter-checkbox" />
-                <span>Đà Nẵng</span>
-                <span class="filter-count">(0)</span>
-              </label>
-              <label class="filter-label">
-                <input type="checkbox" name="filterLocation" value="cantho" class="filter-checkbox" />
-                <span>Cần Thơ</span>
-                <span class="filter-count">(0)</span>
-              </label>
-              <label class="filter-label">
-                <input type="checkbox" name="filterLocation" value="remote" class="filter-checkbox" />
-                <span>Làm từ xa (Remote)</span>
-                <span class="filter-count">(0)</span>
-              </label>
-            </div>
+            <h4 class="filter-group-title"><i class="fa-solid fa-location-dot"></i> Địa điểm làm việc</h4>
+            <select id="filterLocation" class="module1-filter-control">
+              <option value="">Tất cả tỉnh/thành phố</option>
+            </select>
           </div>
 
-          <!-- Nhóm 2: Mức Lương (Salary Range) -->
           <div class="filter-group">
-            <h4 class="filter-group-title">
-              <span><i class="fa-solid fa-money-bill-wave" style="color: var(--color-primary); margin-right: 6px;"></i> Mức Lương Hàng Tháng</span>
-            </h4>
-            <div class="filter-options-list">
-              <label class="filter-label">
-                <input type="checkbox" name="filterSalary" value="under-10" class="filter-checkbox" />
-                <span>Dưới 10 Triệu</span>
-                <span class="filter-count">(0)</span>
-              </label>
-              <label class="filter-label">
-                <input type="checkbox" name="filterSalary" value="10-15" class="filter-checkbox" />
-                <span>10 - 15 Triệu</span>
-                <span class="filter-count">(0)</span>
-              </label>
-              <label class="filter-label">
-                <input type="checkbox" name="filterSalary" value="15-25" class="filter-checkbox" />
-                <span>15 - 25 Triệu</span>
-                <span class="filter-count">(0)</span>
-              </label>
-              <label class="filter-label">
-                <input type="checkbox" name="filterSalary" value="over-25" class="filter-checkbox" />
-                <span>Trên 25 Triệu</span>
-                <span class="filter-count">(0)</span>
-              </label>
-            </div>
+            <h4 class="filter-group-title"><i class="fa-solid fa-layer-group"></i> Ngành nghề</h4>
+            <select id="filterCategory" class="module1-filter-control">
+              <option value="">Tất cả ngành nghề</option>
+            </select>
           </div>
 
-          <!-- Nhóm 3: Hình Thức Làm Việc (Work Type) -->
           <div class="filter-group">
-            <h4 class="filter-group-title">
-              <span><i class="fa-regular fa-clock" style="color: var(--color-primary); margin-right: 6px;"></i> Hình Thức Làm Việc</span>
-            </h4>
-            <div class="filter-options-list">
-              <label class="filter-label">
-                <input type="checkbox" name="filterWorkType" value="fulltime" class="filter-checkbox" />
-                <span>Toàn thời gian (Full-time)</span>
-                <span class="filter-count">(0)</span>
-              </label>
-              <label class="filter-label">
-                <input type="checkbox" name="filterWorkType" value="parttime" class="filter-checkbox" />
-                <span>Bán thời gian (Part-time)</span>
-                <span class="filter-count">(0)</span>
-              </label>
-              <label class="filter-label">
-                <input type="checkbox" name="filterWorkType" value="internship" class="filter-checkbox" />
-                <span>Thực tập sinh (Internship)</span>
-                <span class="filter-count">(0)</span>
-              </label>
-              <label class="filter-label">
-                <input type="checkbox" name="filterWorkType" value="remote" class="filter-checkbox" />
-                <span>Làm việc từ xa (Remote)</span>
-                <span class="filter-count">(0)</span>
-              </label>
-            </div>
+            <h4 class="filter-group-title"><i class="fa-solid fa-code"></i> Kỹ năng</h4>
+            <select id="filterSkill" class="module1-filter-control">
+              <option value="">Tất cả kỹ năng</option>
+            </select>
           </div>
 
-          <!-- Nhóm 4: Kinh Nghiệm Làm Việc (Experience Level) -->
           <div class="filter-group">
-            <h4 class="filter-group-title">
-              <span><i class="fa-solid fa-briefcase" style="color: var(--color-primary); margin-right: 6px;"></i> Kinh Nghiệm Yêu Cầu</span>
-            </h4>
-            <div class="filter-options-list">
-              <label class="filter-label">
-                <input type="checkbox" name="filterExperience" value="fresher" class="filter-checkbox" />
-                <span>Dưới 1 năm / Fresher</span>
-                <span class="filter-count">(0)</span>
-              </label>
-              <label class="filter-label">
-                <input type="checkbox" name="filterExperience" value="1-3" class="filter-checkbox" />
-                <span>1 - 3 năm kinh nghiệm</span>
-                <span class="filter-count">(0)</span>
-              </label>
-              <label class="filter-label">
-                <input type="checkbox" name="filterExperience" value="3-5" class="filter-checkbox" />
-                <span>3 - 5 năm kinh nghiệm</span>
-                <span class="filter-count">(0)</span>
-              </label>
-              <label class="filter-label">
-                <input type="checkbox" name="filterExperience" value="over-5" class="filter-checkbox" />
-                <span>Trên 5 năm</span>
-                <span class="filter-count">(0)</span>
-              </label>
-            </div>
+            <h4 class="filter-group-title"><i class="fa-regular fa-clock"></i> Hình thức làm việc</h4>
+            <select id="filterEmployment" class="module1-filter-control">
+              <option value="">Tất cả hình thức</option>
+              <option value="full_time">Toàn thời gian</option>
+              <option value="part_time">Bán thời gian</option>
+              <option value="internship">Thực tập</option>
+              <option value="remote">Từ xa (Remote)</option>
+            </select>
           </div>
 
-          <!-- Nhóm 5: Ngành Nghề Chuyên Môn (Category) -->
           <div class="filter-group">
-            <h4 class="filter-group-title">
-              <span><i class="fa-solid fa-layer-group" style="color: var(--color-primary); margin-right: 6px;"></i> Lĩnh Vực Chuyên Môn</span>
-            </h4>
-            <div class="filter-options-list">
-              <label class="filter-label">
-                <input type="checkbox" name="filterCategory" value="software" class="filter-checkbox" />
-                <span>Lập trình phần mềm</span>
-                <span class="filter-count">(0)</span>
-              </label>
-              <label class="filter-label">
-                <input type="checkbox" name="filterCategory" value="data-ai" class="filter-checkbox" />
-                <span>Dữ liệu &amp; AI / ML</span>
-                <span class="filter-count">(0)</span>
-              </label>
-              <label class="filter-label">
-                <input type="checkbox" name="filterCategory" value="design" class="filter-checkbox" />
-                <span>Thiết kế UI/UX</span>
-                <span class="filter-count">(0)</span>
-              </label>
-              <label class="filter-label">
-                <input type="checkbox" name="filterCategory" value="security" class="filter-checkbox" />
-                <span>An toàn thông tin</span>
-                <span class="filter-count">(0)</span>
-              </label>
-              <label class="filter-label">
-                <input type="checkbox" name="filterCategory" value="cloud-devops" class="filter-checkbox" />
-                <span>Hạ tầng Cloud &amp; DevOps</span>
-                <span class="filter-count">(0)</span>
-              </label>
-            </div>
+            <h4 class="filter-group-title"><i class="fa-solid fa-briefcase"></i> Kinh nghiệm</h4>
+            <select id="filterExperience" class="module1-filter-control">
+              <option value="">Tất cả kinh nghiệm</option>
+              <option value="intern">Thực tập</option>
+              <option value="fresher">Fresher</option>
+              <option value="junior">Junior</option>
+              <option value="middle">Middle</option>
+              <option value="senior">Senior</option>
+              <option value="lead">Lead</option>
+            </select>
           </div>
 
-          <!-- Nút áp dụng trên mobile/sidebar -->
-          <div style="margin-top: var(--space-20);">
-            <button type="button" class="btn btn-primary" style="width: 100%;" onclick="document.getElementById('btnCloseSidebarMobile').click();">
-              Áp Dụng Bộ Lọc
-            </button>
+          <div class="filter-group">
+            <h4 class="filter-group-title"><i class="fa-solid fa-money-bill-wave"></i> Khoảng lương (VND)</h4>
+            <label class="module1-field-label" for="filterSalaryMin">Lương tối thiểu</label>
+            <input id="filterSalaryMin" class="module1-filter-control" type="number" min="0" step="1000000" placeholder="Ví dụ: 10000000" />
+            <label class="module1-field-label" for="filterSalaryMax">Lương tối đa</label>
+            <input id="filterSalaryMax" class="module1-filter-control" type="number" min="0" step="1000000" placeholder="Ví dụ: 30000000" />
+            <p class="module1-filter-hint">Nhập mức lương theo VND, ví dụ 15000000 = 15 triệu.</p>
           </div>
+
+          <button type="button" id="btnApplyFilters" class="btn btn-primary" style="width:100%;margin-top:12px;">
+            Áp dụng bộ lọc
+          </button>
         </aside>
 
         <!-- -------------------------------------------------------------------
@@ -331,8 +229,7 @@
                 <label for="sortSelect" class="sort-label">Sắp xếp theo:</label>
                 <select id="sortSelect" class="sort-select" aria-label="Sắp xếp việc làm">
                   <option value="newest" selected>Mới nhất</option>
-                  <option value="salary-desc">Mức lương cao nhất</option>
-                  <option value="deadline-asc">Hạn nộp hồ sơ gần nhất</option>
+                  <option value="salary_desc">Mức lương cao nhất</option>
                 </select>
               </div>
             </div>
@@ -344,6 +241,8 @@
           </div>
 
           <!-- Danh sách thẻ việc làm (Hydrated & Filtered qua JavaScript) -->
+          <p id="jobsLoading" class="module1-status" role="status" hidden>Đang tải danh sách việc làm...</p>
+          <p id="jobsErrorNotice" class="module1-status module1-status-error" role="status" hidden></p>
           <div class="jobs-list" id="jobsListContainer" role="feed" aria-busy="false">
             <!-- Thẻ việc làm sẽ được render động theo Wireframe 5.2 -->
           </div>
@@ -375,7 +274,8 @@
   <div class="sidebar-backdrop" id="sidebarBackdrop" aria-hidden="true"></div>
 
   <!-- =========================================================================
-       <<< KẾT THÚC PHẠM VI CODE DO NGUYỄN LÊ GIA HÂN (083306010188) ĐẢM NHIỆM <<<
+       <<< KẾT THÚC PHẠM VI CODE DO NGUYỄN LÊ GIA HÂN (083306010188
+      ) ĐẢM NHIỆM <<<
        ========================================================================= -->
 
   <!-- =========================================================================
@@ -450,6 +350,7 @@
   </footer>
 
   <!-- Nạp tệp kịch bản JavaScript điều khiển -->
+  <script src="./assets/js/api.js"></script>
   <script src="./assets/js/main.js"></script>
   <script src="./assets/js/jobs.js"></script>
   <script src="./assets/js/account-nav.js"></script>
