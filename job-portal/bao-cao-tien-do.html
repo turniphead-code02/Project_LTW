@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Báo Cáo Tiến Độ Đồ Án Job Portal — Nhóm 6 UTH</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <style>
+    :root {
+      --primary: #1e40af;
+      --primary-light: #3b82f6;
+      --primary-soft: #eff6ff;
+      --accent: #10b981;
+      --accent-soft: #ecfdf5;
+      --warning: #f59e0b;
+      --warning-soft: #fffbeb;
+      --danger: #ef4444;
+      --danger-soft: #fef2f2;
+      --dark: #0f172a;
+      --body: #334155;
+      --muted: #64748b;
+      --border: #cbd5e1;
+      --bg: #f8fafc;
+      --sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: 'Space Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--sans);
+      background: #0b1120;
+      color: var(--dark);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+    }
+
+    .deck-viewport {
+      width: min(96vw, calc(83vh * 16 / 9));
+      height: min(83vh, calc(96vw * 9 / 16));
+      position: relative;
+      background: #ffffff;
+      border-radius: 14px;
+      box-shadow: 0 28px 65px rgba(0, 0, 0, 0.6);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      padding: 24px 36px 22px;
+      display: none;
+      flex-direction: column;
+      background: #ffffff;
+      background-image: radial-gradient(rgba(30, 64, 175, 0.045) 1px, transparent 1px);
+      background-size: 22px 22px;
+      overflow-y: auto;
+    }
+
+    .slide.active {
+      display: flex;
+      animation: fadeSlide 0.2s ease-out;
+    }
+
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .slide-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+      flex-shrink: 0;
+    }
+
+    .header-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .slide-kicker {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--primary);
+      background: var(--primary-soft);
+      border: 1px solid rgba(30, 64, 175, 0.2);
+      padding: 2px 8px;
+      border-radius: 5px;
+    }
+
+    .presenter-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #047857;
+      background: var(--accent-soft);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      padding: 2px 10px;
+      border-radius: 99px;
+    }
+
+    .slide-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--dark);
+      margin-top: 3px;
+      letter-spacing: -0.02em;
+    }
+
+    .slide-num {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--muted);
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 4px 10px;
+      border-radius: 8px;
+      white-space: nowrap;
+    }
+
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    /* Slide 1: Cover */
+    .slide-cover {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+      color: #ffffff;
+      justify-content: space-between;
+      padding: 36px 46px;
+    }
+
+    .cover-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #34d399;
+      background: rgba(16, 185, 129, 0.14);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      padding: 5px 13px;
+      border-radius: 99px;
+      width: fit-content;
+    }
+
+    .cover-title {
+      font-size: 2.15rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin: 12px 0 10px;
+    }
+
+    .cover-agenda {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .agenda-box {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 9px;
+      padding: 9px 11px;
+      font-size: 0.78rem;
+      color: #e2e8f0;
+      line-height: 1.4;
+    }
+
+    .agenda-box strong {
+      display: block;
+      color: #34d399;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      margin-bottom: 2px;
+    }
+
+    .cover-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+      margin-top: 10px;
+    }
+
+    .member-chip {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-left: 3px solid #34d399;
+      border-radius: 9px;
+      padding: 8px 12px;
+    }
+
+    .member-chip strong { display: block; font-size: 0.86rem; color: #ffffff; }
+    .member-chip span { font-size: 0.71rem; color: #93c5fd; font-family: var(--mono); }
+
+    /* Layout Helpers */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: stretch; }
+    .three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; align-items: stretch; }
+
+    .panel {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 12px 14px;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+    }
+
+    .panel h3 {
+      font-size: 0.88rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--dark);
+    }
+
+    .check-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: var(--body);
+    }
+
+    .check-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+      line-height: 1.4;
+    }
+
+    code {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--primary);
+      font-weight: 700;
+      background: rgba(30, 64, 175, 0.07);
+      padding: 1px 4px;
+      border-radius: 4px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 5px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .b-green { background: var(--accent-soft); color: #047857; border: 1px solid rgba(16,185,129,0.3); }
+    .b-blue { background: var(--primary-soft); color: var(--primary); border: 1px solid rgba(30,64,175,0.25); }
+    .b-amber { background: var(--warning-soft); color: #b45309; border: 1px solid rgba(245,158,11,0.3); }
+    .b-red { background: var(--danger-soft); color: #b91c1c; border: 1px solid rgba(239,68,68,0.3); }
+
+    /* Slide 2: Architecture Diagram */
+    .arch-flow {
+      display: grid;
+      grid-template-columns: 1fr auto 1.15fr auto 1fr;
+      gap: 8px;
+      align-items: stretch;
+    }
+
+    .arch-arrow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .step-bubble {
+      background: var(--primary-soft);
+      color: var(--primary);
+      border: 1px solid rgba(30, 64, 175, 0.25);
+      border-radius: 7px;
+      padding: 5px 7px;
+      line-height: 1.3;
+    }
+
+    .step-bubble.ret {
+      background: var(--accent-soft);
+      color: #047857;
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    /* Tables */
+    table.slide-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.75rem;
+      background: #ffffff;
+      border-radius: 9px;
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+    }
+
+    table.slide-table th {
+      background: #f1f5f9;
+      color: var(--dark);
+      font-weight: 700;
+      text-align: left;
+      padding: 6px 10px;
+      border-bottom: 2px solid #cbd5e1;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+    }
+
+    table.slide-table td {
+      padding: 5px 10px;
+      border-bottom: 1px solid #e2e8f0;
+      color: var(--body);
+      vertical-align: middle;
+      line-height: 1.35;
+    }
+
+    table.slide-table tr:last-child td { border-bottom: none; }
+
+    /* Code box */
+    pre.code-box {
+      background: #0f172a;
+      color: #e2e8f0;
+      font-family: var(--mono);
+      font-size: 0.69rem;
+      line-height: 1.42;
+      padding: 10px 12px;
+      border-radius: 9px;
+      overflow-x: auto;
+      border: 1px solid #1e293b;
+    }
+
+    .kw { color: #93c5fd; font-weight: 700; }
+    .str { color: #34d399; }
+    .cmt { color: #94a3b8; }
+
+    /* Live Preview Grid (Slide 4) */
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .preview-card {
+      border: 1px solid #cbd5e1;
+      border-radius: 9px;
+      overflow: hidden;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .preview-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px 10px;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 0.73rem;
+      font-weight: 700;
+    }
+
+    .preview-bar a { font-family: var(--mono); font-size: 0.67rem; color: var(--primary); text-decoration: none; }
+    .preview-frame-wrap { position: relative; height: 138px; overflow: hidden; background: #f1f5f9; }
+    .preview-frame-wrap iframe { width: 1280px; height: 720px; border: 0; transform: scale(0.35); transform-origin: top left; pointer-events: none; }
+
+    /* Relationship Diagram Boxes (Slide 8) */
+    .rel-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .rel-card {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-left: 4px solid var(--primary);
+      border-radius: 9px;
+      padding: 10px 12px;
+      font-size: 0.77rem;
+      line-height: 1.42;
+    }
+
+    .rel-card h4 {
+      font-size: 0.84rem;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Speaker Notes Drawer */
+    .notes-drawer {
+      width: min(96vw, calc(83vh * 16 / 9));
+      background: #1e293b;
+      color: #f8fafc;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 8px 14px;
+      margin-top: 7px;
+      font-size: 0.76rem;
+      line-height: 1.42;
+      display: none;
+      gap: 10px;
+      align-items: flex-start;
+      max-height: 11vh;
+      overflow-y: auto;
+    }
+
+    .notes-drawer.open { display: flex; }
+
+    .notes-tag {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      font-weight: 700;
+      background: var(--accent);
+      color: #0f172a;
+      padding: 2px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+      margin-top: 2px;
+    }
+
+    /* Controls Bar */
+    .controls-bar {
+      width: min(96vw, calc(83vh * 16 / 9));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 6px;
+      color: #cbd5e1;
+      font-size: 0.75rem;
+    }
+
+    .ctrl-btns { display: flex; align-items: center; gap: 6px; }
+
+    .ctrl-btn {
+      background: #1e293b;
+      color: #f8fafc;
+      border: 1px solid #334155;
+      padding: 5px 11px;
+      border-radius: 7px;
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .ctrl-btn:hover, .ctrl-btn.active { background: var(--primary); border-color: var(--primary); }
+    .progress-dots { display: flex; gap: 5px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: #334155; cursor: pointer; border: none; transition: width 0.2s; }
+    .dot.active { background: var(--accent); width: 22px; border-radius: 99px; }
+
+    @media print {
+      @page { size: landscape; margin: 0; }
+      body { background: #ffffff; height: auto; overflow: visible; display: block; padding: 0; }
+      .controls-bar, .notes-drawer { display: none !important; }
+      .deck-viewport { width: 100%; height: auto; box-shadow: none; border-radius: 0; overflow: visible; }
+      .slide { position: relative; display: flex !important; page-break-after: always; break-after: page; height: 100vh; }
+    }
+  </style>
+</head>
+<body>
+
+  <main class="deck-viewport" id="deckViewport">
+
+    <!-- =====================================================================
+         SLIDE 1: TRANG BÌA & BỐ CỤC BÁO CÁO (TRẦN HỮU THÀNH)
+         ===================================================================== -->
+    <section class="slide slide-cover active" data-speaker="1. Trần Hữu Thành" data-note="Chào thầy Trần Thịnh Mạnh Đức, em là Trần Hữu Thành, nhóm trưởng Nhóm 6. Hôm nay nhóm em xin báo cáo tiến độ đồ án Cổng Thông Tin Việc Làm & Tuyển Dụng Trực Tuyến (Job Portal). Bài báo cáo của nhóm đi theo đúng 8 nội dung yêu cầu: từ sơ đồ kiến trúc, danh sách chức năng, giao diện, cách Front-end và Back-end gửi nhận dữ liệu, thiết kế 10 bảng Database cho tới phần Demo thực hành Thêm – Xem – Sửa – Xóa trực tiếp trên MySQL.">
+      <div>
+        <div class="header-meta-row" style="margin-bottom: 10px;">
+          <div class="cover-badge">
+            <i class="fa-solid fa-code-branch"></i>
+            <span>BÁO CÁO TIẾN ĐỘ ĐỒ ÁN — HỌC PHẦN LẬP TRÌNH WEBSITE</span>
+          </div>
+        </div>
+        <h1 class="cover-title">Cổng Thông Tin Việc Làm &amp; Tuyển Dụng Trực Tuyến (Job Portal)</h1>
+        <p style="font-size: 0.92rem; color: #cbd5e1; margin-bottom: 10px;">
+          GVHD: <strong>ThS. Trần Thịnh Mạnh Đức</strong> &nbsp;|&nbsp; Nhóm 6 — Khoa CNTT — Trường ĐH Giao Thông Vận Tải TP.HCM (UTH)
+        </p>
+
+        <div class="cover-agenda">
+          <div class="agenda-box"><strong>PHẦN 1 (Slide 2–3)</strong>Sơ đồ kiến trúc FE &rarr; BE &rarr; DB &amp; Danh sách chức năng Đã/Chưa hoàn thành.</div>
+          <div class="agenda-box"><strong>PHẦN 2 (Slide 4)</strong>Giao diện các trang chính &amp; Các chức năng đã kết nối với Back-end.</div>
+          <div class="agenda-box"><strong>PHẦN 3 (Slide 5–6)</strong>Cách gửi dữ liệu từ FE lên Server &amp; Cách BE xử lý, trả kết quả về FE.</div>
+          <div class="agenda-box"><strong>PHẦN 4 (Slide 7–9)</strong>Thiết kế CSDL (10 bảng, trường, PK, FK, quan hệ) &amp; Demo thực hành DB.</div>
+        </div>
+      </div>
+
+      <div>
+        <p style="font-size: 0.78rem; color: #93c5fd; font-weight: 700; margin-bottom: 6px; text-transform: uppercase;">
+          Thành viên thực hiện (Nhóm 6):
+        </p>
+        <div class="cover-grid">
+          <div class="member-chip"><strong>1. Trần Hữu Thành (Lead)</strong><span>044206000003 &bull; Core Server &amp; Trang chủ</span></div>
+          <div class="member-chip"><strong>2. Nguyễn Lê Gia Hân</strong><span>083306010188 &bull; Module 1: Tìm việc &amp; Bộ lọc</span></div>
+          <div class="member-chip"><strong>3. Hồ Trúc Gia Hân</strong><span>056306004131 &bull; Module 2: Chi tiết &amp; Nộp CV</span></div>
+          <div class="member-chip"><strong>4. Nguyễn Phú Quang</strong><span>036206029474 &bull; Module 3: Ứng viên &amp; CSDL</span></div>
+          <div class="member-chip"><strong>5. Đinh Duy Diễn</strong><span>051206000952 &bull; Module 4: Nhà tuyển dụng</span></div>
+          <div class="member-chip"><strong>6. Lê Hoàng Thiên Hương</strong><span>042303000056 &bull; Module 5: Auth &amp; Admin</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SLIDE 2: NỘI DUNG 1 — SƠ ĐỒ KIẾN TRÚC WEBSITE (TRẦN HỮU THÀNH)
+         ===================================================================== -->
+    <section class="slide" data-speaker="1. Trần Hữu Thành" data-note="Đầu tiên là sơ đồ kiến trúc của website. Nhóm chia hệ thống thành 3 phần tách biệt: Bên trái là phần Giao diện chạy trên trình duyệt gồm 12 trang dành cho 3 vai trò. Ở giữa là Máy chủ xử lý viết bằng Node.js và Express ở cổng 5001, kiểm tra đăng nhập, quyền hạn và điều hướng vào 6 nhánh xử lý. Bên phải là Cơ sở dữ liệu MySQL ở cổng 3306 gồm 10 bảng. Một vòng hoạt động thực tế đi theo đúng 6 bước từ (1) đến (6) như trên hình.">
+      <div class="slide-header">
+        <div>
+          <div class="header-meta-row">
+            <span class="slide-kicker">NỘI DUNG BẮT BUỘC 1 // KIẾN TRÚC HỆ THỐNG</span>
+          </div>
+          <h2 class="slide-title">1. Sơ Đồ Kiến Trúc Website: Front-end &rarr; Back-end &rarr; Database</h2>
+        </div>
+        <span class="slide-num">Slide 02 / 09</span>
+      </div>
+
+      <div class="slide-body">
+        <div class="arch-flow">
+          <!-- Tầng 1 -->
+          <div class="panel" style="border-top: 4px solid var(--primary);">
+            <h3><i class="fa-solid fa-desktop" style="color:var(--primary);"></i> FRONT-END (Trình duyệt)</h3>
+            <ul class="check-list">
+              <li><strong>Thư mục:</strong> <code>job-portal/</code> (12 trang <code>.html</code>, <code>assets/css/</code>, <code>assets/js/</code>).</li>
+              <li><strong>Hiển thị &amp; Sự kiện:</strong> <code>home.js</code>, <code>jobs.js</code>, <code>job-detail.js</code>, <code>candidate.js</code>, <code>employer-table.js</code>, <code>admin.js</code>.</li>
+              <li><strong>Cầu nối API dùng chung:</strong> <code>assets/js/api.js</code> (đóng gói hàm <code>fetch()</code> và tự động gửi kèm JWT Token).</li>
+            </ul>
+          </div>
+
+          <!-- Mũi tên FE <-> BE -->
+          <div class="arch-arrow">
+            <div class="step-bubble">
+              <strong>(1) Request HTTP</strong><br/>
+              <code>GET / POST / PATCH / DELETE</code><br/>
+              Header: <code>Bearer Token</code>
+            </div>
+            <i class="fa-solid fa-right-left" style="color:var(--primary); font-size:1.2rem;"></i>
+            <div class="step-bubble ret">
+              <strong>(6) Response JSON</strong><br/>
+              <code>{ success, code, data }</code><br/>
+              Cập nhật lại DOM HTML
+            </div>
+          </div>
+
+          <!-- Tầng 2 -->
+          <div class="panel" style="border-top: 4px solid var(--accent);">
+            <h3><i class="fa-solid fa-server" style="color:var(--accent);"></i> BACK-END (Node.js + Express :5001)</h3>
+            <ul class="check-list">
+              <li><strong>Điểm vào:</strong> <code>backend/src/server.js</code> (Cấu hình CORS, JSON parser, phục vụ file tĩnh).</li>
+              <li><strong>Bước (2) Middleware kiểm soát:</strong>
+                <code>auth.middleware.js</code> (kiểm tra đăng nhập &amp; vai trò),
+                <code>upload.middleware.js</code> (kiểm tra file PDF &le; 5MB).</li>
+              <li><strong>Bước (3) Điều hướng 6 file Routes:</strong>
+                <code>home</code>, <code>jobs</code>, <code>jobDetail</code>, <code>candidate</code>, <code>employer</code>, <code>authAdmin</code>.</li>
+            </ul>
+          </div>
+
+          <!-- Mũi tên BE <-> DB -->
+          <div class="arch-arrow">
+            <div class="step-bubble">
+              <strong>(4) Truy vấn SQL</strong><br/>
+              <code>pool.query(sql, [params])</code><br/>
+              qua <code>config/db.js</code>
+            </div>
+            <i class="fa-solid fa-right-left" style="color:var(--warning); font-size:1.2rem;"></i>
+            <div class="step-bubble ret">
+              <strong>(5) Kết quả Bảng</strong><br/>
+              Dòng dữ liệu / <code>insertId</code><br/>
+              từ MySQL Port <code>3306</code>
+            </div>
+          </div>
+
+          <!-- Tầng 3 -->
+          <div class="panel" style="border-top: 4px solid var(--warning);">
+            <h3><i class="fa-solid fa-database" style="color:var(--warning);"></i> DATABASE (MySQL :3306)</h3>
+            <ul class="check-list">
+              <li><strong>Tên CSDL:</strong> <code>job_portal_db</code> (MySQL 9.3, bảng mã <code>utf8mb4_unicode_ci</code>).</li>
+              <li><strong>Cấu trúc:</strong> 10 bảng liên kết khóa ngoại (<code>database/schema.sql</code>).</li>
+              <li><strong>Dữ liệu mẫu &amp; thực tế:</strong> Lưu tài khoản, công ty, việc làm, kỹ năng, CV PDF và đơn ứng tuyển.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="panel" style="background:#f8fafc; padding: 9px 14px; font-size: 0.78rem;">
+          <strong>Tóm tắt luồng chạy thực tế:</strong> Người dùng thao tác trên HTML &rarr; <strong>(1)</strong> JS gọi <code>api.js</code> gửi HTTP Request lên cổng <code>5001</code> &rarr; <strong>(2)</strong> Express kiểm tra Token/Quyền &rarr; <strong>(3)</strong> Route xử lý logic &rarr; <strong>(4)</strong> Gọi <code>pool.query()</code> xuống MySQL &rarr; <strong>(5)</strong> MySQL trả kết quả &rarr; <strong>(6)</strong> Express trả JSON về để JS vẽ lại giao diện.
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SLIDE 3: NỘI DUNG 2 — CHỨC NĂNG ĐÃ HOÀN THÀNH & CHƯA HOÀN THÀNH (TRẦN HỮU THÀNH)
+         ===================================================================== -->
+    <section class="slide" data-speaker="1. Trần Hữu Thành" data-note="Ở Slide 3 là danh sách chức năng đã hoàn thành và chưa hoàn thành. Bên trái, cả 6 nhóm chức năng chính của 3 vai trò đều đã hoàn thành 100% và đọc/ghi trực tiếp vào MySQL. Bên phải là 3 hạng mục đang hoàn thiện tiếp: chưa điền tài khoản Gmail thật vào cấu hình gửi mã OTP, chưa tự động gửi email thông báo khi HR duyệt hồ sơ, và chưa đưa website từ máy cá nhân lên mạng.">
+      <div class="slide-header">
+        <div>
+          <div class="header-meta-row">
+            <span class="slide-kicker">NỘI DUNG BẮT BUỘC 2 // TIẾN ĐỘ CHỨC NĂNG</span>
+          </div>
+          <h2 class="slide-title">2. Danh Sách Chức Năng Đã Hoàn Thành &amp; Chưa Hoàn Thành</h2>
+        </div>
+        <span class="slide-num">Slide 03 / 09</span>
+      </div>
+
+      <div class="slide-body">
+        <div class="two-col">
+          <div class="panel" style="border-top: 4px solid var(--accent);">
+            <h3><i class="fa-solid fa-circle-check" style="color:var(--accent);"></i> Các Chức Năng Đã Hoàn Thành (Kết Nối MySQL 100%)</h3>
+            <ul class="check-list">
+              <li><span class="badge b-green">XONG 100%</span> <strong>1. Trang chủ (`index.html`):</strong> Hiển thị thống kê, 6 việc làm nổi bật mới nhất, 6 công ty hàng đầu từ DB và công cụ ước lượng lương theo kỹ năng.</li>
+              <li><span class="badge b-green">XONG 100%</span> <strong>2. Tìm kiếm &amp; Lọc việc làm (`jobs.html`):</strong> Tìm theo từ khóa, lọc theo địa điểm, ngành nghề, kinh nghiệm, khoảng lương tối thiểu/tối đa, sắp xếp và phân trang.</li>
+              <li><span class="badge b-green">XONG 100%</span> <strong>3. Chi tiết việc làm &amp; Nộp CV (`job-detail.html`):</strong> Xem mô tả chi tiết, việc làm liên quan; nộp đơn bằng CV có sẵn hoặc tải file PDF mới (&le; 5MB), chặn nộp trùng 2 lần.</li>
+              <li><span class="badge b-green">XONG 100%</span> <strong>4. Quản lý Ứng viên (`candidate-dashboard.html`):</strong> Cập nhật thông tin cá nhân, tải lên/xóa/đặt CV mặc định, xem tiến trình duyệt đơn 4 bước, rút đơn, lưu/bỏ lưu việc làm.</li>
+              <li><span class="badge b-green">XONG 100%</span> <strong>5. Quản lý Nhà tuyển dụng (`employer-dashboard.html`):</strong> Xem thống kê KPI công ty, đăng tin tuyển dụng mới (`post-job.html`), xem CV ứng viên và chuyển trạng thái hồ sơ.</li>
+              <li><span class="badge b-green">XONG 100%</span> <strong>6. Xác thực &amp; Quản trị Admin (`auth.html`, `admin-portal.html`):</strong> Đăng ký, đăng nhập phân quyền 3 vai trò (JWT + mã hóa mật khẩu `bcrypt`), Admin duyệt/từ chối tin đăng và khóa/mở tài khoản.</li>
+            </ul>
+          </div>
+
+          <div class="panel" style="border-top: 4px solid var(--warning);">
+            <h3><i class="fa-solid fa-clock" style="color:var(--warning);"></i> Các Chức Năng Chưa Hoàn Thành / Đang Hoàn Thiện Tiếp</h3>
+            <ul class="check-list">
+              <li>
+                <span class="badge b-amber">CHƯA XONG</span>
+                <div>
+                  <strong>1. Cấu hình gửi Email OTP thực tế qua Gmail SMTP:</strong><br/>
+                  Back-end đã viết xong hàm gửi mail bằng thư viện <code>nodemailer</code> (trong <code>authAdmin.routes.js</code>), nhưng trong file <code>.env</code> hiện chưa điền tài khoản và Gmail App Password thật nên đang chạy ở chế độ hiển thị mã OTP kiểm thử nội bộ.
+                </div>
+              </li>
+              <li>
+                <span class="badge b-amber">CHƯA XONG</span>
+                <div>
+                  <strong>2. Gửi Email thông báo tự động khi HR cập nhật trạng thái đơn:</strong><br/>
+                  Khi Nhà tuyển dụng đổi trạng thái hồ sơ sang <em>Phỏng vấn</em> hoặc <em>Tiếp nhận</em>, hệ thống mới cập nhật trạng thái trên web của ứng viên chứ chưa tự động bắn email thông báo (đang đánh dấu <code>TODO</code> tại <code>employer.routes.js</code>).
+                </div>
+              </li>
+              <li>
+                <span class="badge b-amber">CHƯA XONG</span>
+                <div>
+                  <strong>3. Chức năng Nhà tuyển dụng chỉnh sửa nội dung tin đã đăng &amp; Deploy Cloud:</strong><br/>
+                  Hiện HR đã đăng tin mới và xem danh sách tin, nhưng chưa có form sửa lại nội dung tin đã đăng; đồng thời hệ thống đang chạy tại máy local (<code>localhost:5001</code>), chưa đưa lên hosting trực tuyến.
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SLIDE 4: NỘI DUNG 3 & 4 — GIAO DIỆN CHÍNH & KẾT NỐI BACK-END (NGUYỄN LÊ GIA HÂN)
+         ===================================================================== -->
+    <section class="slide" data-speaker="2. Nguyễn Lê Gia Hân" data-note="Em chào thầy, em là Nguyễn Lê Gia Hân. Ở Slide 4 này em xin trình bày giao diện các trang chính và bảng tổng hợp các chức năng đã kết nối với Back-end. Bên trái là 4 màn hình chính đang chạy trực tiếp trên cổng 5001: Trang chủ, Trang tìm việc, Trang nhà tuyển dụng và Trang Admin. Bên phải là bảng đối chiếu cụ thể từng trang giao diện đang gọi lên đường dẫn API nào của Back-end và lấy/lưu vào bảng nào trong MySQL.">
+      <div class="slide-header">
+        <div>
+          <div class="header-meta-row">
+            <span class="slide-kicker">NỘI DUNG BẮT BUỘC 3 &amp; 4 // GIAO DIỆN &amp; KẾT NỐI BACK-END</span>
+          </div>
+          <h2 class="slide-title">3. Giao Diện Các Trang Chính &amp; 4. Các Chức Năng Đã Kết Nối Back-end</h2>
+        </div>
+        <span class="slide-num">Slide 04 / 09</span>
+      </div>
+
+      <div class="slide-body">
+        <div class="two-col">
+          <!-- Cột trái: 4 màn hình trực tiếp -->
+          <div class="preview-grid">
+            <div class="preview-card">
+              <div class="preview-bar"><span>1. Trang Chủ (index.html)</span><a href="./index.html" target="_blank">Mở &nearr;</a></div>
+              <div class="preview-frame-wrap"><iframe src="./index.html" title="Trang chủ"></iframe></div>
+            </div>
+            <div class="preview-card">
+              <div class="preview-bar"><span>2. Tìm Việc &amp; Lọc (jobs.html)</span><a href="./jobs.html" target="_blank">Mở &nearr;</a></div>
+              <div class="preview-frame-wrap"><iframe src="./jobs.html" title="Tìm việc"></iframe></div>
+            </div>
+            <div class="preview-card">
+              <div class="preview-bar"><span>3. Nhà Tuyển Dụng (employer-dashboard.html)</span><a href="./employer-dashboard.html" target="_blank">Mở &nearr;</a></div>
+              <div class="preview-frame-wrap"><iframe src="./employer-dashboard.html" title="HR"></iframe></div>
+            </div>
+            <div class="preview-card">
+              <div class="preview-bar"><span>4. Quản Trị Admin (admin-portal.html)</span><a href="./admin-portal.html" target="_blank">Mở &nearr;</a></div>
+              <div class="preview-frame-wrap"><iframe src="./admin-portal.html" title="Admin"></iframe></div>
+            </div>
+          </div>
+
+          <!-- Cột phải: Bảng kết nối FE -> BE -> DB -->
+          <div>
+            <table class="slide-table">
+              <thead>
+                <tr>
+                  <th>Trang Giao Diện (FE)</th>
+                  <th>Chức Năng Đã Kết Nối</th>
+                  <th>API Back-end (<code>/api/v1/...</code>)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Trang chủ</strong><br/><code>index.html</code> + <code>home.js</code></td>
+                  <td>Lấy số liệu thống kê, 6 việc làm mới nhất, 6 công ty hàng đầu</td>
+                  <td><span class="badge b-blue">GET</span> <code>/home/overview</code></td>
+                </tr>
+                <tr>
+                  <td><strong>Tìm việc làm</strong><br/><code>jobs.html</code> + <code>jobs.js</code></td>
+                  <td>Đổ danh mục vào bộ lọc; tìm kiếm từ khóa, lọc lương/ngành/địa điểm, phân trang</td>
+                  <td><span class="badge b-blue">GET</span> <code>/jobs/filters</code><br/><span class="badge b-blue">GET</span> <code>/jobs?keyword=...</code></td>
+                </tr>
+                <tr>
+                  <td><strong>Chi tiết việc làm</strong><br/><code>job-detail.html</code> + <code>job-detail.js</code></td>
+                  <td>Xem chi tiết JD, việc làm liên quan; gửi form ứng tuyển kèm file CV PDF</td>
+                  <td><span class="badge b-blue">GET</span> <code>/job-detail/:id</code><br/><span class="badge b-green">POST</span> <code>/job-detail/:id/apply</code></td>
+                </tr>
+                <tr>
+                  <td><strong>Không gian Ứng viên</strong><br/><code>candidate-dashboard.html</code><br/><code>my-applications.html</code><br/><code>saved-jobs.html</code></td>
+                  <td>Sửa hồ sơ; tải lên/xóa/đặt CV mặc định; xem tiến trình đơn &amp; rút đơn; lưu/bỏ lưu việc</td>
+                  <td><span class="badge b-blue">GET/PUT</span> <code>/candidate/profile</code><br/><span class="badge b-green">POST/DEL</span> <code>/candidate/resumes</code><br/><span class="badge b-red">DEL</span> <code>/candidate/applications/:id</code><br/><span class="badge b-green">POST/DEL</span> <code>/candidate/saved-jobs</code></td>
+                </tr>
+                <tr>
+                  <td><strong>Nhà tuyển dụng (HR)</strong><br/><code>employer-dashboard.html</code><br/><code>post-job.html</code></td>
+                  <td>Xem thống kê KPI &amp; danh sách ứng viên; đăng tin tuyển dụng mới; đổi trạng thái CV</td>
+                  <td><span class="badge b-blue">GET</span> <code>/employer/dashboard</code><br/><span class="badge b-green">POST</span> <code>/employer/jobs</code><br/><span class="badge b-amber">PATCH</span> <code>/employer/applications/:id/status</code></td>
+                </tr>
+                <tr>
+                  <td><strong>Đăng nhập &amp; Admin</strong><br/><code>auth.html</code>, <code>admin-portal.html</code></td>
+                  <td>Đăng ký, đăng nhập nhận Token; Admin duyệt/từ chối tin và khóa/mở tài khoản</td>
+                  <td><span class="badge b-green">POST</span> <code>/auth/login</code>, <code>/auth/register</code><br/><span class="badge b-amber">PATCH</span> <code>/admin/jobs/:id/status</code><br/><span class="badge b-amber">PATCH</span> <code>/admin/users/:id/status</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SLIDE 5: NỘI DUNG 5 — CÁCH FRONT-END GỬI DỮ LIỆU LÊN SERVER (HỒ TRÚC GIA HÂN)
+         ===================================================================== -->
+    <section class="slide" data-speaker="3. Hồ Trúc Gia Hân" data-note="Ở Slide 5 em xin giải thích cách phần Giao diện lấy dữ liệu người dùng nhập vào để gửi lên Máy chủ qua 2 cách chính: Bên trái là phương thức GET ở trang Tìm việc — đọc từ khóa, địa điểm, mức lương từ các ô nhập trên màn hình rồi ghép vào đuôi đường dẫn URL. Bên phải là phương thức POST, PATCH, DELETE — đóng gói chữ thành chuỗi JSON khi đăng tin, hoặc đóng gói dạng biểu mẫu kèm tệp tin (FormData) khi ứng viên nộp file CV PDF, đồng thời tự động gửi kèm mã xác thực đăng nhập.">
+      <div class="slide-header">
+        <div>
+          <div class="header-meta-row">
+            <span class="slide-kicker">NỘI DUNG BẮT BUỘC 5 // FRONT-END GỬI DỮ LIỆU LÊN SERVER</span>
+          </div>
+          <h2 class="slide-title">5. Cách Gửi Dữ Liệu Từ Front-end Lên Server (<code>GET</code>, <code>POST</code>, <code>PATCH</code>, <code>DELETE</code>)</h2>
+        </div>
+        <span class="slide-num">Slide 05 / 09</span>
+      </div>
+
+      <div class="slide-body">
+        <div class="two-col">
+          <!-- Cột 1: Phương thức GET -->
+          <div class="panel" style="border-top: 4px solid var(--primary);">
+            <h3><span class="badge b-blue">CÁCH 1: PHƯƠNG THỨC GET</span> Truyền Dữ Liệu Qua URL Query String</h3>
+            <p style="font-size:0.77rem; color:var(--body); margin-bottom:8px;">
+              <strong>Khi nào dùng:</strong> Khi lấy danh sách, xem chi tiết hoặc lọc việc làm (không làm thay đổi dữ liệu trong DB).<br/>
+              <strong>Cách hoạt động:</strong> JS đọc giá trị người dùng nhập ở các ô lọc, dùng <code>URLSearchParams</code> ghép vào sau dấu <code>?</code> trên đường dẫn URL.
+            </p>
+            <pre class="code-box"><span class="cmt">// Ví dụ thực tế trong: job-portal/assets/js/jobs.js</span>
+<span class="kw">const</span> params = <span class="kw">new</span> URLSearchParams();
+
+<span class="cmt">// 1. Đọc giá trị từ các ô input / select trên giao diện</span>
+<span class="kw">const</span> keyword = document.getElementById(<span class="str">'topKeywordInput'</span>).value.trim();
+<span class="kw">const</span> locationId = document.getElementById(<span class="str">'topLocationSelect'</span>).value;
+<span class="kw">const</span> salaryMin = document.getElementById(<span class="str">'filterSalaryMin'</span>).value;
+
+<span class="kw">if</span> (keyword)    params.set(<span class="str">'keyword'</span>, keyword);
+<span class="kw">if</span> (locationId) params.set(<span class="str">'location_id'</span>, locationId);
+<span class="kw">if</span> (salaryMin)  params.set(<span class="str">'salary_min'</span>, salaryMin);
+params.set(<span class="str">'page'</span>, currentPage);
+
+<span class="cmt">// 2. Gửi request GET lên Server:</span>
+<span class="cmt">// URL thực tế: GET http://localhost:5001/api/v1/jobs?keyword=React&amp;location_id=1&amp;page=1</span>
+<span class="kw">const</span> response = <span class="kw">await</span> window.JobPortalAPI.get(<span class="str">`/jobs?${params.toString()}`</span>);</pre>
+          </div>
+
+          <!-- Cột 2: Phương thức POST / PATCH / DELETE -->
+          <div class="panel" style="border-top: 4px solid var(--accent);">
+            <h3><span class="badge b-green">CÁCH 2: POST / PATCH / DELETE</span> Gửi Qua Body (JSON hoặc FormData)</h3>
+            <p style="font-size:0.77rem; color:var(--body); margin-bottom:8px;">
+              <strong>Khi nào dùng:</strong> Khi thêm mới (<code>POST</code>), cập nhật một phần (<code>PATCH</code>) hoặc xóa (<code>DELETE</code>).<br/>
+              <strong>Cách hoạt động:</strong> Đóng gói dữ liệu vào phần <code>body</code> của hàm <code>fetch()</code> và gửi kèm <code>Authorization: Bearer &lt;token&gt;</code> trong Header.
+            </p>
+            <pre class="code-box"><span class="cmt">// A. Gửi dữ liệu chữ bằng JSON (VD: HR đăng tin mới - employer-table.js)</span>
+<span class="kw">await</span> window.JobPortalAPI.post(<span class="str">'/employer/jobs'</span>, {
+  title: <span class="str">'Kỹ sư Backend Node.js'</span>,
+  category_id: 1,
+  location_id: 1,
+  salary_min: 15000000,
+  salary_max: 25000000,
+  deadline: <span class="str">'2026-12-30'</span>
+}); <span class="cmt">// -> api.js tự chuyển thành JSON.stringify(body) kèm Content-Type: application/json</span>
+
+<span class="cmt">// B. Gửi kèm File CV PDF bằng FormData (VD: Ứng viên nộp đơn - job-detail.js)</span>
+<span class="kw">const</span> formData = <span class="kw">new</span> FormData();
+formData.append(<span class="str">'cover_letter'</span>, coverLetterInput.value);
+formData.append(<span class="str">'cvFile'</span>, fileInput.files[0]); <span class="cmt">// File nhị phân .pdf</span>
+<span class="kw">await</span> window.JobPortalAPI.post(<span class="str">`/job-detail/${jobId}/apply`</span>, formData);
+
+<span class="cmt">// C. Cập nhật trạng thái bằng PATCH (VD: Admin duyệt tin - admin.js)</span>
+<span class="kw">await</span> window.JobPortalAPI.patch(<span class="str">`/admin/jobs/${jobId}/status`</span>, { status: <span class="str">'approved'</span> });</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SLIDE 6: NỘI DUNG 6 — CÁCH BACK-END XỬ LÝ & TRẢ KẾT QUẢ VỀ FE (HỒ TRÚC GIA HÂN)
+         ===================================================================== -->
+    <section class="slide" data-speaker="3. Hồ Trúc Gia Hân" data-note="Sang Slide 6 là cách Máy chủ xử lý sau khi nhận được yêu cầu từ Giao diện gửi lên qua 4 bước: Bước 1 là kiểm tra đăng nhập, quyền hạn và kiểm tra file PDF hợp lệ. Bước 2 là mở gói tin lấy dữ liệu ra kiểm tra xem có thiếu thông tin bắt buộc không. Bước 3 là chạy câu lệnh SQL với dấu chấm hỏi để đọc hoặc ghi vào MySQL an toàn. Và Bước 4 là đóng gói kết quả thành JSON trả về cho trình duyệt vẽ lại giao diện.">
+      <div class="slide-header">
+        <div>
+          <div class="header-meta-row">
+            <span class="slide-kicker">NỘI DUNG BẮT BUỘC 6 // BACK-END XỬ LÝ &amp; PHẢN HỒI</span>
+          </div>
+          <h2 class="slide-title">6. Cách Back-end Xử Lý Dữ Liệu &amp; Trả Kết Quả Về Front-end</h2>
+        </div>
+        <span class="slide-num">Slide 06 / 09</span>
+      </div>
+
+      <div class="slide-body">
+        <div class="two-col">
+          <!-- Cột trái: Code xử lý tại Back-end -->
+          <div class="panel" style="border-top: 4px solid var(--primary);">
+            <h3><i class="fa-solid fa-gears" style="color:var(--primary);"></i> Bước 1 &rarr; 3: Back-end Nhận, Kiểm Tra &amp; Chạy SQL</h3>
+            <ul class="check-list" style="margin-bottom:8px;">
+              <li><strong>Đọc dữ liệu gửi lên:</strong> Lấy từ <code>req.query</code> (nếu là <code>GET</code>), <code>req.params.id</code> (lấy ID trên đường dẫn) hoặc <code>req.body</code> (nếu là <code>POST</code>/<code>PATCH</code>).</li>
+              <li><strong>Kiểm tra quyền &amp; điều kiện:</strong> Qua <code>requireAuth</code>, <code>requireRole</code>; kiểm tra dữ liệu rỗng/sai định dạng (trả mã <code>400</code> nếu sai).</li>
+              <li><strong>Truy vấn MySQL an toàn:</strong> Dùng <code>await pool.query(sql, [tham_số])</code> truyền qua dấu <code>?</code> để tránh lỗi SQL Injection.</li>
+            </ul>
+            <pre class="code-box"><span class="cmt">// Ví dụ thực tế tại: backend/src/routes/employer.routes.js</span>
+router.post(<span class="str">'/jobs'</span>, requireAuth, requireRole(<span class="str">'employer'</span>), <span class="kw">async</span> (req, res) =&gt; {
+  <span class="cmt">// 1. Lấy dữ liệu Front-end gửi lên trong req.body</span>
+  <span class="kw">const</span> { title, category_id, location_id, salary_min, salary_max, deadline } = req.body;
+  <span class="kw">if</span> (!title) <span class="kw">return</span> sendError(res, { code: 400, message: <span class="str">'Thiếu tiêu đề.'</span> });
+
+  <span class="cmt">// 2. Thực thi câu lệnh INSERT vào bảng `jobs` trong MySQL</span>
+  <span class="kw">const</span> [result] = <span class="kw">await</span> pool.query(
+    <span class="str">`INSERT INTO jobs (company_id, category_id, location_id, title, slug,
+                       salary_min, salary_max, deadline, status)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending')`</span>,
+    [companyId, category_id, location_id, title, slug, salary_min, salary_max, deadline]
+  );
+
+  <span class="cmt">// 3. Trả kết quả JSON về cho Front-end (mã 201 Created)</span>
+  <span class="kw">return</span> sendSuccess(res, {
+    code: 201,
+    message: <span class="str">'Đã gửi tin tuyển dụng, đang chờ quản trị viên duyệt.'</span>,
+    data: { job_id: result.insertId, status: <span class="str">'pending'</span> }
+  });
+});</pre>
+          </div>
+
+          <!-- Cột phải: JSON trả về & Front-end nhận lại -->
+          <div class="panel" style="border-top: 4px solid var(--accent);">
+            <h3><i class="fa-solid fa-reply" style="color:var(--accent);"></i> Bước 4: Đóng Gói JSON Trả Về &amp; Front-end Hiển Thị</h3>
+            <ul class="check-list" style="margin-bottom:8px;">
+              <li><strong>Định dạng JSON thống nhất (<code>utils/response.js</code>):</strong> Mọi API đều trả về đối tượng gồm <code>success</code> (<code>true/false</code>), <code>code</code> (mã HTTP), <code>message</code> (câu thông báo) và <code>data</code> (dữ liệu từ DB).</li>
+              <li><strong>Front-end nhận kết quả:</strong> Khi <code>await JobPortalAPI...</code> nhận được JSON, JS hiện thông báo Toast và dùng hàm <code>.map()</code> tạo chuỗi HTML gắn vào <code>innerHTML</code>.</li>
+            </ul>
+            <pre class="code-box"><span class="cmt">// 1. Gói tin JSON thực tế Back-end trả về cho trình duyệt:</span>
+{
+  <span class="str">"success"</span>: <span class="kw">true</span>,
+  <span class="str">"code"</span>: 200,
+  <span class="str">"message"</span>: <span class="str">"Tra cứu danh sách việc làm thành công."</span>,
+  <span class="str">"data"</span>: [
+    {
+      <span class="str">"job_id"</span>: 1,
+      <span class="str">"title"</span>: <span class="str">"Frontend React Developer (Junior / Middle)"</span>,
+      <span class="str">"company_name"</span>: <span class="str">"Công Ty Cổ Phần Công Nghệ VNG"</span>,
+      <span class="str">"salary_min"</span>: <span class="str">"15000000.00"</span>,
+      <span class="str">"salary_max"</span>: <span class="str">"22000000.00"</span>
+    }
+  ],
+  <span class="str">"meta"</span>: { <span class="str">"page"</span>: 1, <span class="str">"pageSize"</span>: 6, <span class="str">"total"</span>: 6, <span class="str">"totalPages"</span>: 1 }
+}
+
+<span class="cmt">// 2. Front-end (jobs.js) nhận `response.data` và vẽ ra giao diện:</span>
+jobsListContainer.innerHTML = response.data.map(job =&gt; renderJobCard(job)).join(<span class="str">''</span>);</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SLIDE 7: NỘI DUNG 7 (PHẦN 1) — BẢNG, TRƯỜNG DỮ LIỆU, KHÓA CHÍNH & KHÓA NGOẠI (NGUYỄN PHÚ QUANG)
+         ===================================================================== -->
+    <section class="slide" data-speaker="4. Nguyễn Phú Quang" data-note="Ở Slide 7 và Slide 8 em xin trình bày thiết kế cơ sở dữ liệu của nhóm. Slide 7 liệt kê đầy đủ 10 bảng cùng với các trường dữ liệu chính, khóa chính và khóa ngoại của từng bảng. Ví dụ bảng Người dùng có khóa chính là mã người dùng, lưu họ tên, email không trùng, mật khẩu đã mã hóa và vai trò; bảng Tin tuyển dụng là bảng trung tâm có khóa chính là mã công việc và có 3 khóa ngoại nối tới bảng Công ty, Ngành nghề và Địa điểm.">
+      <div class="slide-header">
+        <div>
+          <div class="header-meta-row">
+            <span class="slide-kicker">NỘI DUNG BẮT BUỘC 7 (PHẦN 1) // CẤU TRÚC BẢNG &amp; TRƯỜNG DỮ LIỆU</span>
+          </div>
+          <h2 class="slide-title">7A. Thiết Kế Cơ Sở Dữ Liệu (<code>job_portal_db</code>): 10 Bảng, Trường Dữ Liệu, PK &amp; FK</h2>
+        </div>
+        <span class="slide-num">Slide 07 / 09</span>
+      </div>
+
+      <div class="slide-body">
+        <table class="slide-table">
+          <thead>
+            <tr>
+              <th>STT &amp; Tên Bảng</th>
+              <th>Khóa Chính (PK)</th>
+              <th>Khóa Ngoại (FK)</th>
+              <th>Các Trường Dữ Liệu Chính &amp; Kiểu Dữ Liệu</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1. <code>users</code></strong> (Người dùng)</td>
+              <td><code>user_id</code> (INT)</td>
+              <td><em>Không có</em></td>
+              <td><code>full_name</code> (VARCHAR), <code>email</code> (VARCHAR UNIQUE), <code>password_hash</code> (VARCHAR), <code>phone</code>, <code>role</code> (ENUM: candidate/employer/admin), <code>status</code> (active/locked)</td>
+            </tr>
+            <tr>
+              <td><strong>2. <code>companies</code></strong> (Công ty)</td>
+              <td><code>company_id</code> (INT)</td>
+              <td><code>user_id</code> &rarr; <code>users.user_id</code> (UNIQUE)</td>
+              <td><code>company_name</code> (VARCHAR), <code>slug</code> (UNIQUE), <code>tax_code</code> (Mã số thuế), <code>logo_url</code>, <code>website</code>, <code>address</code>, <code>description</code> (TEXT)</td>
+            </tr>
+            <tr>
+              <td><strong>3. <code>categories</code></strong> (Ngành nghề)</td>
+              <td><code>category_id</code> (INT)</td>
+              <td><em>Không có</em></td>
+              <td><code>category_name</code> (VARCHAR UNIQUE), <code>slug</code> (VARCHAR UNIQUE), <code>description</code> (TEXT)</td>
+            </tr>
+            <tr>
+              <td><strong>4. <code>locations</code></strong> (Địa điểm)</td>
+              <td><code>location_id</code> (INT)</td>
+              <td><em>Không có</em></td>
+              <td><code>location_name</code> (VARCHAR UNIQUE — VD: TP.HCM, Hà Nội, Đà Nẵng), <code>slug</code> (VARCHAR UNIQUE)</td>
+            </tr>
+            <tr>
+              <td><strong>5. <code>jobs</code></strong> (Tin tuyển dụng)</td>
+              <td><code>job_id</code> (INT)</td>
+              <td><code>company_id</code> &rarr; <code>companies</code><br/><code>category_id</code> &rarr; <code>categories</code><br/><code>location_id</code> &rarr; <code>locations</code></td>
+              <td><code>title</code>, <code>slug</code>, <code>description</code>, <code>requirements</code>, <code>benefits</code>, <code>salary_min</code>, <code>salary_max</code> (DECIMAL), <code>employment_type</code>, <code>experience_level</code>, <code>deadline</code> (DATE), <code>status</code> (ENUM: pending/approved/rejected)</td>
+            </tr>
+            <tr>
+              <td><strong>6. <code>skills</code></strong> (Từ điển kỹ năng)</td>
+              <td><code>skill_id</code> (INT)</td>
+              <td><em>Không có</em></td>
+              <td><code>skill_name</code> (VARCHAR UNIQUE — VD: ReactJS, Node.js, SQL, Docker), <code>slug</code> (VARCHAR UNIQUE)</td>
+            </tr>
+            <tr>
+              <td><strong>7. <code>job_skills</code></strong> (Kỹ năng của tin)</td>
+              <td><code>(job_id, skill_id)</code></td>
+              <td><code>job_id</code> &rarr; <code>jobs.job_id</code><br/><code>skill_id</code> &rarr; <code>skills.skill_id</code></td>
+              <td>Bảng trung gian lưu các cặp mã công việc và mã kỹ năng yêu cầu của công việc đó.</td>
+            </tr>
+            <tr>
+              <td><strong>8. <code>resumes</code></strong> (Kho CV ứng viên)</td>
+              <td><code>resume_id</code> (INT)</td>
+              <td><code>user_id</code> &rarr; <code>users.user_id</code></td>
+              <td><code>title</code> (Tên gợi nhớ CV), <code>file_url</code> (Đường dẫn file PDF), <code>is_default</code> (TINYINT — đánh dấu CV mặc định), <code>created_at</code></td>
+            </tr>
+            <tr>
+              <td><strong>9. <code>applications</code></strong> (Đơn ứng tuyển)</td>
+              <td><code>application_id</code> (INT)</td>
+              <td><code>job_id</code> &rarr; <code>jobs.job_id</code><br/><code>user_id</code> &rarr; <code>users.user_id</code><br/><code>resume_id</code> &rarr; <code>resumes.resume_id</code></td>
+              <td><code>resume_snapshot_url</code> (Bản sao file PDF lúc nộp), <code>cover_letter</code> (TEXT), <code>status</code> (ENUM: pending/viewed/interview/accepted/rejected/withdrawn), <code>applied_at</code>, <code>viewed_at</code></td>
+            </tr>
+            <tr>
+              <td><strong>10. <code>saved_jobs</code></strong> (Việc đã lưu)</td>
+              <td><code>(user_id, job_id)</code></td>
+              <td><code>user_id</code> &rarr; <code>users.user_id</code><br/><code>job_id</code> &rarr; <code>jobs.job_id</code></td>
+              <td><code>saved_at</code> (DATETIME — thời điểm ứng viên bấm lưu công việc yêu thích).</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SLIDE 8: NỘI DUNG 7 (PHẦN 2) — QUAN HỆ GIỮA CÁC BẢNG (NGUYỄN PHÚ QUANG)
+         ===================================================================== -->
+    <section class="slide" data-speaker="4. Nguyễn Phú Quang" data-note="Sang Slide 8 là giải thích các mối quan hệ 1-1, 1-nhiều và nhiều-nhiều giữa 10 bảng: Thứ nhất là quan hệ 1-1 giữa Người dùng và Công ty vì mỗi tài khoản HR đại diện cho đúng 1 doanh nghiệp. Thứ hai là quan hệ 1-nhiều từ Công ty, Ngành nghề, Địa điểm sang Tin tuyển dụng. Thứ ba là quan hệ nhiều-nhiều giữa Tin tuyển dụng và Kỹ năng qua bảng trung gian. Thứ tư là nhóm quan hệ của Ứng viên gồm Kho CV, Đơn ứng tuyển (chặn nộp trùng 2 lần cùng 1 việc) và Việc đã lưu.">
+      <div class="slide-header">
+        <div>
+          <div class="header-meta-row">
+            <span class="slide-kicker">NỘI DUNG BẮT BUỘC 7 (PHẦN 2) // MỐI QUAN HỆ GIỮA CÁC BẢNG</span>
+          </div>
+          <h2 class="slide-title">7B. Sơ Đồ Mối Quan Hệ Giữa Các Bảng (<code>1-1</code>, <code>1-N</code>, <code>N-N</code>) &amp; Ràng Buộc</h2>
+        </div>
+        <span class="slide-num">Slide 08 / 09</span>
+      </div>
+
+      <div class="slide-body">
+        <div class="rel-grid">
+          <div class="rel-card">
+            <h4>
+              <span>1. Quan hệ <code>users</code> &mdash; <code>companies</code></span>
+              <span class="badge b-blue">Quan hệ 1 &ndash; 1</span>
+            </h4>
+            <p>
+              Cột <code>companies.user_id</code> là Khóa ngoại tham chiếu tới <code>users.user_id</code> và được đặt ràng buộc <code>UNIQUE</code>.<br/>
+              <strong>Ý nghĩa:</strong> Mỗi tài khoản có vai trò Nhà tuyển dụng (<code>role = 'employer'</code>) chỉ sở hữu và quản lý đúng 1 hồ sơ công ty duy nhất.
+            </p>
+          </div>
+
+          <div class="rel-card" style="border-left-color: var(--accent);">
+            <h4>
+              <span>2. Quan hệ <code>companies / categories / locations</code> &mdash; <code>jobs</code></span>
+              <span class="badge b-green">Quan hệ 1 &ndash; Nhiều (1-N)</span>
+            </h4>
+            <p>
+              Bảng <code>jobs</code> chứa 3 Khóa ngoại: <code>company_id</code>, <code>category_id</code>, <code>location_id</code>.<br/>
+              <strong>Ý nghĩa:</strong> Một công ty có thể đăng nhiều tin tuyển dụng; một ngành nghề hoặc một tỉnh/thành phố có nhiều tin tuyển dụng thuộc về nó (giúp lọc theo ID chính xác, không bị lệch chính tả).
+            </p>
+          </div>
+
+          <div class="rel-card" style="border-left-color: var(--warning);">
+            <h4>
+              <span>3. Quan hệ <code>jobs</code> &mdash; <code>skills</code> (qua <code>job_skills</code>)</span>
+              <span class="badge b-amber">Quan hệ Nhiều &ndash; Nhiều (N-N)</span>
+            </h4>
+            <p>
+              Một công việc yêu cầu nhiều kỹ năng (VD: cần cả Node.js, SQL, Docker) và một kỹ năng xuất hiện ở nhiều công việc khác nhau.<br/>
+              <strong>Cách giải quyết:</strong> Tách bảng trung gian <code>job_skills</code> có khóa chính ghép <code>(job_id, skill_id)</code> nối 2 khóa ngoại về 2 bảng.
+            </p>
+          </div>
+
+          <div class="rel-card" style="border-left-color: #8b5cf6;">
+            <h4>
+              <span>4. Quan hệ <code>users</code> &mdash; <code>resumes</code>, <code>applications</code>, <code>saved_jobs</code></span>
+              <span class="badge b-blue">Quan hệ 1 &ndash; N &amp; N &ndash; N</span>
+            </h4>
+            <p>
+              &bull; <code>users (1) &rarr; (N) resumes</code>: Một ứng viên tải lên được nhiều bản CV PDF.<br/>
+              &bull; <code>applications</code> nối <code>users</code>, <code>jobs</code>, <code>resumes</code> và đặt <code>UNIQUE(job_id, user_id)</code> để 1 ứng viên chỉ nộp tối đa 1 đơn cho mỗi công việc.<br/>
+              &bull; <code>saved_jobs</code> dùng khóa chính ghép <code>(user_id, job_id)</code> để lưu danh sách việc làm yêu thích.
+            </p>
+          </div>
+        </div>
+
+        <pre class="code-box"><span class="cmt">-- Minh họa ràng buộc Khóa ngoại (Foreign Key) &amp; Chống nộp trùng trong database/schema.sql:</span>
+<span class="kw">UNIQUE KEY</span> `uq_applications_job_user` (`job_id`, `user_id`),
+<span class="kw">CONSTRAINT</span> `fk_applications_job`    <span class="kw">FOREIGN KEY</span> (`job_id`)    <span class="kw">REFERENCES</span> `jobs` (`job_id`)       <span class="kw">ON DELETE CASCADE</span>,
+<span class="kw">CONSTRAINT</span> `fk_applications_user`   <span class="kw">FOREIGN KEY</span> (`user_id`)   <span class="kw">REFERENCES</span> `users` (`user_id`)     <span class="kw">ON DELETE CASCADE</span>,
+<span class="kw">CONSTRAINT</span> `fk_applications_resume` <span class="kw">FOREIGN KEY</span> (`resume_id`) <span class="kw">REFERENCES</span> `resumes` (`resume_id`) <span class="kw">ON DELETE SET NULL</span></pre>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SLIDE 9: MINH CHỨNG THỰC HÀNH (ĐINH DUY DIỄN & LÊ HOÀNG THIÊN HƯƠNG)
+         ===================================================================== -->
+    <section class="slide" data-note="Cuối cùng ở Slide 9 là kịch bản Minh chứng thực hành trên trình duyệt và MySQL. Chức năng 1: Đăng nhập HR, thêm mới một tin tuyển dụng trên web và chạy lệnh SELECT trong MySQL để chứng minh dữ liệu vừa thêm đã lưu vào bảng việc làm với trạng thái chờ duyệt. Chức năng 2: Đăng nhập Admin bấm duyệt tin (Sửa dữ liệu từ chờ duyệt sang đã duyệt), tải lại trang Tìm việc (Xem dữ liệu) và thử Lưu/Bỏ lưu việc làm (Xóa dữ liệu).">
+      <div class="slide-header">
+        <div>
+          <div class="header-meta-row">
+            <span class="slide-kicker">MINH CHỨNG THỰC HÀNH // LIVE DEMO TRÊN WEB &amp; MYSQL</span>
+          </div>
+          <h2 class="slide-title">8. Minh Chứng Thực Hành: Demo Thêm – Xem – Sửa – Xóa &amp; Kiểm Chứng Trong MySQL</h2>
+        </div>
+        <span class="slide-num">Slide 09 / 09</span>
+      </div>
+
+      <div class="slide-body">
+        <div class="two-col">
+          <!-- Phần Demo 1 -->
+          <div class="panel" style="border-top: 4px solid var(--primary);">
+            <h3><i class="fa-solid fa-user-tie" style="color:var(--primary);"></i> Phần Demo 1: THÊM DỮ LIỆU (<code>POST</code>)</h3>
+            <ul class="check-list" style="margin-bottom:8px;">
+              <li><strong>Bước 1:</strong> Mở <a href="./auth.html" target="_blank"><code>auth.html</code></a>, đăng nhập tài khoản HR VNG (<code>hr@vng.com.vn</code> / <code>123456</code>).</li>
+              <li><strong>Bước 2:</strong> Mở <a href="./post-job.html" target="_blank"><code>post-job.html</code></a>, điền thông tin tin tuyển dụng mới và bấm <strong>Đăng tin</strong>.</li>
+              <li><strong>Bước 3:</strong> Chỉ vào tab <strong>Network (F12)</strong> thấy request <code>POST /api/v1/employer/jobs</code> trả về <code>201 Created</code>.</li>
+              <li><strong>Bước 4:</strong> Chuyển qua <strong>MySQL Terminal</strong> chạy câu <code>SELECT</code> bên dưới để chứng minh dòng dữ liệu mới đã được thêm vào bảng <code>jobs</code> với <code>status = 'pending'</code>.</li>
+            </ul>
+            <pre class="code-box"><span class="cmt">-- Câu lệnh kiểm chứng trong MySQL sau khi HR bấm Đăng tin:</span>
+<span class="kw">SELECT</span> job_id, company_id, title, status, created_at
+<span class="kw">FROM</span> jobs
+<span class="kw">ORDER BY</span> job_id <span class="kw">DESC LIMIT</span> 3;</pre>
+          </div>
+
+          <!-- Phần Demo 2 -->
+          <div class="panel" style="border-top: 4px solid var(--accent);">
+            <h3><i class="fa-solid fa-user-shield" style="color:var(--accent);"></i> Phần Demo 2: SỬA, XEM &amp; XÓA (<code>PATCH / GET / DELETE</code>)</h3>
+            <ul class="check-list" style="margin-bottom:8px;">
+              <li><strong>Bước 1 — Sửa (<code>PATCH</code>):</strong> Đăng nhập Admin (<code>admin@jobportal.vn</code> / <code>123456</code>), vào <a href="./admin-portal.html" target="_blank"><code>admin-portal.html</code></a> bấm <strong>Duyệt tin</strong> vừa tạo &rarr; kiểm tra lại MySQL thấy cột <code>status</code> đã đổi từ <code>pending</code> sang <code>approved</code>.</li>
+              <li><strong>Bước 2 — Xem (<code>GET</code> + F5):</strong> Mở <a href="./jobs.html" target="_blank"><code>jobs.html</code></a>, bấm <strong>F5 tải lại trang</strong> &rarr; tin vừa duyệt hiển thị ngay lên đầu danh sách việc làm.</li>
+              <li><strong>Bước 3 — Thêm &amp; Xóa việc đã lưu (<code>POST / DELETE</code>):</strong> Đăng nhập Ứng viên (<code>thanh.tran@student.ut.edu.vn</code> / <code>123456</code>), bấm <strong>Lưu việc làm</strong> rồi vào <a href="./saved-jobs.html" target="_blank"><code>saved-jobs.html</code></a> bấm <strong>Bỏ lưu</strong> &rarr; kiểm chứng trong bảng <code>saved_jobs</code>.</li>
+            </ul>
+            <pre class="code-box"><span class="cmt">-- Kiểm chứng sau khi Admin duyệt &amp; Ứng viên Lưu/Bỏ lưu:</span>
+<span class="kw">SELECT</span> job_id, title, status <span class="kw">FROM</span> jobs <span class="kw">ORDER BY</span> job_id <span class="kw">DESC LIMIT</span> 2;
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> saved_jobs <span class="kw">ORDER BY</span> saved_at <span class="kw">DESC LIMIT</span> 5;</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <aside class="notes-drawer open" id="notesDrawer" aria-live="polite">
+    <span class="notes-tag">Gợi ý nói</span>
+    <div id="notesContent"></div>
+  </aside>
+
+  <div class="controls-bar">
+    <div>
+      <span>Phím tắt: <strong>&larr; / &rarr;</strong> chuyển slide &bull; <strong>S</strong> ẩn/hiện gợi ý nói &bull; <strong>F</strong> toàn màn hình</span>
+    </div>
+    <div class="progress-dots" id="progressDots"></div>
+    <div class="ctrl-btns">
+      <button type="button" class="ctrl-btn active" id="notesBtn"><i class="fa-solid fa-comment-dots"></i> Gợi ý nói</button>
+      <button type="button" class="ctrl-btn" id="prevBtn"><i class="fa-solid fa-chevron-left"></i> Trước</button>
+      <button type="button" class="ctrl-btn" id="nextBtn">Sau <i class="fa-solid fa-chevron-right"></i></button>
+      <button type="button" class="ctrl-btn" id="fsBtn"><i class="fa-solid fa-expand"></i></button>
+      <button type="button" class="ctrl-btn" onclick="window.print()"><i class="fa-solid fa-file-pdf"></i> Xuất PDF</button>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const dotsWrap = document.getElementById('progressDots');
+      const notesDrawer = document.getElementById('notesDrawer');
+      const notesContent = document.getElementById('notesContent');
+      const notesBtn = document.getElementById('notesBtn');
+      let current = 0;
+
+      slides.forEach((_, idx) => {
+        const dot = document.createElement('button');
+        dot.className = 'dot' + (idx === 0 ? ' active' : '');
+        dot.title = 'Slide ' + (idx + 1);
+        dot.addEventListener('click', () => goTo(idx));
+        dotsWrap.appendChild(dot);
+      });
+
+      const dots = Array.from(dotsWrap.querySelectorAll('.dot'));
+
+      function syncNotes() {
+        const activeSlide = slides[current];
+        notesContent.textContent = activeSlide.getAttribute('data-note') || '';
+      }
+
+      function goTo(index) {
+        if (index < 0 || index >= slides.length) return;
+        slides[current].classList.remove('active');
+        dots[current].classList.remove('active');
+        current = index;
+        slides[current].classList.add('active');
+        dots[current].classList.add('active');
+        syncNotes();
+      }
+
+      function toggleNotes() {
+        notesDrawer.classList.toggle('open');
+        notesBtn.classList.toggle('active');
+      }
+
+      notesBtn.addEventListener('click', toggleNotes);
+      document.getElementById('prevBtn').addEventListener('click', () => goTo(current - 1));
+      document.getElementById('nextBtn').addEventListener('click', () => goTo(current + 1));
+
+      document.getElementById('fsBtn').addEventListener('click', () => {
+        const el = document.getElementById('deckViewport');
+        if (!document.fullscreenElement) el.requestFullscreen?.();
+        else document.exitFullscreen?.();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); goTo(current + 1); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(current - 1); }
+        else if (e.key.toLowerCase() === 's') { toggleNotes(); }
+        else if (e.key.toLowerCase() === 'f') {
+          const el = document.getElementById('deckViewport');
+          if (!document.fullscreenElement) el.requestFullscreen?.();
+          else document.exitFullscreen?.();
+        }
+      });
+
+      syncNotes();
+    })();
+  </script>
+</body>
+</html>
