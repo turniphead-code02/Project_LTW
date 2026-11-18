@@ -22,13 +22,19 @@
 
 /* ---------- PHẦN 0: GỌI API & TIỆN ÍCH DÙNG CHUNG ---------- */
 var EmployerAPI = (function () {
-  var BASE = window.API_BASE || '';
+  var BASE = window.API_BASE || ((window.location && window.location.port === '5001') ? '' : 'http://localhost:5001');
   var SALARY_UNIT = 1000000; // form nhập "triệu đồng", CSDL lưu đồng (đổi nếu nhóm lưu đơn vị khác)
 
-  // Token truy cập: nếu nhóm lưu ở nơi khác (biến, cookie) thì sửa hàm này
+  // Token truy cập: đồng bộ chuẩn key `jobportal_access_token` của JobPortalAPI
   function authHeader() {
     var t = '';
-    try { t = window.accessToken || localStorage.getItem('accessToken') || ''; } catch (e) {}
+    try {
+      t = (window.JobPortalAPI && typeof window.JobPortalAPI.getToken === 'function' && window.JobPortalAPI.getToken())
+        || localStorage.getItem('jobportal_access_token')
+        || window.accessToken
+        || localStorage.getItem('accessToken')
+        || '';
+    } catch (e) {}
     return t ? { Authorization: 'Bearer ' + t } : {};
   }
 
