@@ -92,17 +92,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Tạo menu theo vai trò
         let roleLink = null;
+        let dashboardHref = "./candidate-dashboard.html";
 
         if (isEmployer) {
             roleLink = createLink(
                 "Nhà tuyển dụng",
                 "./employer-dashboard.html"
             );
+            dashboardHref = "./employer-dashboard.html";
         } else if (isAdmin) {
             roleLink = createLink(
                 "Trang Quản Trị",
                 "./admin-portal.html"
             );
+            dashboardHref = "./admin-portal.html";
+        } else if (isCandidate) {
+            roleLink = createLink(
+                "Hồ Sơ Ứng Viên",
+                "./candidate-dashboard.html"
+            );
+            dashboardHref = "./candidate-dashboard.html";
         }
 
         if (roleLink) {
@@ -110,12 +119,16 @@ document.addEventListener("DOMContentLoaded", function () {
             headerNav.appendChild(roleLink);
         }
 
-        // Tạo khu vực tài khoản
+        // Tạo khu vực tài khoản (Tên người dùng bấm được vào trang Dashboard)
         const accountNav = document.createElement("div");
         accountNav.id = "accountNav";
 
-        const nameElement = document.createElement("span");
+        const nameElement = document.createElement("a");
         nameElement.className = "account-name";
+        nameElement.href = dashboardHref;
+        nameElement.title = "Mở bảng điều khiển cá nhân";
+        nameElement.style.textDecoration = "none";
+        nameElement.style.cursor = "pointer";
         nameElement.textContent = accountName;
 
         const logoutButton = document.createElement("button");
