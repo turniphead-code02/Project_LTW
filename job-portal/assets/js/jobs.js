@@ -360,14 +360,53 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function toggleBookmark(id) {
+  function isCandidateLoggedIn() {
+    try {
+      const api = window.JobPortalAPI;
+      if (!api || typeof api.getToken !== 'function' || !api.getToken()) return false;
+      const raw = localStorage.getItem('jobportal_session');
+      const session = raw ? JSON.parse(raw) : null;
+      return !session || !session.role || String(session.role).toLowerCase() === 'candidate';
+    } catch (_) {
+      return false;
+    }
+  }
+
+  async function syncSavedBookmarks() {
+    if (!isCandidateLoggedIn()) return;
+    try {
+      const res = await window.JobPortalAPI.get('/candidate/saved-jobs');
+      if (res && res.success && Array.isArray(res.data)) {
+        bookmarkedIds = res.data.map((item) => item.job_id);
+        try { localStorage.setItem('jobportal_bookmarks', JSON.stringify(bookmarkedIds)); } catch (_) {}
+        renderJobs();
+      }
+    } catch (_) {}
+  }
+
+  async function toggleBookmark(id) {
     const normalized = String(id);
     const index = bookmarkedIds.map(String).indexOf(normalized);
-    if (index >= 0) bookmarkedIds.splice(index, 1);
+    const willRemove = index >= 0;
+    if (willRemove) bookmarkedIds.splice(index, 1);
     else bookmarkedIds.push(id);
     try { localStorage.setItem('jobportal_bookmarks', JSON.stringify(bookmarkedIds)); } catch (_) {}
     renderJobs();
-    if (window.showToast) window.showToast(index >= 0 ? 'Đã bỏ lưu việc làm.' : 'Đã lưu việc làm.', 'success');
+
+    if (isCandidateLoggedIn()) {
+      try {
+        if (willRemove) {
+          await window.JobPortalAPI.delete(`/candidate/saved-jobs/${id}`);
+        } else {
+          await window.JobPortalAPI.post(`/candidate/saved-jobs/${id}`, {});
+        }
+      } catch (err) {
+        if (window.showToast) window.showToast(err.message || 'Không thể đồng bộ lưu việc làm lên máy chủ.', 'warning');
+        return;
+      }
+    }
+
+    if (window.showToast) window.showToast(willRemove ? 'Đã bỏ lưu việc làm.' : 'Đã lưu việc làm.', 'success');
   }
 
   function syncTopLocation() {
@@ -445,5 +484,6 @@ document.addEventListener('DOMContentLoaded', () => {
     await loadFilterOptions();
     applyUrlFilterParams(urlFilters);
     await loadJobs(true);
+    await syncSavedBookmarks();
   })();
 });

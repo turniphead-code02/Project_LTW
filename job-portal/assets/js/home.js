@@ -124,30 +124,60 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // 4. LƯU VIỆC LÀM YÊU THÍCH (BOOKMARK BUTTON TOGGLE - EVENT DELEGATION)
+  // 4. LƯU VIỆC LÀM YÊU THÍCH (BOOKMARK BUTTON TOGGLE - EVENT DELEGATION + API MYSQL)
+  function isCandidateAuth() {
+    try {
+      const api = window.JobPortalAPI;
+      if (!api || typeof api.getToken !== 'function' || !api.getToken()) return false;
+      const raw = localStorage.getItem('jobportal_session');
+      const s = raw ? JSON.parse(raw) : null;
+      return !s || !s.role || String(s.role).toLowerCase() === 'candidate';
+    } catch (_) {
+      return false;
+    }
+  }
+
   const jobsGrid = document.querySelector('.jobs-grid');
   if (jobsGrid) {
-    jobsGrid.addEventListener('click', function (e) {
+    jobsGrid.addEventListener('click', async function (e) {
       const btn = e.target.closest('.btn-bookmark');
       if (!btn) return;
       e.preventDefault();
       e.stopPropagation();
 
+      const jobCard = btn.closest('.job-card');
+      const jobTitle = jobCard.querySelector('.job-card-title').textContent.trim();
+      const jobId = btn.getAttribute('data-job-id');
       const isSaved = btn.classList.toggle('is-saved');
-      const jobTitle = btn.closest('.job-card').querySelector('.job-card-title').textContent.trim();
 
       if (isSaved) {
         btn.innerHTML = '<i class="fa-solid fa-bookmark"></i>';
         btn.setAttribute('aria-label', 'Bỏ lưu việc làm');
-        if (window.showToast) {
-          window.showToast(`Đã lưu "${jobTitle}" vào danh sách theo dõi!`, 'success');
-        }
       } else {
         btn.innerHTML = '<i class="fa-regular fa-bookmark"></i>';
         btn.setAttribute('aria-label', 'Lưu việc làm này');
-        if (window.showToast) {
-          window.showToast(`Đã bỏ lưu "${jobTitle}"!`, 'warning');
+      }
+
+      if (jobId && isCandidateAuth()) {
+        try {
+          if (isSaved) {
+            await window.JobPortalAPI.post(`/candidate/saved-jobs/${jobId}`, {});
+          } else {
+            await window.JobPortalAPI.delete(`/candidate/saved-jobs/${jobId}`);
+          }
+        } catch (err) {
+          if (window.showToast) {
+            window.showToast(err.message || 'Không thể đồng bộ lưu việc làm lên máy chủ.', 'warning');
+          }
+          return;
         }
+      }
+
+      if (window.showToast) {
+        window.showToast(
+          isSaved ? `Đã lưu "${jobTitle}" vào danh sách theo dõi!` : `Đã bỏ lưu "${jobTitle}"!`,
+          isSaved ? 'success' : 'warning'
+        );
       }
     });
   }
@@ -218,6 +248,16 @@ document.addEventListener('DOMContentLoaded', function () {
         updateRadarMetrics();
       }
 
+      let savedSet = new Set();
+      if (isCandidateAuth()) {
+        try {
+          const savedRes = await window.JobPortalAPI.get('/candidate/saved-jobs');
+          if (savedRes && savedRes.success && Array.isArray(savedRes.data)) {
+            savedRes.data.forEach((item) => savedSet.add(String(item.job_id)));
+          }
+        } catch (_) {}
+      }
+
       if (jobsGrid && Array.isArray(featuredJobs) && featuredJobs.length > 0) {
         jobsGrid.innerHTML = featuredJobs.map((job, idx) => {
           const code = `JP-${String(job.job_id || idx + 1).padStart(2, '0')}`;
@@ -260,7 +300,7 @@ document.addEventListener('DOMContentLoaded', function () {
               </div>
               <div class="job-card-footer">
                 <span>Hạn nộp: ${formatDeadline(job.deadline)}</span>
-                <button class="btn-bookmark" type="button" aria-label="Lưu công việc này"><i class="fa-regular fa-bookmark"></i></button>
+                <button class="btn-bookmark${savedSet.has(String(job.job_id)) ? ' is-saved' : ''}" data-job-id="${job.job_id}" type="button" aria-label="${savedSet.has(String(job.job_id)) ? 'Bỏ lưu việc làm' : 'Lưu công việc này'}"><i class="${savedSet.has(String(job.job_id)) ? 'fa-solid' : 'fa-regular'} fa-bookmark"></i></button>
               </div>
             </article>
           `;
