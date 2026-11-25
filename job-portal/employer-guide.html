@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quy Chế Kiểm Duyệt Hồ Sơ &amp; Tin Tuyển Dụng — JobPortal UTH</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="./assets/css/variables.css" />
+  <link rel="stylesheet" href="./assets/css/base.css" />
+  <link rel="stylesheet" href="./assets/css/components.css" />
+</head>
+<body>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a href="./index.html" class="header-brand" aria-label="Trang chủ JobPortal">
+        <div class="brand-icon" aria-hidden="true"><i class="fa-solid fa-briefcase"></i></div>
+        <div class="brand-text">Job<span>Portal</span><span class="brand-badge">UTH TALENT</span></div>
+      </a>
+      <nav class="header-nav" role="navigation" aria-label="Điều hướng chính">
+        <a href="./index.html" class="nav-link">Trang Chủ</a>
+        <a href="./jobs.html" class="nav-link">Tìm Việc Làm</a>
+        <a href="./employer-dashboard.html" class="nav-link">Nhà Tuyển Dụng</a>
+      </nav>
+      <div class="header-actions">
+        <a href="./auth.html?mode=login" class="btn btn-outline btn-sm">Đăng Nhập</a>
+        <a href="./auth.html?mode=register" class="btn btn-accent btn-sm">Đăng Ký</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="section" style="padding: 48px 0;">
+    <div class="container" style="max-width: 880px;">
+      <span class="section-kicker"><i class="fa-solid fa-shield-halved"></i> // POLICY &amp; GUIDELINES</span>
+      <h1 class="section-title" style="margin-bottom: 12px;">Quy Chế Kiểm Duyệt Tin Tuyển Dụng &amp; Bảo Mật Hồ Sơ</h1>
+      <p class="section-desc" style="margin-bottom: 28px;">Tiêu chuẩn minh bạch dành cho Doanh nghiệp đối tác và Ứng viên trên hệ thống JobPortal UTH.</p>
+
+      <div style="display: grid; gap: 20px;">
+        <div style="background: #fff; border: 1px solid var(--color-border); border-left: 4px solid var(--color-primary); border-radius: 12px; padding: 20px 24px;">
+          <h2 style="font-size: 1.1rem; margin-bottom: 8px;">1. Quy trình kiểm duyệt tin tuyển dụng (HR &rarr; Admin)</h2>
+          <p style="color: var(--color-body); line-height: 1.65;">Mọi tin tuyển dụng mới do Nhà tuyển dụng đăng tải sẽ ở trạng thái <strong>Chờ duyệt (Pending)</strong>. Quản trị viên kiểm tra thông tin pháp nhân, mức lương công khai và mô tả công việc rõ ràng trước khi chuyển sang trạng thái <strong>Đã duyệt (Approved)</strong> để hiển thị công khai.</p>
+        </div>
+
+        <div style="background: #fff; border: 1px solid var(--color-border); border-left: 4px solid var(--color-accent); border-radius: 12px; padding: 20px 24px;">
+          <h2 style="font-size: 1.1rem; margin-bottom: 8px;">2. Tiêu chuẩn bảo mật tệp CV ứng viên</h2>
+          <p style="color: var(--color-body); line-height: 1.65;">Hệ thống chỉ tiếp nhận tệp CV chuẩn định dạng <strong>PDF (&le; 5MB)</strong> và xác thực chữ ký nhị phân <code>%PDF-</code>. Tệp CV của ứng viên được lưu trữ riêng tư và chỉ cho phép chính chủ ứng viên, Nhà tuyển dụng phụ trách vị trí đó và Admin truy cập.</p>
+        </div>
+      </div>
+
+      <div style="margin-top: 28px; display: flex; gap: 12px;">
+        <a href="./index.html" class="btn btn-outline"><i class="fa-solid fa-arrow-left"></i> Về Trang Chủ</a>
+        <a href="./jobs.html" class="btn btn-primary">Tìm Việc Làm Ngay</a>
+      </div>
+    </div>
+  </main>
+
+  <script src="./assets/js/api.js"></script>
+  <script src="./assets/js/main.js"></script>
+  <script src="./assets/js/account-nav.js"></script>
+</body>
+</html>

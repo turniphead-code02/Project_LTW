@@ -125,17 +125,32 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // 4. LƯU VIỆC LÀM YÊU THÍCH (BOOKMARK BUTTON TOGGLE - EVENT DELEGATION + API MYSQL)
-  function isCandidateAuth() {
+  function getLoggedInRole() {
     try {
       const api = window.JobPortalAPI;
-      if (!api || typeof api.getToken !== 'function' || !api.getToken()) return false;
+      if (!api || typeof api.getToken !== 'function' || !api.getToken()) return 'guest';
       const raw = localStorage.getItem('jobportal_session');
       const s = raw ? JSON.parse(raw) : null;
-      return !s || !s.role || String(s.role).toLowerCase() === 'candidate';
+      return (s && s.role) ? String(s.role).toLowerCase() : 'candidate';
     } catch (_) {
-      return false;
+      return 'guest';
     }
   }
+
+  function isCandidateAuth() {
+    return getLoggedInRole() === 'candidate';
+  }
+
+  // Ẩn nút Lưu việc làm nếu đang đăng nhập vai trò Employer hoặc Admin
+  function hideBookmarkForNonCandidates() {
+    const role = getLoggedInRole();
+    if (role === 'employer' || role === 'admin') {
+      document.querySelectorAll('.jobs-grid .btn-bookmark').forEach((b) => {
+        b.style.display = 'none';
+      });
+    }
+  }
+  hideBookmarkForNonCandidates();
 
   const jobsGrid = document.querySelector('.jobs-grid');
   if (jobsGrid) {
@@ -305,6 +320,7 @@ document.addEventListener('DOMContentLoaded', function () {
             </article>
           `;
         }).join('');
+        hideBookmarkForNonCandidates();
       }
 
       const employersGrid = document.querySelector('.employers-grid');
@@ -321,6 +337,7 @@ document.addEventListener('DOMContentLoaded', function () {
             </a>
           `;
         }).join('');
+        hideBookmarkForNonCandidates();
       }
     } catch (err) {
       // Giữ nguyên dữ liệu tĩnh nếu chưa kết nối được server (Zero Dead-End)

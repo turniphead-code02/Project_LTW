@@ -25,16 +25,41 @@ var EmployerAPI = (function () {
   var BASE = window.API_BASE || ((window.location && window.location.port === '5001') ? '' : 'http://localhost:5001');
   var SALARY_UNIT = 1000000; // form nhập "triệu đồng", CSDL lưu đồng (đổi nếu nhóm lưu đơn vị khác)
 
-  // Token truy cập: đồng bộ chuẩn key `jobportal_access_token` của JobPortalAPI
-  function authHeader() {
-    var t = '';
+  // Bảo vệ phân quyền trang Nhà tuyển dụng (Client-side RBAC Guard)
+  (function enforceEmployerRole() {
     try {
-      t = (window.JobPortalAPI && typeof window.JobPortalAPI.getToken === 'function' && window.JobPortalAPI.getToken())
+      var token = (window.JobPortalAPI && typeof window.JobPortalAPI.getToken === 'function' && window.JobPortalAPI.getToken())
+        || localStorage.getItem('jobportal_access_token')
+        || window.accessToken
+        || localStorage.getItem('accessToken');
+      var raw = localStorage.getItem('jobportal_session');
+      var sess = raw ? JSON.parse(raw) : null;
+      if (!token || !sess) {
+        window.location.replace('./auth.html?mode=login');
+        return;
+      }
+      var role = String(sess.role || '').toLowerCase();
+      if (role === 'candidate') {
+        window.location.replace('./candidate-dashboard.html');
+      } else if (role === 'admin') {
+        window.location.replace('./admin-portal.html');
+      }
+    } catch (_) {}
+  })();
+
+  // Token truy cập: đồng bộ chuẩn key `jobportal_access_token` của JobPortalAPI
+  function getRawToken() {
+    try {
+      return (window.JobPortalAPI && typeof window.JobPortalAPI.getToken === 'function' && window.JobPortalAPI.getToken())
         || localStorage.getItem('jobportal_access_token')
         || window.accessToken
         || localStorage.getItem('accessToken')
         || '';
-    } catch (e) {}
+    } catch (e) { return ''; }
+  }
+
+  function authHeader() {
+    var t = getRawToken();
     return t ? { Authorization: 'Bearer ' + t } : {};
   }
 
@@ -587,8 +612,14 @@ document.addEventListener('DOMContentLoaded', function () {
   function fillModal(c) {
     var st = STATUS[EmployerAPI.statusKey(c.status)];
     var url = safeUrl(c.resume_snapshot_url);
+    var cvHref = url;
+    if (url && url.indexOf('/uploads/cv/') !== -1) {
+      var tok = '';
+      try { tok = localStorage.getItem('jobportal_access_token') || ''; } catch (_) {}
+      if (tok) cvHref = url + (url.indexOf('?') === -1 ? '?token=' : '&token=') + encodeURIComponent(tok);
+    }
     var cvPart = url
-      ? '<span>📄 ' + esc(decodeURIComponent(url.split('/').pop())) + '</span><a href="' + esc(url) + '" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">Mở CV</a>'
+      ? '<span>📄 ' + esc(decodeURIComponent(url.split('/').pop())) + '</span><a href="' + esc(cvHref) + '" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">Mở CV</a>'
       : '<span>📄 Ứng viên chưa đính kèm tệp CV.</span>';
     document.getElementById('cvModalTitle').textContent = c.applicant_name;
     document.getElementById('cvModalBody').innerHTML =

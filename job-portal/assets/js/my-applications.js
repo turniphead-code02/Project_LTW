@@ -30,6 +30,25 @@ document.addEventListener('DOMContentLoaded', function () {
     return Boolean(API && typeof API.getToken === 'function' && API.getToken());
   }
 
+  // Bảo vệ phân quyền trang Ứng viên (Client-side RBAC Guard)
+  (function enforceCandidateRole() {
+    try {
+      const token = (API && API.getToken && API.getToken()) || localStorage.getItem('jobportal_access_token');
+      const raw = localStorage.getItem(SESSION_KEY);
+      const sess = raw ? JSON.parse(raw) : null;
+      if (!token || !sess) {
+        window.location.replace('./auth.html?mode=login');
+        return;
+      }
+      const role = String(sess.role || '').toLowerCase();
+      if (role === 'employer') {
+        window.location.replace('./employer-dashboard.html');
+      } else if (role === 'admin') {
+        window.location.replace('./admin-portal.html');
+      }
+    } catch (_) {}
+  })();
+
   function getAppliedJobs() {
     try {
       const data = localStorage.getItem(STORAGE_KEY);

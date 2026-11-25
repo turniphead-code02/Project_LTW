@@ -257,6 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     if (emptyState) emptyState.style.display = 'none';
+    const hideBookmarks = getLoggedInRole() === 'employer' || getLoggedInRole() === 'admin';
 
     jobsList.innerHTML = currentJobs.map((job) => {
       const id = job.job_id ?? job.id;
@@ -297,10 +298,10 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="job-item-footer">
             <div><span style="color:var(--color-muted);"><i class="fa-regular fa-calendar" aria-hidden="true"></i> Hạn nộp: <strong>${escapeHtml(deadline)}</strong></span></div>
             <div style="display:flex;align-items:center;gap:12px;">
-              <button type="button" class="btn-bookmark-job" data-id="${escapeHtml(id)}" style="background:transparent;border:1px solid var(--color-border);width:34px;height:34px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-size:.95rem;cursor:pointer;color:${saved ? 'var(--color-primary)' : '#64748b'};" title="${saved ? 'Bỏ lưu tin tuyển dụng' : 'Lưu tin tuyển dụng này'}" aria-label="${saved ? 'Bỏ lưu tin tuyển dụng' : 'Lưu tin tuyển dụng'}">
+              ${hideBookmarks ? '' : `<button type="button" class="btn-bookmark-job" data-id="${escapeHtml(id)}" style="background:transparent;border:1px solid var(--color-border);width:34px;height:34px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-size:.95rem;cursor:pointer;color:${saved ? 'var(--color-primary)' : '#64748b'};" title="${saved ? 'Bỏ lưu tin tuyển dụng' : 'Lưu tin tuyển dụng này'}" aria-label="${saved ? 'Bỏ lưu tin tuyển dụng' : 'Lưu tin tuyển dụng'}">
                 <i class="${saved ? 'fa-solid' : 'fa-regular'} fa-bookmark"></i>
-              </button>
-              <a href="${detailUrl}" class="job-item-action-link"><span>Xem chi tiết &amp; Nộp hồ sơ</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+              </button>`}
+              <a href="${detailUrl}" class="job-item-action-link"><span>${hideBookmarks ? 'Xem chi tiết' : 'Xem chi tiết &amp; Nộp hồ sơ'}</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
             </div>
           </div>
         </article>`;
@@ -360,16 +361,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function isCandidateLoggedIn() {
+  function getLoggedInRole() {
     try {
       const api = window.JobPortalAPI;
-      if (!api || typeof api.getToken !== 'function' || !api.getToken()) return false;
+      if (!api || typeof api.getToken !== 'function' || !api.getToken()) return 'guest';
       const raw = localStorage.getItem('jobportal_session');
       const session = raw ? JSON.parse(raw) : null;
-      return !session || !session.role || String(session.role).toLowerCase() === 'candidate';
+      return (session && session.role) ? String(session.role).toLowerCase() : 'candidate';
     } catch (_) {
-      return false;
+      return 'guest';
     }
+  }
+
+  function isCandidateLoggedIn() {
+    return getLoggedInRole() === 'candidate';
   }
 
   async function syncSavedBookmarks() {

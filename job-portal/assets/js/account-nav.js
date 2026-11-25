@@ -80,9 +80,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const isEmployer = role === "employer" || role === "hr";
         const isAdmin = role === "admin";
 
-        // Ẩn nút Nhà tuyển dụng đối với Candidate
+        // Ẩn nút Nhà tuyển dụng đối với Candidate và Admin
         if (employerButton) {
-            employerButton.style.display = isCandidate ? "none" : "";
+            employerButton.style.display = (isCandidate || isAdmin) ? "none" : "";
         }
 
         // Ẩn nút đăng nhập và đăng ký

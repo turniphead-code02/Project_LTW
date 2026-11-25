@@ -428,13 +428,37 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // --------------------------------------------------------------------------
-  // 4. KIỂM TRA TRẠNG THÁI ỨNG TUYỂN (CHECK APPLIED STATE FROM LOCALSTORAGE)
+  // 4. KIỂM TRA TRẠNG THÁI ỨNG TUYỂN & PHÂN QUYỀN VAI TRÒ (ROLE CHECK)
   // --------------------------------------------------------------------------
-  function checkApplicationStatus() {
-    const appliedList = JSON.parse(localStorage.getItem('jobportal_applied_jobs') || '[]');
-    const isApplied = appliedList.some(item => item.jobId === job.id);
+  function getSessionRole() {
+    try {
+      const api = window.JobPortalAPI;
+      if (!api || typeof api.getToken !== 'function' || !api.getToken()) return 'guest';
+      const raw = localStorage.getItem('jobportal_session');
+      const sess = raw ? JSON.parse(raw) : null;
+      return (sess && sess.role) ? String(sess.role).toLowerCase() : 'candidate';
+    } catch (_) {
+      return 'guest';
+    }
+  }
 
+  function checkApplicationStatus() {
+    const role = getSessionRole();
     const applyBtns = document.querySelectorAll('.btn-trigger-apply');
+
+    if (role === 'employer' || role === 'admin') {
+      applyBtns.forEach(btn => {
+        btn.disabled = true;
+        btn.style.opacity = '0.7';
+        btn.style.cursor = 'not-allowed';
+        btn.innerHTML = '<i class="fa-solid fa-eye" aria-hidden="true"></i><span>CHẾ ĐỘ XEM (DÀNH CHO ỨNG VIÊN)</span>';
+      });
+      return;
+    }
+
+    const appliedList = JSON.parse(localStorage.getItem('jobportal_applied_jobs') || '[]');
+    const isApplied = appliedList.some(item => String(item.jobId) === String(job.id));
+
     applyBtns.forEach(btn => {
       if (isApplied) {
         btn.classList.add('is-applied');
@@ -477,8 +501,17 @@ document.addEventListener('DOMContentLoaded', function () {
   applyBtns.forEach(btn => {
     btn.addEventListener('click', function (e) {
       e.preventDefault();
+      const role = getSessionRole();
+      if (role === 'guest') {
+        if (window.showToast) {
+          window.showToast('Vui lòng đăng nhập tài khoản Ứng viên để nộp hồ sơ!', 'warning');
+        }
+        setTimeout(() => { window.location.href = './auth.html?mode=login'; }, 800);
+        return;
+      }
+      if (role === 'employer' || role === 'admin') return;
       const appliedList = JSON.parse(localStorage.getItem('jobportal_applied_jobs') || '[]');
-      if (appliedList.some(item => item.jobId === job.id)) {
+      if (appliedList.some(item => String(item.jobId) === String(job.id))) {
         if (window.showToast) {
           window.showToast('Bạn đã nộp hồ sơ cho vị trí này rồi! Kiểm tra mục Theo dõi đơn ứng tuyển.', 'info');
         }
@@ -705,19 +738,24 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   if (btnBookmark) {
-    updateBookmarkUI();
+    const role = getSessionRole();
+    if (role === 'employer' || role === 'admin') {
+      btnBookmark.style.display = 'none';
+    } else {
+      updateBookmarkUI();
 
-    // Đồng bộ trạng thái đã lưu từ Backend nếu đã đăng nhập
-    if (hasAuth()) {
-      API.get('/candidate/saved-jobs').then(res => {
-        if (res && Array.isArray(res.data)) {
-          bookmarks = res.data.map(item => String(item.job_id));
-          localStorage.setItem('jobportal_bookmarks', JSON.stringify(bookmarks));
-          updateBookmarkUI();
-        }
-      }).catch(err => {
-        console.warn('[API] Không thể đồng bộ việc làm đã lưu:', err.message);
-      });
+      // Đồng bộ trạng thái đã lưu từ Backend nếu đã đăng nhập tài khoản Ứng viên
+      if (hasAuth() && role === 'candidate') {
+        API.get('/candidate/saved-jobs').then(res => {
+          if (res && Array.isArray(res.data)) {
+            bookmarks = res.data.map(item => String(item.job_id));
+            localStorage.setItem('jobportal_bookmarks', JSON.stringify(bookmarks));
+            updateBookmarkUI();
+          }
+        }).catch(err => {
+          console.warn('[API] Không thể đồng bộ việc làm đã lưu:', err.message);
+        });
+      }
     }
 
     btnBookmark.addEventListener('click', async function () {
