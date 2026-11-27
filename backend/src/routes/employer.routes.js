@@ -213,6 +213,17 @@ router.post('/jobs', async (req, res) => {
       });
     }
 
+    // --- Kiểm tra cấu hình kiểm duyệt tin từ Admin (nếu bảng system_settings tồn tại) ---
+    let initialJobStatus = 'pending';
+    try {
+      const [cfg] = await pool.query(
+        "SELECT setting_value FROM system_settings WHERE setting_key = 'require_job_approval' LIMIT 1"
+      );
+      if (cfg.length && cfg[0].setting_value === '0') {
+        initialJobStatus = 'approved';
+      }
+    } catch (_) {}
+
     // --- Ghi vào CSDL, thử lại nếu slug bị trùng (hiếm) ---
     for (let attempt = 0; attempt < 3; attempt++) {
       const slug = toSlug(title);
@@ -221,14 +232,16 @@ router.post('/jobs', async (req, res) => {
           `INSERT INTO jobs
              (company_id, category_id, location_id, title, slug, description, requirements, benefits,
               salary_min, salary_max, employment_type, experience_level, deadline, status)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')`,
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
           [companyId, categoryId, locationId, title, slug, description, requirements, benefits,
-           salaryMin, salaryMax, employmentType, experienceLevel, deadline]
+           salaryMin, salaryMax, employmentType, experienceLevel, deadline, initialJobStatus]
         );
         return sendSuccess(res, {
           code: 201,
-          message: 'Đã gửi tin tuyển dụng, đang chờ quản trị viên duyệt.',
-          data: { job_id: result.insertId, slug, status: 'pending' }
+          message: initialJobStatus === 'approved'
+            ? 'Đã đăng và công khai tin tuyển dụng ngay lập tức.'
+            : 'Đã gửi tin tuyển dụng, đang chờ quản trị viên duyệt.',
+          data: { job_id: result.insertId, slug, status: initialJobStatus }
         });
       } catch (e) {
         if (e.code !== 'ER_DUP_ENTRY') throw e; // chỉ thử lại khi trùng slug

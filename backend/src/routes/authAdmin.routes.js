@@ -79,6 +79,60 @@ function normalizeBcryptHash(hash) {
     return normalizedHash;
 }
 
+const DEFAULT_SYSTEM_SETTINGS = {
+    site_name: 'JobPortal',
+    admin_email: 'admin@jobportal.com',
+    site_description: 'Nền tảng tuyển dụng đa ngành hàng đầu Việt Nam — kết nối ứng viên và doanh nghiệp uy tín.',
+    require_employer_approval: '0',
+    require_job_approval: '1'
+};
+
+let settingsReadyPromise = null;
+
+async function ensureSettingsTable() {
+    if (!settingsReadyPromise) {
+        settingsReadyPromise = (async () => {
+            await pool.query(`
+                CREATE TABLE IF NOT EXISTS system_settings (
+                    setting_key VARCHAR(100) PRIMARY KEY,
+                    setting_value TEXT NOT NULL,
+                    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+            `);
+            for (const [k, v] of Object.entries(DEFAULT_SYSTEM_SETTINGS)) {
+                await pool.query(
+                    'INSERT IGNORE INTO system_settings (setting_key, setting_value) VALUES (?, ?)',
+                    [k, v]
+                );
+            }
+        })().catch(err => {
+            settingsReadyPromise = null;
+            throw err;
+        });
+    }
+    return settingsReadyPromise;
+}
+
+async function getSystemSettingsMap() {
+    await ensureSettingsTable();
+    const [rows] = await pool.query('SELECT setting_key, setting_value FROM system_settings');
+    const result = { ...DEFAULT_SYSTEM_SETTINGS };
+    for (const row of rows) {
+        result[row.setting_key] = row.setting_value;
+    }
+    return result;
+}
+
+function slugifyCategory(text) {
+    return String(text || '')
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/đ/g, 'd').replace(/Đ/g, 'D')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        .slice(0, 100);
+}
+
 // ============================================================================
 // 1. ĐĂNG KÝ TÀI KHOẢN
 // ============================================================================
@@ -112,6 +166,15 @@ router.post('/auth/register', async (req, res) => {
 
         const normalizedEmail = String(email).trim().toLowerCase();
         const safeRole = role === 'employer' ? 'employer' : 'candidate';
+        let initialStatus = 'active';
+        if (safeRole === 'employer') {
+            try {
+                const settings = await getSystemSettingsMap();
+                if (settings.require_employer_approval === '1') {
+                    initialStatus = 'locked';
+                }
+            } catch (_) {}
+        }
 
         const passwordHash = await bcrypt.hash(String(password), 10);
 
@@ -128,7 +191,7 @@ router.post('/auth/register', async (req, res) => {
                 passwordHash,
                 phone,
                 safeRole,
-                'active'
+                initialStatus
             ]
         );
 
@@ -256,6 +319,12 @@ router.post('/auth/login', async (req, res) => {
                 message: 'Email hoặc mật khẩu không chính xác.'
             });
         }
+
+        // Cập nhật dấu thời gian hoạt động gần nhất
+        await pool.query(
+            'UPDATE users SET updated_at = CURRENT_TIMESTAMP WHERE user_id = ?',
+            [user.user_id]
+        ).catch(() => {});
 
         const accessToken = jwt.sign(
             {
@@ -672,7 +741,7 @@ router.get('/auth/me', requireAuth, async (req, res) => {
 });
 
 // ============================================================================
-// 6. ADMIN - TỔNG QUAN
+// 6. ADMIN - TỔNG QUAN HỆ THỐNG (ĐA VAI TRÒ & ĐẦY ĐỦ DỮ LIỆU KIỂM DUYỆT)
 // ============================================================================
 
 router.get(
@@ -687,36 +756,96 @@ router.get(
                     c.company_name,
                     c.tax_code,
                     c.website,
+                    c.logo_url,
                     c.created_at,
                     u.user_id,
                     u.full_name,
                     u.email,
-                    u.status AS user_status
+                    u.phone,
+                    u.status AS user_status,
+                    u.updated_at AS last_active_at,
+                    (SELECT COUNT(*) FROM jobs j2 WHERE j2.company_id = c.company_id) AS job_count
                 FROM companies c
                 INNER JOIN users u ON c.user_id = u.user_id
                 ORDER BY c.created_at DESC
+            `);
+
+            const [candidates] = await pool.query(`
+                SELECT
+                    u.user_id,
+                    u.full_name,
+                    u.email,
+                    u.phone,
+                    u.status AS user_status,
+                    u.created_at,
+                    u.updated_at AS last_active_at,
+                    (SELECT COUNT(*) FROM resumes r WHERE r.user_id = u.user_id) AS resume_count,
+                    (SELECT COUNT(*) FROM applications a WHERE a.user_id = u.user_id) AS application_count
+                FROM users u
+                WHERE u.role = 'candidate'
+                ORDER BY u.created_at DESC
             `);
 
             const [jobs] = await pool.query(`
                 SELECT
                     j.job_id,
                     j.title,
+                    j.slug,
+                    j.description,
+                    j.requirements,
+                    j.benefits,
                     j.salary_min,
                     j.salary_max,
+                    j.currency,
+                    j.employment_type,
+                    j.experience_level,
+                    DATE_FORMAT(j.deadline, '%Y-%m-%d') AS deadline,
                     j.status,
                     j.reject_reason,
                     j.created_at,
-                    c.company_name
+                    DATEDIFF(CURDATE(), DATE(j.created_at)) AS age_days,
+                    (j.deadline < CURDATE()) AS is_expired,
+                    c.company_name,
+                    c.logo_url,
+                    cat.category_id,
+                    cat.category_name,
+                    loc.location_name,
+                    (SELECT COUNT(*) FROM applications a WHERE a.job_id = j.job_id) AS application_count
                 FROM jobs j
                 INNER JOIN companies c ON j.company_id = c.company_id
+                LEFT JOIN categories cat ON j.category_id = cat.category_id
+                LEFT JOIN locations loc ON j.location_id = loc.location_id
                 ORDER BY j.created_at DESC
             `);
+
+            const [categories] = await pool.query(`
+                SELECT
+                    cat.category_id,
+                    cat.category_name,
+                    cat.slug,
+                    cat.description,
+                    COUNT(j.job_id) AS job_count
+                FROM categories cat
+                LEFT JOIN jobs j ON j.category_id = cat.category_id
+                GROUP BY cat.category_id, cat.category_name, cat.slug, cat.description
+                ORDER BY job_count DESC, cat.category_name ASC
+            `);
+
+            const [[appAgg]] = await pool.query(
+                'SELECT COUNT(*) AS totalApplications FROM applications'
+            );
+
+            const settings = await getSystemSettingsMap();
 
             return sendSuccess(res, {
                 message: 'Tải dữ liệu quản trị hệ thống thành công.',
                 data: {
                     employers,
-                    jobs
+                    candidates,
+                    jobs,
+                    categories,
+                    totalApplications: Number(appAgg?.totalApplications || 0),
+                    settings
                 }
             });
 
@@ -732,7 +861,7 @@ router.get(
 );
 
 // ============================================================================
-// 7. ADMIN - DUYỆT / TỪ CHỐI TIN TUYỂN DỤNG
+// 7. ADMIN - DUYỆT / TỪ CHỐI / ĐÓNG TIN & XÓA TIN TUYỂN DỤNG CŨ
 // ============================================================================
 
 router.patch(
@@ -796,8 +925,97 @@ router.patch(
     }
 );
 
+router.delete(
+    '/admin/jobs/:id',
+    requireAuth,
+    requireRole('admin'),
+    async (req, res) => {
+        try {
+            const jobId = Number(req.params.id);
+
+            if (!Number.isInteger(jobId) || jobId <= 0) {
+                return sendError(res, {
+                    code: 400,
+                    message: 'ID tin tuyển dụng không hợp lệ.'
+                });
+            }
+
+            const [result] = await pool.query(
+                'DELETE FROM jobs WHERE job_id = ?',
+                [jobId]
+            );
+
+            if (result.affectedRows === 0) {
+                return sendError(res, {
+                    code: 404,
+                    message: 'Không tìm thấy tin tuyển dụng để xóa.'
+                });
+            }
+
+            return sendSuccess(res, {
+                message: 'Đã xóa vĩnh viễn tin tuyển dụng khỏi hệ thống.',
+                data: { job_id: jobId }
+            });
+        } catch (err) {
+            console.error('ADMIN DELETE JOB ERROR:', err);
+            return sendError(res, {
+                code: 500,
+                message: 'Lỗi xóa tin tuyển dụng: ' + err.message
+            });
+        }
+    }
+);
+
+router.post(
+    '/admin/jobs/cleanup',
+    requireAuth,
+    requireRole('admin'),
+    async (req, res) => {
+        try {
+            const {
+                mode = 'expired_or_old',
+                minAgeDays = 30
+            } = req.body || {};
+
+            const safeDays = Math.max(1, Math.min(3650, Number(minAgeDays) || 30));
+            let whereClause = '';
+            let params = [];
+
+            if (mode === 'expired') {
+                whereClause = 'deadline < CURDATE()';
+            } else if (mode === 'old') {
+                whereClause = 'DATEDIFF(CURDATE(), DATE(created_at)) >= ?';
+                params = [safeDays];
+            } else if (mode === 'closed_rejected') {
+                whereClause = "status IN ('closed', 'rejected')";
+            } else {
+                whereClause = '(deadline < CURDATE() OR DATEDIFF(CURDATE(), DATE(created_at)) >= ?)';
+                params = [safeDays];
+            }
+
+            const [result] = await pool.query(
+                `DELETE FROM jobs WHERE ${whereClause}`,
+                params
+            );
+
+            return sendSuccess(res, {
+                message: `Đã dọn dẹp ${result.affectedRows} tin tuyển dụng lâu ngày / hết hạn.`,
+                data: {
+                    deletedCount: Number(result.affectedRows || 0)
+                }
+            });
+        } catch (err) {
+            console.error('ADMIN CLEANUP JOBS ERROR:', err);
+            return sendError(res, {
+                code: 500,
+                message: 'Lỗi dọn dẹp tin tuyển dụng: ' + err.message
+            });
+        }
+    }
+);
+
 // ============================================================================
-// 8. ADMIN - KHÓA / MỞ KHÓA TÀI KHOẢN
+// 8. ADMIN - KHÓA / MỞ KHÓA TÀI KHOẢN (CHẶN TỰ KHÓA HOẶC KHÓA ADMIN)
 // ============================================================================
 
 router.patch(
@@ -823,20 +1041,41 @@ router.patch(
                 });
             }
 
-            const [result] = await pool.query(
-                'UPDATE users SET status = ? WHERE user_id = ?',
-                [status, userId]
+            if (userId === Number(req.user.user_id)) {
+                return sendError(res, {
+                    code: 400,
+                    message: 'Không thể tự khóa tài khoản quản trị viên đang đăng nhập.'
+                });
+            }
+
+            const [targetRows] = await pool.query(
+                'SELECT user_id, role FROM users WHERE user_id = ? LIMIT 1',
+                [userId]
             );
 
-            if (result.affectedRows === 0) {
+            if (targetRows.length === 0) {
                 return sendError(res, {
                     code: 404,
                     message: 'Không tìm thấy tài khoản.'
                 });
             }
 
+            if (targetRows[0].role === 'admin') {
+                return sendError(res, {
+                    code: 403,
+                    message: 'Không thể thay đổi trạng thái tài khoản quản trị viên khác.'
+                });
+            }
+
+            await pool.query(
+                'UPDATE users SET status = ? WHERE user_id = ?',
+                [status, userId]
+            );
+
             return sendSuccess(res, {
-                message: 'Đã cập nhật trạng thái tài khoản.',
+                message: status === 'locked'
+                    ? 'Đã khóa tài khoản thành công.'
+                    : 'Đã mở khóa tài khoản thành công.',
                 data: {
                     user_id: userId,
                     status
@@ -849,6 +1088,145 @@ router.patch(
             return sendError(res, {
                 code: 500,
                 message: 'Lỗi cập nhật tài khoản: ' + err.message
+            });
+        }
+    }
+);
+
+// ============================================================================
+// 9. ADMIN - QUẢN LÝ DANH MỤC NGÀNH NGHỀ
+// ============================================================================
+
+router.post(
+    '/admin/categories',
+    requireAuth,
+    requireRole('admin'),
+    async (req, res) => {
+        try {
+            const name = String((req.body || {}).category_name || '').trim();
+            const description = String((req.body || {}).description || '').trim() || null;
+
+            if (name.length < 2 || name.length > 100) {
+                return sendError(res, {
+                    code: 400,
+                    message: 'Tên ngành nghề cần từ 2 đến 100 ký tự.'
+                });
+            }
+
+            const slug = slugifyCategory(name) || `category-${Date.now()}`;
+            const [result] = await pool.query(
+                'INSERT INTO categories (category_name, slug, description) VALUES (?, ?, ?)',
+                [name, slug, description]
+            );
+
+            return sendSuccess(res, {
+                code: 201,
+                message: 'Đã thêm ngành nghề mới.',
+                data: {
+                    category_id: result.insertId,
+                    category_name: name,
+                    slug,
+                    description
+                }
+            });
+        } catch (err) {
+            if (err.code === 'ER_DUP_ENTRY') {
+                return sendError(res, {
+                    code: 400,
+                    message: 'Tên hoặc slug ngành nghề này đã tồn tại.'
+                });
+            }
+            return sendError(res, {
+                code: 500,
+                message: 'Lỗi thêm ngành nghề: ' + err.message
+            });
+        }
+    }
+);
+
+router.delete(
+    '/admin/categories/:id',
+    requireAuth,
+    requireRole('admin'),
+    async (req, res) => {
+        try {
+            const catId = Number(req.params.id);
+            if (!Number.isInteger(catId) || catId <= 0) {
+                return sendError(res, { code: 400, message: 'ID ngành nghề không hợp lệ.' });
+            }
+
+            const [[ref]] = await pool.query(
+                'SELECT COUNT(*) AS cnt FROM jobs WHERE category_id = ?',
+                [catId]
+            );
+
+            if (Number(ref?.cnt || 0) > 0) {
+                return sendError(res, {
+                    code: 400,
+                    message: `Không thể xóa ngành nghề đang có ${ref.cnt} tin tuyển dụng.`
+                });
+            }
+
+            const [result] = await pool.query(
+                'DELETE FROM categories WHERE category_id = ?',
+                [catId]
+            );
+
+            if (result.affectedRows === 0) {
+                return sendError(res, { code: 404, message: 'Không tìm thấy ngành nghề.' });
+            }
+
+            return sendSuccess(res, {
+                message: 'Đã xóa ngành nghề.',
+                data: { category_id: catId }
+            });
+        } catch (err) {
+            return sendError(res, {
+                code: 500,
+                message: 'Lỗi xóa ngành nghề: ' + err.message
+            });
+        }
+    }
+);
+
+// ============================================================================
+// 10. ADMIN - LƯU CẤU HÌNH HỆ THỐNG VÀO CSDL
+// ============================================================================
+
+router.put(
+    '/admin/settings',
+    requireAuth,
+    requireRole('admin'),
+    async (req, res) => {
+        try {
+            await ensureSettingsTable();
+            const body = req.body || {};
+
+            const updates = {
+                site_name: String(body.site_name || DEFAULT_SYSTEM_SETTINGS.site_name).trim().slice(0, 120),
+                admin_email: String(body.admin_email || DEFAULT_SYSTEM_SETTINGS.admin_email).trim().slice(0, 150),
+                site_description: String(body.site_description || '').trim().slice(0, 1000),
+                require_employer_approval: body.require_employer_approval ? '1' : '0',
+                require_job_approval: body.require_job_approval ? '1' : '0'
+            };
+
+            for (const [k, v] of Object.entries(updates)) {
+                await pool.query(
+                    `INSERT INTO system_settings (setting_key, setting_value)
+                     VALUES (?, ?)
+                     ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)`,
+                    [k, v]
+                );
+            }
+
+            return sendSuccess(res, {
+                message: 'Đã lưu cài đặt hệ thống vào cơ sở dữ liệu.',
+                data: updates
+            });
+        } catch (err) {
+            return sendError(res, {
+                code: 500,
+                message: 'Lỗi lưu cài đặt hệ thống: ' + err.message
             });
         }
     }
