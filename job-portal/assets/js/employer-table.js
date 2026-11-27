@@ -643,6 +643,22 @@ document.addEventListener('DOMContentLoaded', function () {
     }).join('');
   }
 
+  // Đăng xuất an toàn: xóa token & session trên mọi trang Nhà tuyển dụng
+  document.querySelectorAll('.emp-logout-link').forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      if (window.JobPortalAPI && typeof window.JobPortalAPI.clearAuthSession === 'function') {
+        window.JobPortalAPI.clearAuthSession();
+      }
+      try {
+        localStorage.removeItem('jobportal_access_token');
+        localStorage.removeItem('jobportal_session');
+        localStorage.removeItem('accessToken');
+      } catch (_) {}
+      window.location.href = './auth.html?mode=login';
+    });
+  });
+
   // Nạp company header + meta + chi tiết tin nếu là chế độ sửa
   EmployerAPI.loadCompany().then(function (c) {
     if (c) EmployerAPI.hydrateBrandName(c);
@@ -884,14 +900,9 @@ document.addEventListener('DOMContentLoaded', function () {
   function fillModal(c) {
     var st = STATUS[EmployerAPI.statusKey(c.status)];
     var url = c.resume_snapshot_url;
-    var cvHref = url;
-    if (url) {
-      var full = url.indexOf('http') === 0 ? url : EmployerAPI.BASE + url;
-      var tok = EmployerAPI.getRawToken();
-      cvHref = tok ? full + (full.indexOf('?') !== -1 ? '&' : '?') + 'token=' + encodeURIComponent(tok) : full;
-    }
+    var cvFileName = url ? esc(decodeURIComponent(url.split('/').pop())) : '';
     var cvPart = url
-      ? '<span><i class="fa-solid fa-file-pdf" style="color:var(--color-danger);"></i> ' + esc(decodeURIComponent(url.split('/').pop())) + '</span><a href="' + esc(cvHref) + '" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">Mở CV</a>'
+      ? '<span><i class="fa-solid fa-file-pdf" style="color:var(--color-danger);"></i> ' + cvFileName + '</span><button type="button" class="btn btn-ghost btn-sm" id="btnOpenSecureCv" data-cv-url="' + esc(url) + '">Mở CV</button>'
       : '<span>Ứng viên chưa đính kèm tệp CV.</span>';
     document.getElementById('cvModalTitle').textContent = c.applicant_name;
     document.getElementById('cvModalBody').innerHTML =
@@ -902,6 +913,28 @@ document.addEventListener('DOMContentLoaded', function () {
       '<div class="info-row"><span>Trạng thái</span><span class="status ' + st.cls + '">' + st.text + '</span></div>' +
       '<div class="cv-box">' + cvPart + '</div>' +
       '<div><div class="emp-label-text" style="margin-bottom:6px;">Thư giới thiệu</div><div class="letter-box">' + (c.cover_letter ? esc(c.cover_letter) : 'Ứng viên không gửi thư giới thiệu.') + '</div></div>';
+
+    var openCvBtn = document.getElementById('btnOpenSecureCv');
+    if (openCvBtn && url) {
+      openCvBtn.addEventListener('click', function () {
+        var full = url.indexOf('http') === 0 ? url : EmployerAPI.BASE + url;
+        var tok = EmployerAPI.getRawToken();
+        var headers = tok ? { Authorization: 'Bearer ' + tok } : {};
+        openCvBtn.disabled = true;
+        fetch(full, { headers: headers, credentials: 'include' })
+          .then(function (res) {
+            if (!res.ok) throw new Error('Không thể tải tệp CV (' + res.status + ').');
+            return res.blob();
+          })
+          .then(function (blob) {
+            var blobUrl = URL.createObjectURL(blob);
+            window.open(blobUrl, '_blank', 'noopener');
+            setTimeout(function () { URL.revokeObjectURL(blobUrl); }, 60000);
+          })
+          .catch(EmployerAPI.fail)
+          .finally(function () { openCvBtn.disabled = false; });
+      });
+    }
   }
 
   function openModal(id) {

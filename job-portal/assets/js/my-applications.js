@@ -57,48 +57,17 @@ document.addEventListener('DOMContentLoaded', function () {
   const currentUserName = (session && (session.fullName || session.name)) || 'Ứng viên';
   const currentUserEmail = (session && session.email) || '';
 
-  (function hydrateProfileHeader() {
-    const firstChar = currentUserName.trim().charAt(0).toUpperCase() || 'U';
-    const headerUserName = document.getElementById('headerUserName');
-    const sidebarUserName = document.getElementById('sidebarUserName');
-    if (headerUserName) headerUserName.textContent = currentUserName;
-    if (sidebarUserName) sidebarUserName.textContent = currentUserName;
-    document.querySelectorAll('.user-avatar, .profile-avatar').forEach(el => {
-      el.textContent = firstChar;
-    });
-  })();
+  const UI = window.CandidateUI || {};
+  const escapeHtml = UI.escapeHtml || (s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])));
+
+  if (typeof UI.hydrateHeader === 'function') {
+    UI.hydrateHeader(currentUserName);
+  }
 
   function openCandConfirm(title, message, onConfirm) {
-    const modal = document.getElementById('candidateConfirmModal');
-    const titleEl = document.getElementById('candConfirmTitle');
-    const msgEl = document.getElementById('candConfirmMessage');
-    const okBtn = document.getElementById('candConfirmOk');
-    const cancelBtn = document.getElementById('candConfirmCancel');
-    const closeBtn = document.getElementById('candConfirmClose');
-    if (!modal || !okBtn) return;
-
-    if (titleEl) titleEl.textContent = title || 'Xác nhận thao tác';
-    if (msgEl) msgEl.textContent = message || '';
-
-    const cleanup = () => {
-      modal.classList.remove('is-open');
-      document.body.style.overflow = '';
-      okBtn.onclick = null;
-      if (cancelBtn) cancelBtn.onclick = null;
-      if (closeBtn) closeBtn.onclick = null;
-      modal.onclick = null;
-    };
-
-    okBtn.onclick = async () => {
-      cleanup();
-      if (typeof onConfirm === 'function') await onConfirm();
-    };
-    if (cancelBtn) cancelBtn.onclick = cleanup;
-    if (closeBtn) closeBtn.onclick = cleanup;
-    modal.onclick = e => { if (e.target === modal) cleanup(); };
-
-    modal.classList.add('is-open');
-    document.body.style.overflow = 'hidden';
+    if (typeof UI.openConfirm === 'function') {
+      UI.openConfirm(title, message, onConfirm);
+    }
   }
 
   // --------------------------------------------------------------------------
@@ -170,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function () {
       let matchKeyword = true;
       if (searchKeyword) {
         const kw = searchKeyword.toLowerCase();
-        const searchable = `${app.jobTitle} ${app.company} ${app.salary || ''} ${app.location || ''}`.toLowerCase();
+        const searchable = `${escapeHtml(app.jobTitle)} ${escapeHtml(app.company)} ${app.salary || ''} ${app.location || ''}`.toLowerCase();
         matchKeyword = searchable.includes(kw);
       }
 
@@ -227,16 +196,16 @@ document.addEventListener('DOMContentLoaded', function () {
             <div class="app-job-info">
               <div class="app-company-logo" style="background: #ffffff; color: ${app.companyLogoBg || '#1e40af'}; border: 1px solid var(--color-border); overflow: hidden; padding: ${app.logoUrl ? '4px' : '0'};" aria-hidden="true">
                 ${app.logoUrl
-                  ? `<img src="${app.logoUrl}" alt="${app.company}" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.style.display='none'; if (this.nextElementSibling) this.nextElementSibling.style.display='flex';"><span style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center;">${app.companyLogo || app.company.charAt(0)}</span>`
+                  ? `<img src="${escapeHtml(app.logoUrl)}" alt="${escapeHtml(app.company)}" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.style.display='none'; if (this.nextElementSibling) this.nextElementSibling.style.display='flex';"><span style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center;">${app.companyLogo || app.company.charAt(0)}</span>`
                   : (app.companyLogo || app.company.charAt(0))}
               </div>
               <div class="app-job-details">
                 <h2>
-                  <a href="./job-detail.html?id=${app.jobId}">${app.jobTitle}</a>
+                  <a href="./job-detail.html?id=${encodeURIComponent(app.jobId)}">${escapeHtml(app.jobTitle)}</a>
                 </h2>
                 <div class="app-job-subinfo">
-                  <span><i class="fa-regular fa-building" aria-hidden="true"></i> <strong>${app.company}</strong></span>
-                  <span><i class="fa-solid fa-location-dot" aria-hidden="true"></i> ${app.location || 'TP.HCM'}</span>
+                  <span><i class="fa-regular fa-building" aria-hidden="true"></i> <strong>${escapeHtml(app.company)}</strong></span>
+                  <span><i class="fa-solid fa-location-dot" aria-hidden="true"></i> ${escapeHtml(app.location || 'TP.HCM')}</span>
                   <span><i class="fa-solid fa-money-bill-wave" aria-hidden="true"></i> <strong>${app.salary || 'Thỏa thuận'}</strong></span>
                 </div>
               </div>
@@ -315,7 +284,7 @@ document.addEventListener('DOMContentLoaded', function () {
             <div class="app-feedback-box ${isWithdrawn ? 'feedback-withdrawn' : (isOffer ? 'feedback-offer' : (isRejected ? 'feedback-rejected' : 'feedback-interview'))}" style="${isWithdrawn ? 'background:#f8fafc; border:1px solid #cbd5e1; color:#475569;' : ''}">
               <i class="${isWithdrawn ? 'fa-solid fa-circle-info' : (isOffer ? 'fa-solid fa-trophy' : (isRejected ? 'fa-solid fa-circle-xmark' : 'fa-solid fa-bullhorn'))}" style="font-size: 1.2rem; flex-shrink: 0; margin-top: 2px;"></i>
               <div>
-                <strong>${isWithdrawn ? 'Thông tin tiến trình:' : `Thông báo từ Nhà Tuyển Dụng (${app.company}):`}</strong>
+                <strong>${isWithdrawn ? 'Thông tin tiến trình:' : `Thông báo từ Nhà Tuyển Dụng (${escapeHtml(app.company)}):`}</strong>
                 <p style="margin: 4px 0 0; line-height: 1.5;">${isWithdrawn ? 'Bạn đã chủ động rút đơn ứng tuyển cho vị trí này. Đơn ứng tuyển được lưu trữ trong lịch sử hồ sơ của bạn.' : app.feedback}</p>
               </div>
             </div>
@@ -323,7 +292,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
           <div class="app-card-actions">
             <div class="app-card-btn-group">
-              <a href="./job-detail.html?id=${app.jobId}" class="btn-outline btn-sm">
+              <a href="./job-detail.html?id=${encodeURIComponent(app.jobId)}" class="btn-outline btn-sm">
                 <i class="fa-solid fa-arrow-up-right-from-square"></i> Xem lại JD việc làm
               </a>
 
@@ -365,19 +334,17 @@ document.addEventListener('DOMContentLoaded', function () {
   // 5. GẮN SỰ KIỆN TƯƠNG TÁC
   // --------------------------------------------------------------------------
   function attachCardEventListeners() {
-    // 1. Mở xem tệp bản chụp CV (Kèm Token xác thực để truy cập API bảo mật /uploads/cv)
+    // 1. Mở xem tệp bản chụp CV qua header Authorization (không lộ token trên URL)
     applicationsContainer.querySelectorAll('.btn-download-snapshot').forEach(btn => {
-      btn.addEventListener('click', function () {
+      btn.addEventListener('click', async function () {
         const file = this.getAttribute('data-file') || 'CV.pdf';
         const url = this.getAttribute('data-url');
-        if (url) {
-          let fullUrl = url.startsWith('http') ? url : (API ? API.BASE_URL.replace('/api/v1', '') + url : url);
-          const token = (typeof API !== 'undefined' && API.getToken) ? API.getToken() : (localStorage.getItem('jobportal_access_token') || '');
-          if (token) {
-            const sep = fullUrl.includes('?') ? '&' : '?';
-            fullUrl = `${fullUrl}${sep}token=${encodeURIComponent(token)}`;
+        if (url && typeof UI.openSecurePdf === 'function') {
+          try {
+            await UI.openSecurePdf(url, file);
+          } catch (err) {
+            if (window.showToast) window.showToast(err?.message || 'Không thể mở tệp CV.', 'error');
           }
-          window.open(fullUrl, '_blank');
         } else if (window.showToast) {
           window.showToast(`Đang tải tệp bản chụp: ${file}...`, 'info');
         }
@@ -507,7 +474,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function openCoverLetterModal(app) {
     if (!letterModal) return;
-    if (letterJobTitle) letterJobTitle.textContent = `${app.jobTitle} — ${app.company}`;
+    if (letterJobTitle) letterJobTitle.textContent = `${escapeHtml(app.jobTitle)} — ${escapeHtml(app.company)}`;
     if (letterContent) letterContent.textContent = app.coverLetter || 'Ứng viên không nhập thư giới thiệu.';
     letterModal.classList.add('is-open');
     document.body.style.overflow = 'hidden';

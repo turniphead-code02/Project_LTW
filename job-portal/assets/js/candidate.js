@@ -117,37 +117,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  const UI = window.CandidateUI || {};
+  const escapeHtml = UI.escapeHtml || (s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])));
+
   function openCandConfirm(title, message, onConfirm) {
-    const modal = document.getElementById('candidateConfirmModal');
-    const titleEl = document.getElementById('candConfirmTitle');
-    const msgEl = document.getElementById('candConfirmMessage');
-    const okBtn = document.getElementById('candConfirmOk');
-    const cancelBtn = document.getElementById('candConfirmCancel');
-    const closeBtn = document.getElementById('candConfirmClose');
-    if (!modal || !okBtn) return;
-
-    if (titleEl) titleEl.textContent = title || 'Xác nhận thao tác';
-    if (msgEl) msgEl.textContent = message || '';
-
-    const cleanup = () => {
-      modal.classList.remove('is-open');
-      document.body.style.overflow = '';
-      okBtn.onclick = null;
-      if (cancelBtn) cancelBtn.onclick = null;
-      if (closeBtn) closeBtn.onclick = null;
-      modal.onclick = null;
-    };
-
-    okBtn.onclick = async () => {
-      cleanup();
-      if (typeof onConfirm === 'function') await onConfirm();
-    };
-    if (cancelBtn) cancelBtn.onclick = cleanup;
-    if (closeBtn) closeBtn.onclick = cleanup;
-    modal.onclick = e => { if (e.target === modal) cleanup(); };
-
-    modal.classList.add('is-open');
-    document.body.style.overflow = 'hidden';
+    if (typeof UI.openConfirm === 'function') {
+      UI.openConfirm(title, message, onConfirm);
+    }
   }
 
   // --------------------------------------------------------------------------
@@ -304,13 +280,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     educationList.innerHTML = educations.map(edu => `
-      <div class="education-item" data-id="${edu.id}">
+      <div class="education-item" data-id="${escapeHtml(edu.id)}">
         <div class="education-item-content">
-          <h3>${edu.school}</h3>
-          <p class="education-major">${edu.major}</p>
-          <span class="education-years"><i class="fa-regular fa-calendar" aria-hidden="true"></i> ${edu.startYear} — ${edu.endYear || 'Hiện tại'}</span>
+          <h3>${escapeHtml(edu.school)}</h3>
+          <p class="education-major">${escapeHtml(edu.major)}</p>
+          <span class="education-years"><i class="fa-regular fa-calendar" aria-hidden="true"></i> ${escapeHtml(edu.startYear)} — ${escapeHtml(edu.endYear || 'Hiện tại')}</span>
         </div>
-        <button type="button" class="btn-delete-item btn-delete-edu" data-id="${edu.id}" title="Xóa học vấn này" aria-label="Xóa học vấn">
+        <button type="button" class="btn-delete-item btn-delete-edu" data-id="${escapeHtml(edu.id)}" title="Xóa học vấn này" aria-label="Xóa học vấn">
           <i class="fa-solid fa-trash-can"></i>
         </button>
       </div>
@@ -397,8 +373,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     skillsList.innerHTML = skills.map((skill, index) => `
       <span class="skill-chip">
-        <span>${skill}</span>
-        <button type="button" class="skill-chip-delete" data-index="${index}" aria-label="Xóa kỹ năng ${skill}">
+        <span>${escapeHtml(skill)}</span>
+        <button type="button" class="skill-chip-delete" data-index="${index}" aria-label="Xóa kỹ năng ${escapeHtml(skill)}">
           &times;
         </button>
       </span>
@@ -484,29 +460,29 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     resumeList.innerHTML = resumes.map(res => `
-      <div class="resume-card-item ${res.isDefault ? 'is-default' : ''}" data-id="${res.id}">
+      <div class="resume-card-item ${res.isDefault ? 'is-default' : ''}" data-id="${escapeHtml(res.id)}">
         <div class="resume-item-main">
           <i class="fa-solid fa-file-pdf resume-pdf-icon" aria-hidden="true"></i>
           <div class="resume-title-wrap">
             <h3>
-              <span>${res.title}</span>
+              <span>${escapeHtml(res.title)}</span>
               ${res.isDefault ? '<span class="badge-default-cv">✓ CV Mặc Định</span>' : ''}
             </h3>
             <div class="resume-sub-meta">
-              <span><i class="fa-solid fa-file-arrow-up" aria-hidden="true"></i> ${res.fileSize || 'PDF'}</span> • <span><i class="fa-regular fa-calendar" aria-hidden="true"></i> Tải lên: ${res.uploadDate || 'Mới đây'}</span>
+              <span><i class="fa-solid fa-file-arrow-up" aria-hidden="true"></i> ${escapeHtml(res.fileSize || 'PDF')}</span> • <span><i class="fa-regular fa-calendar" aria-hidden="true"></i> Tải lên: ${escapeHtml(res.uploadDate || 'Mới đây')}</span>
             </div>
           </div>
         </div>
         <div class="resume-actions-group">
           ${!res.isDefault ? `
-            <button type="button" class="btn-outline btn-sm btn-set-default" data-id="${res.id}">
+            <button type="button" class="btn-outline btn-sm btn-set-default" data-id="${escapeHtml(res.id)}">
               Đặt làm mặc định
             </button>
           ` : ''}
-          <button type="button" class="btn-outline btn-sm btn-download-cv" data-id="${res.id}" data-url="${res.fileUrl || ''}" title="Tải CV về máy">
+          <button type="button" class="btn-outline btn-sm btn-download-cv" data-id="${escapeHtml(res.id)}" data-url="${escapeHtml(res.fileUrl || '')}" title="Tải CV về máy">
             <i class="fa-solid fa-download"></i>
           </button>
-          <button type="button" class="btn-delete-item btn-delete-cv" data-id="${res.id}" title="Xóa CV này">
+          <button type="button" class="btn-delete-item btn-delete-cv" data-id="${escapeHtml(res.id)}" title="Xóa CV này">
             <i class="fa-solid fa-trash-can"></i>
           </button>
         </div>
@@ -545,20 +521,18 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
 
-    // Tải về / Mở file PDF (Kèm Token xác thực để truy cập API bảo mật /uploads/cv)
+    // Tải về / Mở file PDF qua header Authorization (không lộ JWT trên URL)
     resumeList.querySelectorAll('.btn-download-cv').forEach(btn => {
-      btn.addEventListener('click', function () {
+      btn.addEventListener('click', async function () {
         const id = this.getAttribute('data-id');
         const url = this.getAttribute('data-url');
         const r = resumes.find(item => String(item.id) === String(id));
-        if (url) {
-          let fullUrl = url.startsWith('http') ? url : (API ? API.BASE_URL.replace('/api/v1', '') + url : url);
-          const token = (typeof API !== 'undefined' && API.getToken) ? API.getToken() : (localStorage.getItem('jobportal_access_token') || '');
-          if (token) {
-            const sep = fullUrl.includes('?') ? '&' : '?';
-            fullUrl = `${fullUrl}${sep}token=${encodeURIComponent(token)}`;
+        if (url && typeof UI.openSecurePdf === 'function') {
+          try {
+            await UI.openSecurePdf(url, r ? r.title : 'CV.pdf');
+          } catch (err) {
+            notify(err?.message || 'Không thể mở tệp CV.', 'error');
           }
-          window.open(fullUrl, '_blank');
         } else {
           notify(`Đang tải xuống tệp: ${r ? r.title : 'CV.pdf'}...`, 'info');
         }
@@ -891,24 +865,24 @@ document.addEventListener('DOMContentLoaded', function () {
           <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap;">
             <div>
               <h2 style="font-size: 1.15rem; font-weight: 700; color: var(--color-dark); margin-bottom: 4px;">
-                <a href="./job-detail.html?id=${app.jobId}" style="color: inherit; text-decoration: none;">${app.jobTitle}</a>
+                <a href="./job-detail.html?id=${encodeURIComponent(app.jobId)}" style="color: inherit; text-decoration: none;">${escapeHtml(app.jobTitle)}</a>
               </h2>
               <div style="font-size: 0.875rem; color: var(--color-muted); display: flex; gap: 12px; flex-wrap: wrap;">
-                <span><i class="fa-regular fa-building" aria-hidden="true"></i> <strong>${app.company}</strong></span>
-                <span><i class="fa-solid fa-money-bill-wave" aria-hidden="true"></i> ${app.salary || 'Thương lượng'}</span>
-                <span><i class="fa-solid fa-location-dot" aria-hidden="true"></i> ${app.location || 'TP.HCM'}</span>
+                <span><i class="fa-regular fa-building" aria-hidden="true"></i> <strong>${escapeHtml(app.company)}</strong></span>
+                <span><i class="fa-solid fa-money-bill-wave" aria-hidden="true"></i> ${escapeHtml(app.salary || 'Thương lượng')}</span>
+                <span><i class="fa-solid fa-location-dot" aria-hidden="true"></i> ${escapeHtml(app.location || 'TP.HCM')}</span>
               </div>
             </div>
             <div>
               <span class="candidate-badge" style="background:${conf.badgeBg}; color:${conf.badgeColor};">
-                ${app.statusText || 'Đã nộp đơn'}
+                ${escapeHtml(app.statusText || 'Đã nộp đơn')}
               </span>
             </div>
           </div>
 
           <div style="background: var(--color-bg-page); border: 1px solid var(--color-border); border-radius: 8px; padding: 10px 14px; margin: 14px 0; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-            <span><i class="fa-solid fa-file-pdf" style="color: var(--color-danger);"></i> Bản chụp CV bất biến: <strong>${app.fileName || 'CV_Snapshot.pdf'}</strong></span>
-            <span style="color: var(--color-muted);"><i class="fa-regular fa-clock" aria-hidden="true"></i> Nộp lúc: ${app.appliedAt}</span>
+            <span><i class="fa-solid fa-file-pdf" style="color: var(--color-danger);"></i> Bản chụp CV bất biến: <strong>${escapeHtml(app.fileName || 'CV_Snapshot.pdf')}</strong></span>
+            <span style="color: var(--color-muted);"><i class="fa-regular fa-clock" aria-hidden="true"></i> Nộp lúc: ${escapeHtml(app.appliedAt)}</span>
           </div>
 
           <!-- STEPPER 4 BƯỚC -->
@@ -948,7 +922,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
           ${app.coverLetter ? `
             <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 10px 14px; border-radius: 6px; font-size: 0.85rem; color: #334155; margin-bottom: 14px;">
-              <strong><i class="fa-regular fa-envelope" aria-hidden="true"></i> Thư giới thiệu:</strong> ${app.coverLetter}
+              <strong><i class="fa-regular fa-envelope" aria-hidden="true"></i> Thư giới thiệu:</strong> ${escapeHtml(app.coverLetter)}
             </div>
           ` : ''}
 
@@ -1081,12 +1055,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 </button>
               </div>
               <h3 style="font-size: 1.05rem; font-weight:700; color:var(--color-dark); margin-bottom: 4px;">
-                <a href="./job-detail.html?id=${job.id}" style="color:inherit; text-decoration:none;">${job.title}</a>
+                <a href="./job-detail.html?id=${encodeURIComponent(job.id)}" style="color:inherit; text-decoration:none;">${escapeHtml(job.title)}</a>
               </h3>
-              <p style="font-size: 0.85rem; color: var(--color-muted); margin-bottom: 8px;"><i class="fa-regular fa-building"></i> ${job.company}</p>
+              <p style="font-size: 0.85rem; color: var(--color-muted); margin-bottom: 8px;"><i class="fa-regular fa-building"></i> ${escapeHtml(job.company)}</p>
               <div style="font-size: 0.85rem; color: var(--color-body); display: flex; gap: 10px; flex-wrap: wrap;">
-                <span><i class="fa-solid fa-money-bill-wave"></i> ${job.salary}</span>
-                <span><i class="fa-solid fa-location-dot"></i> ${job.location}</span>
+                <span><i class="fa-solid fa-money-bill-wave"></i> ${escapeHtml(job.salary)}</span>
+                <span><i class="fa-solid fa-location-dot"></i> ${escapeHtml(job.location)}</span>
               </div>
             </div>
             <div style="display: flex; gap: 8px; margin-top: 12px; border-top: 1px solid var(--color-border-light); padding-top: 12px;">

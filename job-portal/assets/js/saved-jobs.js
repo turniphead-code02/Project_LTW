@@ -90,46 +90,17 @@ document.addEventListener('DOMContentLoaded', function () {
   const session = getStorage(STORAGE_KEYS.SESSION, null);
   const currentUserName = (session && (session.fullName || session.name)) || 'Ứng viên';
 
-  const headerUserName = document.getElementById('headerUserName');
-  const sidebarUserName = document.getElementById('sidebarUserName');
-  const firstChar = currentUserName.trim().charAt(0).toUpperCase() || 'U';
-  if (headerUserName) headerUserName.textContent = currentUserName;
-  if (sidebarUserName) sidebarUserName.textContent = currentUserName;
-  document.querySelectorAll('.user-avatar, .profile-avatar').forEach(el => {
-    el.textContent = firstChar;
-  });
+  const UI = window.CandidateUI || {};
+  const escapeHtml = UI.escapeHtml || (s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])));
+
+  if (typeof UI.hydrateHeader === 'function') {
+    UI.hydrateHeader(currentUserName);
+  }
 
   function openCandConfirm(title, message, onConfirm) {
-    const modal = document.getElementById('candidateConfirmModal');
-    const titleEl = document.getElementById('candConfirmTitle');
-    const msgEl = document.getElementById('candConfirmMessage');
-    const okBtn = document.getElementById('candConfirmOk');
-    const cancelBtn = document.getElementById('candConfirmCancel');
-    const closeBtn = document.getElementById('candConfirmClose');
-    if (!modal || !okBtn) return;
-
-    if (titleEl) titleEl.textContent = title || 'Xác nhận thao tác';
-    if (msgEl) msgEl.textContent = message || '';
-
-    const cleanup = () => {
-      modal.classList.remove('is-open');
-      document.body.style.overflow = '';
-      okBtn.onclick = null;
-      if (cancelBtn) cancelBtn.onclick = null;
-      if (closeBtn) closeBtn.onclick = null;
-      modal.onclick = null;
-    };
-
-    okBtn.onclick = async () => {
-      cleanup();
-      if (typeof onConfirm === 'function') await onConfirm();
-    };
-    if (cancelBtn) cancelBtn.onclick = cleanup;
-    if (closeBtn) closeBtn.onclick = cleanup;
-    modal.onclick = e => { if (e.target === modal) cleanup(); };
-
-    modal.classList.add('is-open');
-    document.body.style.overflow = 'hidden';
+    if (typeof UI.openConfirm === 'function') {
+      UI.openConfirm(title, message, onConfirm);
+    }
   }
 
   // --------------------------------------------------------------------------
@@ -308,15 +279,15 @@ document.addEventListener('DOMContentLoaded', function () {
         <article class="job-listing-item" data-id="${job.id}" style="position: relative;">
           <div class="job-item-header">
             <div style="display: flex; gap: 16px; align-items: flex-start;">
-              <div class="company-logo-badge" style="background: #ffffff; color: ${job.logoBg || '#1e40af'}; border: 1px solid var(--color-border); width: 52px; height: 52px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.05rem; flex-shrink: 0; box-shadow: var(--shadow-sm); overflow: hidden; padding: ${job.logoUrl ? '4px' : '0'};">
+              <div class="company-logo-badge" style="background: #ffffff; color: ${escapeHtml(job.logoBg || '#1e40af')}; border: 1px solid var(--color-border); width: 52px; height: 52px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.05rem; flex-shrink: 0; box-shadow: var(--shadow-sm); overflow: hidden; padding: ${job.logoUrl ? '4px' : '0'};">
                 ${job.logoUrl
-                  ? `<img src="${job.logoUrl}" alt="${job.company}" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.style.display='none'; if (this.nextElementSibling) this.nextElementSibling.style.display='flex';"><span style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center;">${job.logo || 'JP'}</span>`
-                  : (job.logo || 'JP')}
+                  ? `<img src="${escapeHtml(job.logoUrl)}" alt="${escapeHtml(job.company)}" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.style.display='none'; if (this.nextElementSibling) this.nextElementSibling.style.display='flex';"><span style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center;">${escapeHtml(job.logo || 'JP')}</span>`
+                  : escapeHtml(job.logo || 'JP')}
               </div>
 
               <div>
                 <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 4px;">
-                  <span style="font-size: 0.85rem; font-weight: 600; color: var(--color-muted);"><i class="fa-regular fa-building" aria-hidden="true"></i> ${job.company}</span>
+                  <span style="font-size: 0.85rem; font-weight: 600; color: var(--color-muted);"><i class="fa-regular fa-building" aria-hidden="true"></i> ${escapeHtml(job.company)}</span>
                   ${job.verified ? `
                     <span class="candidate-badge" style="background: #ecfdf5; color: #047857; font-size: 0.725rem; padding: 2px 8px;">
                       <i class="fa-solid fa-circle-check"></i> Đã xác thực
@@ -330,8 +301,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
 
                 <h3 class="job-item-title" style="margin: 0; font-size: 1.15rem; font-weight: 700;">
-                  <a href="./job-detail.html?id=${job.id}" style="color: var(--color-dark); text-decoration: none; transition: color 0.2s;">
-                    ${job.title}
+                  <a href="./job-detail.html?id=${encodeURIComponent(job.id)}" style="color: var(--color-dark); text-decoration: none; transition: color 0.2s;">
+                    ${escapeHtml(job.title)}
                   </a>
                 </h3>
               </div>
@@ -356,14 +327,14 @@ document.addEventListener('DOMContentLoaded', function () {
           </div>
 
           <p style="font-size: 0.9rem; color: var(--color-body); line-height: 1.55; margin: 4px 0 8px;">
-            ${job.description || ''}
+            ${escapeHtml(job.description || '')}
           </p>
 
           ${job.tags && job.tags.length ? `
             <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px;">
               ${job.tags.map(tag => `
                 <span style="background: var(--color-bg-page); border: 1px solid var(--color-border); color: var(--color-dark); font-size: 0.775rem; padding: 3px 10px; border-radius: 6px; font-weight: 500;">
-                  #${tag}
+                  #${escapeHtml(tag)}
                 </span>
               `).join('')}
             </div>

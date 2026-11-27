@@ -110,37 +110,37 @@ INSERT INTO `jobs` (`job_id`, `company_id`, `category_id`, `location_id`, `title
 'Phát triển và tối ưu hóa giao diện ứng dụng Zalo Web và Zalo Mini App. Xây dựng giao diện Responsive chuẩn WCAG 2.1 AA.',
 'Có từ 1 - 3 năm kinh nghiệm React, TypeScript, Redux Toolkit. Thành thạo HTML5 Semantic và CSS3 Flexbox/Grid.',
 'Thu nhập 15 - 22 triệu + Lương tháng 13. MacBook Pro M3 mới 100%. Bảo hiểm VNG Care toàn diện. Phòng Gym & Hồ bơi miễn phí.',
-15000000.00, 22000000.00, 'VND', 'full_time', 'junior', '2026-11-25', 'approved', NOW()),
+15000000.00, 22000000.00, 'VND', 'full_time', 'junior', '2027-01-20', 'approved', NOW()),
 
 (2, 2, 1, 1, 'Junior Backend Node.js / NestJS Engineer', 'junior-backend-nodejs-fpt-02',
 'Xây dựng các RESTful API và Microservices hiệu năng cao phục vụ chuyển đổi số ngân hàng Nhật Bản và Bắc Mỹ.',
 'Thành thạo Node.js, NestJS, TypeScript, PostgreSQL và Docker. Hiểu biết về Redis Caching và CI/CD cơ bản.',
 'Mức lương 14 - 20 triệu/tháng. Xe đưa đón F-Town miễn phí. Cơ hội đi Onsite làm việc tại Nhật Bản hoặc Hoa Kỳ.',
-14000000.00, 20000000.00, 'VND', 'full_time', 'junior', '2026-11-30', 'approved', NOW()),
+14000000.00, 20000000.00, 'VND', 'full_time', 'junior', '2027-01-20', 'approved', NOW()),
 
 (3, 3, 1, 2, 'Thực Tập Sinh Lập Trình Java / Spring Boot', 'thuc-tap-sinh-java-viettel-03',
 'Chương trình đào tạo Viettel Digital Talent 2026. Trực tiếp tham gia phát triển phân hệ Smart City với Java Spring Boot.',
 'Sinh viên năm 3, năm 4 hoặc mới tốt nghiệp khối ngành CNTT. GPA từ 2.8/4.0 trở lên. Nắm vững Java OOP và SQL.',
 'Phụ cấp thực tập 6 - 8 triệu/tháng. Cơ hội ký hợp đồng kỹ sư chính thức sau 3 tháng. Được Mentor cấp cao kèm cặp 1-1.',
-6000000.00, 8000000.00, 'VND', 'internship', 'fresher', '2026-12-15', 'approved', NOW()),
+6000000.00, 8000000.00, 'VND', 'internship', 'fresher', '2027-01-20', 'approved', NOW()),
 
 (4, 4, 2, 1, 'Chuyên Viên Phân Tích Dữ Liệu (Data Analyst)', 'chuyen-vien-data-analyst-momo-04',
 'Khai phá dữ liệu hành vi người dùng trên siêu ứng dụng MoMo. Xây dựng Dashboard báo cáo quản trị tự động trên Power BI.',
 'Có 1 - 3 năm kinh nghiệm SQL nâng cao, Python phân tích số liệu (Pandas, NumPy) và Power BI/Tableau.',
 'Lương 16 - 24 triệu/tháng + Thưởng hiệu quả kinh doanh. Cơ hội nhận cổ phiếu ESOP ưu đãi. Môi trường Agile năng động.',
-16000000.00, 24000000.00, 'VND', 'full_time', 'middle', '2026-11-20', 'approved', NOW()),
+16000000.00, 24000000.00, 'VND', 'full_time', 'middle', '2027-01-20', 'approved', NOW()),
 
 (5, 5, 3, 1, 'UI/UX Product Designer (Mobile & Web App)', 'ui-ux-product-designer-shopee-05',
 'Thiết kế trải nghiệm người dùng luồng giỏ hàng và thanh toán trên ứng dụng Shopee. Duy trì bộ Design System chuyên nghiệp.',
 'Ít nhất 2 năm kinh nghiệm thiết kế UI/UX trên Figma. Có Portfolio sản phẩm thực tế chứng minh tư duy thiết kế.',
 'Thu nhập 18 - 28 triệu/tháng. Môi trường làm việc đa văn hóa quốc tế. Bữa ăn nhẹ và đồ uống miễn phí hàng ngày.',
-18000000.00, 28000000.00, 'VND', 'full_time', 'middle', '2026-11-28', 'approved', NOW()),
+18000000.00, 28000000.00, 'VND', 'full_time', 'middle', '2027-01-20', 'approved', NOW()),
 
 (6, 6, 5, 3, 'DevOps & Cloud Engineer (AWS / Kubernetes)', 'devops-cloud-engineer-kms-06',
 'Quản trị hạ tầng Cloud AWS quy mô lớn cho đối tác Mỹ. Tự động hóa triển khai phần mềm không gián đoạn (Zero Downtime).',
 'Có từ 3 - 5 năm kinh nghiệm quản trị Linux, AWS, Kubernetes, Terraform và xây dựng pipeline CI/CD Jenkins/GitLab.',
 'Lương 25 - 38 triệu/tháng. Xem xét tăng lương 2 lần/năm. Thưởng nóng các chứng chỉ quốc tế AWS Solutions Architect.',
-25000000.00, 38000000.00, 'VND', 'full_time', 'senior', '2026-12-05', 'approved', NOW());
+25000000.00, 38000000.00, 'VND', 'full_time', 'senior', '2027-01-20', 'approved', NOW());
 
 -- ----------------------------------------------------------------------------
 -- 7. NẠP DỮ LIỆU BẢNG: job_skills (Gắn kỹ năng vào việc làm)
