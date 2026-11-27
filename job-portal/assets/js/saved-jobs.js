@@ -24,8 +24,6 @@ document.addEventListener('DOMContentLoaded', function () {
   const API = window.JobPortalAPI;
 
   const STORAGE_KEYS = {
-    BOOKMARKS: 'jobportal_bookmarks',
-    APPLICATIONS: 'jobportal_applied_jobs',
     SESSION: 'jobportal_session'
   };
 
@@ -87,9 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // 3. KHỞI TẠO DANH SÁCH VIỆC LÀM ĐÃ LƯU
   // --------------------------------------------------------------------------
   let bookmarkedIds = [];
-
-  const appliedList = getStorage(STORAGE_KEYS.APPLICATIONS, []);
-  const appliedJobIds = new Set(appliedList.map(app => String(app.jobId || app.job_id)));
+  let appliedJobIds = new Set();
 
   const session = getStorage(STORAGE_KEYS.SESSION, null);
   const currentUserName = (session && (session.fullName || session.name)) || 'Ứng viên';
@@ -152,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const sidebarAppBadge = document.getElementById('sidebarAppCount');
 
     if (sidebarSaveBadge) sidebarSaveBadge.textContent = totalCount;
-    if (sidebarAppBadge) sidebarAppBadge.textContent = appliedList.length;
+    if (sidebarAppBadge) sidebarAppBadge.textContent = appliedJobIds.size;
 
     const pillAllCount = document.getElementById('pillAllCount');
     const pillNotAppliedCount = document.getElementById('pillNotAppliedCount');
@@ -378,32 +374,23 @@ document.addEventListener('DOMContentLoaded', function () {
         const jobId = this.getAttribute('data-id');
         const targetJob = ALL_JOBS_DB.find(j => String(j.id) === String(jobId));
 
-        if (hasAuth()) {
-          if (!isNaN(Number(jobId))) {
-            try {
-              btn.disabled = true;
-              await API.delete(`/candidate/saved-jobs/${jobId}`);
-              bookmarkedIds = bookmarkedIds.filter(id => String(id) !== String(jobId));
-              setStorage(STORAGE_KEYS.BOOKMARKS, bookmarkedIds);
-              notify(`Đã bỏ lưu công việc "${targetJob ? targetJob.title : 'Việc làm'}" thành công.`, 'info');
-              renderSavedJobs();
-            } catch (err) {
-              console.warn('[API] Lỗi bỏ lưu việc làm:', err.message);
-              notify('Lỗi bỏ lưu việc làm: ' + (err.message || 'Không thể xóa trên máy chủ'), 'error');
-              btn.disabled = false;
-            }
-          } else {
-            notify('Mã việc làm không hợp lệ trên máy chủ.', 'warning');
-          }
+        if (!hasAuth()) {
+          notify('Vui lòng đăng nhập để thực hiện thao tác này.', 'warning');
           return;
         }
-
-        // Chế độ ngoại tuyến (chưa đăng nhập)
-        bookmarkedIds = bookmarkedIds.filter(id => String(id) !== String(jobId));
-        setStorage(STORAGE_KEYS.BOOKMARKS, bookmarkedIds);
-
-        notify(`Đã bỏ lưu công việc "${targetJob ? targetJob.title : 'Việc làm'}"`, 'info');
-        renderSavedJobs();
+        if (!isNaN(Number(jobId))) {
+          try {
+            btn.disabled = true;
+            await API.delete(`/candidate/saved-jobs/${jobId}`);
+            bookmarkedIds = bookmarkedIds.filter(id => String(id) !== String(jobId));
+            notify(`Đã bỏ lưu công việc "${targetJob ? targetJob.title : 'Việc làm'}" thành công.`, 'info');
+            renderSavedJobs();
+          } catch (err) {
+            console.warn('[API] Lỗi bỏ lưu việc làm:', err.message);
+            notify('Lỗi bỏ lưu việc làm: ' + (err.message || 'Không thể xóa trên máy chủ'), 'error');
+            btn.disabled = false;
+          }
+        }
       });
     });
   }
@@ -463,9 +450,7 @@ document.addEventListener('DOMContentLoaded', function () {
         btnConfirmClear.disabled = false;
         btnConfirmClear.textContent = 'Xác nhận xóa';
 
-        // Chỉ xóa khỏi danh sách các ID đã xóa thành công trên máy chủ
         bookmarkedIds = bookmarkedIds.filter(id => !successIds.includes(id));
-        setStorage(STORAGE_KEYS.BOOKMARKS, bookmarkedIds);
         closeClearModal();
         renderSavedJobs();
 
@@ -477,12 +462,8 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
       }
 
-      // Ngoại tuyến (chưa đăng nhập)
-      bookmarkedIds = [];
-      setStorage(STORAGE_KEYS.BOOKMARKS, bookmarkedIds);
       closeClearModal();
-      notify('Đã xóa toàn bộ việc làm đã lưu khỏi danh sách!', 'success');
-      renderSavedJobs();
+      notify('Vui lòng đăng nhập để đồng bộ xóa dữ liệu trên máy chủ.', 'warning');
     });
   }
 
@@ -579,7 +560,14 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     try {
-      const res = await API.get('/candidate/saved-jobs');
+      const [savedRes, appsRes] = await Promise.all([
+        API.get('/candidate/saved-jobs'),
+        API.get('/candidate/applications').catch(() => null)
+      ]);
+      if (appsRes && Array.isArray(appsRes.data)) {
+        appliedJobIds = new Set(appsRes.data.map(app => String(app.job_id)));
+      }
+      const res = savedRes;
       if (res && Array.isArray(res.data)) {
         const dbJobs = res.data.map(item => {
           const salaryNum = item.salary_max ? Math.round(item.salary_max / 1e6) : 0;
@@ -627,7 +615,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         ALL_JOBS_DB = dbJobs;
         bookmarkedIds = dbJobs.map(j => String(j.id));
-        setStorage(STORAGE_KEYS.BOOKMARKS, bookmarkedIds);
       }
     } catch (err) {
       console.warn('[SAVED JOBS] Đồng bộ API:', err.message);

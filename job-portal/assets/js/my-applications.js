@@ -23,7 +23,6 @@ document.addEventListener('DOMContentLoaded', function () {
   'use strict';
 
   const API = window.JobPortalAPI;
-  const STORAGE_KEY = 'jobportal_applied_jobs';
   const SESSION_KEY = 'jobportal_session';
 
   function hasAuth() {
@@ -48,24 +47,6 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     } catch (_) {}
   })();
-
-  function getAppliedJobs() {
-    try {
-      const data = localStorage.getItem(STORAGE_KEY);
-      return data ? JSON.parse(data) : [];
-    } catch (e) {
-      console.warn('Lỗi đọc đơn ứng tuyển:', e);
-      return [];
-    }
-  }
-
-  function saveAppliedJobs(list) {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
-    } catch (e) {
-      console.error('Lỗi lưu đơn ứng tuyển:', e);
-    }
-  }
 
   // Đọc session người dùng
   let session = null;
@@ -101,8 +82,6 @@ document.addEventListener('DOMContentLoaded', function () {
   // 3. CẬP NHẬT CHỈ SỐ KPI THỐNG KÊ
   // --------------------------------------------------------------------------
   function updateKPIs() {
-    applications = getAppliedJobs();
-
     const total = applications.length;
     const viewed = applications.filter(a => a.status === 'viewed').length;
     const interview = applications.filter(a => a.status === 'interview').length;
@@ -135,8 +114,6 @@ document.addEventListener('DOMContentLoaded', function () {
   function renderApplications() {
     if (!applicationsContainer) return;
 
-    applications = getAppliedJobs();
-
     const filtered = applications.filter(app => {
       let matchStatus = true;
       if (currentFilter === 'submitted') matchStatus = (app.status === 'submitted' || app.status === 'pending');
@@ -162,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function () {
           <div class="empty-state-icon"><i class="fa-regular fa-folder-open" style="color: var(--color-primary);"></i></div>
           <h3 class="empty-state-title">Không tìm thấy đơn ứng tuyển nào!</h3>
           <p class="empty-state-desc">
-            ${searchKeyword ? `Không có kết quả khớp với từ khóa "${searchKeyword}". Hãy thử tìm kiếm từ khóa khác.` : 'Bạn chưa có hồ sơ nào ở danh mục này. Hãy tiếp tục ứng tuyển các vị trí việc làm IT đang mở!'}
+            ${searchKeyword ? `Không có kết quả khớp với từ khóa "${searchKeyword}". Hãy thử tìm kiếm từ khóa khác.` : 'Bạn chưa có hồ sơ nào ở danh mục này. Hãy tiếp tục ứng tuyển các vị trí việc làm đang mở!'}
           </p>
           <a href="./jobs.html" class="btn-primary" style="text-decoration: none;">
             <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
@@ -374,54 +351,35 @@ document.addEventListener('DOMContentLoaded', function () {
           return;
         }
 
-        // Gọi API nếu có đăng nhập
-        if (hasAuth()) {
-          if (!isNaN(Number(id))) {
-            const originalText = btn.innerHTML;
-            try {
-              btn.disabled = true;
-              btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang rút...';
-              await API.delete(`/candidate/applications/${id}`);
-              const target = applications.find(a => String(a.id) === String(id));
-              if (target) {
-                target.status = 'withdrawn';
-                target.statusText = 'Đã rút đơn';
-              }
-              saveAppliedJobs(applications);
-              updateKPIs();
-              renderApplications();
-
-              if (window.showToast) {
-                window.showToast(`Đã rút đơn ứng tuyển vị trí "${jobTitle}" thành công. Đơn được lưu vào lịch sử.`, 'warning');
-              }
-            } catch (err) {
-              console.warn('[API] Lỗi rút đơn:', err.message);
-              if (window.showToast) {
-                window.showToast('Lỗi rút đơn ứng tuyển: ' + (err.message || 'Không thể rút đơn trên máy chủ'), 'error');
-              }
-              btn.disabled = false;
-              btn.innerHTML = originalText;
-            }
-          } else {
-            if (window.showToast) {
-              window.showToast('Đơn ứng tuyển không hợp lệ trên máy chủ.', 'warning');
-            }
-          }
+        if (!hasAuth()) {
+          if (window.showToast) window.showToast('Vui lòng đăng nhập để rút đơn trên máy chủ.', 'warning');
           return;
         }
+        if (!isNaN(Number(id))) {
+          const originalText = btn.innerHTML;
+          try {
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang rút...';
+            await API.delete(`/candidate/applications/${id}`);
+            const target = applications.find(a => String(a.id) === String(id));
+            if (target) {
+              target.status = 'withdrawn';
+              target.statusText = 'Đã rút đơn';
+            }
+            updateKPIs();
+            renderApplications();
 
-        // Chế độ ngoại tuyến (chưa đăng nhập) - cập nhật trạng thái withdrawn để lưu giữ lịch sử
-        const target = applications.find(a => String(a.id) === String(id));
-        if (target) {
-          target.status = 'withdrawn';
-          target.statusText = 'Đã rút đơn';
-        }
-        saveAppliedJobs(applications);
-        updateKPIs();
-        renderApplications();
-
-        if (window.showToast) {
-          window.showToast(`Đã rút đơn ứng tuyển vị trí "${jobTitle}". Đơn được lưu vào lịch sử.`, 'warning');
+            if (window.showToast) {
+              window.showToast(`Đã rút đơn ứng tuyển vị trí "${jobTitle}" thành công. Đơn được lưu vào lịch sử.`, 'warning');
+            }
+          } catch (err) {
+            console.warn('[API] Lỗi rút đơn:', err.message);
+            if (window.showToast) {
+              window.showToast('Lỗi rút đơn ứng tuyển: ' + (err.message || 'Không thể rút đơn trên máy chủ'), 'error');
+            }
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+          }
         }
       });
     });
@@ -616,8 +574,6 @@ document.addEventListener('DOMContentLoaded', function () {
                   : 'Hồ sơ đã gửi thành công và đang trong danh sách chờ xét duyệt.'))
           };
         });
-
-        saveAppliedJobs(applications);
       }
     } catch (err) {
       console.warn('[MY APPLICATIONS] Đồng bộ API:', err.message);

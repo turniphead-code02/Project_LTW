@@ -46,9 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
   let requestSequence = 0;
   let bookmarkedIds = [];
 
-  try { bookmarkedIds = JSON.parse(localStorage.getItem('jobportal_bookmarks') || '[]'); }
-  catch (_) { bookmarkedIds = []; }
-
   function escapeHtml(value) {
     return String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
   }
@@ -394,40 +391,43 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   async function syncSavedBookmarks() {
-    if (!isCandidateLoggedIn()) return;
+    if (!isCandidateLoggedIn()) {
+      bookmarkedIds = [];
+      return;
+    }
     try {
       const res = await window.JobPortalAPI.get('/candidate/saved-jobs');
       if (res && res.success && Array.isArray(res.data)) {
         bookmarkedIds = res.data.map((item) => item.job_id);
-        try { localStorage.setItem('jobportal_bookmarks', JSON.stringify(bookmarkedIds)); } catch (_) {}
         renderJobs();
       }
     } catch (_) {}
   }
 
   async function toggleBookmark(id) {
+    if (!isCandidateLoggedIn()) {
+      if (window.showToast) window.showToast('Vui lòng đăng nhập tài khoản Ứng viên để lưu việc làm!', 'warning');
+      setTimeout(() => { window.location.href = './auth.html?mode=login'; }, 800);
+      return;
+    }
+
     const normalized = String(id);
     const index = bookmarkedIds.map(String).indexOf(normalized);
     const willRemove = index >= 0;
-    if (willRemove) bookmarkedIds.splice(index, 1);
-    else bookmarkedIds.push(id);
-    try { localStorage.setItem('jobportal_bookmarks', JSON.stringify(bookmarkedIds)); } catch (_) {}
-    renderJobs();
 
-    if (isCandidateLoggedIn()) {
-      try {
-        if (willRemove) {
-          await window.JobPortalAPI.delete(`/candidate/saved-jobs/${id}`);
-        } else {
-          await window.JobPortalAPI.post(`/candidate/saved-jobs/${id}`, {});
-        }
-      } catch (err) {
-        if (window.showToast) window.showToast(err.message || 'Không thể đồng bộ lưu việc làm lên máy chủ.', 'warning');
-        return;
+    try {
+      if (willRemove) {
+        await window.JobPortalAPI.delete(`/candidate/saved-jobs/${id}`);
+        bookmarkedIds.splice(index, 1);
+      } else {
+        await window.JobPortalAPI.post(`/candidate/saved-jobs/${id}`, {});
+        bookmarkedIds.push(id);
       }
+      renderJobs();
+      if (window.showToast) window.showToast(willRemove ? 'Đã bỏ lưu việc làm.' : 'Đã lưu việc làm.', 'success');
+    } catch (err) {
+      if (window.showToast) window.showToast(err.message || 'Không thể đồng bộ lưu việc làm lên máy chủ.', 'warning');
     }
-
-    if (window.showToast) window.showToast(willRemove ? 'Đã bỏ lưu việc làm.' : 'Đã lưu việc làm.', 'success');
   }
 
   function syncTopLocation() {

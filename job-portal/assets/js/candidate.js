@@ -29,14 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // 1. STORAGE KEYS & CẤU HÌNH DỮ LIỆU
   // --------------------------------------------------------------------------
   const STORAGE_KEYS = {
-    SESSION: 'jobportal_session',
-    PROFILE: 'jobportal_candidate_profile',
-    EDUCATION: 'jobportal_candidate_education',
-    SKILLS: 'jobportal_candidate_skills',
-    RESUMES: 'jobportal_candidate_resumes',
-    LINKS: 'jobportal_candidate_links',
-    APPLICATIONS: 'jobportal_applied_jobs',
-    BOOKMARKS: 'jobportal_bookmarks'
+    SESSION: 'jobportal_session'
   };
 
   function hasAuth() {
@@ -89,38 +82,40 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // --------------------------------------------------------------------------
-  // 2. KHỞI TẠO DỮ LIỆU TỪ SESSION & API (ZERO HARDCODED MOCK DATA)
+  // 2. KHỞI TẠO DỮ LIỆU TỪ SESSION & SERVER DB (KHÔNG LƯU DATA Ở LOCALSTORAGE)
   // --------------------------------------------------------------------------
   const session = getStorage(STORAGE_KEYS.SESSION, null);
   const initialName = (session && (session.fullName || session.name)) || 'Ứng viên';
   const initialEmail = (session && session.email) || '';
 
-  let profile = getStorage(STORAGE_KEYS.PROFILE, {
+  let profile = {
     fullName: initialName,
     email: initialEmail,
     phone: '',
     location: '',
     title: '',
     bio: ''
-  });
+  };
 
-  if (session) {
-    profile.fullName = session.fullName || session.name || profile.fullName;
-    profile.email = session.email || profile.email;
-  }
-
-  let educations = getStorage(STORAGE_KEYS.EDUCATION, []);
-
-  let skills = getStorage(STORAGE_KEYS.SKILLS, []);
-
+  let educations = [];
+  let skills = [];
   let resumes = [];
-
-  let links = getStorage(STORAGE_KEYS.LINKS, {
-    portfolio: '',
-    github: ''
-  });
-
+  let links = { portfolio: '', github: '' };
   let applications = [];
+
+  async function persistProfileToServer(payload) {
+    if (!hasAuth()) {
+      notify('Vui lòng đăng nhập để lưu thay đổi vào cơ sở dữ liệu.', 'warning');
+      return false;
+    }
+    try {
+      await API.put('/candidate/profile', payload);
+      return true;
+    } catch (err) {
+      notify(err?.message || 'Lỗi đồng bộ dữ liệu lên máy chủ.', 'error');
+      return false;
+    }
+  }
 
   // --------------------------------------------------------------------------
   // 3. ĐỒNG BỘ HIỂN THỊ PROFILE & HEADER
@@ -230,11 +225,21 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
       }
 
+      if (!hasAuth()) {
+        notify('Vui lòng đăng nhập để lưu hồ sơ lên máy chủ.', 'warning');
+        return;
+      }
+
+      const saved = await persistProfileToServer({
+        full_name: fullName,
+        phone,
+        location
+      });
+      if (!saved) return;
+
       profile.fullName = fullName;
       profile.phone = phone;
       profile.location = location;
-
-      setStorage(STORAGE_KEYS.PROFILE, profile);
 
       if (session) {
         session.fullName = fullName;
@@ -242,19 +247,10 @@ document.addEventListener('DOMContentLoaded', function () {
         setStorage(STORAGE_KEYS.SESSION, session);
       }
 
-      // Đồng bộ sang API Backend nếu có đăng nhập
-      if (hasAuth()) {
-        try {
-          await API.put('/candidate/profile', { full_name: fullName, phone });
-        } catch (apiErr) {
-          console.warn('[API] Lưu hồ sơ lên máy chủ thất bại:', apiErr.message);
-        }
-      }
-
       renderProfileHeader();
       toggleProfileEdit(false);
       updateProfileCompletion();
-      notify('Cập nhật thông tin cá nhân thành công!', 'success');
+      notify('Đã cập nhật thông tin cá nhân vào cơ sở dữ liệu!', 'success');
     });
   }
 
@@ -288,10 +284,11 @@ document.addEventListener('DOMContentLoaded', function () {
     `).join('');
 
     educationList.querySelectorAll('.btn-delete-edu').forEach(btn => {
-      btn.addEventListener('click', function () {
+      btn.addEventListener('click', async function () {
         const id = this.getAttribute('data-id');
-        educations = educations.filter(item => item.id !== id);
-        setStorage(STORAGE_KEYS.EDUCATION, educations);
+        const nextList = educations.filter(item => item.id !== id);
+        if (!(await persistProfileToServer({ educations: nextList }))) return;
+        educations = nextList;
         renderEducations();
         updateProfileCompletion();
         notify('Đã xóa thông tin học vấn.', 'warning');
@@ -317,7 +314,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   if (educationForm) {
-    educationForm.addEventListener('submit', function (e) {
+    educationForm.addEventListener('submit', async function (e) {
       e.preventDefault();
 
       const school = document.getElementById('schoolName').value.trim();
@@ -330,14 +327,15 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
       }
 
-      educations.push({
+      const nextList = [...educations, {
         id: 'edu-' + Date.now(),
         school,
         major,
         startYear,
         endYear: endYear || 'Hiện tại'
-      });
-      setStorage(STORAGE_KEYS.EDUCATION, educations);
+      }];
+      if (!(await persistProfileToServer({ educations: nextList }))) return;
+      educations = nextList;
 
       educationForm.reset();
       educationForm.hidden = true;
@@ -345,7 +343,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       renderEducations();
       updateProfileCompletion();
-      notify('Đã thêm học vấn mới thành công!', 'success');
+      notify('Đã lưu học vấn mới lên cơ sở dữ liệu!', 'success');
     });
   }
 
@@ -374,17 +372,18 @@ document.addEventListener('DOMContentLoaded', function () {
     `).join('');
 
     skillsList.querySelectorAll('.skill-chip-delete').forEach(btn => {
-      btn.addEventListener('click', function () {
+      btn.addEventListener('click', async function () {
         const index = parseInt(this.getAttribute('data-index'), 10);
-        skills.splice(index, 1);
-        setStorage(STORAGE_KEYS.SKILLS, skills);
+        const nextSkills = skills.filter((_, idx) => idx !== index);
+        if (!(await persistProfileToServer({ skills: nextSkills }))) return;
+        skills = nextSkills;
         renderSkills();
         updateProfileCompletion();
       });
     });
   }
 
-  function addSkill(newSkill) {
+  async function addSkill(newSkill) {
     const trimmed = newSkill.trim();
     if (!trimmed) return;
 
@@ -394,11 +393,12 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
 
-    skills.push(trimmed);
-    setStorage(STORAGE_KEYS.SKILLS, skills);
+    const nextSkills = [...skills, trimmed];
+    if (!(await persistProfileToServer({ skills: nextSkills }))) return;
+    skills = nextSkills;
     renderSkills();
     updateProfileCompletion();
-    notify(`Đã thêm kỹ năng "${trimmed}".`, 'success');
+    notify(`Đã lưu kỹ năng "${trimmed}" lên hồ sơ.`, 'success');
   }
 
   if (skillForm && skillInput) {
@@ -494,7 +494,6 @@ document.addEventListener('DOMContentLoaded', function () {
               btn.textContent = 'Đang lưu...';
               await API.patch(`/candidate/resumes/${id}/default`);
               resumes.forEach(r => { r.isDefault = (String(r.id) === String(id)); });
-              setStorage(STORAGE_KEYS.RESUMES, resumes);
               renderResumes();
               notify('Đã cập nhật CV mặc định trên máy chủ thành công!', 'success');
             } catch (err) {
@@ -509,11 +508,7 @@ document.addEventListener('DOMContentLoaded', function () {
           return;
         }
 
-        // Chế độ ngoại tuyến (chưa đăng nhập)
-        resumes.forEach(r => { r.isDefault = (String(r.id) === String(id)); });
-        setStorage(STORAGE_KEYS.RESUMES, resumes);
-        renderResumes();
-        notify('Đã cập nhật CV mặc định để nộp đơn tuyển dụng!', 'success');
+        notify('Vui lòng đăng nhập để thay đổi CV mặc định.', 'warning');
       });
     });
 
@@ -560,7 +555,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 resumes[0].isDefault = true;
               }
 
-              setStorage(STORAGE_KEYS.RESUMES, resumes);
               renderResumes();
               updateProfileCompletion();
               notify('Đã xóa CV khỏi kho hồ sơ máy chủ thành công.', 'warning');
@@ -575,15 +569,7 @@ document.addEventListener('DOMContentLoaded', function () {
           return;
         }
 
-        // Chế độ ngoại tuyến (chưa đăng nhập)
-        resumes = resumes.filter(item => String(item.id) !== String(id));
-        if (resumes.length > 0 && !resumes.some(r => r.isDefault)) {
-          resumes[0].isDefault = true;
-        }
-        setStorage(STORAGE_KEYS.RESUMES, resumes);
-        renderResumes();
-        updateProfileCompletion();
-        notify('Đã xóa CV khỏi kho hồ sơ.', 'warning');
+        notify('Vui lòng đăng nhập để xóa CV trên máy chủ.', 'warning');
       });
     });
   }
@@ -668,7 +654,6 @@ document.addEventListener('DOMContentLoaded', function () {
             resumes.forEach(r => { r.isDefault = false; });
           }
           resumes.unshift(serverCv);
-          setStorage(STORAGE_KEYS.RESUMES, resumes);
           renderResumes();
           updateProfileCompletion();
           if (resumeFileName) resumeFileName.textContent = `Đã tải lên: ${file.name}`;
@@ -684,29 +669,11 @@ document.addEventListener('DOMContentLoaded', function () {
         if (uploadResumeBtn) uploadResumeBtn.disabled = false;
         if (resumeFileInput) resumeFileInput.value = '';
       }
-      return; // Bắt buộc return để không rơi xuống fallback ngoại tuyến
+      return;
     }
 
-    // Fallback nếu chưa kết nối Backend (chưa đăng nhập)
-    try {
-      const newResume = {
-        id: 'res-' + Date.now(),
-        title: file.name,
-        fileName: file.name,
-        fileSize: sizeMb,
-        uploadDate: new Date().toLocaleDateString('vi-VN'),
-        isDefault: resumes.length === 0
-      };
-
-      resumes.unshift(newResume);
-      setStorage(STORAGE_KEYS.RESUMES, resumes);
-      renderResumes();
-      updateProfileCompletion();
-      if (resumeFileName) resumeFileName.textContent = `Đã chọn: ${file.name} (${sizeMb})`;
-      notify(`Tải lên thành công: ${file.name}!`, 'success');
-    } finally {
-      if (resumeFileInput) resumeFileInput.value = '';
-    }
+    notify('Vui lòng đăng nhập tài khoản Ứng viên để tải lên CV lên máy chủ.', 'warning');
+    if (resumeFileInput) resumeFileInput.value = '';
   }
 
   // --------------------------------------------------------------------------
@@ -742,19 +709,18 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   if (socialLinksForm) {
-    socialLinksForm.addEventListener('submit', function (e) {
+    socialLinksForm.addEventListener('submit', async function (e) {
       e.preventDefault();
 
       const portfolioVal = portfolioUrlInput ? portfolioUrlInput.value.trim() : '';
       const githubVal = githubUrlInput ? githubUrlInput.value.trim() : '';
+      const nextLinks = { portfolio: portfolioVal, github: githubVal };
 
-      links.portfolio = portfolioVal;
-      links.github = githubVal;
-
-      setStorage(STORAGE_KEYS.LINKS, links);
+      if (!(await persistProfileToServer({ links: nextLinks }))) return;
+      links = nextLinks;
       renderLinks();
       updateProfileCompletion();
-      notify('Đã lưu các liên kết cá nhân (Portfolio & GitHub)!', 'success');
+      notify('Đã lưu các liên kết cá nhân lên cơ sở dữ liệu!', 'success');
     });
   }
 
@@ -850,7 +816,6 @@ document.addEventListener('DOMContentLoaded', function () {
               coverLetter: item.cover_letter
             };
           });
-          setStorage(STORAGE_KEYS.APPLICATIONS, applications);
         }
       } catch (err) {
         console.warn('[API] Lỗi tải danh sách đơn ứng tuyển:', err.message);
@@ -864,8 +829,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const container = document.getElementById('applicationsContainer');
     if (!container) return;
 
-    applications = getStorage(STORAGE_KEYS.APPLICATIONS, applications);
-
     const appBadge = document.getElementById('sidebarAppCount');
     if (appBadge) appBadge.textContent = applications.length;
 
@@ -874,7 +837,7 @@ document.addEventListener('DOMContentLoaded', function () {
         <div class="empty-state-box">
           <i class="fa-regular fa-folder-open" aria-hidden="true"></i>
           <h3>Bạn chưa nộp đơn ứng tuyển nào!</h3>
-          <p>Hãy khám phá ngay hơn 5.000+ vị trí việc làm IT hấp dẫn và nộp hồ sơ để bắt đầu hành trình nghề nghiệp.</p>
+          <p>Hãy khám phá ngay các vị trí việc làm đa ngành hấp dẫn và nộp hồ sơ để bắt đầu hành trình nghề nghiệp.</p>
           <a href="./jobs.html" class="btn-primary" style="text-decoration:none;">
             <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
             <span>Khám phá việc làm ngay</span>
@@ -990,7 +953,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 target.status = 'withdrawn';
                 target.statusText = 'Đã rút đơn';
               }
-              setStorage(STORAGE_KEYS.APPLICATIONS, applications);
               renderApplicationsList();
               notify('Đã rút đơn ứng tuyển thành công. Đơn được lưu vào lịch sử.', 'warning');
             } catch (err) {
@@ -1005,15 +967,7 @@ document.addEventListener('DOMContentLoaded', function () {
           return;
         }
 
-        // Chế độ ngoại tuyến (chưa đăng nhập) - cập nhật trạng thái withdrawn để lưu giữ lịch sử
-        const target = applications.find(a => String(a.id) === String(id));
-        if (target) {
-          target.status = 'withdrawn';
-          target.statusText = 'Đã rút đơn';
-        }
-        setStorage(STORAGE_KEYS.APPLICATIONS, applications);
-        renderApplicationsList();
-        notify('Đã rút đơn ứng tuyển thành công. Đơn được lưu vào lịch sử.', 'warning');
+        notify('Vui lòng đăng nhập để rút đơn trên máy chủ.', 'warning');
       });
     });
   }
@@ -1044,8 +998,6 @@ document.addEventListener('DOMContentLoaded', function () {
             employmentType: item.employment_type === 'full_time' ? 'Toàn thời gian' : item.employment_type,
             deadline: item.deadline ? new Date(item.deadline).toLocaleDateString('vi-VN') : 'Hạn nộp mở'
           }));
-          const bookmarkedIds = savedJobsData.map(j => j.id);
-          setStorage(STORAGE_KEYS.BOOKMARKS, bookmarkedIds);
         }
       } catch (err) {
         console.warn('[API] Lỗi tải việc làm đã lưu:', err.message);
@@ -1059,11 +1011,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const container = document.getElementById('savedJobsContainer');
     if (!container) return;
 
-    const bookmarkedIds = getStorage(STORAGE_KEYS.BOOKMARKS, []);
     const saveBadge = document.getElementById('sidebarSaveCount');
-    if (saveBadge) saveBadge.textContent = savedJobsData.length || bookmarkedIds.length;
+    if (saveBadge) saveBadge.textContent = savedJobsData.length;
 
-    if (savedJobsData.length === 0 && bookmarkedIds.length === 0) {
+    if (savedJobsData.length === 0) {
       container.innerHTML = `
         <div class="empty-state-box">
           <i class="fa-regular fa-bookmark" aria-hidden="true"></i>
@@ -1078,14 +1029,7 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
 
-    const itemsToRender = savedJobsData.length > 0 ? savedJobsData : bookmarkedIds.map(id => ({
-      id,
-      title: `Vị trí việc làm (#${id})`,
-      company: 'Doanh nghiệp IT',
-      location: 'TP.HCM',
-      salary: 'Thỏa thuận',
-      deadline: 'Đang mở'
-    }));
+    const itemsToRender = savedJobsData;
 
     container.innerHTML = `
       <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px;">
@@ -1126,9 +1070,6 @@ document.addEventListener('DOMContentLoaded', function () {
               btn.disabled = true;
               await API.delete(`/candidate/saved-jobs/${id}`);
               savedJobsData = savedJobsData.filter(j => String(j.id) !== String(id));
-              let currentBookmarks = getStorage(STORAGE_KEYS.BOOKMARKS, []);
-              currentBookmarks = currentBookmarks.filter(item => String(item) !== String(id));
-              setStorage(STORAGE_KEYS.BOOKMARKS, currentBookmarks);
               renderSavedJobsList();
               notify('Đã bỏ lưu tin việc làm này thành công.', 'info');
             } catch (err) {
@@ -1142,13 +1083,7 @@ document.addEventListener('DOMContentLoaded', function () {
           return;
         }
 
-        // Chế độ ngoại tuyến (chưa đăng nhập)
-        savedJobsData = savedJobsData.filter(j => String(j.id) !== String(id));
-        let currentBookmarks = getStorage(STORAGE_KEYS.BOOKMARKS, []);
-        currentBookmarks = currentBookmarks.filter(item => String(item) !== String(id));
-        setStorage(STORAGE_KEYS.BOOKMARKS, currentBookmarks);
-        renderSavedJobsList();
-        notify('Đã bỏ lưu tin việc làm này.', 'info');
+        notify('Vui lòng đăng nhập để bỏ lưu việc làm.', 'warning');
       });
     });
   }
@@ -1199,15 +1134,21 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!hasAuth()) return;
 
     try {
-      // 1. Đồng bộ Profile
+      // 1. Đồng bộ Profile + Học vấn + Kỹ năng + Links từ MySQL
       const profileRes = await API.get('/candidate/profile');
       if (profileRes && profileRes.data) {
         const u = profileRes.data;
         profile.fullName = u.full_name || profile.fullName;
         profile.email = u.email || profile.email;
-        profile.phone = u.phone || profile.phone;
-        setStorage(STORAGE_KEYS.PROFILE, profile);
+        profile.phone = u.phone || '';
+        profile.location = u.location || '';
+        educations = Array.isArray(u.educations) ? u.educations : [];
+        skills = Array.isArray(u.skills) ? u.skills : [];
+        links = (u.links && typeof u.links === 'object') ? u.links : { portfolio: '', github: '' };
         renderProfileHeader();
+        renderEducations();
+        renderSkills();
+        renderLinks();
       }
 
       // 2. Đồng bộ Kho CV
@@ -1222,7 +1163,6 @@ document.addEventListener('DOMContentLoaded', function () {
           uploadDate: new Date(item.created_at).toLocaleDateString('vi-VN'),
           isDefault: Boolean(item.is_default)
         }));
-        setStorage(STORAGE_KEYS.RESUMES, resumes);
         renderResumes();
       }
 

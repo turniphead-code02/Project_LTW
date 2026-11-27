@@ -20,6 +20,39 @@ const { handleCvUpload, validatePdfMagicBytes } = require('../middlewares/upload
 // Áp dụng xác thực JWT & phân quyền vai trò 'candidate' cho toàn bộ route
 router.use(requireAuth, requireRole('candidate'));
 
+let candidateProfileTableReady = null;
+async function ensureCandidateProfilesTable() {
+  if (!candidateProfileTableReady) {
+    candidateProfileTableReady = pool.query(`
+      CREATE TABLE IF NOT EXISTS candidate_profiles (
+        user_id INT PRIMARY KEY,
+        preferred_location VARCHAR(60) NULL DEFAULT NULL,
+        educations_json LONGTEXT NULL DEFAULT NULL,
+        skills_json LONGTEXT NULL DEFAULT NULL,
+        portfolio_url VARCHAR(500) NULL DEFAULT NULL,
+        github_url VARCHAR(500) NULL DEFAULT NULL,
+        updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        CONSTRAINT fk_candidate_profiles_user FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE ON UPDATE CASCADE
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+    `).catch(err => {
+      candidateProfileTableReady = null;
+      throw err;
+    });
+  }
+  return candidateProfileTableReady;
+}
+
+function safeJsonArray(raw) {
+  if (!raw) return [];
+  if (Array.isArray(raw)) return raw;
+  try {
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (_) {
+    return [];
+  }
+}
+
 /**
  * ----------------------------------------------------------------------------
  * 0. THÔNG TIN CÁ NHÂN & THỐNG KÊ DASHBOARD ỨNG VIÊN
@@ -29,14 +62,40 @@ router.use(requireAuth, requireRole('candidate'));
 // GET /api/v1/candidate/profile
 router.get('/profile', async (req, res) => {
   try {
+    await ensureCandidateProfilesTable();
+
     const [users] = await pool.query(
-      'SELECT user_id, full_name, email, phone, role, status, created_at, updated_at FROM users WHERE user_id = ? LIMIT 1',
+      `SELECT u.user_id, u.full_name, u.email, u.phone, u.role, u.status, u.created_at, u.updated_at,
+              cp.preferred_location, cp.educations_json, cp.skills_json, cp.portfolio_url, cp.github_url
+       FROM users u
+       LEFT JOIN candidate_profiles cp ON u.user_id = cp.user_id
+       WHERE u.user_id = ?
+       LIMIT 1`,
       [req.user.user_id]
     );
     if (!users.length) {
       return sendError(res, { code: 404, message: 'Không tìm thấy hồ sơ người dùng.' });
     }
-    return sendSuccess(res, { message: 'Tải thông tin hồ sơ thành công.', data: users[0] });
+
+    const row = users[0];
+    return sendSuccess(res, {
+      message: 'Tải thông tin hồ sơ thành công.',
+      data: {
+        user_id: row.user_id,
+        full_name: row.full_name,
+        email: row.email,
+        phone: row.phone,
+        role: row.role,
+        status: row.status,
+        location: row.preferred_location || '',
+        educations: safeJsonArray(row.educations_json),
+        skills: safeJsonArray(row.skills_json),
+        links: {
+          portfolio: row.portfolio_url || '',
+          github: row.github_url || ''
+        }
+      }
+    });
   } catch (err) {
     return sendError(res, { code: 500, message: 'Lỗi tải hồ sơ cá nhân: ' + err.message });
   }
@@ -45,19 +104,61 @@ router.get('/profile', async (req, res) => {
 // PUT /api/v1/candidate/profile
 router.put('/profile', async (req, res) => {
   try {
-    const { full_name, phone } = req.body;
-    if (!full_name || !full_name.trim()) {
-      return sendError(res, { code: 400, message: 'Họ và tên không được để trống.' });
+    await ensureCandidateProfilesTable();
+    const userId = req.user.user_id;
+    const b = req.body || {};
+
+    // Hỗ trợ cập nhật từng phần (học vấn, kỹ năng, liên kết) hoặc toàn bộ thông tin cá nhân
+    if (b.full_name !== undefined) {
+      if (!String(b.full_name).trim()) {
+        return sendError(res, { code: 400, message: 'Họ và tên không được để trống.' });
+      }
+      await pool.query(
+        'UPDATE users SET full_name = ?, phone = ? WHERE user_id = ?',
+        [String(b.full_name).trim(), b.phone ? String(b.phone).trim() : null, userId]
+      );
     }
 
+    // Đảm bảo có dòng trong candidate_profiles trước khi cập nhật các trường được gửi lên
     await pool.query(
-      'UPDATE users SET full_name = ?, phone = ? WHERE user_id = ?',
-      [full_name.trim(), phone ? phone.trim() : null, req.user.user_id]
+      'INSERT IGNORE INTO candidate_profiles (user_id) VALUES (?)',
+      [userId]
     );
 
+    const sets = [];
+    const params = [];
+
+    if (b.location !== undefined) {
+      sets.push('preferred_location = ?');
+      params.push(b.location ? String(b.location).trim().slice(0, 60) : null);
+    }
+    if (Array.isArray(b.educations)) {
+      sets.push('educations_json = ?');
+      params.push(JSON.stringify(b.educations));
+    }
+    if (Array.isArray(b.skills)) {
+      sets.push('skills_json = ?');
+      params.push(JSON.stringify(b.skills));
+    }
+    if (b.links && typeof b.links === 'object') {
+      sets.push('portfolio_url = ?, github_url = ?');
+      params.push(
+        b.links.portfolio ? String(b.links.portfolio).trim().slice(0, 500) : null,
+        b.links.github ? String(b.links.github).trim().slice(0, 500) : null
+      );
+    }
+
+    if (sets.length > 0) {
+      params.push(userId);
+      await pool.query(
+        `UPDATE candidate_profiles SET ${sets.join(', ')} WHERE user_id = ?`,
+        params
+      );
+    }
+
     return sendSuccess(res, {
-      message: 'Cập nhật thông tin hồ sơ cá nhân thành công.',
-      data: { user_id: req.user.user_id, full_name: full_name.trim(), phone: phone ? phone.trim() : null }
+      message: 'Đã lưu hồ sơ ứng viên lên cơ sở dữ liệu.',
+      data: { user_id: userId }
     });
   } catch (err) {
     return sendError(res, { code: 500, message: 'Lỗi cập nhật hồ sơ cá nhân: ' + err.message });
