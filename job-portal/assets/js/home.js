@@ -339,7 +339,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
       if (Array.isArray(featuredJobs)) {
         liveJobsCache = featuredJobs;
-        updateRadarMetrics();
       }
 
       let savedSet = new Set();
@@ -444,107 +443,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }, 4500);
   }
 
-  // 8. TRẠM ĐỊNH GIÁ LƯƠNG & KỸ NĂNG (IT SALARY & SKILL RADAR)
-  const levelBtns = document.querySelectorAll('.radar-level-btn');
-  const skillChips = document.querySelectorAll('#radarSkillGroup .radar-chip');
-  const salaryDisplayEl = document.getElementById('radarSalaryDisplay');
-  const jobCountEl = document.getElementById('radarJobCount');
-  const gaugeFillEl = document.getElementById('radarGaugeFill');
-  const percentileEl = document.getElementById('radarPercentileLabel');
-  const syncDownBtn = document.getElementById('radarSyncDownBtn');
-
-  function updateRadarMetrics() {
-    const activeLevel = document.querySelector('.radar-level-btn.active');
-    if (!activeLevel || !salaryDisplayEl) return;
-
-    const baseMin = parseFloat(activeLevel.getAttribute('data-base-min')) || 12;
-    const baseMax = parseFloat(activeLevel.getAttribute('data-base-max')) || 17;
-
-    const activeSkills = [];
-    let totalBonus = 0;
-    skillChips.forEach((chip, idx) => {
-      if (chip.classList.contains('active')) {
-        activeSkills.push(chip.getAttribute('data-skill') || '');
-        const b = parseFloat(chip.getAttribute('data-bonus')) || 1.5;
-        // Giảm dần biên độ cộng thêm sau kỹ năng thứ 3 để khung lương sát thực tế thị trường
-        const weight = activeSkills.length <= 3 ? 1 : 0.45;
-        totalBonus += b * weight;
-      }
-    });
-
-    const estMin = (baseMin + totalBonus * 0.85).toFixed(1);
-    const estMax = (baseMax + totalBonus * 1.1).toFixed(1);
-    salaryDisplayEl.innerHTML = `${estMin} - ${estMax} Triệu <small>/ tháng</small>`;
-
-    // Thanh phân vị (tính trên thang tối đa 35M)
-    const midPoint = (parseFloat(estMin) + parseFloat(estMax)) / 2;
-    const pct = Math.min(96, Math.max(18, Math.round((midPoint / 35) * 100)));
-    if (gaugeFillEl) gaugeFillEl.style.width = `${pct}%`;
-
-    if (percentileEl) {
-      if (pct >= 72) percentileEl.textContent = 'Top 10% khung lương cạnh tranh';
-      else if (pct >= 52) percentileEl.textContent = 'Top 25% mức lương thị trường';
-      else if (pct >= 35) percentileEl.textContent = 'Mức chuẩn thị trường lao động';
-      else percentileEl.textContent = 'Mức khởi điểm thực tập';
-    }
-
-    // Tính số việc làm khớp dựa trên dữ liệu MySQL thực hoặc thẻ việc làm hiện có
-    if (jobCountEl) {
-      if (liveJobsCache.length > 0) {
-        const matched = activeSkills.length > 0
-          ? liveJobsCache.filter((job) => {
-              const hay = `${job.title} ${job.skills || ''} ${job.category_name || ''}`.toLowerCase();
-              return activeSkills.some((sk) => hay.includes(sk.toLowerCase().replace('ui/ux ', '')));
-            })
-          : liveJobsCache;
-        jobCountEl.textContent = String(matched.length);
-      } else {
-        const domCards = Array.from(document.querySelectorAll('.jobs-grid .job-card'));
-        const matchedDom = activeSkills.length > 0
-          ? domCards.filter((c) => activeSkills.some((sk) => c.textContent.toLowerCase().includes(sk.toLowerCase())))
-          : domCards;
-        jobCountEl.textContent = String(matchedDom.length);
-      }
-    }
-  }
-
-  levelBtns.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      levelBtns.forEach((b) => b.classList.remove('active'));
-      btn.classList.add('active');
-      updateRadarMetrics();
-    });
-  });
-
-  skillChips.forEach((chip) => {
-    chip.addEventListener('click', () => {
-      chip.classList.toggle('active');
-      updateRadarMetrics();
-    });
-  });
-
-  if (syncDownBtn) {
-    syncDownBtn.addEventListener('click', () => {
-      const selectedSkills = Array.from(document.querySelectorAll('#radarSkillGroup .radar-chip.active'))
-        .map((el) => el.getAttribute('data-skill'));
-      const searchKw = document.getElementById('searchKeyword');
-      if (searchKw && selectedSkills.length > 0) {
-        searchKw.value = selectedSkills[0];
-      }
-      const featuredSec = document.getElementById('featuredJobs');
-      if (featuredSec) {
-        featuredSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-      if (window.showToast) {
-        const label = selectedSkills.length ? selectedSkills.join(', ') : 'Tất cả kỹ năng';
-        window.showToast(`Đã đồng bộ bộ kỹ năng: ${label}`, 'success');
-      }
-    });
-  }
-
-  updateRadarMetrics();
-
-  // 9. INSTANT COMMAND SEARCH PALETTE DROPDOWN
+  // 8. INSTANT COMMAND SEARCH PALETTE DROPDOWN
   const kwInput = document.getElementById('searchKeyword');
   const previewDropdown = document.getElementById('searchPreviewDropdown');
   const previewList = document.getElementById('searchPreviewList');

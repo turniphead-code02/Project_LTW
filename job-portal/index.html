@@ -101,103 +101,36 @@
       </div>
 
       <div class="container hero-content">
-        <!-- Bố cục Bất đối xứng: Cột thông điệp chính (Trái) + Trạm Định Giá Lương & Kỹ Năng (Phải) -->
-        <div class="hero-split-layout">
-          <div class="hero-narrative-col">
-            <div class="hero-eyebrow">
-              <i class="fa-solid fa-briefcase" aria-hidden="true"></i>
-              <span>Cổng Thông Tin Việc Làm Đa Ngành Nghề &amp; Định Giá Năng Lực</span>
-            </div>
-
-            <h1 id="heroTitle" class="hero-title">
-              Tìm Kiếm Việc Làm Đa Ngành &amp; Kết Nối Doanh Nghiệp Hàng Đầu
-            </h1>
-
-            <p class="hero-subtitle">
-              Kết nối ứng viên từ Công nghệ thông tin, Marketing, Tài chính – Kế toán, Kinh doanh, Nhân sự đến Logistics với các doanh nghiệp đã xác thực. Tích hợp <strong>ước lượng khung lương theo kỹ năng</strong>, lọc đa tiêu chí và theo dõi duyệt CV 4 bước.
-            </p>
-
-            <!-- Huy hiệu cam kết chuẩn kỹ thuật (Architectural Trust Pills) -->
-            <div class="hero-trust-pills">
-              <div class="trust-pill">
-                <i class="fa-solid fa-bolt" aria-hidden="true"></i>
-                <span>Tự động tính % khớp kỹ năng</span>
-              </div>
-              <div class="trust-pill">
-                <i class="fa-solid fa-file-shield" aria-hidden="true"></i>
-                <span>Kiểm duyệt CV PDF &le; 5MB</span>
-              </div>
-              <div class="trust-pill">
-                <i class="fa-solid fa-scale-balanced" aria-hidden="true"></i>
-                <span>So sánh &amp; đối chiếu lương trực tiếp</span>
-              </div>
-            </div>
+        <!-- Phần tiêu đề chính Hero Banner chuẩn Z-Pattern QTTK 5.1 -->
+        <div class="hero-center-header">
+          <div class="hero-eyebrow">
+            <i class="fa-solid fa-briefcase" aria-hidden="true"></i>
+            <span>Cổng Thông Tin Việc Làm &amp; Tuyển Dụng Đa Ngành Nghề</span>
           </div>
 
-          <!-- TRẠM ĐỊNH GIÁ LƯƠNG & KHỚP LỆNH KỸ NĂNG (INTERACTIVE SALARY & SKILL RADAR) -->
-          <aside class="hero-radar-console" aria-label="Công cụ định giá mức lương theo kỹ năng">
-            <div class="radar-console-header">
-              <div class="radar-console-title">
-                <i class="fa-solid fa-sliders" aria-hidden="true"></i>
-                <span>// CAREER SALARY &amp; SKILL RADAR</span>
-              </div>
-              <span class="radar-status-pill"><span class="pulse-dot"></span> INTERACTIVE</span>
+          <h1 id="heroTitle" class="hero-title">
+            Tìm Kiếm Việc Làm Đa Ngành &amp; Kết Nối Doanh Nghiệp Hàng Đầu
+          </h1>
+
+          <p class="hero-subtitle">
+            Kết nối ứng viên từ Marketing, Tài chính – Kế toán, Kinh doanh, Nhân sự, Logistics đến Công nghệ thông tin với các doanh nghiệp đã xác thực. Tích hợp bộ lọc đa tiêu chí và quy trình theo dõi hồ sơ 4 bước minh bạch.
+          </p>
+
+          <!-- Huy hiệu cam kết chuẩn kỹ thuật (Architectural Trust Pills) -->
+          <div class="hero-trust-pills">
+            <div class="trust-pill">
+              <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+              <span>Tìm kiếm &amp; lọc đa ngành chuẩn xác</span>
             </div>
-
-            <!-- Bước 1: Chọn cấp độ kinh nghiệm -->
-            <div class="radar-group">
-              <label class="radar-label">01. Chọn cấp độ hiện tại của bạn:</label>
-              <div class="radar-level-tabs" role="radiogroup" aria-label="Cấp độ kinh nghiệm">
-                <button type="button" class="radar-level-btn" data-level="intern" data-base-min="6" data-base-max="9.5">Thực Tập Sinh</button>
-                <button type="button" class="radar-level-btn active" data-level="fresher" data-base-min="12" data-base-max="17">Fresher (&lt;1 năm)</button>
-                <button type="button" class="radar-level-btn" data-level="junior" data-base-min="17" data-base-max="25">Junior (1-3 năm)</button>
-              </div>
+            <div class="trust-pill">
+              <i class="fa-solid fa-file-shield" aria-hidden="true"></i>
+              <span>Kiểm duyệt CV PDF &le; 5MB</span>
             </div>
-
-            <!-- Bước 2: Chọn các kỹ năng chuyên môn đang nắm vững -->
-            <div class="radar-group">
-              <label class="radar-label">02. Chạm để chọn Kỹ năng chuyên môn bạn sở hữu:</label>
-              <div class="radar-skill-chips" id="radarSkillGroup">
-                <button type="button" class="radar-chip active" data-skill="SQL" data-bonus="1.5">SQL / Data</button>
-                <button type="button" class="radar-chip active" data-skill="Marketing" data-bonus="2.0">Digital Marketing</button>
-                <button type="button" class="radar-chip" data-skill="MISA" data-bonus="1.8">Kế Toán / MISA</button>
-                <button type="button" class="radar-chip" data-skill="Sales B2B" data-bonus="2.5">Sales B2B</button>
-                <button type="button" class="radar-chip" data-skill="Logistics" data-bonus="2.2">Logistics / XNK</button>
-                <button type="button" class="radar-chip" data-skill="Node.js" data-bonus="2.5">Node.js</button>
-                <button type="button" class="radar-chip" data-skill="ReactJS" data-bonus="2.5">ReactJS</button>
-                <button type="button" class="radar-chip" data-skill="Figma" data-bonus="1.8">UI/UX Figma</button>
-              </div>
+            <div class="trust-pill">
+              <i class="fa-solid fa-list-check" aria-hidden="true"></i>
+              <span>Theo dõi trạng thái hồ sơ 4 bước</span>
             </div>
-
-            <!-- Kết quả định giá thời gian thực -->
-            <div class="radar-output-panel">
-              <div class="radar-output-top">
-                <div>
-                  <span class="radar-output-caption">KHUNG LƯƠNG ĐỊNH GIÁ THỊ TRƯỜNG</span>
-                  <div class="radar-salary-value" id="radarSalaryDisplay">16.0 - 21.0 Triệu <small>/ tháng</small></div>
-                </div>
-                <div class="radar-match-counter">
-                  <span id="radarJobCount">6</span>
-                  <small>việc khớp</small>
-                </div>
-              </div>
-
-              <!-- Thanh thước đo phân vị lương -->
-              <div class="radar-gauge-track" aria-hidden="true">
-                <div class="radar-gauge-fill" id="radarGaugeFill" style="width: 68%;"></div>
-              </div>
-              <div class="radar-gauge-labels">
-                <span>Khởi điểm (6M)</span>
-                <span id="radarPercentileLabel" class="radar-percentile-highlight">Top 25% năng lực sinh viên IT</span>
-                <span>Senior (35M+)</span>
-              </div>
-
-              <button type="button" id="radarSyncDownBtn" class="radar-sync-btn">
-                <i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>
-                <span>Đồng bộ bộ kỹ năng này xuống Bảng Việc Làm bên dưới &darr;</span>
-              </button>
-            </div>
-          </aside>
+          </div>
         </div>
 
         <!-- Khối tìm kiếm 4 trường (Keyword, Location, Category, Submit) + Instant Command Dropdown -->
