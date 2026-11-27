@@ -115,7 +115,7 @@
                 </button>
                 <div>
                     <h1 id="page-title">Tổng quan hệ thống</h1>
-                    <p id="admin-greeting">Xin chào, Administrator!</p>
+                    <p id="page-subtitle">Giám sát người dùng, kiểm duyệt nội dung tin tuyển dụng và dọn dẹp dữ liệu hết hạn.</p>
                 </div>
             </div>
 
@@ -283,13 +283,6 @@
         <!-- 2. EMPLOYERS -->
         <section class="admin-section" id="employers">
 
-            <div class="section-intro">
-                <div>
-                    <h2>Quản lý Doanh nghiệp</h2>
-                    <p>Kiểm tra hồ sơ công ty, số lượng tin đăng và kiểm soát trạng thái hoạt động tài khoản HR.</p>
-                </div>
-            </div>
-
             <div class="admin-panel">
 
                 <div class="table-toolbar">
@@ -336,13 +329,6 @@
 
         <!-- 3. CANDIDATES -->
         <section class="admin-section" id="candidates">
-
-            <div class="section-intro">
-                <div>
-                    <h2>Quản lý Ứng viên</h2>
-                    <p>Theo dõi danh sách tài khoản tìm việc, số lượng CV và lượt ứng tuyển.</p>
-                </div>
-            </div>
 
             <div class="admin-panel">
 
@@ -391,17 +377,6 @@
         <!-- 4. JOB MODERATION & STALE CLEANUP -->
         <section class="admin-section" id="jobs">
 
-            <div class="section-intro section-intro-row">
-                <div>
-                    <h2>Kiểm duyệt &amp; Quản lý Tin tuyển dụng</h2>
-                    <p>Xem chi tiết nội dung trước khi duyệt, đóng tin vi phạm hoặc xóa các tin đăng lâu ngày / quá hạn.</p>
-                </div>
-                <button type="button" class="btn-cleanup" id="btn-open-cleanup">
-                    <i class="fa-solid fa-broom"></i>
-                    <span>Dọn tin cũ / quá hạn</span>
-                </button>
-            </div>
-
             <div class="admin-panel">
 
                 <div class="table-toolbar">
@@ -429,6 +404,11 @@
                         <option value="old60">Đăng ≥ 60 ngày</option>
                         <option value="old90">Đăng ≥ 90 ngày</option>
                     </select>
+
+                    <button type="button" class="btn-cleanup" id="btn-open-cleanup">
+                        <i class="fa-solid fa-broom"></i>
+                        <span>Dọn tin cũ / quá hạn</span>
+                    </button>
                 </div>
 
                 <div class="table-responsive">
@@ -458,13 +438,6 @@
 
         <!-- 5. CATEGORIES -->
         <section class="admin-section" id="categories">
-
-            <div class="section-intro">
-                <div>
-                    <h2>Quản lý Ngành nghề</h2>
-                    <p>Thêm mới hoặc xóa danh mục ngành nghề chưa có tin tuyển dụng gắn kết.</p>
-                </div>
-            </div>
 
             <div class="admin-panel">
                 <div class="settings-heading">
@@ -506,13 +479,6 @@
 
         <!-- 6. SYSTEM SETTINGS -->
         <section class="admin-section" id="settings">
-
-            <div class="section-intro">
-                <div>
-                    <h2>Cài đặt hệ thống</h2>
-                    <p>Cấu hình thông tin chung và quy trình kiểm duyệt được lưu trực tiếp trong cơ sở dữ liệu.</p>
-                </div>
-            </div>
 
             <div class="admin-panel">
 

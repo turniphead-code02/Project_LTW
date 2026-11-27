@@ -17,13 +17,31 @@ let state = {
 let pendingRejectJobId = null;
 let pendingConfirmAction = null;
 
-const SECTION_TITLES = {
-    overview: "Tổng quan hệ thống",
-    employers: "Quản lý Doanh nghiệp",
-    candidates: "Quản lý Ứng viên",
-    jobs: "Kiểm duyệt & Quản lý Tin tuyển dụng",
-    categories: "Quản lý Ngành nghề",
-    settings: "Cài đặt hệ thống"
+const SECTION_META = {
+    overview: {
+        title: "Tổng quan hệ thống",
+        subtitle: "Giám sát người dùng, kiểm duyệt nội dung tin tuyển dụng và dọn dẹp dữ liệu hết hạn."
+    },
+    employers: {
+        title: "Quản lý Doanh nghiệp",
+        subtitle: "Kiểm tra hồ sơ công ty, số lượng tin đăng và kiểm soát trạng thái tài khoản HR."
+    },
+    candidates: {
+        title: "Quản lý Ứng viên",
+        subtitle: "Theo dõi danh sách tài khoản tìm việc, số lượng CV và lượt ứng tuyển."
+    },
+    jobs: {
+        title: "Kiểm duyệt & Quản lý Tin tuyển dụng",
+        subtitle: "Xem chi tiết nội dung trước khi duyệt, đóng tin vi phạm hoặc xóa tin đăng lâu ngày / quá hạn."
+    },
+    categories: {
+        title: "Quản lý Ngành nghề",
+        subtitle: "Thêm mới hoặc xóa danh mục ngành nghề chưa có tin tuyển dụng gắn kết."
+    },
+    settings: {
+        title: "Cài đặt hệ thống",
+        subtitle: "Cấu hình thông tin chung và quy trình kiểm duyệt được lưu trực tiếp trong cơ sở dữ liệu."
+    }
 };
 
 /* =========================================
@@ -182,15 +200,16 @@ function checkAdminSession() {
     const adminName = session.fullName || session.name || session.full_name || "Administrator";
     const initial = adminName.trim().charAt(0).toUpperCase() || "A";
 
-    const greetingEl = document.getElementById("admin-greeting");
     const sidebarNameEl = document.getElementById("admin-sidebar-name");
     const sidebarAvatarEl = document.getElementById("admin-sidebar-avatar");
     const topbarAvatarEl = document.getElementById("admin-topbar-avatar");
 
-    if (greetingEl) greetingEl.textContent = `Xin chào, ${adminName}!`;
     if (sidebarNameEl) sidebarNameEl.textContent = adminName;
     if (sidebarAvatarEl) sidebarAvatarEl.textContent = initial;
-    if (topbarAvatarEl) topbarAvatarEl.textContent = initial;
+    if (topbarAvatarEl) {
+        topbarAvatarEl.textContent = initial;
+        topbarAvatarEl.title = adminName;
+    }
 
     return true;
 }
@@ -833,8 +852,11 @@ function switchSection(sectionId) {
     if (activeNav) activeNav.classList.add("active");
 
     const titleEl = document.getElementById("page-title");
-    if (titleEl && SECTION_TITLES[sectionId]) {
-        titleEl.textContent = SECTION_TITLES[sectionId];
+    const subtitleEl = document.getElementById("page-subtitle");
+    const meta = SECTION_META[sectionId];
+    if (meta) {
+        if (titleEl) titleEl.textContent = meta.title;
+        if (subtitleEl) subtitleEl.textContent = meta.subtitle;
     }
 
     document.getElementById("admin-sidebar")?.classList.remove("is-open");
