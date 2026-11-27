@@ -230,8 +230,8 @@ document.addEventListener('DOMContentLoaded', function () {
   function mapFilterCategory(job) {
     if (job.employment_type === 'internship' || job.experience_level === 'intern') return 'intern';
     const slug = (job.category_slug || '').toLowerCase();
-    const title = (job.title || '').toLowerCase();
-    if (slug.includes('thiet-ke') || title.includes('ui/ux') || title.includes('designer')) return 'design';
+    if (['marketing-truyen-thong', 'kinh-doanh-ban-hang', 'thuong-mai-dien-tu'].includes(slug)) return 'business';
+    if (['tai-chinh-ke-toan', 'nhan-su-hanh-chinh', 'logistics-chuoi-cung-ung'].includes(slug)) return 'ops';
     return 'it';
   }
 
@@ -288,12 +288,23 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         if (allJobsBtnText) {
           allJobsBtnText.textContent = openCount > 0
-            ? `Xem Tất Cả ${openCount} Việc Làm IT Đang Mở`
-            : 'Xem Tất Cả Việc Làm IT';
+            ? `Xem Tất Cả ${openCount} Việc Làm Đang Mở`
+            : 'Xem Tất Cả Việc Làm';
         }
       }
 
-      // Cập nhật danh mục ngành IT thực tế từ MySQL
+      // Đồng bộ danh mục ngành nghề đa lĩnh vực từ MySQL vào Hero Select & Categories Grid
+      const searchCategoryEl = document.getElementById('searchCategory');
+      if (searchCategoryEl && Array.isArray(categories) && categories.length > 0) {
+        const currentCat = searchCategoryEl.value;
+        searchCategoryEl.innerHTML =
+          '<option value="">Tất cả ngành nghề</option>' +
+          categories
+            .map((cat) => `<option value="${escapeHtml(cat.slug)}">${escapeHtml(cat.category_name)}</option>`)
+            .join('');
+        if (currentCat) searchCategoryEl.value = currentCat;
+      }
+
       const categoriesGrid = document.querySelector('.categories-grid');
       if (categoriesGrid && Array.isArray(categories) && categories.length > 0) {
         const iconMap = {
@@ -302,10 +313,16 @@ document.addEventListener('DOMContentLoaded', function () {
           'thiet-ke-ui-ux': 'fa-pen-ruler',
           'an-toan-thong-tin': 'fa-shield-halved',
           'cloud-devops': 'fa-cloud',
-          'kiem-thu-phan-mem-qa': 'fa-vial-circle-check'
+          'kiem-thu-phan-mem-qa': 'fa-vial-circle-check',
+          'marketing-truyen-thong': 'fa-bullhorn',
+          'tai-chinh-ke-toan': 'fa-coins',
+          'kinh-doanh-ban-hang': 'fa-handshake',
+          'nhan-su-hanh-chinh': 'fa-users-gear',
+          'logistics-chuoi-cung-ung': 'fa-truck-fast',
+          'thuong-mai-dien-tu': 'fa-cart-shopping'
         };
         categoriesGrid.innerHTML = categories.map((cat) => {
-          const icon = iconMap[cat.slug] || 'fa-laptop-code';
+          const icon = iconMap[cat.slug] || 'fa-briefcase';
           const count = Number(cat.open_jobs_count) || 0;
           const countLabel = count > 0 ? `${count} việc làm đang mở` : 'Đang cập nhật tin tuyển dụng';
           return `
@@ -411,10 +428,10 @@ document.addEventListener('DOMContentLoaded', function () {
   const signalTickerEl = document.getElementById('liveSignalTicker');
   if (signalTickerEl) {
     const signals = [
-      '[LIVE] Hệ thống đồng bộ trực tiếp danh sách việc làm IT đã kiểm duyệt từ cơ sở dữ liệu',
-      '[LIVE] Hỗ trợ lọc nhanh theo kỹ năng ReactJS, Node.js, Java, Python, Figma & Cloud DevOps',
+      '[LIVE] Hệ thống đồng bộ trực tiếp việc làm đa ngành: IT, Marketing, Tài chính - Kế toán, Kinh doanh & Logistics',
+      '[LIVE] Tìm kiếm thông minh theo chuyên ngành, tỉnh/thành phố, kỹ năng chuyên môn và khung lương minh bạch',
       '[LIVE] Quy trình ứng tuyển minh bạch 4 bước: Đã nộp → Đã xem → Phỏng vấn → Kết quả',
-      '[LIVE] Doanh nghiệp công nghệ đăng tin miễn phí với quy chuẩn kiểm duyệt pháp nhân rõ ràng'
+      '[LIVE] Doanh nghiệp đa lĩnh vực đăng tin miễn phí với quy chuẩn kiểm duyệt pháp nhân rõ ràng'
     ];
     let signalIdx = 0;
     setInterval(() => {
@@ -465,9 +482,9 @@ document.addEventListener('DOMContentLoaded', function () {
     if (gaugeFillEl) gaugeFillEl.style.width = `${pct}%`;
 
     if (percentileEl) {
-      if (pct >= 72) percentileEl.textContent = 'Top 10% năng lực kỹ sư trẻ';
-      else if (pct >= 52) percentileEl.textContent = 'Top 25% năng lực sinh viên IT';
-      else if (pct >= 35) percentileEl.textContent = 'Mức chuẩn thị trường IT';
+      if (pct >= 72) percentileEl.textContent = 'Top 10% khung lương cạnh tranh';
+      else if (pct >= 52) percentileEl.textContent = 'Top 25% mức lương thị trường';
+      else if (pct >= 35) percentileEl.textContent = 'Mức chuẩn thị trường lao động';
       else percentileEl.textContent = 'Mức khởi điểm thực tập';
     }
 

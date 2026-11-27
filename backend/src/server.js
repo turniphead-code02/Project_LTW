@@ -13,6 +13,7 @@ require('dotenv').config();
 
 const { pool, checkDatabaseConnection } = require('./config/db');
 const { ensureDatabaseReady } = require('./scripts/initCloudDb');
+const { ensureMultiIndustryData } = require('./scripts/seedMultiIndustry');
 const { sendError } = require('./utils/response');
 const { handleMulterError } = require('./middlewares/upload.middleware');
 const { serveSecureCv } = require('./middlewares/secureCv.middleware');
@@ -127,5 +128,8 @@ app.listen(PORT, async () => {
   console.log(`🔌 Điểm cuối REST API:            http://localhost:${PORT}/api/v1/health`);
   console.log(`================================================================`);
   lastDbInitResult = await ensureDatabaseReady();
-  await checkDatabaseConnection();
+  const dbOk = await checkDatabaseConnection();
+  if (dbOk) {
+    await ensureMultiIndustryData();
+  }
 });

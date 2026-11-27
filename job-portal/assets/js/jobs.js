@@ -20,11 +20,17 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
   const FALLBACK_CATEGORIES = [
     { category_id: 1, category_name: 'Lập Trình & Phát Triển Phần Mềm', slug: 'lap-trinh-phan-mem' },
-    { category_id: 2, category_name: 'Khoa Học Dữ Liệu & AI/ML', slug: 'khoa-hoc-du-lieu-ai' },
-    { category_id: 3, category_name: 'Thiết Kế UI/UX', slug: 'thiet-ke-ui-ux' },
-    { category_id: 4, category_name: 'An Toàn Thông Tin', slug: 'an-toan-thong-tin' },
-    { category_id: 5, category_name: 'Cloud & DevOps', slug: 'cloud-devops' },
-    { category_id: 6, category_name: 'Kiểm Thử Phần Mềm QA/QC', slug: 'kiem-thu-phan-mem-qa' }
+    { category_id: 2, category_name: 'Khoa Học Dữ Liệu & Trí Tuệ Nhân Tạo (AI/ML)', slug: 'khoa-hoc-du-lieu-ai' },
+    { category_id: 3, category_name: 'Thiết Kế Trải Nghiệm & Giao Diện (UI/UX Design)', slug: 'thiet-ke-ui-ux' },
+    { category_id: 4, category_name: 'An Toàn Thông Tin & Giám Sát Bảo Mật (SecOps)', slug: 'an-toan-thong-tin' },
+    { category_id: 5, category_name: 'Hạ Tầng Điện Toán Đám Mây & DevOps', slug: 'cloud-devops' },
+    { category_id: 6, category_name: 'Kiểm Thử Phần Mềm & Đảm Bảo Chất Lượng (QA/QC)', slug: 'kiem-thu-phan-mem-qa' },
+    { category_id: 7, category_name: 'Marketing & Truyền Thông', slug: 'marketing-truyen-thong' },
+    { category_id: 8, category_name: 'Tài Chính – Kế Toán – Kiểm Toán', slug: 'tai-chinh-ke-toan' },
+    { category_id: 9, category_name: 'Kinh Doanh & Phát Triển Thị Trường (Sales)', slug: 'kinh-doanh-ban-hang' },
+    { category_id: 10, category_name: 'Nhân Sự & Hành Chính (HR / C&B)', slug: 'nhan-su-hanh-chinh' },
+    { category_id: 11, category_name: 'Logistics & Xuất Nhập Khẩu', slug: 'logistics-chuoi-cung-ung' },
+    { category_id: 12, category_name: 'Thương Mại Điện Tử & Vận Hành Sàn', slug: 'thuong-mai-dien-tu' }
   ];
   const FALLBACK_SKILLS = [
     { skill_id: 1, skill_name: 'ReactJS', slug: 'reactjs' },
