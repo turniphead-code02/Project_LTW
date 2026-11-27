@@ -96,24 +96,22 @@ async function initDatabase(options = {}) {
   const schemaPath = path.resolve(__dirname, '../../../database/schema.sql');
   const seedPath = path.resolve(__dirname, '../../../database/seed_data.sql');
 
-  const conn = await mysql.createConnection(buildDbConfig({ multipleStatements: false }));
+  // Kết nối ở mức server trước (không chỉ định database) để tự tạo DB nếu Cloud DB chưa có
+  const conn = await mysql.createConnection(buildDbConfig({ database: undefined, multipleStatements: false }));
 
   try {
     const dbName = (process.env.DB_NAME || 'job_portal_db').replace(/`/g, '');
-    try {
-      await conn.query(
-        `CREATE DATABASE IF NOT EXISTS \`${dbName}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`
-      );
-      await conn.query(`USE \`${dbName}\``);
-    } catch (_) {
-      // Một số Cloud DB dùng sẵn schema được cấp phát trong DB_NAME
-    }
+    await conn.query(
+      `CREATE DATABASE IF NOT EXISTS \`${dbName}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`
+    );
+    await conn.query(`USE \`${dbName}\``);
 
     if (!force) {
       const [rows] = await conn.query(
         `SELECT COUNT(*) AS cnt
          FROM information_schema.tables
-         WHERE table_schema = DATABASE() AND table_name = 'users'`
+         WHERE table_schema = ? AND table_name = 'users'`,
+        [dbName]
       );
       if (Number(rows[0]?.cnt) > 0) {
         return { initialized: false, reason: 'already_exists' };
@@ -153,16 +151,10 @@ async function initDatabase(options = {}) {
 
 async function ensureDatabaseReady() {
   try {
-    const [rows] = await pool.query(
-      `SELECT COUNT(*) AS cnt
-       FROM information_schema.tables
-       WHERE table_schema = DATABASE() AND table_name = 'users'`
-    );
-    if (Number(rows[0]?.cnt) === 0) {
-      await initDatabase({ force: false });
-    }
+    return await initDatabase({ force: false });
   } catch (err) {
-    console.warn('[DB Init] Bỏ qua tự động khởi tạo CSDL:', err.message);
+    console.warn('[DB Init] Cảnh báo khi tự động khởi tạo CSDL:', err.message);
+    return { initialized: false, error: err.message };
   }
 }
 

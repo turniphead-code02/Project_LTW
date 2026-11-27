@@ -79,12 +79,16 @@ app.use('/api/v1/employer', employerRoutes);
 app.use('/api/v1', authAdminRoutes); // Gồm /api/v1/auth/* và /api/v1/admin/*
 
 // 4. Route kiểm tra sức khỏe hệ thống (Healthcheck)
+let lastDbInitResult = null;
 app.get('/api/v1/health', async (req, res) => {
   let dbConnected = false;
+  let dbError = null;
   try {
     await pool.query('SELECT 1');
     dbConnected = true;
-  } catch (_) {}
+  } catch (err) {
+    dbError = err.message;
+  }
 
   res.json({
     success: true,
@@ -92,7 +96,9 @@ app.get('/api/v1/health', async (req, res) => {
     message: 'JobPortal Backend API đang hoạt động.',
     data: {
       timestamp: new Date().toISOString(),
-      database: dbConnected ? 'connected' : 'disconnected'
+      database: dbConnected ? 'connected' : 'disconnected',
+      dbError: dbConnected ? undefined : dbError,
+      dbInit: lastDbInitResult
     }
   });
 });
@@ -120,8 +126,6 @@ app.listen(PORT, async () => {
   console.log(`📂 Giao diện Frontend:            http://localhost:${PORT}/index.html`);
   console.log(`🔌 Điểm cuối REST API:            http://localhost:${PORT}/api/v1/health`);
   console.log(`================================================================`);
-  const dbOk = await checkDatabaseConnection();
-  if (dbOk) {
-    await ensureDatabaseReady();
-  }
+  lastDbInitResult = await ensureDatabaseReady();
+  await checkDatabaseConnection();
 });
