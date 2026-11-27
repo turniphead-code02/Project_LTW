@@ -18,16 +18,6 @@
   <link rel="stylesheet" href="./assets/css/base.css" />
   <link rel="stylesheet" href="./assets/css/components.css" />
   <link rel="stylesheet" href="./assets/css/jobs.css" />
-  <style>
-    .module1-filter-control{display:block;width:100%;min-height:42px;margin-top:8px;padding:10px 12px;border:1px solid var(--color-border);border-radius:8px;background:var(--color-surface);color:var(--color-dark);font:inherit;font-size:14px;}
-    .module1-filter-control:focus{outline:2px solid var(--color-primary-light);outline-offset:1px;}
-    .module1-field-label{display:block;margin-top:12px;color:var(--color-body);font-size:13px;font-weight:600;}
-    .module1-filter-hint{margin:8px 0 0;color:var(--color-muted);font-size:11px;line-height:1.5;}
-    .module1-status{margin:8px 0 14px;padding:12px 14px;border-radius:8px;background:var(--color-surface);color:var(--color-muted);font-size:13px;}
-    .module1-status-error{color:#b91c1c;background:#fef2f2;}
-    .jobs-list[aria-busy="true"]{opacity:.55;pointer-events:none;}
-  </style>
-
 </head>
 <body>
 
@@ -119,6 +109,11 @@
           <span>Tìm Kiếm</span>
         </button>
       </form>
+
+      <!-- Thanh chọn nhanh ngành nghề trực quan (đồng bộ 2 chiều với bộ lọc Sidebar) -->
+      <div class="jobs-category-ribbon" id="jobsCategoryRibbon" aria-label="Lọc nhanh theo ngành nghề">
+        <!-- Render động từ danh sách ngành nghề qua jobs.js -->
+      </div>
     </div>
   </div>
 
@@ -135,10 +130,11 @@
         <aside class="jobs-filter-sidebar" id="jobsFilterSidebar" aria-label="Bộ lọc tìm kiếm việc làm">
           <div class="sidebar-header">
             <div class="sidebar-title">
-              <i class="fa-solid fa-sliders" style="color: var(--color-primary);"></i>
-              <span>BỘ LỌC ĐA TIÊU CHÍ</span>
+              <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+              <span>Bộ Lọc Đa Tiêu Chí</span>
+              <span class="sidebar-filter-badge" id="activeFilterCountBadge" hidden>0</span>
             </div>
-            <div style="display:flex;align-items:center;gap:8px;">
+            <div class="sidebar-header-actions">
               <button type="button" class="btn-reset-filters" id="btnResetAll">Đặt lại</button>
               <button type="button" class="btn-close-sidebar" id="btnCloseSidebarMobile" aria-label="Đóng bảng bộ lọc">
                 <i class="fa-solid fa-xmark"></i>
@@ -147,29 +143,35 @@
           </div>
 
           <div class="filter-group">
-            <h4 class="filter-group-title"><i class="fa-solid fa-location-dot"></i> Địa điểm làm việc</h4>
-            <select id="filterLocation" class="module1-filter-control">
+            <h4 class="filter-group-title"><span class="fg-label"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Địa điểm làm việc</span></h4>
+            <select id="filterLocation" class="module1-filter-control module1-select">
               <option value="">Tất cả tỉnh/thành phố</option>
             </select>
           </div>
 
           <div class="filter-group">
-            <h4 class="filter-group-title"><i class="fa-solid fa-layer-group"></i> Ngành nghề</h4>
-            <select id="filterCategory" class="module1-filter-control">
+            <h4 class="filter-group-title"><span class="fg-label"><i class="fa-solid fa-layer-group" aria-hidden="true"></i> Ngành nghề chuyên môn</span></h4>
+            <select id="filterCategory" class="module1-filter-control module1-select">
               <option value="">Tất cả ngành nghề</option>
             </select>
           </div>
 
           <div class="filter-group">
-            <h4 class="filter-group-title"><i class="fa-solid fa-code"></i> Kỹ năng</h4>
-            <select id="filterSkill" class="module1-filter-control">
+            <h4 class="filter-group-title"><span class="fg-label"><i class="fa-solid fa-tags" aria-hidden="true"></i> Kỹ năng chuyên môn</span></h4>
+            <select id="filterSkill" class="module1-filter-control module1-select">
               <option value="">Tất cả kỹ năng</option>
             </select>
           </div>
 
           <div class="filter-group">
-            <h4 class="filter-group-title"><i class="fa-regular fa-clock"></i> Hình thức làm việc</h4>
-            <select id="filterEmployment" class="module1-filter-control">
+            <h4 class="filter-group-title"><span class="fg-label"><i class="fa-regular fa-clock" aria-hidden="true"></i> Hình thức làm việc</span></h4>
+            <div class="filter-preset-pills" id="employmentPresetPills">
+              <button type="button" class="filter-preset-btn emp-preset-btn active" data-emp="">Tất cả</button>
+              <button type="button" class="filter-preset-btn emp-preset-btn" data-emp="full_time">Toàn thời gian</button>
+              <button type="button" class="filter-preset-btn emp-preset-btn" data-emp="internship">Thực tập</button>
+              <button type="button" class="filter-preset-btn emp-preset-btn" data-emp="remote">Remote</button>
+            </div>
+            <select id="filterEmployment" class="module1-filter-control module1-select" aria-label="Hình thức làm việc">
               <option value="">Tất cả hình thức</option>
               <option value="full_time">Toàn thời gian</option>
               <option value="part_time">Bán thời gian</option>
@@ -179,29 +181,43 @@
           </div>
 
           <div class="filter-group">
-            <h4 class="filter-group-title"><i class="fa-solid fa-briefcase"></i> Kinh nghiệm</h4>
-            <select id="filterExperience" class="module1-filter-control">
+            <h4 class="filter-group-title"><span class="fg-label"><i class="fa-solid fa-briefcase" aria-hidden="true"></i> Cấp bậc kinh nghiệm</span></h4>
+            <select id="filterExperience" class="module1-filter-control module1-select">
               <option value="">Tất cả kinh nghiệm</option>
-              <option value="intern">Thực tập</option>
-              <option value="fresher">Fresher</option>
-              <option value="junior">Junior</option>
-              <option value="middle">Middle</option>
-              <option value="senior">Senior</option>
-              <option value="lead">Lead</option>
+              <option value="intern">Thực tập sinh</option>
+              <option value="fresher">Fresher (&lt; 1 năm)</option>
+              <option value="junior">Junior (1–2 năm)</option>
+              <option value="middle">Middle (2–4 năm)</option>
+              <option value="senior">Senior (4+ năm)</option>
+              <option value="lead">Trưởng nhóm / Lead</option>
             </select>
           </div>
 
           <div class="filter-group">
-            <h4 class="filter-group-title"><i class="fa-solid fa-money-bill-wave"></i> Khoảng lương (VND)</h4>
-            <label class="module1-field-label" for="filterSalaryMin">Lương tối thiểu</label>
-            <input id="filterSalaryMin" class="module1-filter-control" type="number" min="0" step="1000000" placeholder="Ví dụ: 10000000" />
-            <label class="module1-field-label" for="filterSalaryMax">Lương tối đa</label>
-            <input id="filterSalaryMax" class="module1-filter-control" type="number" min="0" step="1000000" placeholder="Ví dụ: 30000000" />
-            <p class="module1-filter-hint">Nhập mức lương theo VND, ví dụ 15000000 = 15 triệu.</p>
+            <h4 class="filter-group-title"><span class="fg-label"><i class="fa-solid fa-money-bill-wave" aria-hidden="true"></i> Mức lương (VND / tháng)</span></h4>
+            <div class="filter-preset-pills" id="salaryPresetPills">
+              <button type="button" class="filter-preset-btn salary-preset-btn active" data-min="" data-max="">Tất cả</button>
+              <button type="button" class="filter-preset-btn salary-preset-btn" data-min="" data-max="10000000">Dưới 10M</button>
+              <button type="button" class="filter-preset-btn salary-preset-btn" data-min="10000000" data-max="20000000">10M – 20M</button>
+              <button type="button" class="filter-preset-btn salary-preset-btn" data-min="20000000" data-max="30000000">20M – 30M</button>
+              <button type="button" class="filter-preset-btn salary-preset-btn" data-min="30000000" data-max="">Trên 30M</button>
+            </div>
+            <div class="salary-inputs-grid">
+              <div>
+                <label class="module1-field-label" for="filterSalaryMin">Tối thiểu</label>
+                <input id="filterSalaryMin" class="module1-filter-control" type="number" min="0" step="1000000" placeholder="VD: 10000000" />
+              </div>
+              <div>
+                <label class="module1-field-label" for="filterSalaryMax">Tối đa</label>
+                <input id="filterSalaryMax" class="module1-filter-control" type="number" min="0" step="1000000" placeholder="VD: 25000000" />
+              </div>
+            </div>
+            <p class="module1-filter-hint">Chọn nhanh mốc lương bên trên hoặc nhập số tiền cụ thể (VND).</p>
           </div>
 
-          <button type="button" id="btnApplyFilters" class="btn btn-primary" style="width:100%;margin-top:12px;">
-            Áp dụng bộ lọc
+          <button type="button" id="btnApplyFilters" class="btn btn-primary btn-apply-filters">
+            <i class="fa-solid fa-check" aria-hidden="true"></i>
+            <span>Áp dụng bộ lọc</span>
           </button>
         </aside>
 

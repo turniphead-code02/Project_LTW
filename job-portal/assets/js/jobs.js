@@ -130,11 +130,97 @@ document.addEventListener('DOMContentLoaded', () => {
     if (previous && items.some((item) => String(item[idKey]) === previous)) select.value = previous;
   }
 
+  function renderCategoryRibbon() {
+    const ribbon = document.getElementById('jobsCategoryRibbon');
+    if (!ribbon) return;
+    const iconMap = {
+      'lap-trinh-phan-mem': 'fa-code',
+      'khoa-hoc-du-lieu-ai': 'fa-chart-pie',
+      'thiet-ke-ui-ux': 'fa-pen-ruler',
+      'an-toan-thong-tin': 'fa-shield-halved',
+      'cloud-devops': 'fa-cloud',
+      'kiem-thu-phan-mem-qa': 'fa-vial-circle-check',
+      'marketing-truyen-thong': 'fa-bullhorn',
+      'tai-chinh-ke-toan': 'fa-coins',
+      'kinh-doanh-ban-hang': 'fa-handshake',
+      'nhan-su-hanh-chinh': 'fa-users-gear',
+      'logistics-chuoi-cung-ung': 'fa-truck-fast',
+      'thuong-mai-dien-tu': 'fa-cart-shopping',
+      'xay-dung-kien-truc': 'fa-helmet-safety',
+      'y-te-duoc-pham': 'fa-kit-medical',
+      'giao-duc-dao-tao': 'fa-graduation-cap',
+      'co-khi-san-xuat': 'fa-gears'
+    };
+    const activeCatId = filterCategory?.value || '';
+    const cats = filterOptions.categories || [];
+    const pills = [
+      `<button type="button" class="cat-ribbon-pill ${activeCatId === '' ? 'active' : ''}" data-cat-id=""><i class="fa-solid fa-border-all" aria-hidden="true"></i><span>Tất cả ngành</span></button>`,
+      ...cats.map((cat, idx) => {
+        const icon = iconMap[cat.slug] || 'fa-briefcase';
+        const isHidden = idx >= 6 && String(cat.category_id) !== String(activeCatId);
+        return `<button type="button" class="cat-ribbon-pill${String(cat.category_id) === String(activeCatId) ? ' active' : ''}${isHidden ? ' is-hidden-pill' : ''}" data-cat-id="${Number(cat.category_id)}"><i class="fa-solid ${icon}" aria-hidden="true"></i><span>${escapeHtml(cat.category_name)}</span></button>`;
+      })
+    ];
+    if (cats.length > 6) {
+      const isExpanded = ribbon.classList.contains('is-expanded');
+      pills.push(`<button type="button" class="cat-ribbon-pill cat-ribbon-more" id="btnToggleRibbonCats">${isExpanded ? 'Thu gọn' : `Xem thêm ${cats.length - 6} ngành`}</button>`);
+    }
+    ribbon.innerHTML = pills.join('');
+
+    ribbon.querySelectorAll('.cat-ribbon-pill[data-cat-id]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (filterCategory) filterCategory.value = btn.dataset.catId || '';
+        renderCategoryRibbon();
+        loadJobs(true);
+      });
+    });
+    const moreBtn = document.getElementById('btnToggleRibbonCats');
+    if (moreBtn) {
+      moreBtn.addEventListener('click', () => {
+        const expanded = ribbon.classList.toggle('is-expanded');
+        moreBtn.textContent = expanded ? 'Thu gọn' : `Xem thêm ${cats.length - 6} ngành`;
+      });
+    }
+  }
+
+  function syncSidebarQuickPills() {
+    const badge = document.getElementById('activeFilterCountBadge');
+    if (badge) {
+      const filters = getFilters();
+      const activeCount = [
+        filters.location_id,
+        filters.category_id,
+        filters.skill_id,
+        filters.employment_type,
+        filters.experience_level,
+        filters.salary_min,
+        filters.salary_max
+      ].filter(Boolean).length;
+      badge.textContent = String(activeCount);
+      badge.hidden = activeCount === 0;
+    }
+
+    const curEmp = filterEmployment?.value || '';
+    document.querySelectorAll('.emp-preset-btn').forEach((btn) => {
+      btn.classList.toggle('active', (btn.dataset.emp || '') === curEmp);
+    });
+
+    const curMin = filterSalaryMin?.value.trim() || '';
+    const curMax = filterSalaryMax?.value.trim() || '';
+    document.querySelectorAll('.salary-preset-btn').forEach((btn) => {
+      const match = (btn.dataset.min || '') === curMin && (btn.dataset.max || '') === curMax;
+      btn.classList.toggle('active', match);
+    });
+
+    renderCategoryRibbon();
+  }
+
   function renderFilterOptions() {
     fillSelect(filterLocation, filterOptions.locations, 'location_id', 'location_name', 'Tất cả tỉnh/thành phố');
     fillSelect(filterCategory, filterOptions.categories, 'category_id', 'category_name', 'Tất cả ngành nghề');
     fillSelect(filterSkill, filterOptions.skills, 'skill_id', 'skill_name', 'Tất cả kỹ năng');
     fillSelect(topLocationSelect, filterOptions.locations, 'location_id', 'location_name', 'Tất cả địa điểm');
+    renderCategoryRibbon();
   }
 
   async function loadFilterOptions() {
@@ -275,43 +361,46 @@ document.addEventListener('DOMContentLoaded', () => {
       const company = escapeHtml(job.company_name || job.company || 'Nhà tuyển dụng');
       const logoUrl = job.logo_url ? escapeHtml(job.logo_url) : '';
       const logoText = escapeHtml((job.company_name || 'J').trim().slice(0, 2).toUpperCase());
+      const categoryName = escapeHtml(job.category_name || '');
       const skills = String(job.skills || '').split(',').map((skill) => skill.trim()).filter(Boolean);
+      const visibleSkills = skills.slice(0, 4);
       const saved = bookmarkedIds.map(String).includes(String(id));
       const deadline = job.deadline ? new Date(`${String(job.deadline).slice(0, 10)}T00:00:00`).toLocaleDateString('vi-VN') : 'Chưa cập nhật';
       const description = escapeHtml(job.description || 'Thông tin mô tả đang được cập nhật.');
       const detailUrl = `./job-detail.html?id=${encodeURIComponent(id)}`;
+      const logoMarkup = logoUrl
+        ? `<img src="${logoUrl}" alt="${company}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline';"><span style="display:none;">${logoText}</span>`
+        : `<span>${logoText}</span>`;
       return `
         <article class="job-listing-item" data-id="${escapeHtml(id)}">
           <div class="job-item-header">
             <div class="job-item-main">
-              <div class="company-logo-box" style="background:#fff;border:1px solid var(--color-border);" aria-hidden="true">
-                ${logoUrl ? `<img src="${logoUrl}" alt="" style="width:100%;height:100%;object-fit:contain;">` : logoText}
-              </div>
-              <div>
+              <div class="company-logo-box" aria-hidden="true">${logoMarkup}</div>
+              <div style="min-width:0;">
                 <h3 class="job-item-title"><a href="${detailUrl}">${title}</a></h3>
                 <div class="job-item-company">
-                  <i class="fa-regular fa-building" aria-hidden="true"></i>
                   <strong>${company}</strong>
-                  <span class="job-code-badge"><i class="fa-solid fa-hashtag"></i> JOB-${escapeHtml(id)}</span>
+                  <i class="fa-solid fa-circle-check" style="color:var(--color-primary);font-size:0.8rem;" title="Doanh nghiệp đã xác thực" aria-hidden="true"></i>
+                  ${categoryName ? `<span class="job-item-cat-pill">${categoryName}</span>` : ''}
                 </div>
               </div>
             </div>
             <div class="job-item-salary"><i class="fa-solid fa-money-bill-wave" aria-hidden="true"></i> ${escapeHtml(formatSalary(job))}</div>
           </div>
-          <p style="font-size:var(--text-small);color:var(--color-body);line-height:1.5;margin:4px 0 6px;">${description}</p>
+          <p class="job-item-desc">${description}</p>
           <div class="job-item-meta-row">
             <div class="job-item-meta-item"><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span>${escapeHtml(job.location_name || 'Chưa cập nhật')}</span></div>
             <div class="job-item-meta-item"><i class="fa-solid fa-briefcase" aria-hidden="true"></i><span>${escapeHtml(labelExperience(job.experience_level))}</span></div>
             <div class="job-item-meta-item"><i class="fa-regular fa-clock" aria-hidden="true"></i><span>${escapeHtml(labelEmployment(job.employment_type))}</span></div>
           </div>
-          <div class="job-item-tags">${skills.map((skill) => `<span class="badge badge-tech">${escapeHtml(skill)}</span>`).join('')}</div>
+          ${visibleSkills.length ? `<div class="job-item-tags">${visibleSkills.map((skill) => `<span class="badge badge-tech">${escapeHtml(skill)}</span>`).join('')}${skills.length > 4 ? `<span class="badge badge-tech">+${skills.length - 4}</span>` : ''}</div>` : ''}
           <div class="job-item-footer">
-            <div><span style="color:var(--color-muted);"><i class="fa-regular fa-calendar" aria-hidden="true"></i> Hạn nộp: <strong>${escapeHtml(deadline)}</strong></span></div>
-            <div style="display:flex;align-items:center;gap:12px;">
-              ${hideBookmarks ? '' : `<button type="button" class="btn-bookmark-job" data-id="${escapeHtml(id)}" style="background:transparent;border:1px solid var(--color-border);width:34px;height:34px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-size:.95rem;cursor:pointer;color:${saved ? 'var(--color-primary)' : '#64748b'};" title="${saved ? 'Bỏ lưu tin tuyển dụng' : 'Lưu tin tuyển dụng này'}" aria-label="${saved ? 'Bỏ lưu tin tuyển dụng' : 'Lưu tin tuyển dụng'}">
+            <span><i class="fa-regular fa-calendar" aria-hidden="true"></i> Hạn nộp: <strong>${escapeHtml(deadline)}</strong></span>
+            <div style="display:flex;align-items:center;gap:10px;">
+              ${hideBookmarks ? '' : `<button type="button" class="btn-bookmark-job${saved ? ' is-saved' : ''}" data-id="${escapeHtml(id)}" title="${saved ? 'Bỏ lưu tin tuyển dụng' : 'Lưu tin tuyển dụng này'}" aria-label="${saved ? 'Bỏ lưu tin tuyển dụng' : 'Lưu tin tuyển dụng'}">
                 <i class="${saved ? 'fa-solid' : 'fa-regular'} fa-bookmark"></i>
               </button>`}
-              <a href="${detailUrl}" class="job-item-action-link"><span>${hideBookmarks ? 'Xem chi tiết' : 'Xem chi tiết &amp; Nộp hồ sơ'}</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+              <a href="${detailUrl}" class="job-item-action-link"><span>${hideBookmarks ? 'Xem chi tiết' : 'Xem chi tiết'}</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
             </div>
           </div>
         </article>`;
@@ -474,21 +563,49 @@ document.addEventListener('DOMContentLoaded', () => {
     return (...args) => { clearTimeout(timer); timer = setTimeout(() => callback(...args), delay); };
   }
 
-  // Events: thay đổi tiêu chí => gọi API; đổi trang => gọi API với page mới.
+  // Events: thay đổi tiêu chí => đồng bộ quick pills & gọi API
   [filterLocation, filterCategory, filterSkill, filterEmployment, filterExperience, sortSelect].forEach((control) => {
-    control?.addEventListener('change', () => { syncTopLocation(); loadJobs(true); });
+    control?.addEventListener('change', () => {
+      syncTopLocation();
+      syncSidebarQuickPills();
+      loadJobs(true);
+    });
   });
-  [filterSalaryMin, filterSalaryMax].forEach((control) => control?.addEventListener('change', () => loadJobs(true)));
+  [filterSalaryMin, filterSalaryMax].forEach((control) =>
+    control?.addEventListener('change', () => {
+      syncSidebarQuickPills();
+      loadJobs(true);
+    })
+  );
+
+  document.querySelectorAll('.emp-preset-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (filterEmployment) filterEmployment.value = btn.dataset.emp || '';
+      syncSidebarQuickPills();
+      loadJobs(true);
+    });
+  });
+
+  document.querySelectorAll('.salary-preset-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (filterSalaryMin) filterSalaryMin.value = btn.dataset.min || '';
+      if (filterSalaryMax) filterSalaryMax.value = btn.dataset.max || '';
+      syncSidebarQuickPills();
+      loadJobs(true);
+    });
+  });
+
   topSearchInput?.addEventListener('input', debounce(() => loadJobs(true), 350));
   topSearchInput?.addEventListener('keydown', (event) => { if (event.key === 'Enter') { event.preventDefault(); loadJobs(true); } });
   topSearchBtn?.addEventListener('click', () => loadJobs(true));
   topLocationSelect?.addEventListener('change', () => {
     if (filterLocation) filterLocation.value = topLocationSelect.value;
+    syncSidebarQuickPills();
     loadJobs(true);
   });
-  btnApply?.addEventListener('click', () => { loadJobs(true); closeDrawer(); });
-  btnReset?.addEventListener('click', resetFilters);
-  btnResetEmpty?.addEventListener('click', resetFilters);
+  btnApply?.addEventListener('click', () => { syncSidebarQuickPills(); loadJobs(true); closeDrawer(); });
+  btnReset?.addEventListener('click', () => { resetFilters(); syncSidebarQuickPills(); });
+  btnResetEmpty?.addEventListener('click', () => { resetFilters(); syncSidebarQuickPills(); });
   btnMobileFilter?.addEventListener('click', openDrawer);
   btnCloseSidebar?.addEventListener('click', closeDrawer);
   backdrop?.addEventListener('click', closeDrawer);
@@ -498,6 +615,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const urlFilters = parseUrlParams();
     await loadFilterOptions();
     applyUrlFilterParams(urlFilters);
+    syncSidebarQuickPills();
     await loadJobs(true);
     await syncSavedBookmarks();
   })();
