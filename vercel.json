@@ -1,0 +1,21 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    { "source": "/", "destination": "/job-portal/index.html" },
+    { "source": "/assets/:path*", "destination": "/job-portal/assets/:path*" },
+    { "source": "/index.html", "destination": "/job-portal/index.html" },
+    { "source": "/jobs.html", "destination": "/job-portal/jobs.html" },
+    { "source": "/job-detail.html", "destination": "/job-portal/job-detail.html" },
+    { "source": "/auth.html", "destination": "/job-portal/auth.html" },
+    { "source": "/candidate-dashboard.html", "destination": "/job-portal/candidate-dashboard.html" },
+    { "source": "/my-applications.html", "destination": "/job-portal/my-applications.html" },
+    { "source": "/saved-jobs.html", "destination": "/job-portal/saved-jobs.html" },
+    { "source": "/employer-dashboard.html", "destination": "/job-portal/employer-dashboard.html" },
+    { "source": "/post-job.html", "destination": "/job-portal/post-job.html" },
+    { "source": "/candidate-management.html", "destination": "/job-portal/candidate-management.html" },
+    { "source": "/admin-portal.html", "destination": "/job-portal/admin-portal.html" },
+    { "source": "/employer-guide.html", "destination": "/job-portal/employer-guide.html" },
+    { "source": "/404.html", "destination": "/job-portal/404.html" },
+    { "source": "/500.html", "destination": "/job-portal/500.html" }
+  ]
+}
