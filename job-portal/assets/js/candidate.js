@@ -428,14 +428,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const suggestedWrap = document.createElement('div');
     suggestedWrap.className = 'suggested-skills';
     suggestedWrap.innerHTML = `
-      <p><i class="fa-regular fa-lightbulb" style="color: var(--color-primary);"></i> Gợi ý kỹ năng ngành IT:</p>
+      <p><i class="fa-regular fa-lightbulb" style="color: var(--color-primary);"></i> Gợi ý kỹ năng nổi bật:</p>
       <div>
-        <button type="button" class="suggest-btn" data-skill="TypeScript">+ TypeScript</button>
-        <button type="button" class="suggest-btn" data-skill="Node.js">+ Node.js</button>
-        <button type="button" class="suggest-btn" data-skill="TailwindCSS">+ TailwindCSS</button>
-        <button type="button" class="suggest-btn" data-skill="PostgreSQL">+ PostgreSQL</button>
-        <button type="button" class="suggest-btn" data-skill="Docker">+ Docker</button>
-        <button type="button" class="suggest-btn" data-skill="RESTful API">+ RESTful API</button>
+        <button type="button" class="suggest-btn" data-skill="Giao tiếp &amp; Đàm phán">+ Giao tiếp &amp; Đàm phán</button>
+        <button type="button" class="suggest-btn" data-skill="Excel / Phân tích dữ liệu">+ Excel / Phân tích dữ liệu</button>
+        <button type="button" class="suggest-btn" data-skill="Digital Marketing">+ Digital Marketing</button>
+        <button type="button" class="suggest-btn" data-skill="Kế toán MISA">+ Kế toán MISA</button>
+        <button type="button" class="suggest-btn" data-skill="Quản lý dự án">+ Quản lý dự án</button>
+        <button type="button" class="suggest-btn" data-skill="SQL / JavaScript">+ SQL / JavaScript</button>
       </div>
     `;
     skillsSection.appendChild(suggestedWrap);

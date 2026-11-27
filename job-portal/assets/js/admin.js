@@ -73,6 +73,26 @@ function showToast(message, type = "success") {
    2. HÀM HỖ TRỢ
 ========================================= */
 
+function formatAdminSalary(minRaw, maxRaw) {
+    const min = Number(minRaw);
+    const max = Number(maxRaw);
+    const toTrieu = v => {
+        const val = v >= 100000 ? v / 1e6 : v;
+        return Number.isInteger(val) ? String(val) : val.toFixed(1).replace(/\.0$/, "");
+    };
+
+    if (min > 0 && max > 0) {
+        return `${toTrieu(min)} - ${toTrieu(max)} triệu`;
+    }
+    if (min > 0) {
+        return `Từ ${toTrieu(min)} triệu`;
+    }
+    if (max > 0) {
+        return `Đến ${toTrieu(max)} triệu`;
+    }
+    return "Thỏa thuận";
+}
+
 function escapeHTML(value) {
     return String(value ?? "").replace(/[&<>"']/g, char => ({
         "&": "&amp;",
@@ -199,7 +219,7 @@ async function fetchAdminOverview() {
             id: job.job_id,
             title: job.title || "Chưa có tiêu đề",
             company: job.company_name || "Chưa có doanh nghiệp",
-            salary: `${job.salary_min || 0} - ${job.salary_max || 0} triệu`,
+            salary: formatAdminSalary(job.salary_min, job.salary_max),
             status: job.status,
             reject_reason: job.reject_reason
         }));
@@ -230,7 +250,9 @@ function updateStatistics() {
         "total-employers": employers.length,
         "pending-employers": lockedEmployers,
         "total-jobs": jobs.length,
-        "pending-jobs": pendingJobs
+        "pending-jobs": pendingJobs,
+        "employer-count": employers.length,
+        "job-count": pendingJobs
     };
 
     Object.entries(statistics).forEach(([id, value]) => {
@@ -240,6 +262,18 @@ function updateStatistics() {
             element.textContent = value;
         }
     });
+
+    const overviewEmp = document.getElementById("overview-employer-count");
+    if (overviewEmp) {
+        overviewEmp.textContent = lockedEmployers > 0
+            ? `${lockedEmployers} tài khoản đang bị khóa`
+            : `${employers.length} doanh nghiệp đang hoạt động`;
+    }
+
+    const overviewJob = document.getElementById("overview-job-count");
+    if (overviewJob) {
+        overviewJob.textContent = `${pendingJobs} tin đang chờ duyệt`;
+    }
 }
 
 /* =========================================
@@ -248,19 +282,30 @@ function updateStatistics() {
 
 function renderEmployers() {
     const tbody = document.getElementById("employer-table-body");
+    const emptyEl = document.getElementById("employer-empty");
 
     if (!tbody) return;
 
     const searchInput = document.getElementById("employer-search");
+    const filterSelect = document.getElementById("employer-filter");
 
     const keyword = searchInput
         ? searchInput.value.toLowerCase().trim()
         : "";
+    const statusFilter = filterSelect ? filterSelect.value : "all";
 
-    const filtered = employers.filter(item =>
-        item.name.toLowerCase().includes(keyword) ||
-        item.email.toLowerCase().includes(keyword)
-    );
+    const filtered = employers.filter(item => {
+        const matchKeyword =
+            item.name.toLowerCase().includes(keyword) ||
+            item.email.toLowerCase().includes(keyword);
+        const matchStatus =
+            statusFilter === "all" || item.status === statusFilter;
+        return matchKeyword && matchStatus;
+    });
+
+    if (emptyEl) {
+        emptyEl.hidden = filtered.length > 0;
+    }
 
     tbody.innerHTML = filtered.map(item => `
         <tr>
@@ -296,19 +341,30 @@ function renderEmployers() {
 
 function renderJobs() {
     const tbody = document.getElementById("job-table-body");
+    const emptyEl = document.getElementById("job-empty");
 
     if (!tbody) return;
 
     const searchInput = document.getElementById("job-search");
+    const filterSelect = document.getElementById("job-filter");
 
     const keyword = searchInput
         ? searchInput.value.toLowerCase().trim()
         : "";
+    const statusFilter = filterSelect ? filterSelect.value : "all";
 
-    const filtered = jobs.filter(item =>
-        item.title.toLowerCase().includes(keyword) ||
-        item.company.toLowerCase().includes(keyword)
-    );
+    const filtered = jobs.filter(item => {
+        const matchKeyword =
+            item.title.toLowerCase().includes(keyword) ||
+            item.company.toLowerCase().includes(keyword);
+        const matchStatus =
+            statusFilter === "all" || item.status === statusFilter;
+        return matchKeyword && matchStatus;
+    });
+
+    if (emptyEl) {
+        emptyEl.hidden = filtered.length > 0;
+    }
 
     tbody.innerHTML = filtered.map(item => `
         <tr>
@@ -465,12 +521,45 @@ document.addEventListener("DOMContentLoaded", function () {
     // Kiểm tra quyền Admin trước khi tải dữ liệu
     if (!checkAdminSession()) return;
 
+    // Hiển thị thông tin Admin từ phiên đăng nhập
+    try {
+        const session = JSON.parse(localStorage.getItem("jobportal_session") || "null");
+        const adminName = session?.full_name || "Administrator";
+        const initial = adminName.trim().charAt(0).toUpperCase() || "A";
+        const greetingEl = document.getElementById("admin-greeting");
+        const sidebarNameEl = document.getElementById("admin-sidebar-name");
+        const sidebarAvatarEl = document.getElementById("admin-sidebar-avatar");
+        const topbarAvatarEl = document.getElementById("admin-topbar-avatar");
+        if (greetingEl) greetingEl.textContent = `Xin chào, ${adminName}!`;
+        if (sidebarNameEl) sidebarNameEl.textContent = adminName;
+        if (sidebarAvatarEl) sidebarAvatarEl.textContent = initial;
+        if (topbarAvatarEl) topbarAvatarEl.textContent = initial;
+    } catch (_) {}
+
     // Chuyển tab
     document.querySelectorAll("[data-section]").forEach(button => {
         button.addEventListener("click", function () {
             switchSection(this.dataset.section);
         });
     });
+
+    // Đăng xuất quản trị viên
+    const logoutBtn = document.getElementById("admin-logout-btn");
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", function () {
+            if (!confirm("Bạn có chắc chắn muốn đăng xuất khỏi trang quản trị?")) return;
+            if (API && typeof API.clearAuthSession === "function") {
+                API.clearAuthSession();
+            } else {
+                localStorage.removeItem("jobportal_access_token");
+                localStorage.removeItem("jobportal_session");
+            }
+            showToast("Đã đăng xuất thành công!");
+            setTimeout(() => {
+                window.location.replace("./auth.html?mode=login");
+            }, 300);
+        });
+    }
 
     // Xử lý duyệt tin và khóa tài khoản
     const adminMain = document.querySelector(".admin-main");
@@ -479,18 +568,54 @@ document.addEventListener("DOMContentLoaded", function () {
         adminMain.addEventListener("click", handleModeration);
     }
 
-    // Tìm kiếm tin tuyển dụng
+    // Tìm kiếm & lọc tin tuyển dụng
     const jobSearch = document.getElementById("job-search");
+    const jobFilter = document.getElementById("job-filter");
 
     if (jobSearch) {
         jobSearch.addEventListener("input", renderJobs);
     }
+    if (jobFilter) {
+        jobFilter.addEventListener("change", renderJobs);
+    }
 
-    // Tìm kiếm doanh nghiệp
+    // Tìm kiếm & lọc doanh nghiệp
     const employerSearch = document.getElementById("employer-search");
+    const employerFilter = document.getElementById("employer-filter");
 
     if (employerSearch) {
         employerSearch.addEventListener("input", renderEmployers);
+    }
+    if (employerFilter) {
+        employerFilter.addEventListener("change", renderEmployers);
+    }
+
+    // Lưu & khôi phục cài đặt hệ thống
+    const SETTINGS_KEY = "jobportal_admin_settings";
+    const sysNameInput = document.getElementById("system-name");
+    const adminEmailInput = document.getElementById("admin-email");
+    const sysDescInput = document.getElementById("system-description");
+    const saveSettingsBtn = document.getElementById("save-settings");
+
+    try {
+        const saved = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "null");
+        if (saved) {
+            if (sysNameInput && saved.systemName) sysNameInput.value = saved.systemName;
+            if (adminEmailInput && saved.adminEmail) adminEmailInput.value = saved.adminEmail;
+            if (sysDescInput && saved.description) sysDescInput.value = saved.description;
+        }
+    } catch (_) {}
+
+    if (saveSettingsBtn) {
+        saveSettingsBtn.addEventListener("click", function () {
+            const payload = {
+                systemName: (sysNameInput?.value || "JobPortal").trim(),
+                adminEmail: (adminEmailInput?.value || "admin@jobportal.com").trim(),
+                description: (sysDescInput?.value || "").trim()
+            };
+            localStorage.setItem(SETTINGS_KEY, JSON.stringify(payload));
+            showToast("Đã lưu cài đặt hệ thống!");
+        });
     }
 
     // Tải dữ liệu từ Backend

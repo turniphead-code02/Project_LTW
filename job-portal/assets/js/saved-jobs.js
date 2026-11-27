@@ -433,8 +433,10 @@ document.addEventListener('DOMContentLoaded', function () {
         <article class="job-listing-item" data-id="${job.id}" style="position: relative;">
           <div class="job-item-header">
             <div style="display: flex; gap: 16px; align-items: flex-start;">
-              <div class="company-logo-badge" style="background: #ffffff; color: ${job.logoBg || '#1e40af'}; border: 1px solid var(--color-border); width: 52px; height: 52px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.05rem; flex-shrink: 0; box-shadow: var(--shadow-sm);">
-                ${job.logo || 'IT'}
+              <div class="company-logo-badge" style="background: #ffffff; color: ${job.logoBg || '#1e40af'}; border: 1px solid var(--color-border); width: 52px; height: 52px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.05rem; flex-shrink: 0; box-shadow: var(--shadow-sm); overflow: hidden; padding: ${job.logoUrl ? '4px' : '0'};">
+                ${job.logoUrl
+                  ? `<img src="${job.logoUrl}" alt="${job.company}" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.style.display='none'; if (this.nextElementSibling) this.nextElementSibling.style.display='flex';"><span style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center;">${job.logo || 'JP'}</span>`
+                  : (job.logo || 'JP')}
               </div>
 
               <div>
@@ -759,11 +761,17 @@ document.addEventListener('DOMContentLoaded', function () {
             ? Math.ceil((new Date(item.deadline) - new Date()) / (1000 * 60 * 60 * 24))
             : 30;
 
+          const rawLogo = item.logo_url || '';
+          const logoUrl = rawLogo.startsWith('/assets/')
+            ? `.${rawLogo}`
+            : (rawLogo.startsWith('assets/') ? `./${rawLogo}` : rawLogo);
+
           return {
             id: String(item.job_id),
             title: item.title,
             company: item.company_name,
             logo: (item.company_name || 'C').charAt(0),
+            logoUrl,
             logoBg: '#1e40af',
             verified: true,
             salary: salaryStr,
@@ -774,9 +782,9 @@ document.addEventListener('DOMContentLoaded', function () {
             workTypeLabel: item.employment_type === 'full_time' ? 'Toàn thời gian' : 'Linh hoạt',
             experience: item.experience_level || 'junior',
             experienceLabel: item.experience_level || 'Có kinh nghiệm',
-            category: 'software',
-            categoryLabel: 'Lập trình phần mềm',
-            tags: ['IT', 'Developer'],
+            category: 'all',
+            categoryLabel: 'Việc làm đa ngành',
+            tags: [item.location_name || 'Toàn quốc', item.employment_type === 'full_time' ? 'Toàn thời gian' : 'Linh hoạt'],
             postedText: 'Gần đây',
             postedDaysAgo: 1,
             deadlineText: item.deadline ? new Date(item.deadline).toLocaleDateString('vi-VN') : 'Đang mở',

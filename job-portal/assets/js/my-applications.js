@@ -299,8 +299,10 @@ document.addEventListener('DOMContentLoaded', function () {
         <article class="application-card status-${app.status}" data-id="${app.id}">
           <div class="app-card-header">
             <div class="app-job-info">
-              <div class="app-company-logo" style="background: #ffffff; color: ${app.companyLogoBg || '#1e40af'}; border: 1px solid var(--color-border);" aria-hidden="true">
-                ${app.companyLogo || app.company.charAt(0)}
+              <div class="app-company-logo" style="background: #ffffff; color: ${app.companyLogoBg || '#1e40af'}; border: 1px solid var(--color-border); overflow: hidden; padding: ${app.logoUrl ? '4px' : '0'};" aria-hidden="true">
+                ${app.logoUrl
+                  ? `<img src="${app.logoUrl}" alt="${app.company}" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.style.display='none'; if (this.nextElementSibling) this.nextElementSibling.style.display='flex';"><span style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center;">${app.companyLogo || app.company.charAt(0)}</span>`
+                  : (app.companyLogo || app.company.charAt(0))}
               </div>
               <div class="app-job-details">
                 <h2>
@@ -670,6 +672,10 @@ document.addEventListener('DOMContentLoaded', function () {
           const salaryStr = (item.salary_min && item.salary_max)
             ? `${Math.round(item.salary_min / 1e6)} - ${Math.round(item.salary_max / 1e6)} Triệu`
             : 'Thương lượng';
+          const rawLogo = item.logo_url || '';
+          const logoUrl = rawLogo.startsWith('/assets/')
+            ? `.${rawLogo}`
+            : (rawLogo.startsWith('assets/') ? `./${rawLogo}` : rawLogo);
 
           return {
             id: item.application_id,
@@ -677,6 +683,7 @@ document.addEventListener('DOMContentLoaded', function () {
             jobTitle: item.job_title,
             company: item.company_name,
             companyLogo: (item.company_name || 'C').charAt(0),
+            logoUrl,
             salary: salaryStr,
             location: item.location_name || 'TP.HCM',
             applicantName: currentUserName,

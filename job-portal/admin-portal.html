@@ -7,6 +7,10 @@
     <meta name="description" content="Trang quản trị hệ thống JobPortal">
     <title>Quản trị hệ thống - JobPortal</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="./assets/css/variables.css">
     <link rel="stylesheet" href="./assets/css/base.css">
     <link rel="stylesheet" href="./assets/css/components.css">
@@ -27,9 +31,9 @@
         </a>
 
         <div class="admin-profile">
-            <div class="admin-avatar">A</div>
+            <div class="admin-avatar" id="admin-sidebar-avatar">A</div>
             <div>
-                <strong>Administrator</strong>
+                <strong id="admin-sidebar-name">Administrator</strong>
                 <small>Quản trị hệ thống</small>
             </div>
         </div>
@@ -43,7 +47,7 @@
             </button>
 
             <button class="nav-item" data-section="employers">
-                <span>▣</span> Duyệt doanh nghiệp
+                <span>▣</span> Doanh nghiệp
                 <span class="nav-count" id="employer-count">0</span>
             </button>
 
@@ -61,6 +65,10 @@
             <a href="index.html" class="nav-item nav-link">
                 <span>←</span> Về trang chủ
             </a>
+
+            <button type="button" class="nav-item nav-logout" id="admin-logout-btn">
+                <span>↪</span> Đăng xuất
+            </button>
 
         </nav>
 
@@ -80,16 +88,16 @@
 
             <div>
                 <h1 id="page-title">Tổng quan hệ thống</h1>
-                <p>Xin chào, Administrator!</p>
+                <p id="admin-greeting">Xin chào, Administrator!</p>
             </div>
 
             <div class="admin-topbar-right">
                 <span class="admin-status">
                     <span class="status-dot"></span>
-                    Hệ thống Demo
+                    Hệ thống trực tuyến
                 </span>
 
-                <div class="topbar-avatar">A</div>
+                <div class="topbar-avatar" id="admin-topbar-avatar">A</div>
             </div>
 
         </header>
@@ -112,21 +120,21 @@
                     <div class="stat-icon blue">🏢</div>
                     <p>Tổng doanh nghiệp</p>
                     <h3 id="total-employers">0</h3>
-                    <small>Trong dữ liệu demo</small>
+                    <small>Doanh nghiệp đã đăng ký</small>
                 </article>
 
                 <article class="stat-card">
-                    <div class="stat-icon orange">⏳</div>
-                    <p>Chờ duyệt doanh nghiệp</p>
+                    <div class="stat-icon orange">🔒</div>
+                    <p>Tài khoản bị khóa</p>
                     <h3 id="pending-employers">0</h3>
-                    <small>Cần xử lý</small>
+                    <small>Đang tạm khóa</small>
                 </article>
 
                 <article class="stat-card">
                     <div class="stat-icon purple">📋</div>
                     <p>Tổng tin tuyển dụng</p>
                     <h3 id="total-jobs">0</h3>
-                    <small>Trong dữ liệu demo</small>
+                    <small>Tin tuyển dụng trên sàn</small>
                 </article>
 
                 <article class="stat-card">
@@ -201,9 +209,8 @@
 
                     <select id="employer-filter">
                         <option value="all">Tất cả trạng thái</option>
-                        <option value="pending">Chờ duyệt</option>
-                        <option value="approved">Đã duyệt</option>
-                        <option value="rejected">Từ chối</option>
+                        <option value="active">Đang hoạt động</option>
+                        <option value="locked">Đã khóa</option>
                     </select>
 
                 </div>
@@ -445,7 +452,7 @@
                     <div>
                         <span>Trạng thái</span>
                         <strong class="system-running">
-                            ● Đang hoạt động (Demo)
+                            ● Đang hoạt động
                         </strong>
                     </div>
 
@@ -466,8 +473,8 @@
 </div>
 
 <script src="./assets/js/toast.js" defer></script>
+<script src="./assets/js/api.js" defer></script>
 <script src="./assets/js/admin.js" defer></script>
-<script src="./assets/js/api.js"></script>
 
 </body>
 </html>

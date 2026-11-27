@@ -22,7 +22,11 @@
 
 /* ---------- PHẦN 0: GỌI API & TIỆN ÍCH DÙNG CHUNG ---------- */
 var EmployerAPI = (function () {
-  var BASE = window.API_BASE || ((window.location && window.location.port === '5001') ? '' : 'http://localhost:5001');
+  var isLocalHost = window.location && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+  var BASE = window.API_BASE
+    || ((window.location && window.location.port === '5001')
+      ? ''
+      : (isLocalHost ? 'http://localhost:5001' : 'https://jobportal-api-nhom6.onrender.com'));
   var SALARY_UNIT = 1000000; // form nhập "triệu đồng", CSDL lưu đồng (đổi nếu nhóm lưu đơn vị khác)
 
   // Bảo vệ phân quyền trang Nhà tuyển dụng (Client-side RBAC Guard)
@@ -183,6 +187,34 @@ document.addEventListener('DOMContentLoaded', function () {
   var $ = function (id) { return document.getElementById(id); };
   var esc = EmployerAPI.esc;
   var STATUS = EmployerAPI.STATUS;
+
+  // 0. ĐỒNG BỘ TÊN NHÀ TUYỂN DỤNG & XỬ LÝ ĐĂNG XUẤT
+  (function hydrateEmployerHeader() {
+    try {
+      var raw = localStorage.getItem('jobportal_session');
+      var sess = raw ? JSON.parse(raw) : null;
+      if (sess) {
+        var displayName = sess.company_name || sess.full_name || sess.email || 'Nhà tuyển dụng';
+        var initial = String(displayName).trim().slice(0, 2).toUpperCase() || 'HR';
+        document.querySelectorAll('.emp-user-name').forEach(function (el) { el.textContent = displayName; });
+        document.querySelectorAll('.emp-avatar').forEach(function (el) { el.textContent = initial; });
+      }
+    } catch (_) {}
+
+    document.querySelectorAll('.emp-sidebar-foot a[href*="auth.html"]').forEach(function (link) {
+      link.addEventListener('click', function () {
+        if (window.JobPortalAPI && typeof window.JobPortalAPI.clearAuthSession === 'function') {
+          window.JobPortalAPI.clearAuthSession();
+        } else {
+          try {
+            localStorage.removeItem('jobportal_access_token');
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('jobportal_session');
+          } catch (_) {}
+        }
+      });
+    });
+  })();
 
   // 1. SIDEBAR: luôn hiện trên desktop; trên mobile là Drawer trượt ra (nút ☰ chỉ hiện ở mobile)
   var sidebar = $('empSidebar');
