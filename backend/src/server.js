@@ -49,6 +49,7 @@ app.all('/uploads/cv*', (req, res) => {
 
 // Phục vụ tệp tĩnh công khai (logo công ty, banner, giao diện Frontend tĩnh)
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+app.use('/portfolios', express.static(path.join(__dirname, '../../portfolios')));
 app.use('/job-portal', express.static(path.join(__dirname, '../../job-portal')));
 app.use('/', express.static(path.join(__dirname, '../../job-portal')));
 
