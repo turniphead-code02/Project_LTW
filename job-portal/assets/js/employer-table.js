@@ -114,11 +114,48 @@ var EmployerAPI = (function () {
     return p(d.getDate()) + '/' + p(d.getMonth() + 1) + '/' + d.getFullYear();
   }
 
-  function hydrateBrandName(name) {
-    if (!name) return;
-    var initial = String(name).trim().slice(0, 2).toUpperCase() || 'HR';
-    document.querySelectorAll('.emp-user-name').forEach(function (el) { el.textContent = name; });
-    document.querySelectorAll('.emp-avatar').forEach(function (el) { el.textContent = initial; });
+  function resolveLogoUrl(raw) {
+    if (!raw) return '';
+    var s = String(raw).trim();
+    if (!s) return '';
+    if (s.indexOf('/assets/') === 0) return '.' + s;
+    if (s.indexOf('assets/') === 0) return './' + s;
+    return s;
+  }
+
+  function hydrateBrandName(nameOrCompany, logoUrlArg) {
+    var name = '';
+    var rawLogo = logoUrlArg || '';
+    if (nameOrCompany && typeof nameOrCompany === 'object') {
+      name = nameOrCompany.company_name || nameOrCompany.name || '';
+      rawLogo = nameOrCompany.logo_url || nameOrCompany.logoUrl || '';
+    } else {
+      name = nameOrCompany || '';
+    }
+    if (!name && !rawLogo) return;
+    var initial = String(name || 'HR').trim().slice(0, 2).toUpperCase() || 'HR';
+    var resolvedLogo = resolveLogoUrl(rawLogo);
+    if (name) {
+      document.querySelectorAll('.emp-user-name').forEach(function (el) { el.textContent = name; });
+    }
+    document.querySelectorAll('.emp-avatar').forEach(function (el) {
+      el.innerHTML = '';
+      if (resolvedLogo) {
+        el.classList.add('has-logo');
+        var img = document.createElement('img');
+        img.src = resolvedLogo;
+        img.alt = name || 'Logo doanh nghiệp';
+        img.className = 'emp-avatar-img';
+        img.onerror = function () {
+          el.classList.remove('has-logo');
+          el.textContent = initial;
+        };
+        el.appendChild(img);
+      } else {
+        el.classList.remove('has-logo');
+        el.textContent = initial;
+      }
+    });
   }
 
   return {
@@ -131,11 +168,12 @@ var EmployerAPI = (function () {
     isOffline: isOffline,
     fail: fail,
     getRawToken: getRawToken,
+    resolveLogoUrl: resolveLogoUrl,
     hydrateBrandName: hydrateBrandName,
     loadDashboard: function () {
       return request('GET', '/dashboard').then(function (j) {
-        if (j.data && j.data.company && j.data.company.company_name) {
-          hydrateBrandName(j.data.company.company_name);
+        if (j.data && j.data.company) {
+          hydrateBrandName(j.data.company);
         }
         return { data: j.data, offline: false };
       }).catch(function (err) {
@@ -369,6 +407,23 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     confirmModal?.addEventListener('click', function (e) { if (e.target === confirmModal) closeConfirm(); });
 
+    function updateLogoPreview(rawUrl, fallbackName) {
+      var preview = $('compLogoPreview');
+      if (!preview) return;
+      var url = EmployerAPI.resolveLogoUrl(rawUrl);
+      var initial = String(fallbackName || 'LOGO').trim().slice(0, 2).toUpperCase() || 'LG';
+      preview.innerHTML = '';
+      if (url) {
+        var img = document.createElement('img');
+        img.src = url;
+        img.alt = fallbackName || 'Logo công ty';
+        img.onerror = function () { preview.textContent = initial; };
+        preview.appendChild(img);
+      } else {
+        preview.textContent = initial;
+      }
+    }
+
     function openCompanyModal() {
       if (!companyModal) return;
       var c = dash?.company;
@@ -379,9 +434,15 @@ document.addEventListener('DOMContentLoaded', function () {
         $('compAddressInput').value = c.address || '';
         $('compLogoInput').value = c.logo_url || '';
         $('compDescInput').value = c.description || '';
+        updateLogoPreview(c.logo_url, c.company_name);
+      } else {
+        updateLogoPreview('', 'LG');
       }
       companyModal.classList.add('is-open');
     }
+    $('compLogoInput')?.addEventListener('input', function () {
+      updateLogoPreview(this.value, $('compNameInput')?.value);
+    });
     function closeCompanyModal() { companyModal?.classList.remove('is-open'); }
 
     $('btnOpenCompanyModal')?.addEventListener('click', openCompanyModal);
@@ -405,7 +466,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (saveBtn) saveBtn.disabled = true;
       EmployerAPI.updateCompany(payload).then(function (updated) {
         dash.company = updated;
-        EmployerAPI.hydrateBrandName(updated.company_name);
+        EmployerAPI.hydrateBrandName(updated);
         closeCompanyModal();
         window.showToast('Đã cập nhật hồ sơ doanh nghiệp!', 'success');
       }).catch(EmployerAPI.fail).finally(function () {
@@ -584,7 +645,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Nạp company header + meta + chi tiết tin nếu là chế độ sửa
   EmployerAPI.loadCompany().then(function (c) {
-    if (c && c.company_name) EmployerAPI.hydrateBrandName(c.company_name);
+    if (c) EmployerAPI.hydrateBrandName(c);
   }).catch(function () {});
 
   EmployerAPI.loadMeta().then(function (m) {
