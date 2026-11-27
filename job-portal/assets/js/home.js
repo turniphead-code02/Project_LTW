@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (entry.isIntersecting && !hasAnimatedStats) {
           hasAnimatedStats = true;
           statNumbers.forEach((statEl) => {
-            const rawTarget = statEl.getAttribute('data-target') || '1000';
+            const rawTarget = statEl.getAttribute('data-target') || '0';
             const targetVal = parseInt(rawTarget.replace(/\D/g, ''), 10);
             animateCount(statEl, targetVal);
           });
@@ -257,7 +257,69 @@ document.addEventListener('DOMContentLoaded', function () {
       const res = await window.JobPortalAPI.get('/home/overview');
       if (!res || !res.success || !res.data) return;
 
-      const { featuredJobs, topCompanies } = res.data;
+      const { stats, categories, featuredJobs, topCompanies } = res.data;
+
+      // Cập nhật dải chỉ số thực tế từ MySQL
+      if (stats) {
+        const openEl = document.getElementById('statOpenJobs');
+        const compEl = document.getElementById('statCompanies');
+        const salEl = document.getElementById('statAvgSalary');
+        const candEl = document.getElementById('statCandidates');
+        const allJobsBtnText = document.getElementById('allJobsCtaLabel');
+
+        const openCount = Number(stats.openJobs) || 0;
+        const compCount = Number(stats.companies) || 0;
+        const candCount = Number(stats.candidates) || 0;
+
+        if (openEl) {
+          openEl.setAttribute('data-target', String(openCount));
+          openEl.textContent = openCount.toLocaleString('vi-VN');
+        }
+        if (compEl) {
+          compEl.setAttribute('data-target', String(compCount));
+          compEl.textContent = compCount.toLocaleString('vi-VN');
+        }
+        if (salEl) {
+          salEl.textContent = stats.avgSalaryMillions ? `${stats.avgSalaryMillions}M` : 'Thỏa thuận';
+        }
+        if (candEl) {
+          candEl.setAttribute('data-target', String(candCount));
+          candEl.textContent = candCount.toLocaleString('vi-VN');
+        }
+        if (allJobsBtnText) {
+          allJobsBtnText.textContent = openCount > 0
+            ? `Xem Tất Cả ${openCount} Việc Làm IT Đang Mở`
+            : 'Xem Tất Cả Việc Làm IT';
+        }
+      }
+
+      // Cập nhật danh mục ngành IT thực tế từ MySQL
+      const categoriesGrid = document.querySelector('.categories-grid');
+      if (categoriesGrid && Array.isArray(categories) && categories.length > 0) {
+        const iconMap = {
+          'lap-trinh-phan-mem': 'fa-code',
+          'khoa-hoc-du-lieu-ai': 'fa-chart-pie',
+          'thiet-ke-ui-ux': 'fa-pen-ruler',
+          'an-toan-thong-tin': 'fa-shield-halved',
+          'cloud-devops': 'fa-cloud',
+          'kiem-thu-phan-mem-qa': 'fa-vial-circle-check'
+        };
+        categoriesGrid.innerHTML = categories.map((cat) => {
+          const icon = iconMap[cat.slug] || 'fa-laptop-code';
+          const count = Number(cat.open_jobs_count) || 0;
+          const countLabel = count > 0 ? `${count} việc làm đang mở` : 'Đang cập nhật tin tuyển dụng';
+          return `
+            <a href="./jobs.html?category=${encodeURIComponent(cat.slug)}" class="category-card">
+              <div class="category-icon-box" aria-hidden="true"><i class="fa-solid ${icon}"></i></div>
+              <div>
+                <h3 class="category-title">${escapeHtml(cat.category_name)}</h3>
+                <p class="category-count">${countLabel}</p>
+              </div>
+            </a>
+          `;
+        }).join('');
+      }
+
       if (Array.isArray(featuredJobs)) {
         liveJobsCache = featuredJobs;
         updateRadarMetrics();
@@ -349,10 +411,10 @@ document.addEventListener('DOMContentLoaded', function () {
   const signalTickerEl = document.getElementById('liveSignalTicker');
   if (signalTickerEl) {
     const signals = [
-      '[LIVE] Sinh viên CNTT UTH vừa vượt qua vòng phỏng vấn Backend Node.js tại FPT Software (Offer 19.5M/tháng)',
-      '[LIVE] VNG Corporation vừa mở thêm 3 vị trí Frontend ReactJS (Junior/Middle) tại Quận 7, TP.HCM',
-      '[LIVE] Viettel Solutions đang tìm Thực Tập Sinh Java / Spring Boot có trợ cấp 6 - 8 Triệu',
-      '[LIVE] KMS Technology vừa cập nhật khung lương DevOps & Cloud Engineer lên tới 38 Triệu/tháng'
+      '[LIVE] Hệ thống đồng bộ trực tiếp danh sách việc làm IT đã kiểm duyệt từ cơ sở dữ liệu',
+      '[LIVE] Hỗ trợ lọc nhanh theo kỹ năng ReactJS, Node.js, Java, Python, Figma & Cloud DevOps',
+      '[LIVE] Quy trình ứng tuyển minh bạch 4 bước: Đã nộp → Đã xem → Phỏng vấn → Kết quả',
+      '[LIVE] Doanh nghiệp công nghệ đăng tin miễn phí với quy chuẩn kiểm duyệt pháp nhân rõ ràng'
     ];
     let signalIdx = 0;
     setInterval(() => {
@@ -365,7 +427,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }, 4500);
   }
 
-  // 8. TRẠM ĐỊNH GIÁ LƯƠNG & KỸ NĂNG (UTH SALARY & SKILL RADAR v2.6)
+  // 8. TRẠM ĐỊNH GIÁ LƯƠNG & KỸ NĂNG (IT SALARY & SKILL RADAR)
   const levelBtns = document.querySelectorAll('.radar-level-btn');
   const skillChips = document.querySelectorAll('#radarSkillGroup .radar-chip');
   const salaryDisplayEl = document.getElementById('radarSalaryDisplay');
@@ -409,16 +471,22 @@ document.addEventListener('DOMContentLoaded', function () {
       else percentileEl.textContent = 'Mức khởi điểm thực tập';
     }
 
-    // Tính số việc làm khớp dựa trên dữ liệu MySQL thực (hoặc giả lập hợp lý khi chưa có cache)
+    // Tính số việc làm khớp dựa trên dữ liệu MySQL thực hoặc thẻ việc làm hiện có
     if (jobCountEl) {
-      if (liveJobsCache.length > 0 && activeSkills.length > 0) {
-        const matched = liveJobsCache.filter((job) => {
-          const hay = `${job.title} ${job.skills || ''} ${job.category_name || ''}`.toLowerCase();
-          return activeSkills.some((sk) => hay.includes(sk.toLowerCase().replace('ui/ux ', '')));
-        });
-        jobCountEl.textContent = String(matched.length || liveJobsCache.length);
+      if (liveJobsCache.length > 0) {
+        const matched = activeSkills.length > 0
+          ? liveJobsCache.filter((job) => {
+              const hay = `${job.title} ${job.skills || ''} ${job.category_name || ''}`.toLowerCase();
+              return activeSkills.some((sk) => hay.includes(sk.toLowerCase().replace('ui/ux ', '')));
+            })
+          : liveJobsCache;
+        jobCountEl.textContent = String(matched.length);
       } else {
-        jobCountEl.textContent = String(Math.max(4, activeSkills.length * 6));
+        const domCards = Array.from(document.querySelectorAll('.jobs-grid .job-card'));
+        const matchedDom = activeSkills.length > 0
+          ? domCards.filter((c) => activeSkills.some((sk) => c.textContent.toLowerCase().includes(sk.toLowerCase())))
+          : domCards;
+        jobCountEl.textContent = String(matchedDom.length);
       }
     }
   }

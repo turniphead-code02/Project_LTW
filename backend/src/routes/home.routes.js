@@ -25,6 +25,22 @@ router.get('/overview', async (req, res) => {
     const [[candidateCount]] = await pool.query(
       "SELECT COUNT(*) AS totalCandidates FROM users WHERE role = 'candidate'"
     );
+    const [[salaryStats]] = await pool.query(`
+      SELECT ROUND(
+        AVG((COALESCE(salary_min, salary_max) + COALESCE(salary_max, salary_min)) / 2) / 1000000,
+        1
+      ) AS avgSalaryMillions
+      FROM jobs
+      WHERE status = 'approved'
+        AND deadline >= CURDATE()
+        AND currency = 'VND'
+        AND (salary_min IS NOT NULL OR salary_max IS NOT NULL)
+    `);
+    const [[appStats]] = await pool.query(`
+      SELECT COUNT(*) AS totalApplications,
+             SUM(CASE WHEN status <> 'submitted' THEN 1 ELSE 0 END) AS respondedApplications
+      FROM applications
+    `);
 
     const [categories] = await pool.query(`
       SELECT c.category_id, c.category_name, c.slug, c.description,
@@ -69,9 +85,14 @@ router.get('/overview', async (req, res) => {
       message: 'Tải dữ liệu trang chủ thành công.',
       data: {
         stats: {
-          openJobs: jobCount.totalJobs,
-          companies: companyCount.totalCompanies,
-          candidates: candidateCount.totalCandidates
+          openJobs: Number(jobCount.totalJobs) || 0,
+          companies: Number(companyCount.totalCompanies) || 0,
+          candidates: Number(candidateCount.totalCandidates) || 0,
+          avgSalaryMillions: salaryStats?.avgSalaryMillions !== null && salaryStats?.avgSalaryMillions !== undefined
+            ? Number(salaryStats.avgSalaryMillions)
+            : null,
+          totalApplications: Number(appStats?.totalApplications) || 0,
+          respondedApplications: Number(appStats?.respondedApplications) || 0
         },
         categories,
         featuredJobs,

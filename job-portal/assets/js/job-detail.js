@@ -269,7 +269,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const job = JOBS_DB[currentJobId] || JOBS_DB['job-01'];
 
   // Cập nhật thẻ Title trang
-  document.title = `${job.title} — ${job.company} | JobPortal UTH`;
+  document.title = `${job.title} — ${job.company} | JobPortal`;
 
   // --------------------------------------------------------------------------
   // 3. ĐIỀN DỮ LIỆU LÊN GIAO DIỆN (HYDRATE DOM ELEMENTS)

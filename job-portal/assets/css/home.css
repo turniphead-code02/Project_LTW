@@ -592,11 +592,11 @@
 }
 
 /* --------------------------------------------------------------------------
-   3. DANH MỤC NGHỀ NGHIỆP TRỌNG ĐIỂM (GRID 4 CỘT)
+   3. DANH MỤC NGHỀ NGHIỆP TRỌNG ĐIỂM (GRID 3 CỘT CHO 6 NHÓM NGÀNH IT)
    -------------------------------------------------------------------------- */
 .categories-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: var(--space-16);
 }
 

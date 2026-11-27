@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>JobPortal — Cổng Thông Tin Việc Làm & Tuyển Dụng Sinh Viên IT | Nhóm 6 UTH</title>
-  <meta name="description" content="Nền tảng việc làm và thực tập công nghệ thông tin dành cho sinh viên và kỹ sư trẻ. Thiết kế theo tiêu chuẩn QTTK.html môn Lập trình Web - Nhóm trưởng Trần Hữu Thành." />
+  <title>JobPortal — Cổng Thông Tin Việc Làm &amp; Tuyển Dụng Ngành Công Nghệ Thông Tin</title>
+  <meta name="description" content="Nền tảng việc làm và thực tập công nghệ thông tin chuyên nghiệp kết nối ứng viên với doanh nghiệp công nghệ." />
 
   <!-- Preconnect Google Fonts để tối ưu tốc độ tải trang -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -47,7 +47,7 @@
       <!-- Cụm Logo thương hiệu -->
       <a href="./index.html" class="header-brand" aria-label="Trang chủ JobPortal">
         <div class="brand-icon" aria-hidden="true"><i class="fa-solid fa-briefcase"></i></div>
-        <div class="brand-text">Job<span>Portal</span><span class="brand-badge">UTH TALENT</span></div>
+        <div class="brand-text">Job<span>Portal</span><span class="brand-badge">IT CAREERS</span></div>
       </a>
 
       <!-- Menu điều hướng chính -->
@@ -89,10 +89,10 @@
         <div class="container hero-signal-inner">
           <div class="signal-badge">
             <span class="pulse-dot"></span>
-            <span>UTH LIVE STREAM</span>
+            <span>LIVE RECRUITMENT</span>
           </div>
           <div id="liveSignalTicker" class="signal-ticker-text" aria-live="polite">
-            [14:20] Sinh viên CNTT UTH vừa vượt qua vòng phỏng vấn Kỹ sư Backend Node.js tại FPT Software (Offer 19.5M/tháng)
+            [LIVE] Hệ thống đồng bộ trực tiếp danh sách việc làm IT đã kiểm duyệt từ cơ sở dữ liệu
           </div>
           <div class="signal-shortcut-tip">
             <span>Nhấn</span> <kbd>/</kbd> <span>để mở Command Search</span>
@@ -105,8 +105,8 @@
         <div class="hero-split-layout">
           <div class="hero-narrative-col">
             <div class="hero-eyebrow">
-              <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
-              <span>Cổng Việc Làm &amp; Định Giá Năng Lực Kỹ Sư — Đại học GTVT TP.HCM (UTH)</span>
+              <i class="fa-solid fa-code" aria-hidden="true"></i>
+              <span>Cổng Việc Làm &amp; Định Giá Năng Lực Chuyên Ngành Công Nghệ Thông Tin</span>
             </div>
 
             <h1 id="heroTitle" class="hero-title">
@@ -114,7 +114,7 @@
             </h1>
 
             <p class="hero-subtitle">
-              Kết nối trực tiếp sinh viên và kỹ sư trẻ với hơn 850 doanh nghiệp công nghệ đã xác thực. Tích hợp bộ máy <strong>chấm điểm độ khớp kỹ năng (Skill-Match)</strong>, định giá khung lương minh bạch và theo dõi trạng thái duyệt CV 4 bước.
+              Kết nối trực tiếp ứng viên và kỹ sư công nghệ thông tin với các doanh nghiệp tuyển dụng đã xác thực. Tích hợp công cụ <strong>ước lượng khung lương theo kỹ năng (Skill-Match)</strong>, tìm kiếm đa tiêu chí và theo dõi quy trình duyệt CV 4 bước.
             </p>
 
             <!-- Huy hiệu cam kết chuẩn kỹ thuật (Architectural Trust Pills) -->
@@ -139,7 +139,7 @@
             <div class="radar-console-header">
               <div class="radar-console-title">
                 <i class="fa-solid fa-sliders" aria-hidden="true"></i>
-                <span>// UTH SALARY &amp; SKILL RADAR v2.6</span>
+                <span>// IT SALARY &amp; SKILL RADAR</span>
               </div>
               <span class="radar-status-pill"><span class="pulse-dot"></span> INTERACTIVE</span>
             </div>
@@ -177,7 +177,7 @@
                   <div class="radar-salary-value" id="radarSalaryDisplay">16.0 - 21.0 Triệu <small>/ tháng</small></div>
                 </div>
                 <div class="radar-match-counter">
-                  <span id="radarJobCount">24</span>
+                  <span id="radarJobCount">6</span>
                   <small>việc khớp</small>
                 </div>
               </div>
@@ -222,8 +222,8 @@
               <select id="searchLocation" class="search-select" aria-label="Chọn địa điểm làm việc">
                 <option value="">Tất cả địa điểm</option>
                 <option value="hcm" selected>TP. Hồ Chí Minh</option>
-                <option value="hn">Hà Nội</option>
-                <option value="dn">Đà Nẵng</option>
+                <option value="hanoi">Hà Nội</option>
+                <option value="danang">Đà Nẵng</option>
                 <option value="cantho">Cần Thơ</option>
                 <option value="remote">Làm việc từ xa (Remote)</option>
               </select>
@@ -232,13 +232,14 @@
             <!-- Trường 3: Ngành nghề / Lĩnh vực -->
             <div class="search-field">
               <span class="search-icon" aria-hidden="true"><i class="fa-solid fa-layer-group"></i></span>
-              <select id="searchCategory" class="search-select" aria-label="Chọn ngành nghề">
-                <option value="">Tất cả ngành nghề</option>
-                <option value="it">Công Nghệ Thông Tin</option>
-                <option value="uiux">Thiết Kế UI / UX</option>
-                <option value="data">Khoa Học Dữ Liệu &amp; AI</option>
-                <option value="security">An Toàn Thông Tin</option>
-                <option value="marketing">Marketing &amp; Truyền Thông</option>
+              <select id="searchCategory" class="search-select" aria-label="Chọn ngành nghề IT">
+                <option value="">Tất cả chuyên ngành IT</option>
+                <option value="lap-trinh-phan-mem">Lập Trình &amp; Phát Triển Phần Mềm</option>
+                <option value="an-toan-thong-tin">An Toàn Thông Tin (SecOps)</option>
+                <option value="thiet-ke-ui-ux">Thiết Kế Giao Diện (UI/UX)</option>
+                <option value="cloud-devops">Hạ Tầng Cloud &amp; DevOps</option>
+                <option value="khoa-hoc-du-lieu-ai">Khoa Học Dữ Liệu &amp; AI</option>
+                <option value="kiem-thu-phan-mem-qa">Kiểm Thử Phần Mềm (QA/QC)</option>
               </select>
             </div>
 
@@ -273,9 +274,9 @@
     </section>
 
     <!-- -----------------------------------------------------------------------
-         3. KHỐI CHỈ SỐ THỊ TRƯỜNG IT THỜI GIAN THỰC (LIVE TELEMETRY STRIP SIGNATURE)
+         3. KHỐI CHỈ SỐ HỆ THỐNG THỜI GIAN THỰC (LIVE DATABASE TELEMETRY)
          ----------------------------------------------------------------------- -->
-    <div class="stats-section-wrap" aria-label="Chỉ số thị trường việc làm IT thời gian thực">
+    <div class="stats-section-wrap" aria-label="Số liệu thực tế trên hệ thống">
       <div class="container">
         <div class="telemetry-strip">
           <!-- Chỉ số 1: Tin tuyển dụng IT đang hoạt động -->
@@ -284,130 +285,106 @@
               <span>ACTIVE OPENINGS</span>
               <span class="pulse-indicator"><span class="pulse-dot"></span> LIVE</span>
             </div>
-            <div class="telemetry-number stat-number" data-target="5200">5.200+</div>
+            <div id="statOpenJobs" class="telemetry-number stat-number" data-target="7">7</div>
             <div class="telemetry-label">Việc Làm IT Đang Mở Tuyển</div>
           </div>
 
-          <!-- Chỉ số 2: Doanh nghiệp công nghệ đối tác -->
+          <!-- Chỉ số 2: Doanh nghiệp công nghệ tham gia -->
           <div class="telemetry-box">
             <div class="telemetry-header">
-              <span>ENTERPRISE HUB</span>
+              <span>PARTNER COMPANIES</span>
               <span class="telemetry-tag">VERIFIED</span>
             </div>
-            <div class="telemetry-number stat-number" data-target="850">850+</div>
-            <div class="telemetry-label">Doanh Nghiệp Đã Xác Thực</div>
+            <div id="statCompanies" class="telemetry-number stat-number" data-target="7">7</div>
+            <div class="telemetry-label">Doanh Nghiệp Công Nghệ</div>
           </div>
 
-          <!-- Chỉ số 3: Lương trung vị khởi điểm theo khảo sát ngành -->
+          <!-- Chỉ số 3: Mức lương trung bình từ dữ liệu tin đăng -->
           <div class="telemetry-box">
             <div class="telemetry-header">
-              <span>MEDIAN STARTING</span>
-              <span class="telemetry-tag">MARKET</span>
+              <span>AVG SALARY</span>
+              <span class="telemetry-tag">REALTIME</span>
             </div>
-            <div class="telemetry-number">18.5M</div>
-            <div class="telemetry-label">Lương Trung Vị Kỹ Sư Mới</div>
+            <div id="statAvgSalary" class="telemetry-number">20.1M</div>
+            <div class="telemetry-label">Lương Trung Bình Vị Trí Đang Mở</div>
           </div>
 
-          <!-- Chỉ số 4: Tỷ lệ phản hồi hồ sơ -->
+          <!-- Chỉ số 4: Ứng viên đã đăng ký -->
           <div class="telemetry-box">
             <div class="telemetry-header">
-              <span>SUCCESS RATE</span>
-              <span class="telemetry-tag">PLACEMENT</span>
+              <span>CANDIDATE POOL</span>
+              <span class="telemetry-tag">ACTIVE</span>
             </div>
-            <div class="telemetry-number">94.2%</div>
-            <div class="telemetry-label">Tỷ Lệ Phản Hồi Hồ Sơ UTH</div>
+            <div id="statCandidates" class="telemetry-number stat-number" data-target="7">7</div>
+            <div class="telemetry-label">Ứng Viên Đã Tham Gia</div>
           </div>
         </div>
       </div>
     </div>
 
     <!-- -----------------------------------------------------------------------
-         4. DANH MỤC NGHỀ NGHIỆP TRỌNG ĐIỂM (CATEGORIES GRID — WIREFRAME 5.1)
+         4. DANH MỤC CHUYÊN NGÀNH CÔNG NGHỆ THÔNG TIN (6 NHÓM NGÀNH THỰC TẾ)
          ----------------------------------------------------------------------- -->
     <section id="categories" class="section">
       <div class="container">
         <div class="section-header-bar">
           <div>
-            <span class="section-kicker"><i class="fa-solid fa-terminal"></i> // SEC_01 // DISCIPLINES</span>
-            <h2 class="section-title">Danh Mục Nghề Nghiệp Trọng Điểm</h2>
-            <p class="section-desc">Phân loại vị trí tuyển dụng theo nhóm chuyên môn kỹ thuật và nghiệp vụ.</p>
+            <span class="section-kicker"><i class="fa-solid fa-terminal"></i> // SEC_01 // IT_DISCIPLINES</span>
+            <h2 class="section-title">Chuyên Ngành Công Nghệ Thông Tin</h2>
+            <p class="section-desc">Phân loại vị trí tuyển dụng IT theo đúng danh mục chuyên môn hiện có trên hệ thống.</p>
           </div>
           <a href="./jobs.html" class="btn btn-outline btn-sm">
-            <span>Xem tất cả ngành nghề</span>
+            <span>Xem tất cả việc làm</span>
             <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
           </a>
         </div>
 
         <div class="categories-grid">
-          <!-- Ngành 1: CNTT -->
-          <a href="./jobs.html?category=it" class="category-card">
+          <a href="./jobs.html?category=lap-trinh-phan-mem" class="category-card">
             <div class="category-icon-box" aria-hidden="true"><i class="fa-solid fa-code"></i></div>
             <div>
-              <h3 class="category-title">Phát Triển Phần Mềm</h3>
-              <p class="category-count">1.450 việc làm đang mở</p>
+              <h3 class="category-title">Lập Trình &amp; Phát Triển Phần Mềm</h3>
+              <p class="category-count">3 việc làm đang mở</p>
             </div>
           </a>
 
-          <!-- Ngành 2: UI/UX -->
-          <a href="./jobs.html?category=uiux" class="category-card">
-            <div class="category-icon-box" aria-hidden="true"><i class="fa-solid fa-pen-ruler"></i></div>
-            <div>
-              <h3 class="category-title">Thiết Kế Sản Phẩm (UI/UX)</h3>
-              <p class="category-count">480 việc làm đang mở</p>
-            </div>
-          </a>
-
-          <!-- Ngành 3: Data & AI -->
-          <a href="./jobs.html?category=data" class="category-card">
-            <div class="category-icon-box" aria-hidden="true"><i class="fa-solid fa-chart-pie"></i></div>
-            <div>
-              <h3 class="category-title">Khoa Học Dữ Liệu &amp; AI</h3>
-              <p class="category-count">360 việc làm đang mở</p>
-            </div>
-          </a>
-
-          <!-- Ngành 4: An Ninh Mạng -->
-          <a href="./jobs.html?category=security" class="category-card">
+          <a href="./jobs.html?category=an-toan-thong-tin" class="category-card">
             <div class="category-icon-box" aria-hidden="true"><i class="fa-solid fa-shield-halved"></i></div>
             <div>
-              <h3 class="category-title">An Toàn Thông Tin</h3>
-              <p class="category-count">240 việc làm đang mở</p>
+              <h3 class="category-title">An Toàn Thông Tin (SecOps)</h3>
+              <p class="category-count">2 việc làm đang mở</p>
             </div>
           </a>
 
-          <!-- Ngành 5: DevOps / Cloud -->
-          <a href="./jobs.html?category=devops" class="category-card">
+          <a href="./jobs.html?category=thiet-ke-ui-ux" class="category-card">
+            <div class="category-icon-box" aria-hidden="true"><i class="fa-solid fa-pen-ruler"></i></div>
+            <div>
+              <h3 class="category-title">Thiết Kế Giao Diện (UI/UX)</h3>
+              <p class="category-count">1 việc làm đang mở</p>
+            </div>
+          </a>
+
+          <a href="./jobs.html?category=cloud-devops" class="category-card">
             <div class="category-icon-box" aria-hidden="true"><i class="fa-solid fa-cloud"></i></div>
             <div>
               <h3 class="category-title">Hạ Tầng Cloud &amp; DevOps</h3>
-              <p class="category-count">310 việc làm đang mở</p>
+              <p class="category-count">1 việc làm đang mở</p>
             </div>
           </a>
 
-          <!-- Ngành 6: QA / QC Testing -->
-          <a href="./jobs.html?category=testing" class="category-card">
+          <a href="./jobs.html?category=khoa-hoc-du-lieu-ai" class="category-card">
+            <div class="category-icon-box" aria-hidden="true"><i class="fa-solid fa-chart-pie"></i></div>
+            <div>
+              <h3 class="category-title">Khoa Học Dữ Liệu &amp; AI</h3>
+              <p class="category-count">Đang cập nhật tin tuyển dụng</p>
+            </div>
+          </a>
+
+          <a href="./jobs.html?category=kiem-thu-phan-mem-qa" class="category-card">
             <div class="category-icon-box" aria-hidden="true"><i class="fa-solid fa-vial-circle-check"></i></div>
             <div>
               <h3 class="category-title">Kiểm Thử Phần Mềm (QA/QC)</h3>
-              <p class="category-count">520 việc làm đang mở</p>
-            </div>
-          </a>
-
-          <!-- Ngành 7: Marketing -->
-          <a href="./jobs.html?category=marketing" class="category-card">
-            <div class="category-icon-box" aria-hidden="true"><i class="fa-solid fa-bullhorn"></i></div>
-            <div>
-              <h3 class="category-title">Digital Marketing</h3>
-              <p class="category-count">780 việc làm đang mở</p>
-            </div>
-          </a>
-
-          <!-- Ngành 8: Logistics -->
-          <a href="./jobs.html?category=logistics" class="category-card">
-            <div class="category-icon-box" aria-hidden="true"><i class="fa-solid fa-truck-fast"></i></div>
-            <div>
-              <h3 class="category-title">Công Nghệ Logistics &amp; Vận Tải</h3>
-              <p class="category-count">450 việc làm đang mở</p>
+              <p class="category-count">Đang cập nhật tin tuyển dụng</p>
             </div>
           </a>
         </div>
@@ -665,7 +642,7 @@
         <!-- Nút dẫn sang trang Tra cứu đầy đủ (Module 1) -->
         <div class="jobs-cta-center">
           <a href="./jobs.html" class="btn btn-primary btn-lg">
-            <span>Xem Tất Cả 5.200+ Việc Làm Đang Mở</span>
+            <span id="allJobsCtaLabel">Xem Tất Cả Việc Làm IT Đang Mở</span>
             <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
           </a>
         </div>
@@ -729,7 +706,7 @@
           <div>
             <span class="section-kicker"><i class="fa-solid fa-terminal"></i> // SEC_04 // PARTNERS</span>
             <h2 class="section-title">Doanh Nghiệp Tuyển Dụng Hàng Đầu</h2>
-            <p class="section-desc">Các tập đoàn và công ty công nghệ đang tích cực tuyển dụng sinh viên và kỹ sư UTH.</p>
+            <p class="section-desc">Các tập đoàn và doanh nghiệp công nghệ đang tuyển dụng nhân sự IT trên hệ thống.</p>
           </div>
           <a href="./jobs.html" class="btn btn-outline btn-sm">
             <span>Xem tất cả đối tác</span>
@@ -741,37 +718,37 @@
           <a href="./jobs.html?keyword=FPT" class="employer-card">
             <div class="employer-logo-img" style="background:#ffffff; display:flex; align-items:center; justify-content:center; font-weight:800; color:#ea580c; border:1px solid #e2e8f0;">FPT</div>
             <h4 class="employer-name">FPT Software</h4>
-            <span class="employer-openings">124 vị trí đang mở</span>
+            <span class="employer-openings">Xem vị trí đang tuyển</span>
           </a>
 
           <a href="./jobs.html?keyword=VNG" class="employer-card">
             <div class="employer-logo-img" style="background:#ffffff; display:flex; align-items:center; justify-content:center; font-weight:800; color:#ea580c; border:1px solid #e2e8f0;">VNG</div>
             <h4 class="employer-name">VNG Corporation</h4>
-            <span class="employer-openings">86 vị trí đang mở</span>
+            <span class="employer-openings">Xem vị trí đang tuyển</span>
           </a>
 
           <a href="./jobs.html?keyword=Viettel" class="employer-card">
             <div class="employer-logo-img" style="background:#ffffff; display:flex; align-items:center; justify-content:center; font-weight:800; color:#dc2626; border:1px solid #e2e8f0;">VIETTEL</div>
-            <h4 class="employer-name">Viettel Group</h4>
-            <span class="employer-openings">95 vị trí đang mở</span>
+            <h4 class="employer-name">Viettel Solutions</h4>
+            <span class="employer-openings">Xem vị trí đang tuyển</span>
           </a>
 
-          <a href="./jobs.html?keyword=TMA" class="employer-card">
-            <div class="employer-logo-img" style="background:#ffffff; display:flex; align-items:center; justify-content:center; font-weight:800; color:#1e40af; border:1px solid #e2e8f0;">TMA</div>
-            <h4 class="employer-name">TMA Solutions</h4>
-            <span class="employer-openings">68 vị trí đang mở</span>
+          <a href="./jobs.html?keyword=Shopee" class="employer-card">
+            <div class="employer-logo-img" style="background:#ffffff; display:flex; align-items:center; justify-content:center; font-weight:800; color:#f97316; border:1px solid #e2e8f0;">SHOPEE</div>
+            <h4 class="employer-name">Shopee Vietnam</h4>
+            <span class="employer-openings">Xem vị trí đang tuyển</span>
           </a>
 
           <a href="./jobs.html?keyword=MoMo" class="employer-card">
             <div class="employer-logo-img" style="background:#ffffff; display:flex; align-items:center; justify-content:center; font-weight:800; color:#db2777; border:1px solid #e2e8f0;">MOMO</div>
             <h4 class="employer-name">Ví Điện Tử MoMo</h4>
-            <span class="employer-openings">45 vị trí đang mở</span>
+            <span class="employer-openings">Xem vị trí đang tuyển</span>
           </a>
 
-          <a href="./jobs.html?keyword=VNPT" class="employer-card">
-            <div class="employer-logo-img" style="background:#ffffff; display:flex; align-items:center; justify-content:center; font-weight:800; color:#0284c7; border:1px solid #e2e8f0;">VNPT</div>
-            <h4 class="employer-name">VNPT Technology</h4>
-            <span class="employer-openings">52 vị trí đang mở</span>
+          <a href="./jobs.html?keyword=KMS" class="employer-card">
+            <div class="employer-logo-img" style="background:#ffffff; display:flex; align-items:center; justify-content:center; font-weight:800; color:#0284c7; border:1px solid #e2e8f0;">KMS</div>
+            <h4 class="employer-name">KMS Technology</h4>
+            <span class="employer-openings">Xem vị trí đang tuyển</span>
           </a>
         </div>
       </div>
@@ -784,9 +761,9 @@
       <div class="container">
         <div class="cta-banner">
           <div class="cta-banner-text">
-            <h2 class="cta-banner-title">Quý Doanh Nghiệp Đang Tìm Kiếm Kỹ Sư Trẻ Tài Năng?</h2>
+            <h2 class="cta-banner-title">Quý Doanh Nghiệp Đang Tìm Kiếm Kỹ Sư IT Tài Năng?</h2>
             <p class="cta-banner-desc">
-              Đăng tin tuyển dụng hoàn toàn miễn phí, tiếp cận mạng lưới hơn 12.000+ sinh viên và kỹ sư công nghệ thông tin từ Trường ĐH Giao Thông Vận Tải TP.HCM (UTH).
+              Đăng tin tuyển dụng miễn phí, tiếp cận nguồn ứng viên công nghệ thông tin chất lượng cao và quản lý quy trình sàng lọc hồ sơ tập trung.
             </p>
           </div>
           <div class="cta-banner-actions">
@@ -810,7 +787,7 @@
         <div class="section-header">
           <div>
             <span class="section-kicker"><i class="fa-solid fa-terminal"></i> // SEC_05 // TEAM_PORTFOLIOS</span>
-            <h2 id="teamSectionTitle" class="section-title">Thành Viên Nhóm 6 — UTH</h2>
+            <h2 id="teamSectionTitle" class="section-title">Đội Ngũ Phát Triển Dự Án</h2>
             <p class="section-desc">Nhấp vào từng thành viên để xem trang Portfolio cá nhân và phân hệ phụ trách trong đồ án JobPortal.</p>
           </div>
         </div>
@@ -918,7 +895,7 @@
             <div class="brand-text" style="color:#ffffff;">Job<span style="color:#60a5fa;">Portal</span></div>
           </div>
           <p style="font-size: var(--text-small); color: #94a3b8; line-height: 1.6; margin-bottom: var(--space-16);">
-            Hệ thống Cổng Thông Tin Việc Làm &amp; Tuyển Dụng Trực Tuyến — Đồ án môn Lập trình Website, Khoa Công Nghệ Thông Tin, Trường Đại học Giao thông vận tải TP.HCM (UTH).
+            Hệ thống Cổng Thông Tin Việc Làm &amp; Tuyển Dụng Chuyên Ngành Công Nghệ Thông Tin — Dự án thực hành Lập trình Website (Nhóm 6).
           </p>
           <p style="font-size: var(--text-xs); color: #64748b;">
             <strong>Trưởng nhóm / Technical Lead:</strong> Trần Hữu Thành (MSSV: 044206000003)
