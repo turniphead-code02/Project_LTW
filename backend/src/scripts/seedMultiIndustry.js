@@ -1,10 +1,9 @@
 /**
  * ============================================================================
  * BỔ SUNG DỮ LIỆU ĐA NGÀNH NGHỀ CHUẨN THỊ TRƯỜNG VIỆT NAM (IDEMPOTENT SEEDER)
- * Ngành nghề bổ sung: Marketing & Truyền thông, Tài chính - Kế toán, Kinh doanh B2B,
- * Nhân sự (HR/C&B), Logistics & Xuất nhập khẩu, Thương mại điện tử, Data/AI & QA/QC.
+ * Phủ đủ 16 nhóm ngành nghề & cập nhật logo ảnh thật cho 16 doanh nghiệp.
  * Chạy thủ công: npm run seed-industries
- * Tự động chạy an toàn khi Server khởi động (không ghi đè dữ liệu hiện có).
+ * Tự động chạy an toàn khi Server khởi động (không ghi đè dữ liệu người dùng).
  * ============================================================================
  */
 
@@ -12,6 +11,25 @@ const mysql = require('mysql2/promise');
 const { buildDbConfig } = require('../config/db');
 
 const DEMO_PASSWORD_HASH = '$2a$10$5hF8xnvdokAe1hzYSAdUeuM6GJZs8bJKSqqmvFvUiSiWRysgg19Ai'; // 123456
+
+const COMPANY_LOGOS = {
+  'vng-corporation': './assets/images/logos/vng-corporation.png',
+  'fpt-software': './assets/images/logos/fpt-software.png',
+  'viettel-solutions': './assets/images/logos/viettel-solutions.png',
+  'momo-fintech': './assets/images/logos/momo-fintech.png',
+  'shopee-vietnam': './assets/images/logos/shopee-vietnam.png',
+  'kms-technology': './assets/images/logos/kms-technology.png',
+  'adsplus-digital': './assets/images/logos/adsplus-digital.png',
+  'misa-jsc': './assets/images/logos/misa-jsc.png',
+  'techcombank': './assets/images/logos/techcombank.png',
+  'navigos-group': './assets/images/logos/navigos-group.png',
+  'gemadept-logistics': './assets/images/logos/gemadept-logistics.png',
+  'fpt-retail': './assets/images/logos/fpt-retail.png',
+  'coteccons': './assets/images/logos/coteccons.png',
+  'long-chau-pharma': './assets/images/logos/long-chau-pharma.png',
+  'vus-education': './assets/images/logos/vus-education.png',
+  'bosch-vietnam': './assets/images/logos/bosch-vietnam.png'
+};
 
 const NEW_CATEGORIES = [
   {
@@ -43,11 +61,32 @@ const NEW_CATEGORIES = [
     name: 'Thương Mại Điện Tử & Vận Hành Sàn',
     slug: 'thuong-mai-dien-tu',
     description: 'Quản lý gian hàng Shopee/Lazada/TikTok Shop, tối ưu chuyển đổi chiến dịch Mega Sale và đối soát vận hành.'
+  },
+  {
+    name: 'Xây Dựng – Kiến Trúc & Bất Động Sản',
+    slug: 'xay-dung-kien-truc',
+    description: 'Giám sát thi công, kỹ sư kết cấu, dự toán QS, quản lý dự án công trình dân dụng và công nghiệp.'
+  },
+  {
+    name: 'Y Tế – Dược Phẩm & Chăm Sóc Sức Khỏe',
+    slug: 'y-te-duoc-pham',
+    description: 'Dược sĩ tư vấn, trình dược viên, quản lý chất lượng dược phẩm GPP và dịch vụ chăm sóc sức khỏe.'
+  },
+  {
+    name: 'Giáo Dục – Đào Tạo & Ngoại Ngữ',
+    slug: 'giao-duc-dao-tao',
+    description: 'Giảng dạy ngoại ngữ, tư vấn tuyển sinh, quản lý học vụ và thiết kế chương trình đào tạo doanh nghiệp.'
+  },
+  {
+    name: 'Sản Xuất – Cơ Khí & Tự Động Hóa',
+    slug: 'co-khi-san-xuat',
+    description: 'Kỹ sư tự động hóa PLC, cơ khí chế tạo, vận hành dây chuyền nhà máy thông minh và quản lý chất lượng QA.'
   }
 ];
 
 const NEW_LOCATIONS = [
-  { name: 'Hải Phòng', slug: 'hai-phong' }
+  { name: 'Hải Phòng', slug: 'hai-phong' },
+  { name: 'Bình Dương', slug: 'binh-duong' }
 ];
 
 const NEW_SKILLS = [
@@ -73,7 +112,13 @@ const NEW_SKILLS = [
   { name: 'Vận Hành Sàn TMĐT', slug: 'van-hanh-san-tmdt' },
   { name: 'Shopee / TikTok Shop', slug: 'shopee-tiktok-shop' },
   { name: 'Power BI', slug: 'power-bi' },
-  { name: 'Selenium / Postman', slug: 'selenium-postman' }
+  { name: 'Selenium / Postman', slug: 'selenium-postman' },
+  { name: 'AutoCAD / Revit BIM', slug: 'autocad-revit-bim' },
+  { name: 'Giám Sát Thi Công', slug: 'giam-sat-thi-cong' },
+  { name: 'Dược Lâm Sàng GPP', slug: 'duoc-lam-sang-gpp' },
+  { name: 'Tư Vấn Tuyển Sinh', slug: 'tu-van-tuyen-sinh' },
+  { name: 'Tự Động Hóa PLC', slug: 'tu-dong-hoa-plc' },
+  { name: 'SIEM / Bảo Mật Mạng', slug: 'siem-bao-mat-mang' }
 ];
 
 const NEW_EMPLOYERS = [
@@ -141,7 +186,51 @@ const NEW_EMPLOYERS = [
     tax_code: '0311609355',
     website: 'https://frt.vn',
     address: '261 Khánh Hội, Quận 4, TP.HCM',
-    description: 'Hệ thống bán lẻ đa kênh hàng đầu Việt Nam vận hành chuỗi FPT Shop, Nhà thuốc Long Châu và hệ sinh thái thương mại điện tử.'
+    description: 'Hệ thống bán lẻ đa kênh hàng đầu Việt Nam vận hành chuỗi FPT Shop và hệ sinh thái thương mại điện tử.'
+  },
+  {
+    full_name: 'Hoàng Minh Đức (Coteccons HR)',
+    email: 'hr@coteccons-careers.vn',
+    phone: '0908777888',
+    company_name: 'Công Ty Cổ Phần Xây Dựng Coteccons',
+    slug: 'coteccons',
+    tax_code: '0303443233',
+    website: 'https://www.coteccons.vn',
+    address: '236/6 Điện Biên Phủ, Bình Thạnh, TP.HCM',
+    description: 'Tổng thầu xây dựng hàng đầu Việt Nam triển khai các dự án cao ốc thương mại, khu đô thị và nhà máy công nghiệp tiêu chuẩn xanh.'
+  },
+  {
+    full_name: 'Nguyễn Ngọc Ánh (Long Châu HR)',
+    email: 'talent@nhathuoclongchau.com.vn',
+    phone: '0908888999',
+    company_name: 'Hệ Thống Nhà Thuốc FPT Long Châu',
+    slug: 'long-chau-pharma',
+    tax_code: '0315275368',
+    website: 'https://nhathuoclongchau.com.vn',
+    address: '379-381 Hai Bà Trưng, Quận 3, TP.HCM',
+    description: 'Chuỗi nhà thuốc chuẩn GPP hàng đầu trên toàn quốc cung cấp dược phẩm chính hãng và dịch vụ tư vấn dược lâm sàng chuyên nghiệp.'
+  },
+  {
+    full_name: 'Lý Bảo Trâm (VUS Talent)',
+    email: 'careers@vus.edu.vn',
+    phone: '0908999000',
+    company_name: 'Hệ Thống Anh Văn Hội Việt Mỹ (VUS)',
+    slug: 'vus-education',
+    tax_code: '0303476442',
+    website: 'https://vus.edu.vn',
+    address: '189 Nguyễn Thị Minh Khai, Quận 1, TP.HCM',
+    description: 'Hệ thống giáo dục và đào tạo Anh ngữ chuẩn quốc tế NEAS với mạng lưới trung tâm lớn tại TP.HCM, Hà Nội và các tỉnh thành.'
+  },
+  {
+    full_name: 'Trần Hữu Nghĩa (Bosch HR)',
+    email: 'hr@bosch-vietnam-careers.vn',
+    phone: '0909111333',
+    company_name: 'Công Ty TNHH Bosch Việt Nam',
+    slug: 'bosch-vietnam',
+    tax_code: '3600891439',
+    website: 'https://www.bosch.com.vn',
+    address: 'KCN Long Thành / Bình Dương & Tòa nhà Etown, TP.HCM',
+    description: 'Tập đoàn công nghệ và kỹ thuật đa quốc gia của Đức hoạt động mạnh trong tự động hóa công nghiệp, R&D và sản xuất thông minh.'
   }
 ];
 
@@ -229,7 +318,7 @@ const NEW_JOBS = [
     employment_type: 'full_time',
     experience_level: 'junior',
     deadline_days: 45,
-    skills: ['Kế Toán Tổng Hợp', 'Phần Mềm MISA', 'Báo Cáo Thuế VAS', 'Excel Nâng Cao']
+    skills: ['Kế Toán Tổng Hợp', 'Phần Mềm MISA', 'Báo Cáo Thuế VAS']
   },
   {
     company_slug: 'techcombank',
@@ -297,7 +386,7 @@ const NEW_JOBS = [
     employment_type: 'full_time',
     experience_level: 'junior',
     deadline_days: 40,
-    skills: ['Tuyển Dụng HR', 'C&B / Bảo Hiểm', 'Luật Lao Động', 'Excel Nâng Cao']
+    skills: ['Tuyển Dụng HR', 'C&B / Bảo Hiểm', 'Luật Lao Động']
   },
   {
     company_slug: 'gemadept-logistics',
@@ -349,6 +438,91 @@ const NEW_JOBS = [
     experience_level: 'junior',
     deadline_days: 40,
     skills: ['Vận Hành Sàn TMĐT', 'Shopee / TikTok Shop', 'Digital Marketing']
+  },
+  {
+    company_slug: 'viettel-solutions',
+    category_slug: 'an-toan-thong-tin',
+    location_slug: 'ha-noi',
+    title: 'Chuyên Viên An Toàn Thông Tin (SOC Analyst L1)',
+    slug: 'soc-analyst-viettel-19',
+    description: 'Giám sát an ninh mạng 24/7 trên hệ thống SIEM, phân tích cảnh báo tấn công mạng, điều tra nhật ký sự cố và phối hợp xử lý lỗ hổng bảo mật hạ tầng doanh nghiệp.',
+    requirements: 'Nắm vững kiến thức mạng máy tính, Linux, phân tích log SIEM; ưu tiên ứng viên có chứng chỉ CompTIA Security+, CEH hoặc kinh nghiệm SOC.',
+    benefits: 'Thu nhập 18-28 triệu/tháng + phụ cấp ca trực, thưởng thành tích quý và tài trợ thi chứng chỉ bảo mật quốc tế.',
+    salary_min: 18000000,
+    salary_max: 28000000,
+    currency: 'VND',
+    employment_type: 'full_time',
+    experience_level: 'junior',
+    deadline_days: 50,
+    skills: ['SIEM / Bảo Mật Mạng', 'Linux', 'Python']
+  },
+  {
+    company_slug: 'coteccons',
+    category_slug: 'xay-dung-kien-truc',
+    location_slug: 'tp-ho-chi-minh',
+    title: 'Kỹ Sư Giám Sát Thi Công Xây Dựng (Site Engineer)',
+    slug: 'giam-sat-thi-cong-coteccons-20',
+    description: 'Trực tiếp giám sát chất lượng, tiến độ và an toàn lao động ngoài công trường; kiểm tra bản vẽ shop-drawing, nghiệm thu khối lượng hạng mục kết cấu và hoàn thiện.',
+    requirements: 'Tốt nghiệp Đại học chuyên ngành Xây dựng Dân dụng & Công nghiệp, 1-3 năm kinh nghiệm thi công, sử dụng thành thạo AutoCAD, Revit BIM.',
+    benefits: 'Lương 16-25 triệu + phụ cấp công trường, bảo hiểm tai nạn 24/7 và thưởng hoàn thành tiến độ dự án.',
+    salary_min: 16000000,
+    salary_max: 25000000,
+    currency: 'VND',
+    employment_type: 'full_time',
+    experience_level: 'junior',
+    deadline_days: 45,
+    skills: ['AutoCAD / Revit BIM', 'Giám Sát Thi Công']
+  },
+  {
+    company_slug: 'long-chau-pharma',
+    category_slug: 'y-te-duoc-pham',
+    location_slug: 'tp-ho-chi-minh',
+    title: 'Dược Sĩ Tư Vấn & Quản Lý Nhà Thuốc Chuẩn GPP',
+    slug: 'duoc-si-tu-van-longchau-21',
+    description: 'Tư vấn sử dụng thuốc an toàn, hợp lý cho khách hàng theo đơn bác sĩ và phác đồ dược lâm sàng; kiểm soát tồn kho, hạn dùng và đảm bảo tiêu chuẩn nhà thuốc GPP.',
+    requirements: 'Tốt nghiệp Cao đẳng/Đại học Dược, giao tiếp tận tâm, trung thực và có chứng chỉ hành nghề Dược là lợi thế lớn.',
+    benefits: 'Thu nhập 12-18 triệu (lương cứng + thưởng doanh số), đóng BHXH đầy đủ và đào tạo chuyên môn định kỳ cùng bác sĩ chuyên khoa.',
+    salary_min: 12000000,
+    salary_max: 18000000,
+    currency: 'VND',
+    employment_type: 'full_time',
+    experience_level: 'fresher',
+    deadline_days: 45,
+    skills: ['Dược Lâm Sàng GPP']
+  },
+  {
+    company_slug: 'vus-education',
+    category_slug: 'giao-duc-dao-tao',
+    location_slug: 'tp-ho-chi-minh',
+    title: 'Chuyên Viên Tư Vấn Tuyển Sinh & Lộ Trình Học Thuật',
+    slug: 'tu-van-tuyen-sinh-vus-22',
+    description: 'Tiếp nhận thông tin phụ huynh/học viên, tư vấn lộ trình học tiếng Anh phù hợp năng lực, hỗ trợ sắp xếp kiểm tra đầu vào và chăm sóc học viên trong suốt khóa học.',
+    requirements: 'Tốt nghiệp Cao đẳng/Đại học, giọng nói truyền cảm, giao tiếp khéo léo, yêu thích môi trường giáo dục và chịu được KPI tuyển sinh.',
+    benefits: 'Lương cứng 9-12 triệu + thưởng tuyển sinh (thu nhập 12-22 triệu), học bổng tiếng Anh cho nhân viên và người thân.',
+    salary_min: 11000000,
+    salary_max: 20000000,
+    currency: 'VND',
+    employment_type: 'full_time',
+    experience_level: 'fresher',
+    deadline_days: 45,
+    skills: ['Tư Vấn Tuyển Sinh', 'Sales B2B']
+  },
+  {
+    company_slug: 'bosch-vietnam',
+    category_slug: 'co-khi-san-xuat',
+    location_slug: 'binh-duong',
+    title: 'Kỹ Sư Tự Động Hóa & Bảo Trì Dây Chuyền (PLC)',
+    slug: 'ky-su-tu-dong-hoa-plc-bosch-23',
+    description: 'Lập trình, hiệu chỉnh hệ thống điều khiển tự động PLC Siemens/Mitsubishi, giám sát dây chuyền sản xuất thông minh Industry 4.0 và tối ưu hiệu suất thiết bị OEE.',
+    requirements: 'Tốt nghiệp Kỹ sư Tự động hóa/Cơ điện tử, 2 năm kinh nghiệm vận hành nhà máy, đọc hiểu tài liệu kỹ thuật tiếng Anh và am hiểu PLC/SCADA.',
+    benefits: 'Thu nhập 18-28 triệu/tháng, xe đưa đón từ TP.HCM đi Bình Dương, cơm trưa miễn phí và thưởng 2 tháng lương cuối năm.',
+    salary_min: 18000000,
+    salary_max: 28000000,
+    currency: 'VND',
+    employment_type: 'full_time',
+    experience_level: 'middle',
+    deadline_days: 50,
+    skills: ['Tự Động Hóa PLC', 'Excel Nâng Cao']
   }
 ];
 
@@ -357,18 +531,24 @@ async function ensureMultiIndustryData() {
   const conn = await mysql.createConnection(buildDbConfig({ database: dbName }));
 
   try {
-    // Kiểm tra nhanh nếu ngành mới đã có đủ rồi thì không cần chạy lại
+    // Luôn đồng bộ logo ảnh thật nội bộ cho các doanh nghiệp hiện hữu
+    for (const [slug, logoPath] of Object.entries(COMPANY_LOGOS)) {
+      await conn.query(
+        'UPDATE companies SET logo_url = ? WHERE slug = ? AND (logo_url IS NULL OR logo_url = "" OR logo_url LIKE "http%")',
+        [logoPath, slug]
+      );
+    }
+
     const [existingCat] = await conn.query(
-      "SELECT COUNT(*) AS cnt FROM categories WHERE slug IN ('marketing-truyen-thong', 'tai-chinh-ke-toan', 'logistics-chuoi-cung-ung')"
+      "SELECT COUNT(*) AS cnt FROM categories WHERE slug IN ('xay-dung-kien-truc', 'y-te-duoc-pham', 'giao-duc-dao-tao', 'co-khi-san-xuat')"
     );
     const [existingJob] = await conn.query(
-      "SELECT COUNT(*) AS cnt FROM jobs WHERE slug = 'van-hanh-tmdt-fptretail-18'"
+      "SELECT COUNT(*) AS cnt FROM jobs WHERE slug = 'ky-su-tu-dong-hoa-plc-bosch-23'"
     );
-    if (Number(existingCat[0]?.cnt) >= 3 && Number(existingJob[0]?.cnt) >= 1) {
+    if (Number(existingCat[0]?.cnt) >= 4 && Number(existingJob[0]?.cnt) >= 1) {
       return { seeded: false, reason: 'already_present' };
     }
 
-    // 1. Bảo đảm địa điểm
     for (const loc of NEW_LOCATIONS) {
       await conn.query(
         'INSERT IGNORE INTO locations (location_name, slug) VALUES (?, ?)',
@@ -376,7 +556,6 @@ async function ensureMultiIndustryData() {
       );
     }
 
-    // 2. Bổ sung 6 ngành nghề đa lĩnh vực
     for (const cat of NEW_CATEGORIES) {
       await conn.query(
         'INSERT IGNORE INTO categories (category_name, slug, description) VALUES (?, ?, ?)',
@@ -384,7 +563,6 @@ async function ensureMultiIndustryData() {
       );
     }
 
-    // 3. Bổ sung từ điển kỹ năng đa ngành
     for (const sk of NEW_SKILLS) {
       await conn.query(
         'INSERT IGNORE INTO skills (skill_name, slug) VALUES (?, ?)',
@@ -392,7 +570,6 @@ async function ensureMultiIndustryData() {
       );
     }
 
-    // 4. Bổ sung tài khoản HR & Doanh nghiệp đối tác mới
     for (const emp of NEW_EMPLOYERS) {
       await conn.query(
         `INSERT IGNORE INTO users (full_name, email, password_hash, phone, role, status)
@@ -401,16 +578,21 @@ async function ensureMultiIndustryData() {
       );
       const [uRows] = await conn.query('SELECT user_id FROM users WHERE email = ? LIMIT 1', [emp.email]);
       const userId = uRows[0]?.user_id;
+      const logoUrl = COMPANY_LOGOS[emp.slug] || null;
       if (userId) {
         await conn.query(
-          `INSERT IGNORE INTO companies (user_id, company_name, slug, tax_code, website, address, description)
-           VALUES (?, ?, ?, ?, ?, ?, ?)`,
-          [userId, emp.company_name, emp.slug, emp.tax_code, emp.website, emp.address, emp.description]
+          `INSERT IGNORE INTO companies (user_id, company_name, slug, tax_code, logo_url, website, address, description)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+          [userId, emp.company_name, emp.slug, emp.tax_code, logoUrl, emp.website, emp.address, emp.description]
         );
       }
     }
 
-    // 5. Lấy map ID theo slug/tên để chèn tin tuyển dụng chuẩn khóa ngoại
+    // Đảm bảo logo được gán lại cho tất cả công ty vừa tạo
+    for (const [slug, logoPath] of Object.entries(COMPANY_LOGOS)) {
+      await conn.query('UPDATE companies SET logo_url = ? WHERE slug = ?', [logoPath, slug]);
+    }
+
     const [catRows] = await conn.query('SELECT category_id, slug FROM categories');
     const [locRows] = await conn.query('SELECT location_id, slug FROM locations');
     const [compRows] = await conn.query('SELECT company_id, slug FROM companies');
@@ -470,7 +652,7 @@ async function ensureMultiIndustryData() {
       }
     }
 
-    console.log(`[Seed Multi-Industry] Đã bổ sung ${insertedJobs} việc làm mới trên 12 nhóm ngành.`);
+    console.log(`[Seed Multi-Industry] Đã bổ sung ${insertedJobs} việc làm mới trên 16 nhóm ngành & cập nhật logo thật.`);
     return { seeded: true, insertedJobs };
   } catch (err) {
     console.warn('[Seed Multi-Industry] Cảnh báo:', err.message);

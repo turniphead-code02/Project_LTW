@@ -30,7 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
     { category_id: 9, category_name: 'Kinh Doanh & Phát Triển Thị Trường (Sales)', slug: 'kinh-doanh-ban-hang' },
     { category_id: 10, category_name: 'Nhân Sự & Hành Chính (HR / C&B)', slug: 'nhan-su-hanh-chinh' },
     { category_id: 11, category_name: 'Logistics & Xuất Nhập Khẩu', slug: 'logistics-chuoi-cung-ung' },
-    { category_id: 12, category_name: 'Thương Mại Điện Tử & Vận Hành Sàn', slug: 'thuong-mai-dien-tu' }
+    { category_id: 12, category_name: 'Thương Mại Điện Tử & Vận Hành Sàn', slug: 'thuong-mai-dien-tu' },
+    { category_id: 13, category_name: 'Xây Dựng – Kiến Trúc & Bất Động Sản', slug: 'xay-dung-kien-truc' },
+    { category_id: 14, category_name: 'Y Tế – Dược Phẩm & Chăm Sóc Sức Khỏe', slug: 'y-te-duoc-pham' },
+    { category_id: 15, category_name: 'Giáo Dục – Đào Tạo & Ngoại Ngữ', slug: 'giao-duc-dao-tao' },
+    { category_id: 16, category_name: 'Sản Xuất – Cơ Khí & Tự Động Hóa', slug: 'co-khi-san-xuat' }
   ];
   const FALLBACK_SKILLS = [
     { skill_id: 1, skill_name: 'ReactJS', slug: 'reactjs' },

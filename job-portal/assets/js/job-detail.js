@@ -279,12 +279,23 @@ document.addEventListener('DOMContentLoaded', function () {
     const currentCrumb = document.getElementById('crumbJobTitle');
     if (currentCrumb) currentCrumb.textContent = job.title;
 
-    // 3.2. Job Header Top (Logo nền trắng theo QTTK Rule #3)
+    // 3.2. Job Header Top (Logo nền trắng + ảnh thật theo QTTK Rule #3)
+    const logoImgMap = {
+      VNG: './assets/images/logos/vng-corporation.png',
+      FPT: './assets/images/logos/fpt-software.png',
+      VT: './assets/images/logos/viettel-solutions.png',
+      MM: './assets/images/logos/momo-fintech.png'
+    };
     const jobLogoBox = document.getElementById('jobLogoBox');
     if (jobLogoBox) {
-      jobLogoBox.textContent = job.logo;
+      const logoSrc = job.logoUrl || logoImgMap[job.logo] || '';
+      if (logoSrc) {
+        jobLogoBox.innerHTML = `<img src="${logoSrc}" alt="${job.company}" style="width:100%;height:100%;object-fit:contain;" />`;
+      } else {
+        jobLogoBox.textContent = job.logo;
+        jobLogoBox.style.color = job.logoBg;
+      }
       jobLogoBox.style.background = '#ffffff';
-      jobLogoBox.style.color = job.logoBg;
       jobLogoBox.style.border = '1px solid var(--color-border)';
     }
 
@@ -839,15 +850,22 @@ document.addEventListener('DOMContentLoaded', function () {
     const otherKeys = allKeys.filter(k => k !== job.id);
 
     // Lấy 3 việc làm khác
+    const similarLogoMap = {
+      VNG: './assets/images/logos/vng-corporation.png',
+      FPT: './assets/images/logos/fpt-software.png',
+      VT: './assets/images/logos/viettel-solutions.png',
+      MM: './assets/images/logos/momo-fintech.png'
+    };
     const similarKeys = otherKeys.slice(0, 3);
     similarContainer.innerHTML = similarKeys.map(k => {
       const sJob = JOBS_DB[k];
+      const sLogoSrc = sJob.logoUrl || similarLogoMap[sJob.logo] || '';
       return `
         <article class="job-listing-item" style="padding: 16px 20px;">
           <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 6px;">
             <div style="display: flex; align-items: center; gap: 12px;">
-              <div class="company-logo-box" style="width: 40px; height: 40px; font-size: 0.9rem; background: #ffffff; color: ${sJob.logoBg}; border: 1px solid var(--color-border);">
-                ${sJob.logo}
+              <div class="company-logo-box" style="width: 44px; height: 44px; font-size: 0.9rem; background: #ffffff; color: ${sJob.logoBg}; border: 1px solid var(--color-border);">
+                ${sLogoSrc ? `<img src="${sLogoSrc}" alt="${sJob.company}" style="width:100%;height:100%;object-fit:contain;" />` : sJob.logo}
               </div>
               <div>
                 <h4 style="font-size: 1.05rem; font-weight: 700; margin: 0 0 2px;">

@@ -54,7 +54,7 @@ router.get('/overview', async (req, res) => {
     const [featuredJobs] = await pool.query(`
       SELECT j.job_id, j.title, j.slug, j.salary_min, j.salary_max, j.currency,
              j.employment_type, j.experience_level, j.deadline, j.created_at,
-             c.company_id, c.company_name, c.logo_url,
+             c.company_id, c.company_name, c.slug AS company_slug, c.logo_url,
              l.location_name, cat.category_name, cat.slug AS category_slug,
              (
                SELECT GROUP_CONCAT(DISTINCT s.skill_name ORDER BY s.skill_name SEPARATOR ', ')

@@ -361,7 +361,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   3. DANH MỤC NGHỀ NGHIỆP ĐA LĨNH VỰC (GRID 4 CỘT CHO 12 NHÓM NGÀNH)
+   3. DANH MỤC NGHỀ NGHIỆP TRỌNG ĐIỂM (TOP 4 HOT + XEM THÊM)
    -------------------------------------------------------------------------- */
 .categories-grid {
   display: grid;
@@ -369,14 +369,27 @@
   gap: var(--space-16);
 }
 
+.category-card.is-hidden-cat {
+  display: none;
+}
+
+.categories-grid.is-expanded .category-card.is-hidden-cat {
+  display: flex;
+}
+
+.categories-more-wrap {
+  margin-top: 22px;
+  text-align: center;
+}
+
 /* --------------------------------------------------------------------------
-   4. LƯỚI VIỆC LÀM NỔI BẬT (3-COLUMN CARD GRID)
+   4. LƯỚI VIỆC LÀM NỔI BẬT (3-COLUMN ENTERPRISE GRID)
    -------------------------------------------------------------------------- */
 .jobs-filter-tabs {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: var(--space-8);
+  gap: 8px;
   margin-bottom: var(--space-24);
   flex-wrap: wrap;
 }
@@ -386,7 +399,7 @@
   font-weight: 600;
   color: var(--color-body);
   padding: 8px 16px;
-  border-radius: var(--radius-btn);
+  border-radius: 999px;
   border: 1px solid var(--color-border);
   background: var(--color-surface);
   transition: var(--transition-fast);
@@ -395,12 +408,14 @@
 .tab-btn:hover {
   border-color: var(--color-primary-light);
   color: var(--color-primary);
+  background: #f8fafc;
 }
 
 .tab-btn.active {
   background-color: var(--color-primary);
   color: var(--color-surface);
   border-color: var(--color-primary);
+  box-shadow: 0 4px 12px -4px rgba(30, 64, 175, 0.35);
 }
 
 .jobs-grid {
@@ -495,11 +510,26 @@
 }
 
 .employer-logo-img {
-  width: 56px;
-  height: 56px;
-  object-fit: contain;
+  width: 64px;
+  height: 64px;
+  padding: 8px;
+  background-color: #ffffff;
+  border: 1px solid var(--color-border);
   margin-bottom: var(--space-12);
-  border-radius: 8px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+.employer-logo-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
 
 .employer-name {
