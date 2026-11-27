@@ -406,7 +406,7 @@
                                         <i class="fa-solid fa-globe" aria-hidden="true"></i>
                                         <input type="text"
                                                id="portfolioUrl"
-                                               placeholder="VD: ../portfolios/NguyenPhuQuang/index.html">
+                                               placeholder="https://portfolio-cuaban.com">
                                         <a href="#"
                                            id="openPortfolio"
                                            target="_blank"
@@ -425,7 +425,7 @@
                                         <i class="fa-brands fa-github" aria-hidden="true"></i>
                                         <input type="url"
                                                id="githubUrl"
-                                               placeholder="https://github.com/nguyenphuquang">
+                                               placeholder="https://github.com/username">
                                         <a href="#"
                                            id="openGithub"
                                            target="_blank"
@@ -512,8 +512,22 @@
 
 
     <!-- =========================================================================
-         3. HỆ THỐNG TOAST THÔNG BÁO DÙNG CHUNG
+         3. HỘP THOẠI XÁC NHẬN & TOAST THÔNG BÁO DÙNG CHUNG
          ========================================================================= -->
+    <div id="candidateConfirmModal" class="candidate-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="candConfirmTitle">
+        <div class="candidate-modal-card" style="max-width: 430px;">
+            <div class="modal-header-row">
+                <h3 id="candConfirmTitle">Xác nhận thao tác</h3>
+                <button type="button" class="btn-close-modal" id="candConfirmClose" aria-label="Đóng">&times;</button>
+            </div>
+            <p id="candConfirmMessage" style="margin: 0 0 20px; color: var(--color-body); font-size: 0.92rem; line-height: 1.55;"></p>
+            <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                <button type="button" class="btn-outline btn-sm" id="candConfirmCancel">Hủy</button>
+                <button type="button" class="btn-primary btn-sm" id="candConfirmOk">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+
     <div id="toastContainer" class="toast-container" role="status" aria-live="polite"></div>
 
 

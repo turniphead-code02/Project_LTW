@@ -16,6 +16,8 @@ document.addEventListener('DOMContentLoaded', async function () {
   let job = null;
   let bookmarks = [];
   let appliedJobIds = new Set();
+  let savedResumes = [];
+  let selectedResumeOption = 'upload-new';
   let currentUploadedFile = null;
 
   function escapeHtml(str) {
@@ -330,15 +332,21 @@ document.addEventListener('DOMContentLoaded', async function () {
   async function syncCandidateStates() {
     if (!hasAuth() || getSessionRole() !== 'candidate') return;
     try {
-      const [appsRes, savedRes] = await Promise.all([
+      const [appsRes, savedRes, resumesRes] = await Promise.all([
         API.get('/candidate/applications').catch(() => null),
-        API.get('/candidate/saved-jobs').catch(() => null)
+        API.get('/candidate/saved-jobs').catch(() => null),
+        API.get('/candidate/resumes').catch(() => null)
       ]);
       if (appsRes && Array.isArray(appsRes.data)) {
         appliedJobIds = new Set(appsRes.data.map(a => String(a.job_id)));
       }
       if (savedRes && Array.isArray(savedRes.data)) {
         bookmarks = savedRes.data.map(s => String(s.job_id));
+      }
+      if (resumesRes && Array.isArray(resumesRes.data)) {
+        savedResumes = resumesRes.data;
+        const defaultCv = savedResumes.find(r => Boolean(r.is_default)) || savedResumes[0];
+        selectedResumeOption = defaultCv ? String(defaultCv.resume_id) : 'upload-new';
       }
     } catch (_) {}
   }
@@ -399,6 +407,78 @@ document.addEventListener('DOMContentLoaded', async function () {
   const selectedFileName = document.getElementById('selectedFileName');
   const btnRemoveFile = document.getElementById('btnRemoveFile');
 
+  const savedResumeSection = document.getElementById('savedResumeSection');
+
+  function syncResumeUploadVisibility() {
+    const isUploadNew = savedResumes.length === 0 || selectedResumeOption === 'upload-new';
+    if (!isUploadNew) {
+      currentUploadedFile = null;
+      if (fileInput) fileInput.value = '';
+      if (fileSelectedBadge) fileSelectedBadge.style.display = 'none';
+      if (dropzone) dropzone.style.display = 'none';
+      return;
+    }
+    if (currentUploadedFile) {
+      if (fileSelectedBadge) fileSelectedBadge.style.display = 'flex';
+      if (dropzone) dropzone.style.display = 'none';
+    } else {
+      if (fileSelectedBadge) fileSelectedBadge.style.display = 'none';
+      if (dropzone) dropzone.style.display = 'block';
+    }
+  }
+
+  function renderSavedResumeSection() {
+    if (!savedResumeSection) return;
+    if (!savedResumes.length) {
+      savedResumeSection.style.display = 'none';
+      savedResumeSection.innerHTML = '';
+      selectedResumeOption = 'upload-new';
+      syncResumeUploadVisibility();
+      return;
+    }
+
+    savedResumeSection.style.display = 'flex';
+    const itemsHtml = savedResumes.map(r => {
+      const idStr = String(r.resume_id);
+      const checked = selectedResumeOption === idStr ? 'checked' : '';
+      const defaultTag = r.is_default
+        ? '<span style="background:rgba(10,102,194,0.1);color:var(--color-primary);font-size:0.7rem;font-weight:700;padding:2px 7px;border-radius:999px;">CV Mặc định</span>'
+        : '';
+      return `
+        <label style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border:1.5px solid ${checked ? 'var(--color-primary)' : 'var(--color-border)'};border-radius:10px;background:${checked ? '#f0f7ff' : '#fff'};cursor:pointer;">
+          <span style="display:flex;align-items:center;gap:10px;min-width:0;">
+            <input type="radio" name="selectedResumeOption" value="${escapeHtml(idStr)}" ${checked} style="accent-color:var(--color-primary);" />
+            <i class="fa-solid fa-file-pdf" style="color:#dc2626;" aria-hidden="true"></i>
+            <span style="font-size:0.875rem;font-weight:600;color:var(--color-dark);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(r.title || 'CV đã lưu')}</span>
+          </span>
+          <span style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+            ${defaultTag}
+            <span style="font-size:0.75rem;color:var(--color-muted);">${escapeHtml(r.file_size || 'PDF')}</span>
+          </span>
+        </label>
+      `;
+    }).join('');
+
+    const uploadChecked = selectedResumeOption === 'upload-new' ? 'checked' : '';
+    savedResumeSection.innerHTML = `
+      ${itemsHtml}
+      <label style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1.5px dashed ${uploadChecked ? 'var(--color-primary)' : 'var(--color-border)'};border-radius:10px;background:${uploadChecked ? '#f0f7ff' : '#fafafa'};cursor:pointer;">
+        <input type="radio" name="selectedResumeOption" value="upload-new" ${uploadChecked} style="accent-color:var(--color-primary);" />
+        <i class="fa-solid fa-cloud-arrow-up" style="color:var(--color-primary);" aria-hidden="true"></i>
+        <span style="font-size:0.875rem;font-weight:600;color:var(--color-dark);">Tải lên tệp CV PDF mới từ máy tính</span>
+      </label>
+    `;
+
+    savedResumeSection.querySelectorAll('input[name="selectedResumeOption"]').forEach(radio => {
+      radio.addEventListener('change', function () {
+        selectedResumeOption = this.value;
+        renderSavedResumeSection();
+      });
+    });
+
+    syncResumeUploadVisibility();
+  }
+
   function openModal() {
     if (!applyModal) return;
     const sess = getSession();
@@ -408,6 +488,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       if (nInput && !nInput.value) nInput.value = sess.fullName || sess.name || '';
       if (eInput && !eInput.value) eInput.value = sess.email || '';
     }
+    renderSavedResumeSection();
     applyModal.classList.add('is-open');
     document.body.style.overflow = 'hidden';
   }
@@ -499,8 +580,9 @@ document.addEventListener('DOMContentLoaded', async function () {
       if (!job) return;
 
       const coverLetter = (document.getElementById('applicantCoverLetter')?.value || '').trim();
-      if (!currentUploadedFile) {
-        if (window.showToast) window.showToast('Vui lòng đính kèm tệp CV định dạng PDF trước khi nộp đơn!', 'warning');
+      const useSavedResume = savedResumes.length > 0 && selectedResumeOption && selectedResumeOption !== 'upload-new';
+      if (!useSavedResume && !currentUploadedFile) {
+        if (window.showToast) window.showToast('Vui lòng chọn CV trong kho hồ sơ hoặc đính kèm tệp CV định dạng PDF!', 'warning');
         return;
       }
 
@@ -511,7 +593,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 
       try {
         const formData = new FormData();
-        formData.append('cvFile', currentUploadedFile);
+        if (useSavedResume) {
+          formData.append('resume_id', selectedResumeOption);
+        } else {
+          formData.append('cvFile', currentUploadedFile);
+        }
         formData.append('cover_letter', coverLetter);
 
         const res = await API.upload(`/job-detail/${job.job_id}/apply`, formData);

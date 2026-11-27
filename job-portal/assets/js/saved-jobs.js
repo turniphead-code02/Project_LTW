@@ -92,8 +92,45 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const headerUserName = document.getElementById('headerUserName');
   const sidebarUserName = document.getElementById('sidebarUserName');
+  const firstChar = currentUserName.trim().charAt(0).toUpperCase() || 'U';
   if (headerUserName) headerUserName.textContent = currentUserName;
   if (sidebarUserName) sidebarUserName.textContent = currentUserName;
+  document.querySelectorAll('.user-avatar, .profile-avatar').forEach(el => {
+    el.textContent = firstChar;
+  });
+
+  function openCandConfirm(title, message, onConfirm) {
+    const modal = document.getElementById('candidateConfirmModal');
+    const titleEl = document.getElementById('candConfirmTitle');
+    const msgEl = document.getElementById('candConfirmMessage');
+    const okBtn = document.getElementById('candConfirmOk');
+    const cancelBtn = document.getElementById('candConfirmCancel');
+    const closeBtn = document.getElementById('candConfirmClose');
+    if (!modal || !okBtn) return;
+
+    if (titleEl) titleEl.textContent = title || 'Xác nhận thao tác';
+    if (msgEl) msgEl.textContent = message || '';
+
+    const cleanup = () => {
+      modal.classList.remove('is-open');
+      document.body.style.overflow = '';
+      okBtn.onclick = null;
+      if (cancelBtn) cancelBtn.onclick = null;
+      if (closeBtn) closeBtn.onclick = null;
+      modal.onclick = null;
+    };
+
+    okBtn.onclick = async () => {
+      cleanup();
+      if (typeof onConfirm === 'function') await onConfirm();
+    };
+    if (cancelBtn) cancelBtn.onclick = cleanup;
+    if (closeBtn) closeBtn.onclick = cleanup;
+    modal.onclick = e => { if (e.target === modal) cleanup(); };
+
+    modal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
 
   // --------------------------------------------------------------------------
   // 4. BIẾN TRẠNG THÁI BỘ LỌC & DOM ELEMENTS
@@ -180,11 +217,23 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     if (currentLocation !== 'all') {
-      list = list.filter(job => job.location === currentLocation || (job.locationLabel && job.locationLabel.toLowerCase().includes(currentLocation.toLowerCase())));
+      const locationMatchers = {
+        hcm: ['hồ chí minh', 'ho chi minh', 'hcm', 'tp.hcm', 'sài gòn'],
+        hanoi: ['hà nội', 'ha noi', 'hanoi'],
+        danang: ['đà nẵng', 'da nang', 'danang'],
+        cantho: ['cần thơ', 'can tho', 'cantho'],
+        remote: ['remote', 'toàn quốc', 'toan quoc', 'từ xa']
+      };
+      const needles = locationMatchers[currentLocation] || [currentLocation.toLowerCase()];
+      list = list.filter(job => {
+        const hay = `${job.location || ''} ${job.locationLabel || ''}`.toLowerCase();
+        return job.location === currentLocation || needles.some(n => hay.includes(n));
+      });
     }
 
     if (currentWorkType !== 'all') {
-      list = list.filter(job => job.workType === currentWorkType);
+      const normType = val => String(val || '').toLowerCase().replace('_', '');
+      list = list.filter(job => normType(job.workType) === normType(currentWorkType));
     }
 
     if (currentQuickFilter === 'not-applied') {
@@ -226,7 +275,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       if (bookmarkedIds.length === 0) {
         emptyStateTitle.textContent = 'Bạn chưa lưu cơ hội việc làm nào!';
-        emptyStateDesc.textContent = 'Khám phá hàng trăm tin tuyển dụng IT chất lượng trên JobPortal và bấm biểu tượng trái tim để lưu lại theo dõi.';
+        emptyStateDesc.textContent = 'Khám phá hàng trăm cơ hội nghề nghiệp đa ngành chất lượng trên JobPortal và bấm biểu tượng trái tim để lưu lại theo dõi.';
         if (emptyStateCta) {
           emptyStateCta.style.display = 'inline-flex';
           emptyStateCta.href = './jobs.html';
@@ -536,17 +585,21 @@ document.addEventListener('DOMContentLoaded', function () {
   const logoutBtn = document.getElementById('logoutBtn');
   if (logoutBtn) {
     logoutBtn.addEventListener('click', function () {
-      if (confirm('Bạn có chắc chắn muốn đăng xuất khỏi JobPortal?')) {
-        if (API && typeof API.clearAuthSession === 'function') {
-          API.clearAuthSession();
-        } else {
-          localStorage.removeItem(STORAGE_KEYS.SESSION);
+      openCandConfirm(
+        'Đăng xuất tài khoản',
+        'Bạn có chắc chắn muốn đăng xuất khỏi JobPortal?',
+        function () {
+          if (API && typeof API.clearAuthSession === 'function') {
+            API.clearAuthSession();
+          } else {
+            localStorage.removeItem(STORAGE_KEYS.SESSION);
+          }
+          notify('Đã đăng xuất thành công!', 'info');
+          setTimeout(() => {
+            window.location.href = './index.html';
+          }, 500);
         }
-        notify('Đã đăng xuất thành công!', 'info');
-        setTimeout(() => {
-          window.location.href = './index.html';
-        }, 500);
-      }
+      );
     });
   }
 

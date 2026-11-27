@@ -357,9 +357,10 @@
           </div>
         </div>
 
-        <!-- Khối kéo thả tệp CV (Dropzone) -->
+        <!-- Chọn CV có sẵn trong Kho CV hoặc tải tệp PDF mới -->
         <div class="form-group">
-          <label class="form-label">Tệp CV ứng tuyển đính kèm <span class="req">*</span></label>
+          <label class="form-label">Hồ sơ CV ứng tuyển đính kèm <span class="req">*</span></label>
+          <div id="savedResumeSection" style="display: none; flex-direction: column; gap: 8px; margin-bottom: 10px;"></div>
           <div class="cv-upload-dropzone" id="cvDropzone" role="button" tabindex="0" aria-label="Kéo thả tệp CV hoặc click để chọn">
             <div class="upload-icon" aria-hidden="true"><i class="fa-solid fa-cloud-arrow-up"></i></div>
             <div class="upload-title">
@@ -389,7 +390,7 @@
           <textarea 
             id="applicantCoverLetter" 
             class="form-control" 
-            placeholder="Em mong muốn ứng tuyển vị trí này vì đam mê với sản phẩm công nghệ của Quý công ty và đã có nền tảng vững chắc về..."
+            placeholder="Em mong muốn ứng tuyển vị trí này vì phù hợp với kinh nghiệm và định hướng nghề nghiệp của bản thân..."
           ></textarea>
         </div>
 
@@ -420,7 +421,7 @@
     <div class="mobile-bar-inner">
       <div class="mobile-bar-salary">
         <span class="mobile-bar-salary-label">Mức lương:</span>
-        <span class="mobile-bar-salary-val" id="mobileBarSalary">15 - 22 Triệu</span>
+        <span class="mobile-bar-salary-val" id="mobileBarSalary">Đang tải...</span>
       </div>
       <button type="button" class="btn btn-accent btn-trigger-apply" style="padding: 10px 20px; font-weight: 800;">
         <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>

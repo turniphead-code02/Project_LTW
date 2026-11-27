@@ -1118,3 +1118,73 @@
     gap: var(--space-10);
   }
 }
+
+/* ==========================================================================
+   MODAL HỆ THỐNG ỨNG VIÊN (CLEAR ALL, INTERVIEW, LETTER, CONFIRM)
+   ========================================================================== */
+.candidate-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  background: rgba(15, 23, 42, 0.58);
+  backdrop-filter: blur(2px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.candidate-modal-backdrop.is-open,
+.candidate-modal-backdrop.active {
+  display: flex;
+}
+
+.candidate-modal-card {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--color-surface, #ffffff);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 24px 48px rgba(15, 23, 42, 0.22);
+  border: 1px solid var(--color-border);
+}
+
+.modal-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 14px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.modal-header-row h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-dark);
+}
+
+.btn-close-modal {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: none;
+  background: var(--color-bg-page);
+  color: var(--color-muted);
+  font-size: 1.3rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.btn-close-modal:hover {
+  background: var(--color-border);
+  color: var(--color-dark);
+}

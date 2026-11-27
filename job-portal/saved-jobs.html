@@ -262,7 +262,7 @@
             <div class="page-heading">
                 <h1>Việc Làm Đã Lưu</h1>
                 <p>
-                    Danh sách các cơ hội nghề nghiệp IT bạn đã đánh dấu yêu thích (<strong>Bookmark</strong>). Giúp bạn dễ dàng so sánh mức lương, hạn nộp và nộp hồ sơ ứng tuyển kịp thời.
+                    Danh sách các cơ hội nghề nghiệp bạn đã đánh dấu yêu thích (<strong>Bookmark</strong>). Giúp bạn dễ dàng so sánh mức lương, hạn nộp và nộp hồ sơ ứng tuyển kịp thời.
                 </p>
             </div>
 
@@ -322,7 +322,7 @@
                     <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
                     <input type="text"
                            id="savedSearchInput"
-                           placeholder="Tìm kiếm theo chức danh, công ty, kỹ năng (React, Node, Java...)"
+                           placeholder="Tìm kiếm theo chức danh, công ty, địa điểm..."
                            aria-label="Tìm việc làm đã lưu">
                 </div>
 
@@ -341,7 +341,8 @@
                     <!-- Lọc theo hình thức làm việc -->
                     <select id="savedWorkTypeFilter" aria-label="Lọc theo hình thức làm việc">
                         <option value="all">Tất cả hình thức</option>
-                        <option value="fulltime">Toàn thời gian</option>
+                        <option value="full_time">Toàn thời gian</option>
+                        <option value="part_time">Bán thời gian</option>
                         <option value="internship">Thực tập sinh</option>
                         <option value="remote">Làm việc từ xa</option>
                     </select>
@@ -408,7 +409,7 @@
                 </div>
                 <h3 id="emptyStateTitle">Bạn chưa lưu cơ hội việc làm nào!</h3>
                 <p id="emptyStateDesc">
-                    Khám phá hàng trăm tin tuyển dụng IT chất lượng trên JobPortal và bấm biểu tượng trái tim để lưu lại theo dõi.
+                    Khám phá hàng loạt tin tuyển dụng đa ngành chất lượng trên JobPortal và bấm biểu tượng lưu tin để theo dõi.
                 </p>
                 <a href="./jobs.html" id="emptyStateCta" class="btn-primary" style="text-decoration: none; margin-top: 8px;">
                     <i class="fa-solid fa-magnifying-glass"></i>
@@ -457,6 +458,20 @@
     <!-- =========================================================================
          7. HỆ THỐNG TOAST THÔNG BÁO DÙNG CHUNG
          ========================================================================= -->
+    <div id="candidateConfirmModal" class="candidate-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="candConfirmTitle">
+        <div class="candidate-modal-card" style="max-width: 430px;">
+            <div class="modal-header-row">
+                <h3 id="candConfirmTitle">Xác nhận thao tác</h3>
+                <button type="button" class="btn-close-modal" id="candConfirmClose" aria-label="Đóng">&times;</button>
+            </div>
+            <p id="candConfirmMessage" style="margin: 0 0 20px; color: var(--color-body); font-size: 0.92rem; line-height: 1.55;"></p>
+            <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                <button type="button" class="btn-outline btn-sm" id="candConfirmCancel">Hủy</button>
+                <button type="button" class="btn-primary btn-sm" id="candConfirmOk">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+
     <div id="toastContainer" class="toast-container" role="status" aria-live="polite"></div>
 
 

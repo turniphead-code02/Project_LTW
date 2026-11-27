@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (typeof window.showToast === 'function') {
       window.showToast(msg, type);
     } else {
-      alert(msg);
+      console.log(`[Toast ${type}]:`, msg);
     }
   }
 
@@ -115,6 +115,39 @@ document.addEventListener('DOMContentLoaded', function () {
       notify(err?.message || 'Lỗi đồng bộ dữ liệu lên máy chủ.', 'error');
       return false;
     }
+  }
+
+  function openCandConfirm(title, message, onConfirm) {
+    const modal = document.getElementById('candidateConfirmModal');
+    const titleEl = document.getElementById('candConfirmTitle');
+    const msgEl = document.getElementById('candConfirmMessage');
+    const okBtn = document.getElementById('candConfirmOk');
+    const cancelBtn = document.getElementById('candConfirmCancel');
+    const closeBtn = document.getElementById('candConfirmClose');
+    if (!modal || !okBtn) return;
+
+    if (titleEl) titleEl.textContent = title || 'Xác nhận thao tác';
+    if (msgEl) msgEl.textContent = message || '';
+
+    const cleanup = () => {
+      modal.classList.remove('is-open');
+      document.body.style.overflow = '';
+      okBtn.onclick = null;
+      if (cancelBtn) cancelBtn.onclick = null;
+      if (closeBtn) closeBtn.onclick = null;
+      modal.onclick = null;
+    };
+
+    okBtn.onclick = async () => {
+      cleanup();
+      if (typeof onConfirm === 'function') await onConfirm();
+    };
+    if (cancelBtn) cancelBtn.onclick = cleanup;
+    if (closeBtn) closeBtn.onclick = cleanup;
+    modal.onclick = e => { if (e.target === modal) cleanup(); };
+
+    modal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
   }
 
   // --------------------------------------------------------------------------
@@ -534,42 +567,44 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Xóa CV qua API (có xóa file vật lý trên server)
     resumeList.querySelectorAll('.btn-delete-cv').forEach(btn => {
-      btn.addEventListener('click', async function () {
+      btn.addEventListener('click', function () {
         const id = this.getAttribute('data-id');
-        if (!confirm('Bạn có chắc chắn muốn xóa tệp CV này khỏi kho hồ sơ?')) return;
-
-        // Nếu đã đăng nhập: Gọi API xóa trên máy chủ thật
-        if (hasAuth()) {
-          if (!isNaN(Number(id))) {
-            try {
-              btn.disabled = true;
-              const res = await API.delete(`/candidate/resumes/${id}`);
-              resumes = resumes.filter(item => String(item.id) !== String(id));
-
-              // Nếu máy chủ tự động chuyển CV khác làm mặc định (khi xóa CV mặc định)
-              if (res && res.data && res.data.new_default_resume_id) {
-                resumes.forEach(r => {
-                  r.isDefault = (String(r.id) === String(res.data.new_default_resume_id));
-                });
-              } else if (resumes.length > 0 && !resumes.some(r => r.isDefault)) {
-                resumes[0].isDefault = true;
-              }
-
-              renderResumes();
-              updateProfileCompletion();
-              notify('Đã xóa CV khỏi kho hồ sơ máy chủ thành công.', 'warning');
-            } catch (err) {
-              console.warn('[API] Lỗi xóa CV trên máy chủ:', err.message);
-              notify('Lỗi xóa CV: ' + (err.message || 'Không thể xóa CV trên máy chủ'), 'error');
-              btn.disabled = false;
+        openCandConfirm(
+          'Xóa CV khỏi kho hồ sơ',
+          'Bạn có chắc chắn muốn xóa tệp CV này khỏi kho hồ sơ? Thao tác không thể hoàn tác.',
+          async () => {
+            if (!hasAuth()) {
+              notify('Vui lòng đăng nhập để xóa CV trên máy chủ.', 'warning');
+              return;
             }
-          } else {
-            notify('CV này không tồn tại trên hệ thống máy chủ.', 'warning');
-          }
-          return;
-        }
+            if (!isNaN(Number(id))) {
+              try {
+                btn.disabled = true;
+                const res = await API.delete(`/candidate/resumes/${id}`);
+                resumes = resumes.filter(item => String(item.id) !== String(id));
 
-        notify('Vui lòng đăng nhập để xóa CV trên máy chủ.', 'warning');
+                // Nếu máy chủ tự động chuyển CV khác làm mặc định (khi xóa CV mặc định)
+                if (res && res.data && res.data.new_default_resume_id) {
+                  resumes.forEach(r => {
+                    r.isDefault = (String(r.id) === String(res.data.new_default_resume_id));
+                  });
+                } else if (resumes.length > 0 && !resumes.some(r => r.isDefault)) {
+                  resumes[0].isDefault = true;
+                }
+
+                renderResumes();
+                updateProfileCompletion();
+                notify('Đã xóa CV khỏi kho hồ sơ máy chủ thành công.', 'warning');
+              } catch (err) {
+                console.warn('[API] Lỗi xóa CV trên máy chủ:', err.message);
+                notify('Lỗi xóa CV: ' + (err.message || 'Không thể xóa CV trên máy chủ'), 'error');
+                btn.disabled = false;
+              }
+            } else {
+              notify('CV này không tồn tại trên hệ thống máy chủ.', 'warning');
+            }
+          }
+        );
       });
     });
   }
@@ -937,37 +972,40 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Sự kiện rút đơn
     container.querySelectorAll('.btn-withdraw-app').forEach(btn => {
-      btn.addEventListener('click', async function () {
+      btn.addEventListener('click', function () {
         const id = this.getAttribute('data-id');
-        if (!confirm('Bạn có chắc chắn muốn rút đơn ứng tuyển này không? Hành động này không thể hoàn tác.')) return;
-
-        if (hasAuth()) {
-          if (!isNaN(Number(id))) {
-            const originalText = btn.textContent;
-            try {
-              btn.disabled = true;
-              btn.textContent = 'Đang rút...';
-              await API.delete(`/candidate/applications/${id}`);
-              const target = applications.find(a => String(a.id) === String(id));
-              if (target) {
-                target.status = 'withdrawn';
-                target.statusText = 'Đã rút đơn';
-              }
-              renderApplicationsList();
-              notify('Đã rút đơn ứng tuyển thành công. Đơn được lưu vào lịch sử.', 'warning');
-            } catch (err) {
-              console.warn('[API] Rút đơn thất bại:', err.message);
-              notify('Lỗi rút đơn ứng tuyển: ' + (err.message || 'Không thể rút đơn trên máy chủ'), 'error');
-              btn.disabled = false;
-              btn.textContent = originalText;
+        openCandConfirm(
+          'Xác nhận rút đơn ứng tuyển',
+          'Bạn có chắc chắn muốn rút đơn ứng tuyển này không? Hành động này không thể hoàn tác.',
+          async () => {
+            if (!hasAuth()) {
+              notify('Vui lòng đăng nhập để rút đơn trên máy chủ.', 'warning');
+              return;
             }
-          } else {
-            notify('Đơn ứng tuyển không hợp lệ trên máy chủ.', 'warning');
+            if (!isNaN(Number(id))) {
+              const originalText = btn.textContent;
+              try {
+                btn.disabled = true;
+                btn.textContent = 'Đang rút...';
+                await API.delete(`/candidate/applications/${id}`);
+                const target = applications.find(a => String(a.id) === String(id));
+                if (target) {
+                  target.status = 'withdrawn';
+                  target.statusText = 'Đã rút đơn';
+                }
+                renderApplicationsList();
+                notify('Đã rút đơn ứng tuyển thành công. Đơn được lưu vào lịch sử.', 'warning');
+              } catch (err) {
+                console.warn('[API] Rút đơn thất bại:', err.message);
+                notify('Lỗi rút đơn ứng tuyển: ' + (err.message || 'Không thể rút đơn trên máy chủ'), 'error');
+                btn.disabled = false;
+                btn.textContent = originalText;
+              }
+            } else {
+              notify('Đơn ứng tuyển không hợp lệ trên máy chủ.', 'warning');
+            }
           }
-          return;
-        }
-
-        notify('Vui lòng đăng nhập để rút đơn trên máy chủ.', 'warning');
+        );
       });
     });
   }
@@ -1094,17 +1132,21 @@ document.addEventListener('DOMContentLoaded', function () {
   const logoutBtn = document.getElementById('logoutBtn');
   if (logoutBtn) {
     logoutBtn.addEventListener('click', function () {
-      if (confirm('Bạn có chắc chắn muốn đăng xuất khỏi JobPortal?')) {
-        if (API && typeof API.clearAuthSession === 'function') {
-          API.clearAuthSession();
-        } else {
-          localStorage.removeItem(STORAGE_KEYS.SESSION);
+      openCandConfirm(
+        'Đăng xuất tài khoản',
+        'Bạn có chắc chắn muốn đăng xuất khỏi JobPortal?',
+        function () {
+          if (API && typeof API.clearAuthSession === 'function') {
+            API.clearAuthSession();
+          } else {
+            localStorage.removeItem(STORAGE_KEYS.SESSION);
+          }
+          notify('Đã đăng xuất thành công!', 'info');
+          setTimeout(() => {
+            window.location.href = './index.html';
+          }, 600);
         }
-        notify('Đã đăng xuất thành công!', 'info');
-        setTimeout(() => {
-          window.location.href = './index.html';
-        }, 600);
-      }
+      );
     });
   }
 
