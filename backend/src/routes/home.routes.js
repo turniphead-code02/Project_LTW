@@ -68,7 +68,7 @@ router.get('/overview', async (req, res) => {
       INNER JOIN categories cat ON j.category_id = cat.category_id
       WHERE j.status = 'approved' AND j.deadline >= CURDATE()
       ORDER BY j.created_at DESC, j.job_id DESC
-      LIMIT 9
+      LIMIT 12
     `);
 
     const [topCompanies] = await pool.query(`
