@@ -92,31 +92,13 @@ var EmployerAPI = (function () {
     });
   }
 
-  // Không có mạng / không có API (trả HTML) -> chuyển sang dữ liệu mẫu
+  // Không có mạng / không có API -> trả rỗng kèm cảnh báo lỗi thật (không dùng MOCK DB)
   function isOffline(err) { return !err.status || err.notJson; }
 
   function fail(err) {
     if (err && err.status === 401) return;
     window.showToast((err && err.message) || 'Có lỗi xảy ra.', 'error');
   }
-
-  // Dữ liệu mẫu (cùng cấu trúc với API) — chỉ dùng khi không gọi được máy chủ
-  var MOCK = {
-    kpi: { activeJobs: 8, pendingJobs: 1, totalApplications: 47, interviews: 5 },
-    jobs: [
-      { job_id: 1, title: 'Frontend Developer (React)', location_name: 'TP. Hồ Chí Minh', deadline: '2030-11-25', status: 'approved', application_count: 18 },
-      { job_id: 2, title: 'Backend Developer (Node.js)', location_name: 'Hà Nội', deadline: '2030-11-12', status: 'approved', application_count: 21 },
-      { job_id: 3, title: 'Thực tập sinh QA/Tester', location_name: 'Remote', deadline: '2030-11-30', status: 'pending', application_count: 8 }
-    ],
-    applications: [
-      { application_id: 1, applicant_name: 'Nguyễn Minh Khoa', applicant_email: 'khoa.nm@student.ut.edu.vn', applicant_phone: '0912 345 678', job_title: 'Frontend Developer (React)', applied_at: '2026-11-06', status: 'submitted', cover_letter: 'Em có 1 năm làm dự án React và muốn phát triển thêm về giao diện sản phẩm.', resume_snapshot_url: '' },
-      { application_id: 2, applicant_name: 'Trần Thu Hà', applicant_email: 'ha.tt@gmail.com', applicant_phone: '0987 111 222', job_title: 'Backend Developer (Node.js)', applied_at: '2026-11-06', status: 'submitted', cover_letter: 'Em từng xây dựng REST API với Express và PostgreSQL cho đồ án môn học.', resume_snapshot_url: '' },
-      { application_id: 3, applicant_name: 'Lê Quốc Bảo', applicant_email: 'bao.lq@gmail.com', applicant_phone: '0903 555 666', job_title: 'Thực tập sinh QA/Tester', applied_at: '2026-11-05', status: 'interview', cover_letter: 'Em muốn thực tập để học quy trình kiểm thử phần mềm thực tế.', resume_snapshot_url: '' },
-      { application_id: 4, applicant_name: 'Phạm Ngọc Anh', applicant_email: 'anh.pn@gmail.com', applicant_phone: '0934 777 888', job_title: 'Frontend Developer (React)', applied_at: '2026-11-04', status: 'accepted', cover_letter: '', resume_snapshot_url: '' },
-      { application_id: 5, applicant_name: 'Võ Thanh Tùng', applicant_email: 'tung.vt@gmail.com', applicant_phone: '0977 999 000', job_title: 'Backend Developer (Node.js)', applied_at: '2026-11-03', status: 'rejected', cover_letter: 'Em đang tìm cơ hội làm việc toàn thời gian.', resume_snapshot_url: '' },
-      { application_id: 6, applicant_name: 'Đặng Mỹ Linh', applicant_email: 'linh.dm@gmail.com', applicant_phone: '0911 222 333', job_title: 'Thực tập sinh QA/Tester', applied_at: '2026-11-02', status: 'viewed', cover_letter: 'Em đã học ISTQB Foundation và muốn áp dụng vào dự án thực tế.', resume_snapshot_url: '' }
-    ]
-  };
 
   // Trạng thái hiển thị (khóa giao diện) <-> giá trị lưu ở CSDL
   var STATUS = {
@@ -158,14 +140,14 @@ var EmployerAPI = (function () {
       return { data: j.data, offline: false };
     }).catch(function (err) {
       if (!isOffline(err)) throw err;
-      window.showToast('Chưa kết nối được máy chủ API — đang hiển thị dữ liệu mẫu.', 'warning');
-      return { data: JSON.parse(JSON.stringify(MOCK)), offline: true };
+      window.showToast('Không thể kết nối máy chủ API để tải dữ liệu nhà tuyển dụng.', 'error');
+      return { data: { kpi: { activeJobs: 0, pendingJobs: 0, totalApplications: 0, interviews: 0 }, jobs: [], applications: [] }, offline: true };
     });
   }
 
   function updateStatus(id, key, offline) {
     if (offline) {
-      return Promise.resolve({ application_id: id, status: API_STATUS[key], viewed_at: new Date().toISOString() });
+      return Promise.reject(new Error('Không kết nối được máy chủ API để cập nhật trạng thái.'));
     }
     return request('PATCH', '/applications/' + id + '/status', { status: API_STATUS[key] }).then(function (j) { return j.data; });
   }
@@ -239,20 +221,13 @@ document.addEventListener('DOMContentLoaded', function () {
     window.addEventListener('resize', function () { if (!isMobile()) closeDrawer(); });
   }
 
-  // 2. THÔNG BÁO TRÊN TOPBAR (bấm chuông để mở danh sách)
+  // 2. THÔNG BÁO TRÊN TOPBAR (Tạo động từ dữ liệu API Dashboard, không hardcode dữ liệu giả)
   var notifBtn = $('btnNotif');
   var notifPanel = $('notifPanel');
   var notifList = $('notifList');
   var notifCount = $('notifCount');
 
-  // Dữ liệu mẫu — chưa có API thông báo trong phân công
-  var notifications = [
-    { id: 'n1', icon: '📄', title: 'Hồ sơ mới', text: 'Nguyễn Minh Khoa vừa ứng tuyển vị trí Frontend Developer (React).', time: '10 phút trước', href: './candidate-management.html' },
-    { id: 'n2', icon: '📄', title: 'Hồ sơ mới', text: 'Trần Thu Hà vừa ứng tuyển vị trí Backend Developer (Node.js).', time: '1 giờ trước', href: './candidate-management.html' },
-    { id: 'n3', icon: '⏰', title: 'Tin sắp hết hạn', text: 'Tin "Backend Developer (Node.js)" sắp hết hạn nộp hồ sơ.', time: '3 giờ trước', href: './employer-dashboard.html' },
-    { id: 'n4', icon: '✅', title: 'Tin đã được duyệt', text: 'Tin "Frontend Developer (React)" đã được quản trị viên duyệt.', time: 'Hôm qua', href: './employer-dashboard.html', read: true },
-    { id: 'n5', icon: '📅', title: 'Lịch phỏng vấn', text: 'Lê Quốc Bảo đã xác nhận lịch phỏng vấn QA/Tester.', time: 'Hôm qua', href: './candidate-management.html', read: true }
-  ];
+  var notifications = [];
 
   // Nhớ trạng thái đã đọc giữa các trang (an toàn khi trình duyệt chặn storage)
   var READ_KEY = 'emp_notif_read';
@@ -430,13 +405,12 @@ document.addEventListener('DOMContentLoaded', function () {
   var editor = $('jobDescription');
   var editorWrap = $('editorWrap');
   var submitBtn = form.querySelector('button[type="submit"]');
-  var metaOffline = false; // true khi không có API -> gửi form ở chế độ mẫu
 
   // Hạn nộp tối thiểu là ngày mai
   var tomorrow = new Date(Date.now() + 86400000);
   $('deadline').min = tomorrow.toISOString().slice(0, 10);
 
-  // Nạp ngành nghề + địa điểm thật từ API (nếu có), thay cho danh sách tĩnh
+  // Nạp ngành nghề + địa điểm thật từ API
   function fillSelect(sel, items, idKey, nameKey, placeholder) {
     if (!sel || !items || !items.length) return;
     sel.innerHTML = '<option value="">' + placeholder + '</option>' + items.map(function (it) {
@@ -446,7 +420,7 @@ document.addEventListener('DOMContentLoaded', function () {
   EmployerAPI.loadMeta().then(function (m) {
     fillSelect($('jobCategory'), m.categories, 'category_id', 'category_name', 'Chọn ngành nghề');
     fillSelect($('jobLocation'), m.locations, 'location_id', 'location_name', 'Chọn địa điểm');
-  }).catch(function (err) { if (EmployerAPI.isOffline(err)) metaOffline = true; });
+  }).catch(EmployerAPI.fail);
 
   // Checkbox "Lương thỏa thuận" khóa 2 ô lương
   negotiable.addEventListener('change', function () {
@@ -539,11 +513,6 @@ document.addEventListener('DOMContentLoaded', function () {
     function done(message) {
       window.showToast(message, 'success');
       setTimeout(function () { window.location.href = './employer-dashboard.html'; }, 1500);
-    }
-
-    if (metaOffline) { // không có API: chỉ minh họa giao diện
-      done('Đã gửi tin (chế độ dữ liệu mẫu), đang chờ quản trị viên duyệt.');
-      return;
     }
 
     submitBtn.disabled = true;

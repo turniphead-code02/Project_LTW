@@ -447,8 +447,12 @@ document.addEventListener('DOMContentLoaded', function () {
         hideBookmarkForNonCandidates();
       }
     } catch (err) {
-      // Giữ nguyên dữ liệu tĩnh nếu chưa kết nối được server (Zero Dead-End)
-      console.warn('[Home] Dùng dữ liệu hiển thị dự phòng:', err.message);
+      console.error('[Home] Không kết nối được máy chủ API:', err.message);
+      const catsEl = document.querySelector('.categories-grid');
+      if (catsEl) catsEl.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--color-muted);">Không tải được danh mục ngành nghề từ máy chủ.</div>';
+      if (jobsGrid) jobsGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--color-muted);">Không thể kết nối máy chủ API để tải danh sách việc làm. Vui lòng thử lại sau.</div>';
+      const empEl = document.querySelector('.employers-grid');
+      if (empEl) empEl.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--color-muted);">Không tải được danh sách doanh nghiệp từ máy chủ.</div>';
     }
   }
 

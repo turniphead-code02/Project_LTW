@@ -79,190 +79,20 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // --------------------------------------------------------------------------
-  // 2. KHO DỮ LIỆU VIỆC LÀM CHUẨN CỦA HỆ THỐNG JOBPORTAL
+  // 2. KHO DỮ LIỆU VIỆC LÀM ĐÃ LƯU (NẠP TỪ API BACKEND)
   // --------------------------------------------------------------------------
-  let ALL_JOBS_DB = [
-    {
-      id: 'job-01',
-      title: 'Frontend React Developer (Junior / Middle)',
-      company: 'Công Ty Cổ Phần Công Nghệ VNG',
-      logo: 'VNG',
-      logoBg: '#ea580c',
-      verified: true,
-      salary: '15 - 22 Triệu',
-      salaryNum: 22,
-      location: 'hcm',
-      locationLabel: 'Quận 7, TP.HCM',
-      workType: 'fulltime',
-      workTypeLabel: 'Toàn thời gian',
-      experience: '1-3',
-      experienceLabel: '1 - 3 năm',
-      category: 'software',
-      categoryLabel: 'Lập trình phần mềm',
-      tags: ['React', 'TypeScript', 'Redux Toolkit', 'TailwindCSS'],
-      postedText: 'Hôm nay',
-      postedDaysAgo: 0,
-      deadlineText: '25/11/2026',
-      deadlineDaysLeft: 16,
-      isHot: true,
-      isUrgent: true,
-      description: 'Phát triển giao diện ứng dụng Zalo Web & Zalo Mini App. Tối ưu hiệu năng tải trang Web Vitals và thiết kế Responsive đạt chuẩn WCAG.'
-    },
-    {
-      id: 'job-02',
-      title: 'Junior Backend Node.js / NestJS Engineer',
-      company: 'FPT Software Global',
-      logo: 'FPT',
-      logoBg: '#0284c7',
-      verified: true,
-      salary: '14 - 20 Triệu',
-      salaryNum: 20,
-      location: 'hcm',
-      locationLabel: 'TP. Thủ Đức, TP.HCM',
-      workType: 'fulltime',
-      workTypeLabel: 'Toàn thời gian',
-      experience: '1-3',
-      experienceLabel: '1 - 2 năm',
-      category: 'software',
-      categoryLabel: 'Lập trình phần mềm',
-      tags: ['Node.js', 'NestJS', 'PostgreSQL', 'Docker', 'Redis'],
-      postedText: '1 ngày trước',
-      postedDaysAgo: 1,
-      deadlineText: '30/11/2026',
-      deadlineDaysLeft: 21,
-      isHot: true,
-      isUrgent: false,
-      description: 'Xây dựng hệ thống RESTful API & Microservices cho khách hàng Nhật Bản. Viết Unit test với Jest và quản lý CI/CD pipeline.'
-    },
-    {
-      id: 'job-03',
-      title: 'Thực Tập Sinh Lập Trình Java / Spring Boot (Có Phụ Cấp)',
-      company: 'Viettel Solutions (Tập Đoàn Viễn Thông Quân Đội)',
-      logo: 'VT',
-      logoBg: '#b91c1c',
-      verified: true,
-      salary: '6 - 8 Triệu (Hỗ trợ)',
-      salaryNum: 8,
-      location: 'hanoi',
-      locationLabel: 'Cầu Giấy, Hà Nội',
-      workType: 'internship',
-      workTypeLabel: 'Thực tập sinh',
-      experience: 'fresher',
-      experienceLabel: 'Dưới 1 năm / Fresher',
-      category: 'software',
-      categoryLabel: 'Lập trình phần mềm',
-      tags: ['Java', 'Spring Boot', 'MySQL', 'Git'],
-      postedText: 'Hôm qua',
-      postedDaysAgo: 1,
-      deadlineText: '15/12/2026',
-      deadlineDaysLeft: 36,
-      isHot: false,
-      isUrgent: true,
-      description: 'Chương trình đào tạo Talent Internship dành cho sinh viên năm 3, năm 4 khối CNTT. Cơ hội lên nhân viên chính thức sau 3 tháng.'
-    },
-    {
-      id: 'job-04',
-      title: 'Chuyên Viên Phân Tích Dữ Liệu (Data Analyst)',
-      company: 'MoMo (Công Ty Cổ Phần Dịch Vụ Di Động Trực Tuyến)',
-      logo: 'MM',
-      logoBg: '#9d174d',
-      verified: true,
-      salary: '16 - 24 Triệu',
-      salaryNum: 24,
-      location: 'hcm',
-      locationLabel: 'Quận 7, TP.HCM',
-      workType: 'fulltime',
-      workTypeLabel: 'Toàn thời gian',
-      experience: '1-3',
-      experienceLabel: '1 - 3 năm',
-      category: 'data-ai',
-      categoryLabel: 'Dữ liệu & AI',
-      tags: ['SQL', 'Python', 'Power BI', 'Data Modeling', 'Tableau'],
-      postedText: '2 ngày trước',
-      postedDaysAgo: 2,
-      deadlineText: '20/11/2026',
-      deadlineDaysLeft: 11,
-      isHot: true,
-      isUrgent: false,
-      description: 'Khai phá và trực quan hóa dữ liệu hành vi người dùng ứng dụng MoMo. Xây dựng Dashboard báo cáo quản trị KPI phục vụ ban giám đốc.'
-    },
-    {
-      id: 'job-05',
-      title: 'UI/UX Product Designer (Mobile & Web App)',
-      company: 'Shopee Vietnam',
-      logo: 'SP',
-      logoBg: '#c2410c',
-      verified: true,
-      salary: '18 - 28 Triệu',
-      salaryNum: 28,
-      location: 'hcm',
-      locationLabel: 'Quận 1, TP.HCM',
-      workType: 'fulltime',
-      workTypeLabel: 'Toàn thời gian',
-      experience: '1-3',
-      experienceLabel: '2+ năm',
-      category: 'design',
-      categoryLabel: 'Thiết kế UI/UX',
-      tags: ['Figma', 'Design System', 'Wireframing', 'User Research', 'Prototyping'],
-      postedText: '3 ngày trước',
-      postedDaysAgo: 3,
-      deadlineText: '28/11/2026',
-      deadlineDaysLeft: 19,
-      isHot: false,
-      isUrgent: false,
-      description: 'Thiết kế trải nghiệm người dùng luồng thanh toán và giỏ hàng sàn TMĐT. Xây dựng bộ Design System và phối hợp với đội ngũ Kỹ sư Frontend.'
-    },
-    {
-      id: 'job-06',
-      title: 'DevOps & Cloud Engineer (AWS / Kubernetes)',
-      company: 'KMS Technology Vietnam',
-      logo: 'KMS',
-      logoBg: '#047857',
-      verified: true,
-      salary: '25 - 38 Triệu',
-      salaryNum: 38,
-      location: 'danang',
-      locationLabel: 'Hải Châu, Đà Nẵng',
-      workType: 'fulltime',
-      workTypeLabel: 'Toàn thời gian',
-      experience: '3-5',
-      experienceLabel: '3 - 5 năm',
-      category: 'cloud-devops',
-      categoryLabel: 'Cloud & DevOps',
-      tags: ['AWS', 'Kubernetes', 'Docker', 'Terraform', 'CI/CD Jenkins'],
-      postedText: '3 ngày trước',
-      postedDaysAgo: 3,
-      deadlineText: '05/12/2026',
-      deadlineDaysLeft: 26,
-      isHot: true,
-      isUrgent: true,
-      description: 'Quản trị hạ tầng Cloud AWS quy mô lớn cho đối tác Mỹ. Tự động hóa quy trình triển khai phần mềm không gián đoạn Zero-Downtime Deployment.'
-    }
-  ];
+  let ALL_JOBS_DB = [];
 
   // --------------------------------------------------------------------------
   // 3. KHỞI TẠO DANH SÁCH VIỆC LÀM ĐÃ LƯU
   // --------------------------------------------------------------------------
-  const rawBookmarks = localStorage.getItem(STORAGE_KEYS.BOOKMARKS);
-  let bookmarkedIds;
-
-  if (rawBookmarks === null) {
-    bookmarkedIds = ['job-01', 'job-04', 'job-05'];
-    setStorage(STORAGE_KEYS.BOOKMARKS, bookmarkedIds);
-  } else {
-    try {
-      bookmarkedIds = JSON.parse(rawBookmarks);
-      if (!Array.isArray(bookmarkedIds)) bookmarkedIds = [];
-    } catch (e) {
-      bookmarkedIds = [];
-    }
-  }
+  let bookmarkedIds = [];
 
   const appliedList = getStorage(STORAGE_KEYS.APPLICATIONS, []);
   const appliedJobIds = new Set(appliedList.map(app => String(app.jobId || app.job_id)));
 
   const session = getStorage(STORAGE_KEYS.SESSION, null);
-  const currentUserName = (session && (session.fullName || session.name)) || 'Nguyễn Phú Quang';
+  const currentUserName = (session && (session.fullName || session.name)) || 'Ứng viên';
 
   const headerUserName = document.getElementById('headerUserName');
   const sidebarUserName = document.getElementById('sidebarUserName');
@@ -795,13 +625,7 @@ document.addEventListener('DOMContentLoaded', function () {
           };
         });
 
-        // Hợp nhất việc làm từ MySQL vào ALL_JOBS_DB
-        dbJobs.forEach(dj => {
-          if (!ALL_JOBS_DB.some(j => String(j.id) === String(dj.id))) {
-            ALL_JOBS_DB.unshift(dj);
-          }
-        });
-
+        ALL_JOBS_DB = dbJobs;
         bookmarkedIds = dbJobs.map(j => String(j.id));
         setStorage(STORAGE_KEYS.BOOKMARKS, bookmarkedIds);
       }

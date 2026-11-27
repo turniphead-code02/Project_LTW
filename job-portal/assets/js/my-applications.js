@@ -73,108 +73,13 @@ document.addEventListener('DOMContentLoaded', function () {
     session = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null');
   } catch (e) {}
 
-  const currentUserName = (session && (session.fullName || session.name)) || 'Nguyễn Phú Quang';
-  const currentUserEmail = (session && session.email) || 'quang.np@student.ut.edu.vn';
+  const currentUserName = (session && (session.fullName || session.name)) || 'Ứng viên';
+  const currentUserEmail = (session && session.email) || '';
 
   // --------------------------------------------------------------------------
-  // 1. KHỞI TẠO DỮ LIỆU ĐƠN ỨNG TUYỂN MẪU (FALLBACK KHI CHƯA ĐĂNG NHẬP)
+  // 1. DANH SÁCH ĐƠN ỨNG TUYỂN (NẠP TỪ API BACKEND)
   // --------------------------------------------------------------------------
-  let applications = getAppliedJobs();
-
-  if (!Array.isArray(applications) || applications.length === 0) {
-    applications = [
-      {
-        id: 'app-fpt-01',
-        jobId: 'job-02',
-        jobTitle: 'Junior Backend Node.js / NestJS Engineer',
-        company: 'FPT Software Global',
-        companyLogo: 'FPT',
-        companyLogoBg: '#0284c7',
-        salary: '14 - 20 Triệu',
-        location: 'TP. Thủ Đức, TP.HCM',
-        applicantName: currentUserName,
-        applicantEmail: currentUserEmail,
-        applicantPhone: '0901 234 567',
-        fileName: 'CV_NguyenPhuQuang_Backend.pdf',
-        fileSize: '1.25 MB',
-        coverLetter: 'Em có 1 năm kinh nghiệm xây dựng RESTful API với Express và NestJS. Em mong muốn được gia nhập FPT Software để phát triển các dự án Microservices quy mô quốc tế.',
-        appliedAt: '24/10/2026 08:30',
-        status: 'interview',
-        statusText: 'Hẹn phỏng vấn',
-        stepIndex: 3,
-        timeline: {
-          step1: { title: '1. ĐÃ NỘP ĐƠN', date: '24/10 08:30', completed: true },
-          step2: { title: '2. DOANH NGHIỆP ĐÃ XEM', date: '25/10 14:15', completed: true },
-          step3: { title: '3. HẸN PHỎNG VẤN', date: 'Đã gửi lịch qua Email', active: true },
-          step4: { title: '4. KẾT QUẢ CUỐI CÙNG', date: 'Đang chờ đánh giá', pending: true }
-        },
-        interviewInfo: {
-          time: '09:30 - Thứ Hai, ngày 15/11/2026',
-          format: 'Phỏng vấn Trực tuyến (Online Interview)',
-          platform: 'Microsoft Teams Meeting',
-          meetingLink: 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_fpt_software',
-          interviewers: 'Anh Nguyễn Minh Đức (Tech Lead) & Chị Trần Mai Anh (Senior HR)',
-          note: 'Ứng viên vui lòng chuẩn bị máy tính có webcam, micro và chuẩn bị trình bày tóm tắt 1 dự án Backend Node.js tiêu biểu trong 10 phút.'
-        },
-        feedback: 'FPT Software đã duyệt hồ sơ của bạn và đánh giá cao kỹ năng NestJS. Lịch phỏng vấn kỹ thuật online đã được xác nhận vào lúc 09:30 ngày 15/11/2026 qua Microsoft Teams.'
-      },
-      {
-        id: 'app-vng-02',
-        jobId: 'job-01',
-        jobTitle: 'Frontend React Developer (Junior / Middle)',
-        company: 'Công Ty Cổ Phần Công Nghệ VNG',
-        companyLogo: 'VNG',
-        companyLogoBg: '#ea580c',
-        salary: '15 - 22 Triệu',
-        location: 'Quận 7, TP.HCM',
-        applicantName: currentUserName,
-        applicantEmail: currentUserEmail,
-        applicantPhone: '0901 234 567',
-        fileName: 'CV_NguyenPhuQuang_Frontend_2026.pdf',
-        fileSize: '1.45 MB',
-        coverLetter: 'Em tự tin với khả năng tối ưu hóa hiệu năng Core Web Vitals, Responsive HTML5/CSS3 và thành thạo Redux Toolkit.',
-        appliedAt: '25/10/2026 14:15',
-        status: 'viewed',
-        statusText: 'Doanh nghiệp đã xem',
-        stepIndex: 2,
-        timeline: {
-          step1: { title: '1. ĐÃ NỘP ĐƠN', date: '25/10 14:15', completed: true },
-          step2: { title: '2. DOANH NGHIỆP ĐÃ XEM', date: '26/10 09:20', active: true },
-          step3: { title: '3. HẸN PHỎNG VẤN', date: 'Đang xét duyệt', pending: true },
-          step4: { title: '4. KẾT QUẢ CUỐI CÙNG', date: 'Chưa có', pending: true }
-        },
-        feedback: 'Phòng Nhân sự VNG Campus đã mở xem và tải bản chụp CV của bạn. Hồ sơ đang được chuyển sang Trưởng bộ phận Zalo Web thẩm định năng lực.'
-      },
-      {
-        id: 'app-viettel-03',
-        jobId: 'job-03',
-        jobTitle: 'Thực Tập Sinh Lập Trình Java / Spring Boot',
-        company: 'Viettel Solutions (Tập Đoàn Viễn Thông Quân Đội)',
-        companyLogo: 'VT',
-        companyLogoBg: '#b91c1c',
-        salary: '6 - 8 Triệu (Hỗ trợ)',
-        location: 'Cầu Giấy, Hà Nội',
-        applicantName: currentUserName,
-        applicantEmail: currentUserEmail,
-        applicantPhone: '0901 234 567',
-        fileName: 'CV_NguyenPhuQuang_JavaIntern.pdf',
-        fileSize: '1.10 MB',
-        coverLetter: 'Em là sinh viên năm cuối CNTT UTH, mong muốn được thực tập và cống hiến lâu dài tại Viettel.',
-        appliedAt: '18/10/2026 10:00',
-        status: 'offer',
-        statusText: 'Trúng tuyển / Đã gửi Offer',
-        stepIndex: 4,
-        timeline: {
-          step1: { title: '1. ĐÃ NỘP ĐƠN', date: '18/10 10:00', completed: true },
-          step2: { title: '2. DOANH NGHIỆP ĐÃ XEM', date: '19/10 15:30', completed: true },
-          step3: { title: '3. HẸN PHỎNG VẤN', date: '23/10 14:00', completed: true },
-          step4: { title: '4. KẾT QUẢ CUỐI CÙNG', date: 'Trúng Tuyển', completed: true, isOffer: true }
-        },
-        feedback: 'CHÚC MỪNG BẠN! Hội đồng tuyển dụng Viettel Solutions trân trọng thông báo bạn đã xuất sắc vượt qua vòng phỏng vấn chuyên môn và được tiếp nhận vào chương trình Kỹ sư Trẻ 2026. Thư mời nhận việc đã gửi qua Email của bạn.'
-      }
-    ];
-    saveAppliedJobs(applications);
-  }
+  let applications = [];
 
   // --------------------------------------------------------------------------
   // 2. STATE BỘ LỌC & DOM ELEMENTS

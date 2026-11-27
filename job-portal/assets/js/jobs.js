@@ -11,54 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
   const PAGE_SIZE = 6;
-  const FALLBACK_LOCATIONS = [
-    { location_id: 1, location_name: 'TP. Hồ Chí Minh', slug: 'tp-ho-chi-minh' },
-    { location_id: 2, location_name: 'Hà Nội', slug: 'ha-noi' },
-    { location_id: 3, location_name: 'Đà Nẵng', slug: 'da-nang' },
-    { location_id: 4, location_name: 'Cần Thơ', slug: 'can-tho' },
-    { location_id: 7, location_name: 'Toàn quốc (Làm từ xa / Remote)', slug: 'remote' }
-  ];
-  const FALLBACK_CATEGORIES = [
-    { category_id: 1, category_name: 'Lập Trình & Phát Triển Phần Mềm', slug: 'lap-trinh-phan-mem' },
-    { category_id: 2, category_name: 'Khoa Học Dữ Liệu & Trí Tuệ Nhân Tạo (AI/ML)', slug: 'khoa-hoc-du-lieu-ai' },
-    { category_id: 3, category_name: 'Thiết Kế Trải Nghiệm & Giao Diện (UI/UX Design)', slug: 'thiet-ke-ui-ux' },
-    { category_id: 4, category_name: 'An Toàn Thông Tin & Giám Sát Bảo Mật (SecOps)', slug: 'an-toan-thong-tin' },
-    { category_id: 5, category_name: 'Hạ Tầng Điện Toán Đám Mây & DevOps', slug: 'cloud-devops' },
-    { category_id: 6, category_name: 'Kiểm Thử Phần Mềm & Đảm Bảo Chất Lượng (QA/QC)', slug: 'kiem-thu-phan-mem-qa' },
-    { category_id: 7, category_name: 'Marketing & Truyền Thông', slug: 'marketing-truyen-thong' },
-    { category_id: 8, category_name: 'Tài Chính – Kế Toán – Kiểm Toán', slug: 'tai-chinh-ke-toan' },
-    { category_id: 9, category_name: 'Kinh Doanh & Phát Triển Thị Trường (Sales)', slug: 'kinh-doanh-ban-hang' },
-    { category_id: 10, category_name: 'Nhân Sự & Hành Chính (HR / C&B)', slug: 'nhan-su-hanh-chinh' },
-    { category_id: 11, category_name: 'Logistics & Xuất Nhập Khẩu', slug: 'logistics-chuoi-cung-ung' },
-    { category_id: 12, category_name: 'Thương Mại Điện Tử & Vận Hành Sàn', slug: 'thuong-mai-dien-tu' },
-    { category_id: 13, category_name: 'Xây Dựng – Kiến Trúc & Bất Động Sản', slug: 'xay-dung-kien-truc' },
-    { category_id: 14, category_name: 'Y Tế – Dược Phẩm & Chăm Sóc Sức Khỏe', slug: 'y-te-duoc-pham' },
-    { category_id: 15, category_name: 'Giáo Dục – Đào Tạo & Ngoại Ngữ', slug: 'giao-duc-dao-tao' },
-    { category_id: 16, category_name: 'Sản Xuất – Cơ Khí & Tự Động Hóa', slug: 'co-khi-san-xuat' }
-  ];
-  const FALLBACK_SKILLS = [
-    { skill_id: 1, skill_name: 'ReactJS', slug: 'reactjs' },
-    { skill_id: 2, skill_name: 'Node.js', slug: 'nodejs' },
-    { skill_id: 3, skill_name: 'TypeScript', slug: 'typescript' },
-    { skill_id: 4, skill_name: 'Java', slug: 'java' },
-    { skill_id: 5, skill_name: 'Spring Boot', slug: 'spring-boot' },
-    { skill_id: 6, skill_name: 'Python', slug: 'python' },
-    { skill_id: 7, skill_name: 'SQL', slug: 'sql' },
-    { skill_id: 9, skill_name: 'Docker', slug: 'docker' },
-    { skill_id: 10, skill_name: 'Kubernetes', slug: 'kubernetes' },
-    { skill_id: 11, skill_name: 'AWS', slug: 'aws' },
-    { skill_id: 12, skill_name: 'Figma', slug: 'figma' }
-  ];
-
-  // Dữ liệu mẫu chỉ dùng khi Backend/MySQL chưa chạy hoặc API không truy cập được.
-  const FALLBACK_JOBS = [
-    { job_id: 1, title: 'Frontend React Developer (Junior / Middle)', slug: 'frontend-react-developer-vng-01', description: 'Phát triển giao diện web với React, TypeScript và tối ưu trải nghiệm người dùng.', salary_min: 15000000, salary_max: 22000000, currency: 'VND', employment_type: 'full_time', experience_level: 'junior', deadline: '2026-11-25', created_at: '2026-11-14 08:00:00', company_name: 'Công Ty Cổ Phần Công Nghệ VNG', logo_url: '', company_id: 1, category_id: 1, category_name: 'Lập Trình & Phát Triển Phần Mềm', location_id: 1, location_name: 'TP. Hồ Chí Minh', skills: 'ReactJS, TypeScript, TailwindCSS' },
-    { job_id: 2, title: 'Junior Backend Node.js / NestJS Engineer', slug: 'junior-backend-nodejs-fpt-02', description: 'Xây dựng RESTful API, Microservices và làm việc với cơ sở dữ liệu.', salary_min: 14000000, salary_max: 20000000, currency: 'VND', employment_type: 'full_time', experience_level: 'junior', deadline: '2026-11-30', created_at: '2026-11-13 08:00:00', company_name: 'FPT Software Global', logo_url: '', company_id: 2, category_id: 1, category_name: 'Lập Trình & Phát Triển Phần Mềm', location_id: 1, location_name: 'TP. Hồ Chí Minh', skills: 'Node.js, NestJS, Docker, Redis' },
-    { job_id: 3, title: 'Thực Tập Sinh Lập Trình Java / Spring Boot', slug: 'thuc-tap-sinh-java-viettel-03', description: 'Chương trình thực tập dành cho sinh viên CNTT, có mentor hướng dẫn.', salary_min: 6000000, salary_max: 8000000, currency: 'VND', employment_type: 'internship', experience_level: 'fresher', deadline: '2026-12-15', created_at: '2026-11-12 08:00:00', company_name: 'Viettel Solutions', logo_url: '', company_id: 3, category_id: 1, category_name: 'Lập Trình & Phát Triển Phần Mềm', location_id: 2, location_name: 'Hà Nội', skills: 'Java, Spring Boot, SQL' },
-    { job_id: 4, title: 'Chuyên Viên Phân Tích Dữ Liệu (Data Analyst)', slug: 'data-analyst-momo-04', description: 'Phân tích dữ liệu, xây dựng dashboard và báo cáo quản trị.', salary_min: 16000000, salary_max: 24000000, currency: 'VND', employment_type: 'full_time', experience_level: 'middle', deadline: '2026-11-20', created_at: '2026-11-11 08:00:00', company_name: 'MoMo', logo_url: '', company_id: 4, category_id: 2, category_name: 'Khoa Học Dữ Liệu & AI/ML', location_id: 1, location_name: 'TP. Hồ Chí Minh', skills: 'SQL, Python, Power BI' },
-    { job_id: 5, title: 'UI/UX Product Designer', slug: 'ui-ux-product-designer-shopee-05', description: 'Thiết kế giao diện và trải nghiệm cho ứng dụng web, mobile.', salary_min: 18000000, salary_max: 28000000, currency: 'VND', employment_type: 'full_time', experience_level: 'middle', deadline: '2026-11-28', created_at: '2026-11-10 08:00:00', company_name: 'Shopee Vietnam', logo_url: '', company_id: 5, category_id: 3, category_name: 'Thiết Kế UI/UX', location_id: 1, location_name: 'TP. Hồ Chí Minh', skills: 'Figma, Design System' },
-    { job_id: 6, title: 'DevOps & Cloud Engineer (AWS / Kubernetes)', slug: 'devops-cloud-engineer-kms-06', description: 'Vận hành hạ tầng Cloud, Docker, Kubernetes và CI/CD.', salary_min: 25000000, salary_max: 38000000, currency: 'VND', employment_type: 'full_time', experience_level: 'senior', deadline: '2026-12-05', created_at: '2026-11-09 08:00:00', company_name: 'KMS Technology Vietnam', logo_url: '', company_id: 6, category_id: 5, category_name: 'Cloud & DevOps', location_id: 3, location_name: 'Đà Nẵng', skills: 'AWS, Docker, Kubernetes' }
-  ];
 
   const el = (id) => document.getElementById(id);
   const topSearchInput = el('topSearchInput');
@@ -90,8 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentPage = 1;
   let currentJobs = [];
   let currentMeta = { page: 1, pageSize: PAGE_SIZE, total: 0, totalPages: 0 };
-  let filterOptions = { locations: FALLBACK_LOCATIONS, categories: FALLBACK_CATEGORIES, skills: FALLBACK_SKILLS };
-  let usingFallback = false;
+  let filterOptions = { locations: [], categories: [], skills: [] };
   let requestSequence = 0;
   let bookmarkedIds = [];
 
@@ -229,14 +180,14 @@ document.addEventListener('DOMContentLoaded', () => {
       const response = await window.JobPortalAPI.get('/jobs/filters');
       const data = response.data || {};
       filterOptions = {
-        locations: Array.isArray(data.locations) ? data.locations : FALLBACK_LOCATIONS,
-        categories: Array.isArray(data.categories) ? data.categories : FALLBACK_CATEGORIES,
-        skills: Array.isArray(data.skills) ? data.skills : FALLBACK_SKILLS
+        locations: Array.isArray(data.locations) ? data.locations : [],
+        categories: Array.isArray(data.categories) ? data.categories : [],
+        skills: Array.isArray(data.skills) ? data.skills : []
       };
     } catch (error) {
-      console.warn('[Module 1] Không tải được danh mục API, sử dụng danh mục mẫu:', error.message);
-      filterOptions = { locations: FALLBACK_LOCATIONS, categories: FALLBACK_CATEGORIES, skills: FALLBACK_SKILLS };
-      showNotice('Không kết nối được danh mục từ máy chủ. Trang đang dùng danh mục mẫu.', true);
+      console.error('[Module 1] Không tải được danh mục API:', error.message);
+      filterOptions = { locations: [], categories: [], skills: [] };
+      showNotice('Không kết nối được danh mục từ máy chủ API.', true);
     }
     renderFilterOptions();
   }
@@ -268,37 +219,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return params.toString();
   }
 
-  function isStillOpen(job) {
-    if (!job.deadline) return true;
-    const deadline = new Date(`${String(job.deadline).slice(0, 10)}T23:59:59`);
-    return Number.isNaN(deadline.getTime()) || deadline >= new Date();
-  }
-
-  function filterFallbackJobs(filters) {
-    const keyword = filters.keyword.toLocaleLowerCase('vi');
-    let result = FALLBACK_JOBS.filter((job) => {
-      if (!isStillOpen(job)) return false;
-      if (keyword) {
-        const text = `${job.title} ${job.company_name} ${job.description} ${job.skills}`.toLocaleLowerCase('vi');
-        if (!text.includes(keyword)) return false;
-      }
-      if (filters.location_id && Number(job.location_id) !== Number(filters.location_id)) return false;
-      if (filters.category_id && Number(job.category_id) !== Number(filters.category_id)) return false;
-      if (filters.skill_id && !String(job.skills || '').toLowerCase().includes(String(filterOptions.skills.find((s) => String(s.skill_id) === filters.skill_id)?.skill_name || '').toLowerCase())) return false;
-      if (filters.employment_type && job.employment_type !== filters.employment_type) return false;
-      if (filters.experience_level && job.experience_level !== filters.experience_level) return false;
-      if (filters.salary_min && (job.salary_max == null || Number(job.salary_max) < Number(filters.salary_min))) return false;
-      if (filters.salary_max && (job.salary_min == null || Number(job.salary_min) > Number(filters.salary_max))) return false;
-      return true;
-    });
-    if (filters.sort === 'salary_desc') result.sort((a, b) => Number(b.salary_max || 0) - Number(a.salary_max || 0));
-    else result.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-    const total = result.length;
-    const totalPages = Math.ceil(total / PAGE_SIZE);
-    const start = (currentPage - 1) * PAGE_SIZE;
-    return { jobs: result.slice(start, start + PAGE_SIZE), meta: { page: currentPage, pageSize: PAGE_SIZE, total, totalPages } };
-  }
-
   function showNotice(message, isError) {
     if (!errorNotice) return;
     errorNotice.textContent = message;
@@ -321,15 +241,12 @@ document.addEventListener('DOMContentLoaded', () => {
       if (sequence !== requestSequence) return;
       currentJobs = Array.isArray(response.data) ? response.data : [];
       currentMeta = response.meta || { page: currentPage, pageSize: PAGE_SIZE, total: currentJobs.length, totalPages: 1 };
-      usingFallback = false;
     } catch (error) {
       if (sequence !== requestSequence) return;
-      console.warn('[Module 1] API jobs không khả dụng, chuyển sang dữ liệu mẫu:', error.message);
-      const fallback = filterFallbackJobs(filters);
-      currentJobs = fallback.jobs;
-      currentMeta = fallback.meta;
-      usingFallback = true;
-      showNotice('Máy chủ/MySQL chưa sẵn sàng. Trang đang hiển thị dữ liệu mẫu để bạn vẫn xem và thử bộ lọc được.', true);
+      console.error('[Module 1] API jobs không khả dụng:', error.message);
+      currentJobs = [];
+      currentMeta = { page: currentPage, pageSize: PAGE_SIZE, total: 0, totalPages: 0 };
+      showNotice('Không thể tải dữ liệu việc làm từ máy chủ API. Vui lòng thử lại sau.', true);
     } finally {
       if (sequence === requestSequence) {
         if (loading) loading.hidden = true;

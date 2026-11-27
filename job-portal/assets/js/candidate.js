@@ -89,52 +89,38 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // --------------------------------------------------------------------------
-  // 2. KHỞI TẠO DỮ LIỆU MẶC ĐỊNH
+  // 2. KHỞI TẠO DỮ LIỆU TỪ SESSION & API (ZERO HARDCODED MOCK DATA)
   // --------------------------------------------------------------------------
   const session = getStorage(STORAGE_KEYS.SESSION, null);
-  const initialName = (session && (session.fullName || session.name)) || 'Nguyễn Phú Quang';
-  const initialEmail = (session && session.email) || 'quang.np@student.ut.edu.vn';
+  const initialName = (session && (session.fullName || session.name)) || 'Ứng viên';
+  const initialEmail = (session && session.email) || '';
 
   let profile = getStorage(STORAGE_KEYS.PROFILE, {
     fullName: initialName,
     email: initialEmail,
-    phone: '0901 234 567',
-    location: 'hcm',
-    title: 'Frontend Web Developer (Fresher / Junior)',
-    bio: 'Sinh viên CNTT trường ĐH Giao Thông Vận Tải TP.HCM (UTH). Đam mê lập trình Web hiện đại với HTML5, CSS3, JavaScript và React.'
+    phone: '',
+    location: '',
+    title: '',
+    bio: ''
   });
 
-  let educations = getStorage(STORAGE_KEYS.EDUCATION, [
-    {
-      id: 'edu-1',
-      school: 'Trường ĐH Giao Thông Vận Tải TP.HCM (UTH)',
-      major: 'Công Nghệ Thông Tin (Khoa CNTT)',
-      startYear: '2022',
-      endYear: '2026'
-    }
-  ]);
+  if (session) {
+    profile.fullName = session.fullName || session.name || profile.fullName;
+    profile.email = session.email || profile.email;
+  }
 
-  let skills = getStorage(STORAGE_KEYS.SKILLS, [
-    'HTML5 Semantic', 'CSS3 Modern', 'JavaScript ES6+', 'ReactJS', 'Responsive Web Design', 'Git / GitHub', 'Figma', 'Bootstrap 5'
-  ]);
+  let educations = getStorage(STORAGE_KEYS.EDUCATION, []);
 
-  let resumes = getStorage(STORAGE_KEYS.RESUMES, [
-    {
-      id: 'res-1',
-      title: 'CV_NguyenPhuQuang_Frontend_2026.pdf',
-      fileName: 'CV_NguyenPhuQuang_Frontend.pdf',
-      fileSize: '1.45 MB',
-      uploadDate: '26/10/2026',
-      isDefault: true
-    }
-  ]);
+  let skills = getStorage(STORAGE_KEYS.SKILLS, []);
+
+  let resumes = [];
 
   let links = getStorage(STORAGE_KEYS.LINKS, {
-    portfolio: '../portfolios/NguyenPhuQuang/index.html',
-    github: 'https://github.com/nguyenphuquang'
+    portfolio: '',
+    github: ''
   });
 
-  let applications = getStorage(STORAGE_KEYS.APPLICATIONS, []);
+  let applications = [];
 
   // --------------------------------------------------------------------------
   // 3. ĐỒNG BỘ HIỂN THỊ PROFILE & HEADER
@@ -145,8 +131,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const sidebarAvatar = document.querySelector('.profile-avatar');
     const headerAvatar = document.querySelector('.user-avatar');
 
-    const displayName = profile.fullName || 'Nguyễn Phú Quang';
-    const firstChar = displayName.trim().charAt(0).toUpperCase() || 'Q';
+    const displayName = profile.fullName || 'Ứng viên';
+    const firstChar = displayName.trim().charAt(0).toUpperCase() || 'U';
 
     if (headerUserName) headerUserName.textContent = displayName;
     if (sidebarUserName) sidebarUserName.textContent = displayName;
