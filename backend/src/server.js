@@ -11,7 +11,8 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
-const { checkDatabaseConnection } = require('./config/db');
+const { pool, checkDatabaseConnection } = require('./config/db');
+const { ensureDatabaseReady } = require('./scripts/initCloudDb');
 const { sendError } = require('./utils/response');
 const { handleMulterError } = require('./middlewares/upload.middleware');
 const { serveSecureCv } = require('./middlewares/secureCv.middleware');
@@ -28,7 +29,23 @@ const app = express();
 const PORT = Number(process.env.PORT) || 5001;
 
 // 1. Cấu hình Middleware cơ bản & Security Headers (Mục 2.2 Đặc tả kỹ thuật)
-app.use(cors({ origin: true, credentials: true }));
+const allowedOrigins = (process.env.CORS_ORIGINS || 'https://portaljob-six.vercel.app')
+  .split(',')
+  .map((item) => item.trim())
+  .filter(Boolean);
+
+app.use(
+  cors({
+    origin(origin, callback) {
+      if (!origin || origin === 'null') return callback(null, true);
+      if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(origin)) return callback(null, true);
+      if (/^https:\/\/[a-z0-9-]+\.vercel\.app$/i.test(origin)) return callback(null, true);
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      return callback(null, true);
+    },
+    credentials: true
+  })
+);
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -62,12 +79,21 @@ app.use('/api/v1/employer', employerRoutes);
 app.use('/api/v1', authAdminRoutes); // Gồm /api/v1/auth/* và /api/v1/admin/*
 
 // 4. Route kiểm tra sức khỏe hệ thống (Healthcheck)
-app.get('/api/v1/health', (req, res) => {
+app.get('/api/v1/health', async (req, res) => {
+  let dbConnected = false;
+  try {
+    await pool.query('SELECT 1');
+    dbConnected = true;
+  } catch (_) {}
+
   res.json({
     success: true,
     code: 200,
     message: 'JobPortal Backend API đang hoạt động.',
-    data: { timestamp: new Date().toISOString() }
+    data: {
+      timestamp: new Date().toISOString(),
+      database: dbConnected ? 'connected' : 'disconnected'
+    }
   });
 });
 
@@ -94,5 +120,8 @@ app.listen(PORT, async () => {
   console.log(`📂 Giao diện Frontend:            http://localhost:${PORT}/index.html`);
   console.log(`🔌 Điểm cuối REST API:            http://localhost:${PORT}/api/v1/health`);
   console.log(`================================================================`);
-  await checkDatabaseConnection();
+  const dbOk = await checkDatabaseConnection();
+  if (dbOk) {
+    await ensureDatabaseReady();
+  }
 });

@@ -7,10 +7,15 @@
  */
 
 (function () {
+  var PRODUCTION_API_BASE = 'https://jobportal-api-nhom6.onrender.com/api/v1';
   var defaultBase = 'http://localhost:5001/api/v1';
+
   if (typeof window !== 'undefined' && window.location && window.location.origin && window.location.origin.startsWith('http')) {
+    var host = window.location.hostname || '';
     if (window.location.port === '5001' || window.location.port === '5000') {
       defaultBase = window.location.origin + '/api/v1';
+    } else if (host && host !== 'localhost' && host !== '127.0.0.1') {
+      defaultBase = PRODUCTION_API_BASE;
     }
   }
   var API_BASE_URL = window.JOBPORTAL_API_BASE || defaultBase;
