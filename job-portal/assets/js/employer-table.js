@@ -2,22 +2,6 @@
    MODULE 4: EMPLOYER PORTAL & RECRUITMENT CONSOLE — JAVASCRIPT TỔNG HỢP
    Thành viên: ĐINH DUY DIỄN (MSSV: 051206000952)
    Phụ thuộc: main.js (window.showToast)
-
-   MỤC LỤC:
-     - Phần 0: Gọi API & tiện ích dùng chung (EmployerAPI)
-     - Phần A: Sidebar, thông báo, KPI, bảng        (employer-dashboard.html)
-     - Phần B: Form đăng tin tuyển dụng             (post-job.html)
-     - Phần C: Bảng quản lý ứng viên & modal xem CV (candidate-management.html)
-
-   API sử dụng (backend/src/routes/employer.routes.js):
-     GET   /api/v1/employer/dashboard
-     POST  /api/v1/employer/jobs
-     PATCH /api/v1/employer/applications/:id/status
-     GET   /api/v1/employer/meta   (danh mục ngành nghề, địa điểm)
-
-   Cách chạy: mở qua server (http://localhost:5000/employer-dashboard.html).
-   Nếu không gọi được API (ví dụ mở bằng Live Server) trang tự dùng dữ liệu mẫu
-   và hiện cảnh báo, để vẫn xem được giao diện.
    ========================================================================== */
 
 /* ---------- PHẦN 0: GỌI API & TIỆN ÍCH DÙNG CHUNG ---------- */
@@ -27,7 +11,7 @@ var EmployerAPI = (function () {
     || ((window.location && window.location.port === '5001')
       ? ''
       : (isLocalHost ? 'http://localhost:5001' : 'https://jobportal-api-nhom6.onrender.com'));
-  var SALARY_UNIT = 1000000; // form nhập "triệu đồng", CSDL lưu đồng (đổi nếu nhóm lưu đơn vị khác)
+  var SALARY_UNIT = 1000000;
 
   // Bảo vệ phân quyền trang Nhà tuyển dụng (Client-side RBAC Guard)
   (function enforceEmployerRole() {
@@ -51,7 +35,6 @@ var EmployerAPI = (function () {
     } catch (_) {}
   })();
 
-  // Token truy cập: đồng bộ chuẩn key `jobportal_access_token` của JobPortalAPI
   function getRawToken() {
     try {
       return (window.JobPortalAPI && typeof window.JobPortalAPI.getToken === 'function' && window.JobPortalAPI.getToken())
@@ -69,14 +52,12 @@ var EmployerAPI = (function () {
 
   function request(method, path, body) {
     var headers = Object.assign({ Accept: 'application/json' }, authHeader());
-    if (body) headers['Content-Type'] = 'application/json';
-    return Promise.resolve().then(function () {
-      return fetch(BASE + '/api/v1/employer' + path, {
-        method: method,
-        headers: headers,
-        credentials: 'include',
-        body: body ? JSON.stringify(body) : undefined
-      });
+    if (body !== undefined) headers['Content-Type'] = 'application/json';
+    return fetch(BASE + '/api/v1/employer' + path, {
+      method: method,
+      headers: headers,
+      credentials: 'include',
+      body: body !== undefined ? JSON.stringify(body) : undefined
     }).then(function (res) {
       return res.json().catch(function () { return null; }).then(function (json) {
         if (res.status === 401) window.location.href = './auth.html?mode=login';
@@ -84,7 +65,7 @@ var EmployerAPI = (function () {
           var err = new Error((json && json.message) || 'Lỗi máy chủ (' + res.status + ').');
           err.status = res.status;
           err.errors = (json && json.errors) || null;
-          err.notJson = (json === null); // máy chủ tĩnh (Live Server) trả HTML, không phải API
+          err.notJson = (json === null);
           throw err;
         }
         return json;
@@ -92,7 +73,6 @@ var EmployerAPI = (function () {
     });
   }
 
-  // Không có mạng / không có API -> trả rỗng kèm cảnh báo lỗi thật (không dùng MOCK DB)
   function isOffline(err) { return !err.status || err.notJson; }
 
   function fail(err) {
@@ -100,7 +80,6 @@ var EmployerAPI = (function () {
     window.showToast((err && err.message) || 'Có lỗi xảy ra.', 'error');
   }
 
-  // Trạng thái hiển thị (khóa giao diện) <-> giá trị lưu ở CSDL
   var STATUS = {
     new:       { text: 'Mới nhận',      cls: 'status-new' },
     viewed:    { text: 'Đã xem',        cls: 'status-viewed' },
@@ -116,7 +95,7 @@ var EmployerAPI = (function () {
     if (s === 'interview' || s === 'interview_scheduled') return 'interview';
     if (s === 'accepted' || s === 'approved') return 'approved';
     if (s === 'rejected') return 'rejected';
-    return 'new'; // trạng thái ban đầu (đã nộp / chờ xử lý)
+    return 'new';
   }
 
   function esc(s) {
@@ -127,7 +106,7 @@ var EmployerAPI = (function () {
 
   function fmtDate(v) {
     if (!v) return '';
-    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(v)); // ngày thuần YYYY-MM-DD: không qua múi giờ
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(v));
     if (m) return m[3] + '/' + m[2] + '/' + m[1];
     var d = new Date(v);
     if (isNaN(d)) return esc(v);
@@ -135,51 +114,66 @@ var EmployerAPI = (function () {
     return p(d.getDate()) + '/' + p(d.getMonth() + 1) + '/' + d.getFullYear();
   }
 
-  function loadDashboard() {
-    return request('GET', '/dashboard').then(function (j) {
-      return { data: j.data, offline: false };
-    }).catch(function (err) {
-      if (!isOffline(err)) throw err;
-      window.showToast('Không thể kết nối máy chủ API để tải dữ liệu nhà tuyển dụng.', 'error');
-      return { data: { kpi: { activeJobs: 0, pendingJobs: 0, totalApplications: 0, interviews: 0 }, jobs: [], applications: [] }, offline: true };
-    });
+  function hydrateBrandName(name) {
+    if (!name) return;
+    var initial = String(name).trim().slice(0, 2).toUpperCase() || 'HR';
+    document.querySelectorAll('.emp-user-name').forEach(function (el) { el.textContent = name; });
+    document.querySelectorAll('.emp-avatar').forEach(function (el) { el.textContent = initial; });
   }
-
-  function updateStatus(id, key, offline) {
-    if (offline) {
-      return Promise.reject(new Error('Không kết nối được máy chủ API để cập nhật trạng thái.'));
-    }
-    return request('PATCH', '/applications/' + id + '/status', { status: API_STATUS[key] }).then(function (j) { return j.data; });
-  }
-
-  function loadMeta() { return request('GET', '/meta').then(function (j) { return j.data; }); }
-  function createJob(payload) { return request('POST', '/jobs', payload); }
 
   return {
-    SALARY_UNIT: SALARY_UNIT, STATUS: STATUS, statusKey: statusKey, esc: esc, fmtDate: fmtDate,
-    isOffline: isOffline, fail: fail,
-    loadDashboard: loadDashboard, updateStatus: updateStatus, loadMeta: loadMeta, createJob: createJob
+    BASE: BASE,
+    SALARY_UNIT: SALARY_UNIT,
+    STATUS: STATUS,
+    statusKey: statusKey,
+    esc: esc,
+    fmtDate: fmtDate,
+    isOffline: isOffline,
+    fail: fail,
+    getRawToken: getRawToken,
+    hydrateBrandName: hydrateBrandName,
+    loadDashboard: function () {
+      return request('GET', '/dashboard').then(function (j) {
+        if (j.data && j.data.company && j.data.company.company_name) {
+          hydrateBrandName(j.data.company.company_name);
+        }
+        return { data: j.data, offline: false };
+      }).catch(function (err) {
+        if (!isOffline(err)) throw err;
+        window.showToast('Không thể kết nối máy chủ API để tải dữ liệu nhà tuyển dụng.', 'error');
+        return { data: { company: null, kpi: { activeJobs: 0, pendingJobs: 0, totalApplications: 0, interviews: 0 }, jobs: [], applications: [] }, offline: true };
+      });
+    },
+    loadJob: function (id) { return request('GET', '/jobs/' + id).then(function (j) { return j.data; }); },
+    createJob: function (payload) { return request('POST', '/jobs', payload); },
+    updateJob: function (id, payload) { return request('PUT', '/jobs/' + id, payload); },
+    updateJobStatus: function (id, status) { return request('PATCH', '/jobs/' + id + '/status', { status: status }); },
+    deleteJob: function (id) { return request('DELETE', '/jobs/' + id); },
+    updateStatus: function (id, key, offline) {
+      if (offline) return Promise.reject(new Error('Không kết nối được máy chủ API để cập nhật trạng thái.'));
+      return request('PATCH', '/applications/' + id + '/status', { status: API_STATUS[key] }).then(function (j) { return j.data; });
+    },
+    loadMeta: function () { return request('GET', '/meta').then(function (j) { return j.data; }); },
+    loadCompany: function () { return request('GET', '/company').then(function (j) { return j.data; }); },
+    updateCompany: function (payload) { return request('PUT', '/company', payload).then(function (j) { return j.data; }); }
   };
 })();
 
 
-/* ---------- PHẦN A: DASHBOARD (SIDEBAR, THÔNG BÁO, KPI, BẢNG) ---------- */
+/* ---------- PHẦN A: HEADER CHUNG, THÔNG BÁO THẬT & DASHBOARD ---------- */
 document.addEventListener('DOMContentLoaded', function () {
-
   var $ = function (id) { return document.getElementById(id); };
   var esc = EmployerAPI.esc;
   var STATUS = EmployerAPI.STATUS;
 
-  // 0. ĐỒNG BỘ TÊN NHÀ TUYỂN DỤNG & XỬ LÝ ĐĂNG XUẤT
-  (function hydrateEmployerHeader() {
+  // 0. Đồng bộ tên ban đầu từ session & xử lý Đăng xuất
+  (function initHeaderAndLogout() {
     try {
       var raw = localStorage.getItem('jobportal_session');
       var sess = raw ? JSON.parse(raw) : null;
       if (sess) {
-        var displayName = sess.company_name || sess.full_name || sess.email || 'Nhà tuyển dụng';
-        var initial = String(displayName).trim().slice(0, 2).toUpperCase() || 'HR';
-        document.querySelectorAll('.emp-user-name').forEach(function (el) { el.textContent = displayName; });
-        document.querySelectorAll('.emp-avatar').forEach(function (el) { el.textContent = initial; });
+        var displayName = sess.company_name || sess.fullName || sess.name || sess.full_name || sess.email || 'Nhà tuyển dụng';
+        EmployerAPI.hydrateBrandName(displayName);
       }
     } catch (_) {}
 
@@ -198,19 +192,19 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   })();
 
-  // 1. SIDEBAR: luôn hiện trên desktop; trên mobile là Drawer trượt ra (nút ☰ chỉ hiện ở mobile)
+  // 1. Mobile Sidebar Drawer
   var sidebar = $('empSidebar');
   var backdrop = $('empBackdrop');
   var toggleBtn = $('btnToggleSidebar');
-
   function isMobile() { return window.matchMedia('(max-width: 1024px)').matches; }
   function closeDrawer() {
+    if (!sidebar || !backdrop || !toggleBtn) return;
     sidebar.classList.remove('is-open');
     backdrop.classList.remove('is-visible');
     toggleBtn.setAttribute('aria-expanded', 'false');
   }
 
-  if (sidebar && toggleBtn) {
+  if (sidebar && toggleBtn && backdrop) {
     toggleBtn.addEventListener('click', function () {
       var open = sidebar.classList.toggle('is-open');
       backdrop.classList.toggle('is-visible', open);
@@ -221,28 +215,69 @@ document.addEventListener('DOMContentLoaded', function () {
     window.addEventListener('resize', function () { if (!isMobile()) closeDrawer(); });
   }
 
-  // 2. THÔNG BÁO TRÊN TOPBAR (Tạo động từ dữ liệu API Dashboard, không hardcode dữ liệu giả)
+  // 2. Thông báo thực tế từ dữ liệu DB Dashboard
   var notifBtn = $('btnNotif');
   var notifPanel = $('notifPanel');
   var notifList = $('notifList');
   var notifCount = $('notifCount');
-
+  var READ_KEY = 'emp_notif_read';
   var notifications = [];
 
-  // Nhớ trạng thái đã đọc giữa các trang (an toàn khi trình duyệt chặn storage)
-  var READ_KEY = 'emp_notif_read';
   function loadRead() { try { return JSON.parse(localStorage.getItem(READ_KEY)) || []; } catch (e) { return []; } }
   function saveRead(ids) { try { localStorage.setItem(READ_KEY, JSON.stringify(ids)); } catch (e) {} }
   var readIds = loadRead();
-  function isRead(n) { return n.read || readIds.indexOf(n.id) !== -1; }
+  function isRead(n) { return readIds.indexOf(n.id) !== -1; }
+
+  function buildRealNotifications(dash) {
+    var items = [];
+    (dash.applications || []).forEach(function (a) {
+      var st = EmployerAPI.statusKey(a.status);
+      if (st === 'new') {
+        items.push({
+          id: 'app-' + a.application_id,
+          icon: '<i class="fa-regular fa-file-lines" style="color:var(--color-primary);"></i>',
+          title: 'Hồ sơ ứng tuyển mới',
+          text: (a.applicant_name || 'Ứng viên') + ' vừa nộp vào "' + (a.job_title || '') + '".',
+          time: EmployerAPI.fmtDate(a.applied_at),
+          href: './candidate-management.html'
+        });
+      }
+    });
+    (dash.jobs || []).forEach(function (j) {
+      if (j.status === 'rejected') {
+        items.push({
+          id: 'job-rej-' + j.job_id,
+          icon: '<i class="fa-solid fa-triangle-exclamation" style="color:var(--color-danger);"></i>',
+          title: 'Tin cần chỉnh sửa',
+          text: 'Tin "' + j.title + '" bị từ chối: ' + (j.reject_reason || 'Chưa đạt yêu cầu duyệt.'),
+          time: 'Cần cập nhật',
+          href: './post-job.html?edit=' + j.job_id
+        });
+      } else if (j.status === 'approved' && j.deadline) {
+        var diffDays = Math.ceil((new Date(j.deadline + 'T23:59:59') - new Date()) / 86400000);
+        if (diffDays >= 0 && diffDays <= 5) {
+          items.push({
+            id: 'job-exp-' + j.job_id,
+            icon: '<i class="fa-regular fa-clock" style="color:var(--color-warning);"></i>',
+            title: 'Tin sắp hết hạn',
+            text: 'Tin "' + j.title + '" sẽ hết hạn sau ' + diffDays + ' ngày.',
+            time: 'Hạn ' + EmployerAPI.fmtDate(j.deadline),
+            href: './employer-dashboard.html'
+          });
+        }
+      }
+    });
+    notifications = items.slice(0, 10);
+    renderNotifs();
+  }
 
   function renderNotifs() {
-    if (!notifList) return;
+    if (!notifList || !notifCount) return;
     var unread = notifications.filter(function (n) { return !isRead(n); }).length;
     notifCount.textContent = unread;
     notifCount.style.display = unread ? 'flex' : 'none';
     if (!notifications.length) {
-      notifList.innerHTML = '<div class="notif-empty">Chưa có thông báo nào.</div>';
+      notifList.innerHTML = '<div class="notif-empty">Chưa có thông báo mới.</div>';
       return;
     }
     notifList.innerHTML = notifications.map(function (n) {
@@ -251,13 +286,14 @@ document.addEventListener('DOMContentLoaded', function () {
         '<span class="notif-icon" aria-hidden="true">' + n.icon + '</span>' +
         '<span class="notif-body"><div class="notif-title">' + esc(n.title) + '</div>' +
         '<div class="notif-text">' + esc(n.text) + '</div>' +
-        '<div class="notif-time">' + n.time + '</div></span>' +
+        '<div class="notif-time">' + esc(n.time) + '</div></span>' +
         (u ? '<span class="notif-unread-dot" aria-label="Chưa đọc"></span>' : '') +
         '</a>';
     }).join('');
   }
 
   function setNotifOpen(open) {
+    if (!notifPanel || !notifBtn) return;
     notifPanel.hidden = !open;
     notifBtn.setAttribute('aria-expanded', String(open));
   }
@@ -265,15 +301,13 @@ document.addEventListener('DOMContentLoaded', function () {
   if (notifBtn && notifPanel) {
     renderNotifs();
     notifBtn.addEventListener('click', function (e) { e.stopPropagation(); setNotifOpen(notifPanel.hidden); });
-
-    // Event delegation: bấm vào 1 thông báo -> đánh dấu đã đọc (rồi chuyển trang theo href)
     notifList.addEventListener('click', function (e) {
       var item = e.target.closest('.notif-item');
       if (!item) return;
       if (readIds.indexOf(item.dataset.id) === -1) readIds.push(item.dataset.id);
       saveRead(readIds);
     });
-    $('btnMarkAllRead').addEventListener('click', function () {
+    $('btnMarkAllRead')?.addEventListener('click', function () {
       readIds = notifications.map(function (n) { return n.id; });
       saveRead(readIds);
       renderNotifs();
@@ -286,13 +320,17 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // 3. DASHBOARD: KPI + bảng (chỉ chạy ở employer-dashboard.html) — dữ liệu từ GET /employer/dashboard
+  // 3. DASHBOARD LOGIC (employer-dashboard.html)
   var recentBody = $('recentTableBody');
   if (recentBody) {
     var jobsBody = $('jobsTableBody');
     var recentEmpty = $('recentEmpty');
+    var companyModal = $('companyModal');
+    var companyForm = $('companyProfileForm');
+    var confirmModal = $('empConfirmModal');
     var dash = null;
     var offline = false;
+    var pendingConfirmFn = null;
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     function animateCount(el, target) {
@@ -302,12 +340,78 @@ document.addEventListener('DOMContentLoaded', function () {
       var start = null;
       function step(ts) {
         if (!start) start = ts;
-        var p = Math.min((ts - start) / 800, 1);
+        var p = Math.min((ts - start) / 700, 1);
         el.textContent = Math.round(target * p).toLocaleString('vi-VN');
         if (p < 1) requestAnimationFrame(step);
       }
       requestAnimationFrame(step);
     }
+
+    function openConfirm(title, msg, okText, fn) {
+      if (!confirmModal) return;
+      $('empConfirmTitle').textContent = title;
+      $('empConfirmMessage').textContent = msg;
+      $('btnOkConfirmModal').textContent = okText;
+      pendingConfirmFn = fn;
+      confirmModal.classList.add('is-open');
+    }
+    function closeConfirm() {
+      confirmModal?.classList.remove('is-open');
+      pendingConfirmFn = null;
+    }
+
+    $('btnCloseConfirmModal')?.addEventListener('click', closeConfirm);
+    $('btnCancelConfirmModal')?.addEventListener('click', closeConfirm);
+    $('btnOkConfirmModal')?.addEventListener('click', function () {
+      var fn = pendingConfirmFn;
+      closeConfirm();
+      if (typeof fn === 'function') fn();
+    });
+    confirmModal?.addEventListener('click', function (e) { if (e.target === confirmModal) closeConfirm(); });
+
+    function openCompanyModal() {
+      if (!companyModal) return;
+      var c = dash?.company;
+      if (c) {
+        $('compNameInput').value = c.company_name || '';
+        $('compTaxInput').value = c.tax_code || '';
+        $('compWebsiteInput').value = c.website || '';
+        $('compAddressInput').value = c.address || '';
+        $('compLogoInput').value = c.logo_url || '';
+        $('compDescInput').value = c.description || '';
+      }
+      companyModal.classList.add('is-open');
+    }
+    function closeCompanyModal() { companyModal?.classList.remove('is-open'); }
+
+    $('btnOpenCompanyModal')?.addEventListener('click', openCompanyModal);
+    $('btnHeadCompany')?.addEventListener('click', openCompanyModal);
+    $('empUserTrigger')?.addEventListener('click', openCompanyModal);
+    $('btnCloseCompanyModal')?.addEventListener('click', closeCompanyModal);
+    $('btnCancelCompanyModal')?.addEventListener('click', closeCompanyModal);
+    companyModal?.addEventListener('click', function (e) { if (e.target === companyModal) closeCompanyModal(); });
+
+    companyForm?.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var saveBtn = $('btnSaveCompanyModal');
+      var payload = {
+        company_name: $('compNameInput').value.trim(),
+        tax_code: $('compTaxInput').value.trim(),
+        website: $('compWebsiteInput').value.trim(),
+        address: $('compAddressInput').value.trim(),
+        logo_url: $('compLogoInput').value.trim(),
+        description: $('compDescInput').value.trim()
+      };
+      if (saveBtn) saveBtn.disabled = true;
+      EmployerAPI.updateCompany(payload).then(function (updated) {
+        dash.company = updated;
+        EmployerAPI.hydrateBrandName(updated.company_name);
+        closeCompanyModal();
+        window.showToast('Đã cập nhật hồ sơ doanh nghiệp!', 'success');
+      }).catch(EmployerAPI.fail).finally(function () {
+        if (saveBtn) saveBtn.disabled = false;
+      });
+    });
 
     function renderKpi() {
       var k = dash.kpi;
@@ -347,20 +451,47 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function renderJobs() {
       if (!dash.jobs.length) {
-        jobsBody.innerHTML = '<tr><td colspan="4" class="emp-empty">Chưa có tin tuyển dụng. <a href="./post-job.html" style="color: var(--color-primary); font-weight: 600;">Đăng tin đầu tiên</a>.</td></tr>';
+        jobsBody.innerHTML = '<tr><td colspan="5" class="emp-empty">Chưa có tin tuyển dụng. <a href="./post-job.html" style="color: var(--color-primary); font-weight: 600;">Đăng tin đầu tiên</a>.</td></tr>';
         return;
       }
       jobsBody.innerHTML = dash.jobs.map(function (j) {
         var st = jobStatusInfo(j);
+        var rejectNote = (j.status === 'rejected' && j.reject_reason)
+          ? '<div class="emp-reject-note"><i class="fa-solid fa-circle-info"></i> Lý do từ chối: ' + esc(j.reject_reason) + '</div>'
+          : '';
+        var toggleBtn = (j.status === 'closed')
+          ? '<button type="button" class="btn btn-ghost btn-sm" data-job-toggle="approved" data-id="' + j.job_id + '"><i class="fa-solid fa-rotate-left"></i> Mở lại</button>'
+          : (j.status !== 'rejected'
+            ? '<button type="button" class="btn btn-ghost btn-sm" data-job-toggle="closed" data-id="' + j.job_id + '"><i class="fa-solid fa-box-archive"></i> Đóng tin</button>'
+            : '');
+
         return '<tr>' +
-          '<td data-label="Chức danh"><div class="cell-strong">' + esc(j.title) + '</div><div class="cell-sub">' + esc(j.location_name || '') + '</div></td>' +
+          '<td data-label="Chức danh"><div class="cell-strong">' + esc(j.title) + '</div>' +
+            '<div class="cell-sub">' + esc(j.category_name || 'Đa ngành') + ' • ' + esc(j.location_name || '') + '</div>' +
+            rejectNote +
+          '</td>' +
           '<td data-label="Hạn nộp">' + EmployerAPI.fmtDate(j.deadline) + '</td>' +
           '<td data-label="Hồ sơ">' + (Number(j.application_count) || 0) + '</td>' +
-          '<td data-label="Trạng thái"><span class="status ' + st.cls + '">' + st.text + '</span></td></tr>';
+          '<td data-label="Trạng thái"><span class="status ' + st.cls + '">' + st.text + '</span></td>' +
+          '<td data-label="Thao tác"><div class="row-actions">' +
+            '<a href="./post-job.html?edit=' + j.job_id + '" class="btn btn-outline btn-sm"><i class="fa-regular fa-pen-to-square"></i> Sửa</a>' +
+            toggleBtn +
+            '<button type="button" class="btn btn-danger-outline btn-sm" data-job-del="' + j.job_id + '" data-title="' + esc(j.title) + '"><i class="fa-regular fa-trash-can"></i> Xóa</button>' +
+          '</div></td></tr>';
       }).join('');
     }
 
-    // Đổi trạng thái bằng event delegation -> PATCH /employer/applications/:id/status
+    function refreshDashboard() {
+      EmployerAPI.loadDashboard().then(function (r) {
+        dash = r.data;
+        offline = r.offline;
+        renderKpi();
+        renderRecent();
+        renderJobs();
+        buildRealNotifications(dash);
+      }).catch(EmployerAPI.fail);
+    }
+
     recentBody.addEventListener('click', function (e) {
       var btn = e.target.closest('button[data-act]');
       if (!btn) return;
@@ -375,6 +506,7 @@ document.addEventListener('DOMContentLoaded', function () {
         dash.kpi.interviews = dash.applications.filter(function (a) { return EmployerAPI.statusKey(a.status) === 'interview'; }).length;
         renderRecent();
         renderKpi();
+        buildRealNotifications(dash);
         window.showToast(
           key === 'rejected' ? 'Đã từ chối hồ sơ của ' + item.applicant_name + '.' : 'Đã hẹn phỏng vấn ' + item.applicant_name + '.',
           key === 'rejected' ? 'warning' : 'success'
@@ -382,18 +514,46 @@ document.addEventListener('DOMContentLoaded', function () {
       }).catch(function (err) { btn.disabled = false; EmployerAPI.fail(err); });
     });
 
-    EmployerAPI.loadDashboard().then(function (r) {
-      dash = r.data;
-      offline = r.offline;
-      renderKpi();
-      renderRecent();
-      renderJobs();
-    }).catch(EmployerAPI.fail);
+    jobsBody.addEventListener('click', function (e) {
+      var toggleBtn = e.target.closest('button[data-job-toggle]');
+      if (toggleBtn) {
+        var jId = Number(toggleBtn.dataset.id);
+        var nextStatus = toggleBtn.dataset.jobToggle;
+        toggleBtn.disabled = true;
+        EmployerAPI.updateJobStatus(jId, nextStatus).then(function (json) {
+          window.showToast(json.message || 'Đã cập nhật trạng thái tin.', 'success');
+          refreshDashboard();
+        }).catch(function (err) {
+          toggleBtn.disabled = false;
+          EmployerAPI.fail(err);
+        });
+        return;
+      }
+
+      var delBtn = e.target.closest('button[data-job-del]');
+      if (delBtn) {
+        var delId = Number(delBtn.dataset.jobDel);
+        var title = delBtn.dataset.title || '';
+        openConfirm(
+          'Xóa tin tuyển dụng',
+          'Bạn có chắc muốn xóa vĩnh viễn tin "' + title + '"? Toàn bộ đơn ứng tuyển thuộc tin này cũng sẽ bị xóa.',
+          'Xóa tin',
+          function () {
+            EmployerAPI.deleteJob(delId).then(function (json) {
+              window.showToast(json.message || 'Đã xóa tin tuyển dụng.', 'info');
+              refreshDashboard();
+            }).catch(EmployerAPI.fail);
+          }
+        );
+      }
+    });
+
+    refreshDashboard();
   }
 });
 
 
-/* ---------- PHẦN B: FORM ĐĂNG TIN TUYỂN DỤNG (post-job.html) ---------- */
+/* ---------- PHẦN B: ĐĂNG TIN & CHỈNH SỬA TIN (post-job.html) ---------- */
 document.addEventListener('DOMContentLoaded', function () {
   var form = document.getElementById('postJobForm');
   if (!form) return;
@@ -404,25 +564,71 @@ document.addEventListener('DOMContentLoaded', function () {
   var salaryMax = $('salaryMax');
   var editor = $('jobDescription');
   var editorWrap = $('editorWrap');
-  var submitBtn = form.querySelector('button[type="submit"]');
+  var submitBtn = $('postJobSubmitBtn') || form.querySelector('button[type="submit"]');
+  var editId = new URLSearchParams(window.location.search).get('edit');
+  var isEdit = Boolean(editId && /^\d+$/.test(editId));
 
-  // Hạn nộp tối thiểu là ngày mai
   var tomorrow = new Date(Date.now() + 86400000);
   $('deadline').min = tomorrow.toISOString().slice(0, 10);
 
-  // Nạp ngành nghề + địa điểm thật từ API
   function fillSelect(sel, items, idKey, nameKey, placeholder) {
-    if (!sel || !items || !items.length) return;
+    if (!sel) return;
+    if (!items || !items.length) {
+      sel.innerHTML = '<option value="">Không có dữ liệu</option>';
+      return;
+    }
     sel.innerHTML = '<option value="">' + placeholder + '</option>' + items.map(function (it) {
       return '<option value="' + EmployerAPI.esc(it[idKey]) + '">' + EmployerAPI.esc(it[nameKey]) + '</option>';
     }).join('');
   }
+
+  // Nạp company header + meta + chi tiết tin nếu là chế độ sửa
+  EmployerAPI.loadCompany().then(function (c) {
+    if (c && c.company_name) EmployerAPI.hydrateBrandName(c.company_name);
+  }).catch(function () {});
+
   EmployerAPI.loadMeta().then(function (m) {
     fillSelect($('jobCategory'), m.categories, 'category_id', 'category_name', 'Chọn ngành nghề');
     fillSelect($('jobLocation'), m.locations, 'location_id', 'location_name', 'Chọn địa điểm');
+
+    if (isEdit) {
+      $('postJobHeading').textContent = 'Chỉnh sửa tin tuyển dụng';
+      $('postJobSub').textContent = 'Cập nhật nội dung và gửi lại quản trị viên kiểm duyệt (nếu cần).';
+      if (submitBtn) submitBtn.innerHTML = '<i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Lưu &amp; Cập nhật tin';
+
+      return EmployerAPI.loadJob(Number(editId)).then(function (j) {
+        $('jobTitle').value = j.title || '';
+        $('jobCategory').value = String(j.category_id || '');
+        $('jobLocation').value = String(j.location_id || '');
+        $('employmentType').value = j.employment_type || 'full_time';
+        $('experienceLevel').value = j.experience_level || 'junior';
+        if (j.deadline) $('deadline').value = j.deadline;
+        editor.innerText = j.description || '';
+        $('jobRequirements').value = j.requirements || '';
+        $('jobBenefits').value = j.benefits || '';
+
+        if (j.salary_min == null && j.salary_max == null) {
+          negotiable.checked = true;
+          salaryMin.disabled = true;
+          salaryMax.disabled = true;
+        } else {
+          negotiable.checked = false;
+          salaryMin.value = j.salary_min ? Number(j.salary_min) / EmployerAPI.SALARY_UNIT : '';
+          salaryMax.value = j.salary_max ? Number(j.salary_max) / EmployerAPI.SALARY_UNIT : '';
+        }
+
+        if (j.status === 'rejected' && j.reject_reason) {
+          var banner = $('editRejectBanner');
+          var reasonText = $('editRejectReasonText');
+          if (banner && reasonText) {
+            reasonText.textContent = j.reject_reason;
+            banner.hidden = false;
+          }
+        }
+      });
+    }
   }).catch(EmployerAPI.fail);
 
-  // Checkbox "Lương thỏa thuận" khóa 2 ô lương
   negotiable.addEventListener('change', function () {
     [salaryMin, salaryMax].forEach(function (el) {
       el.disabled = negotiable.checked;
@@ -430,7 +636,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // Thanh công cụ soạn thảo
   document.querySelectorAll('.editor-btn').forEach(function (btn) {
     btn.addEventListener('mousedown', function (e) { e.preventDefault(); });
     btn.addEventListener('click', function () {
@@ -453,32 +658,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var title = $('jobTitle');
     if (title.value.trim().length < 5) fail(title, 'Chức danh cần ít nhất 5 ký tự.'); else setError(title, '');
-
     var cat = $('jobCategory');
     if (!cat.value) fail(cat, 'Vui lòng chọn ngành nghề.'); else setError(cat, '');
-
     var loc = $('jobLocation');
     if (!loc.value) fail(loc, 'Vui lòng chọn địa điểm.'); else setError(loc, '');
 
     if (!negotiable.checked) {
       var min = Number(salaryMin.value), max = Number(salaryMax.value);
-      if (!salaryMin.value || !salaryMax.value) { fail(salaryMax, 'Nhập mức lương hoặc chọn "Lương thỏa thuận".'); }
-      else if (min <= 0 || max < min) { fail(salaryMax, 'Lương tối đa phải lớn hơn hoặc bằng lương tối thiểu.'); }
+      if (!salaryMin.value || !salaryMax.value) fail(salaryMax, 'Nhập mức lương hoặc chọn "Lương thỏa thuận".');
+      else if (min <= 0 || max < min) fail(salaryMax, 'Lương tối đa phải lớn hơn hoặc bằng lương tối thiểu.');
       else setError(salaryMax, '');
     } else setError(salaryMax, '');
 
     var dl = $('deadline');
     if (!dl.value || new Date(dl.value) < new Date(dl.min)) fail(dl, 'Hạn nộp phải từ ngày mai trở đi.'); else setError(dl, '');
-
     if (editor.textContent.trim().length < 30) fail(editor, 'Mô tả cần ít nhất 30 ký tự.'); else setError(editor, '');
-
     var req = $('jobRequirements');
     if (req.value.trim().length < 10) fail(req, 'Yêu cầu ứng viên cần ít nhất 10 ký tự.'); else setError(req, '');
 
     return ok;
   }
 
-  // Tên trường server báo lỗi -> ô nhập trên form
   var FIELD_TO_INPUT = {
     title: 'jobTitle', category_id: 'jobCategory', location_id: 'jobLocation', employment_type: 'employmentType',
     salary_min: 'salaryMax', salary_max: 'salaryMax', deadline: 'deadline', description: 'jobDescription',
@@ -494,7 +694,6 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
 
-    // Mô tả gửi dạng văn bản thuần để tránh chèn mã HTML độc hại vào trang công khai
     var payload = {
       title: $('jobTitle').value.trim(),
       category_id: Number($('jobCategory').value),
@@ -510,14 +709,14 @@ document.addEventListener('DOMContentLoaded', function () {
       benefits: $('jobBenefits').value.trim()
     };
 
-    function done(message) {
-      window.showToast(message, 'success');
-      setTimeout(function () { window.location.href = './employer-dashboard.html'; }, 1500);
-    }
-
     submitBtn.disabled = true;
-    EmployerAPI.createJob(payload).then(function (json) {
-      done(json.message || 'Đã gửi tin tuyển dụng, đang chờ quản trị viên duyệt.');
+    var reqPromise = isEdit
+      ? EmployerAPI.updateJob(Number(editId), payload)
+      : EmployerAPI.createJob(payload);
+
+    reqPromise.then(function (json) {
+      window.showToast(json.message || 'Lưu tin tuyển dụng thành công!', 'success');
+      setTimeout(function () { window.location.href = './employer-dashboard.html'; }, 1200);
     }).catch(function (err) {
       submitBtn.disabled = false;
       if (err.errors && err.errors.length) {
@@ -530,7 +729,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // Xóa lỗi khi người dùng sửa lại
   form.addEventListener('input', function (e) {
     if (e.target.id) setError(e.target, '');
   });
@@ -545,18 +743,40 @@ document.addEventListener('DOMContentLoaded', function () {
   var esc = EmployerAPI.esc;
   var STATUS = EmployerAPI.STATUS;
   var candidates = [];
+  var jobsList = [];
   var offline = false;
   var currentFilter = 'all';
+  var currentJobFilter = 'all';
   var keyword = '';
   var openId = null;
+  var modal = document.getElementById('cvModal');
+  var jobSelect = document.getElementById('candJobFilter');
+  var lastFocus = null;
 
   function norm(s) { return String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd'); }
   function find(id) { return candidates.find(function (x) { return x.application_id === id; }); }
 
+  function populateJobFilter() {
+    if (!jobSelect) return;
+    jobSelect.innerHTML = '<option value="all">Tất cả vị trí (' + jobsList.length + ')</option>' +
+      jobsList.map(function (j) {
+        return '<option value="' + j.job_id + '">' + esc(j.title) + '</option>';
+      }).join('');
+  }
+
+  function filteredByJobAndSearch() {
+    return candidates.filter(function (c) {
+      var matchJob = (currentJobFilter === 'all' || String(c.job_id) === String(currentJobFilter));
+      var matchKw = (!keyword || norm(c.applicant_name + ' ' + c.job_title + ' ' + c.applicant_email).indexOf(norm(keyword)) !== -1);
+      return matchJob && matchKw;
+    });
+  }
+
   function updateCounts() {
+    var baseList = filteredByJobAndSearch();
     document.querySelectorAll('.filter-tab').forEach(function (tab) {
       var f = tab.dataset.filter;
-      var n = f === 'all' ? candidates.length : candidates.filter(function (c) { return EmployerAPI.statusKey(c.status) === f; }).length;
+      var n = f === 'all' ? baseList.length : baseList.filter(function (c) { return EmployerAPI.statusKey(c.status) === f; }).length;
       tab.querySelector('.tab-count').textContent = n;
     });
   }
@@ -570,9 +790,9 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function render() {
-    var list = candidates.filter(function (c) {
-      return (currentFilter === 'all' || EmployerAPI.statusKey(c.status) === currentFilter) &&
-             (!keyword || norm(c.applicant_name + ' ' + c.job_title).indexOf(norm(keyword)) !== -1);
+    var baseList = filteredByJobAndSearch();
+    var list = baseList.filter(function (c) {
+      return (currentFilter === 'all' || EmployerAPI.statusKey(c.status) === currentFilter);
     });
     document.getElementById('candEmpty').hidden = list.length > 0;
     tbody.innerHTML = list.map(function (c) {
@@ -589,7 +809,6 @@ document.addEventListener('DOMContentLoaded', function () {
     updateCounts();
   }
 
-  // Gọi PATCH rồi cập nhật dòng tương ứng
   function setStatus(id, key, quiet) {
     var c = find(id);
     if (!c) return Promise.resolve();
@@ -597,31 +816,22 @@ document.addEventListener('DOMContentLoaded', function () {
       c.status = r.status;
       c.viewed_at = r.viewed_at;
       render();
-      if (!quiet) {
-        var msg = { approved: 'Đã duyệt hồ sơ của ', interview: 'Đã hẹn phỏng vấn ', rejected: 'Đã từ chối hồ sơ của ' }[key];
-        window.showToast(msg + c.applicant_name + '.', key === 'rejected' ? 'warning' : 'success');
-      }
+      if (!quiet) window.showToast('Đã chuyển hồ sơ "' + c.applicant_name + '" sang "' + STATUS[key].text + '".', key === 'rejected' ? 'warning' : 'success');
     }).catch(EmployerAPI.fail);
   }
 
-  // Modal xem nhanh CV
-  var modal = document.getElementById('cvModal');
-  var lastFocus = null;
-
-  function safeUrl(u) { return /^(https?:\/\/|\/)/.test(u || '') ? u : ''; }
-
   function fillModal(c) {
     var st = STATUS[EmployerAPI.statusKey(c.status)];
-    var url = safeUrl(c.resume_snapshot_url);
+    var url = c.resume_snapshot_url;
     var cvHref = url;
-    if (url && url.indexOf('/uploads/cv/') !== -1) {
-      var tok = '';
-      try { tok = localStorage.getItem('jobportal_access_token') || ''; } catch (_) {}
-      if (tok) cvHref = url + (url.indexOf('?') === -1 ? '?token=' : '&token=') + encodeURIComponent(tok);
+    if (url) {
+      var full = url.indexOf('http') === 0 ? url : EmployerAPI.BASE + url;
+      var tok = EmployerAPI.getRawToken();
+      cvHref = tok ? full + (full.indexOf('?') !== -1 ? '&' : '?') + 'token=' + encodeURIComponent(tok) : full;
     }
     var cvPart = url
-      ? '<span>📄 ' + esc(decodeURIComponent(url.split('/').pop())) + '</span><a href="' + esc(cvHref) + '" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">Mở CV</a>'
-      : '<span>📄 Ứng viên chưa đính kèm tệp CV.</span>';
+      ? '<span><i class="fa-solid fa-file-pdf" style="color:var(--color-danger);"></i> ' + esc(decodeURIComponent(url.split('/').pop())) + '</span><a href="' + esc(cvHref) + '" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">Mở CV</a>'
+      : '<span>Ứng viên chưa đính kèm tệp CV.</span>';
     document.getElementById('cvModalTitle').textContent = c.applicant_name;
     document.getElementById('cvModalBody').innerHTML =
       '<div class="info-row"><span>Vị trí</span><strong>' + esc(c.job_title) + '</strong></div>' +
@@ -641,7 +851,6 @@ document.addEventListener('DOMContentLoaded', function () {
     fillModal(c);
     modal.classList.add('is-open');
     document.getElementById('btnCloseCv').focus();
-    // Mở xem CV lần đầu -> tự chuyển "Mới nhận" thành "Đã xem" (server ghi viewed_at)
     if (EmployerAPI.statusKey(c.status) === 'new') {
       setStatus(id, 'viewed', true).then(function () { if (openId === id) fillModal(find(id)); });
     }
@@ -652,7 +861,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (lastFocus) lastFocus.focus();
   }
 
-  // Sự kiện
   tbody.addEventListener('click', function (e) {
     var act = e.target.closest('button[data-act]');
     var view = e.target.closest('button[data-view]');
@@ -671,6 +879,11 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  jobSelect?.addEventListener('change', function () {
+    currentJobFilter = this.value || 'all';
+    render();
+  });
+
   document.getElementById('candSearch').addEventListener('input', function (e) { keyword = e.target.value.trim(); render(); });
   document.getElementById('btnCloseCv').addEventListener('click', closeModal);
   modal.addEventListener('click', function (e) {
@@ -680,10 +893,11 @@ document.addEventListener('DOMContentLoaded', function () {
   });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal(); });
 
-  // Tải danh sách hồ sơ từ GET /employer/dashboard
   EmployerAPI.loadDashboard().then(function (r) {
     candidates = r.data.applications || [];
+    jobsList = r.data.jobs || [];
     offline = r.offline;
+    populateJobFilter();
     render();
   }).catch(EmployerAPI.fail);
 });

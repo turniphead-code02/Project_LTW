@@ -48,6 +48,91 @@ function toBool(v) {
 
 const NO_COMPANY = { code: 403, message: 'Tài khoản chưa có hồ sơ công ty. Vui lòng liên hệ quản trị viên.' };
 
+async function validateJobPayload(b) {
+  const errors = [];
+  const title = String(b.title || '').trim();
+  if (title.length < 5 || title.length > 200) {
+    errors.push({ field: 'title', message: 'Chức danh cần từ 5 đến 200 ký tự.' });
+  }
+
+  const categoryId = Number(b.category_id);
+  if (!Number.isInteger(categoryId) || categoryId <= 0) {
+    errors.push({ field: 'category_id', message: 'Vui lòng chọn ngành nghề.' });
+  }
+
+  const locationId = Number(b.location_id);
+  if (!Number.isInteger(locationId) || locationId <= 0) {
+    errors.push({ field: 'location_id', message: 'Vui lòng chọn địa điểm làm việc.' });
+  }
+
+  const employmentType = String(b.employment_type || 'full_time');
+  if (!EMPLOYMENT_TYPES.includes(employmentType)) {
+    errors.push({ field: 'employment_type', message: 'Hình thức làm việc không hợp lệ.' });
+  }
+
+  const experienceLevel = String(b.experience_level || 'junior');
+  if (!EXPERIENCE_LEVELS.includes(experienceLevel)) {
+    errors.push({ field: 'experience_level', message: 'Cấp bậc kinh nghiệm không hợp lệ.' });
+  }
+
+  const negotiable = toBool(b.is_negotiable);
+  let salaryMin = null;
+  let salaryMax = null;
+  if (!negotiable) {
+    salaryMin = Number(b.salary_min);
+    salaryMax = Number(b.salary_max);
+    if (!(salaryMin > 0) || !(salaryMax >= salaryMin)) {
+      errors.push({ field: 'salary_max', message: 'Lương tối đa phải lớn hơn hoặc bằng lương tối thiểu.' });
+    }
+  }
+
+  const deadline = String(b.deadline || '');
+  const deadlineDate = new Date(deadline + 'T00:00:00');
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(deadline) || isNaN(deadlineDate) || deadlineDate <= today) {
+    errors.push({ field: 'deadline', message: 'Hạn nộp hồ sơ phải từ ngày mai trở đi.' });
+  }
+
+  const description = String(b.description || '').trim();
+  if (description.length < 30 || description.length > 10000) {
+    errors.push({ field: 'description', message: 'Mô tả cần từ 30 đến 10.000 ký tự.' });
+  }
+
+  const requirements = String(b.requirements || '').trim();
+  if (requirements.length < 10 || requirements.length > 10000) {
+    errors.push({ field: 'requirements', message: 'Yêu cầu ứng viên cần từ 10 đến 10.000 ký tự.' });
+  }
+
+  const benefitsRaw = String(b.benefits || '').trim();
+  if (benefitsRaw.length > 10000) {
+    errors.push({ field: 'benefits', message: 'Quyền lợi tối đa 10.000 ký tự.' });
+  }
+  const benefits = benefitsRaw || null;
+
+  if (!errors.length) {
+    const [cat] = await pool.query('SELECT 1 FROM categories WHERE category_id = ? LIMIT 1', [categoryId]);
+    const [loc] = await pool.query('SELECT 1 FROM locations WHERE location_id = ? LIMIT 1', [locationId]);
+    if (!cat.length) errors.push({ field: 'category_id', message: 'Ngành nghề không tồn tại.' });
+    if (!loc.length) errors.push({ field: 'location_id', message: 'Địa điểm không tồn tại.' });
+  }
+
+  return {
+    errors,
+    data: { title, categoryId, locationId, employmentType, experienceLevel, salaryMin, salaryMax, deadline, description, requirements, benefits }
+  };
+}
+
+async function getInitialJobStatus() {
+  try {
+    const [cfg] = await pool.query(
+      "SELECT setting_value FROM system_settings WHERE setting_key = 'require_job_approval' LIMIT 1"
+    );
+    if (cfg.length && cfg[0].setting_value === '0') return 'approved';
+  } catch (_) {}
+  return 'pending';
+}
+
 /**
  * 0. DANH MỤC CHO FORM ĐĂNG TIN (ngành nghề + địa điểm)
  */
@@ -62,12 +147,18 @@ router.get('/meta', async (req, res) => {
 });
 
 /**
- * 1. DASHBOARD: KPI + DANH SÁCH TIN + DANH SÁCH HỒ SƠ ỨNG VIÊN
+ * 1. DASHBOARD: COMPANY + KPI + DANH SÁCH TIN + DANH SÁCH HỒ SƠ ỨNG VIÊN
  */
 router.get('/dashboard', async (req, res) => {
   try {
     const companyId = await getCompanyId(req.user.user_id);
     if (!companyId) return sendError(res, NO_COMPANY);
+
+    const [[company]] = await pool.query(
+      `SELECT company_id, company_name, slug, tax_code, logo_url, website, address, description
+       FROM companies WHERE company_id = ? LIMIT 1`,
+      [companyId]
+    );
 
     const [[k]] = await pool.query(
       `SELECT
@@ -81,13 +172,16 @@ router.get('/dashboard', async (req, res) => {
     );
 
     const [jobs] = await pool.query(
-      `SELECT j.job_id, j.title, j.slug, j.status, DATE_FORMAT(j.deadline, '%Y-%m-%d') AS deadline, l.location_name,
+      `SELECT j.job_id, j.title, j.slug, j.status, j.reject_reason, j.salary_min, j.salary_max,
+              j.employment_type, j.experience_level, DATE_FORMAT(j.deadline, '%Y-%m-%d') AS deadline,
+              l.location_name, cat.category_name,
               (SELECT COUNT(*) FROM applications a WHERE a.job_id = j.job_id) AS application_count
        FROM jobs j
        INNER JOIN locations l ON j.location_id = l.location_id
+       LEFT JOIN categories cat ON j.category_id = cat.category_id
        WHERE j.company_id = ?
        ORDER BY j.job_id DESC
-       LIMIT 50`,
+       LIMIT 100`,
       [companyId]
     );
 
@@ -108,6 +202,7 @@ router.get('/dashboard', async (req, res) => {
     return sendSuccess(res, {
       message: 'Tải bảng điều khiển nhà tuyển dụng thành công.',
       data: {
+        company: company || null,
         kpi: {
           activeJobs: Number(k.active_jobs),
           pendingJobs: Number(k.pending_jobs),
@@ -124,117 +219,55 @@ router.get('/dashboard', async (req, res) => {
 });
 
 /**
- * 2. ĐĂNG TIN TUYỂN DỤNG MỚI (status mặc định = 'pending', chờ Admin duyệt)
+ * 2. ĐĂNG TIN, XEM CHI TIẾT, SỬA, ĐÓNG/MỞ LẠI & XÓA TIN TUYỂN DỤNG
  */
+router.get('/jobs/:id', async (req, res) => {
+  try {
+    const jobId = Number(req.params.id);
+    if (!Number.isInteger(jobId) || jobId <= 0) {
+      return sendError(res, { code: 400, message: 'Mã tin tuyển dụng không hợp lệ.' });
+    }
+    const companyId = await getCompanyId(req.user.user_id);
+    if (!companyId) return sendError(res, NO_COMPANY);
+
+    const [rows] = await pool.query(
+      `SELECT job_id, title, category_id, location_id, employment_type, experience_level,
+              salary_min, salary_max, DATE_FORMAT(deadline, '%Y-%m-%d') AS deadline,
+              description, requirements, benefits, status, reject_reason
+       FROM jobs WHERE job_id = ? AND company_id = ? LIMIT 1`,
+      [jobId, companyId]
+    );
+    if (!rows.length) {
+      return sendError(res, { code: 404, message: 'Không tìm thấy tin tuyển dụng.' });
+    }
+    return sendSuccess(res, { message: 'Tải chi tiết tin thành công.', data: rows[0] });
+  } catch (err) {
+    return sendError(res, { code: 500, message: 'Lỗi tải tin tuyển dụng: ' + err.message });
+  }
+});
+
 router.post('/jobs', async (req, res) => {
   try {
     const companyId = await getCompanyId(req.user.user_id);
     if (!companyId) return sendError(res, NO_COMPANY);
 
-    // --- Kiểm tra dữ liệu ở phía server (không tin dữ liệu từ trình duyệt) ---
-    const b = req.body || {};
-    const errors = [];
-
-    const title = String(b.title || '').trim();
-    if (title.length < 5 || title.length > 200) {
-      errors.push({ field: 'title', message: 'Chức danh cần từ 5 đến 200 ký tự.' });
-    }
-
-    const categoryId = Number(b.category_id);
-    if (!Number.isInteger(categoryId) || categoryId <= 0) {
-      errors.push({ field: 'category_id', message: 'Vui lòng chọn ngành nghề.' });
-    }
-
-    const locationId = Number(b.location_id);
-    if (!Number.isInteger(locationId) || locationId <= 0) {
-      errors.push({ field: 'location_id', message: 'Vui lòng chọn địa điểm làm việc.' });
-    }
-
-    const employmentType = String(b.employment_type || 'full_time');
-    if (!EMPLOYMENT_TYPES.includes(employmentType)) {
-      errors.push({ field: 'employment_type', message: 'Hình thức làm việc không hợp lệ.' });
-    }
-
-    const experienceLevel = String(b.experience_level || 'junior');
-    if (!EXPERIENCE_LEVELS.includes(experienceLevel)) {
-      errors.push({ field: 'experience_level', message: 'Cấp bậc kinh nghiệm không hợp lệ.' });
-    }
-
-    const negotiable = toBool(b.is_negotiable);
-    let salaryMin = null;
-    let salaryMax = null;
-    if (!negotiable) {
-      salaryMin = Number(b.salary_min);
-      salaryMax = Number(b.salary_max);
-      if (!(salaryMin > 0) || !(salaryMax >= salaryMin)) {
-        errors.push({ field: 'salary_max', message: 'Lương tối đa phải lớn hơn hoặc bằng lương tối thiểu.' });
-      }
-    }
-
-    const deadline = String(b.deadline || '');
-    const deadlineDate = new Date(deadline + 'T00:00:00');
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(deadline) || isNaN(deadlineDate) || deadlineDate <= today) {
-      errors.push({ field: 'deadline', message: 'Hạn nộp hồ sơ phải từ ngày mai trở đi.' });
-    }
-
-    const description = String(b.description || '').trim();
-    if (description.length < 30 || description.length > 10000) {
-      errors.push({ field: 'description', message: 'Mô tả cần từ 30 đến 10.000 ký tự.' });
-    }
-
-    const requirements = String(b.requirements || '').trim();
-    if (requirements.length < 10 || requirements.length > 10000) {
-      errors.push({ field: 'requirements', message: 'Yêu cầu ứng viên cần từ 10 đến 10.000 ký tự.' });
-    }
-
-    const benefitsRaw = String(b.benefits || '').trim();
-    if (benefitsRaw.length > 10000) {
-      errors.push({ field: 'benefits', message: 'Quyền lợi tối đa 10.000 ký tự.' });
-    }
-    const benefits = benefitsRaw || null;
-
+    const { errors, data: v } = await validateJobPayload(req.body || {});
     if (errors.length) {
       return sendError(res, { code: 400, message: 'Dữ liệu gửi lên không hợp lệ.', errors });
     }
 
-    // --- Ngành nghề và địa điểm phải tồn tại ---
-    const [cat] = await pool.query('SELECT 1 FROM categories WHERE category_id = ? LIMIT 1', [categoryId]);
-    const [loc] = await pool.query('SELECT 1 FROM locations WHERE location_id = ? LIMIT 1', [locationId]);
-    if (!cat.length || !loc.length) {
-      return sendError(res, {
-        code: 400,
-        message: 'Dữ liệu gửi lên không hợp lệ.',
-        errors: [
-          ...(!cat.length ? [{ field: 'category_id', message: 'Ngành nghề không tồn tại.' }] : []),
-          ...(!loc.length ? [{ field: 'location_id', message: 'Địa điểm không tồn tại.' }] : [])
-        ]
-      });
-    }
+    const initialJobStatus = await getInitialJobStatus();
 
-    // --- Kiểm tra cấu hình kiểm duyệt tin từ Admin (nếu bảng system_settings tồn tại) ---
-    let initialJobStatus = 'pending';
-    try {
-      const [cfg] = await pool.query(
-        "SELECT setting_value FROM system_settings WHERE setting_key = 'require_job_approval' LIMIT 1"
-      );
-      if (cfg.length && cfg[0].setting_value === '0') {
-        initialJobStatus = 'approved';
-      }
-    } catch (_) {}
-
-    // --- Ghi vào CSDL, thử lại nếu slug bị trùng (hiếm) ---
     for (let attempt = 0; attempt < 3; attempt++) {
-      const slug = toSlug(title);
+      const slug = toSlug(v.title);
       try {
         const [result] = await pool.query(
           `INSERT INTO jobs
              (company_id, category_id, location_id, title, slug, description, requirements, benefits,
               salary_min, salary_max, employment_type, experience_level, deadline, status)
            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-          [companyId, categoryId, locationId, title, slug, description, requirements, benefits,
-           salaryMin, salaryMax, employmentType, experienceLevel, deadline, initialJobStatus]
+          [companyId, v.categoryId, v.locationId, v.title, slug, v.description, v.requirements, v.benefits,
+           v.salaryMin, v.salaryMax, v.employmentType, v.experienceLevel, v.deadline, initialJobStatus]
         );
         return sendSuccess(res, {
           code: 201,
@@ -244,12 +277,179 @@ router.post('/jobs', async (req, res) => {
           data: { job_id: result.insertId, slug, status: initialJobStatus }
         });
       } catch (e) {
-        if (e.code !== 'ER_DUP_ENTRY') throw e; // chỉ thử lại khi trùng slug
+        if (e.code !== 'ER_DUP_ENTRY') throw e;
       }
     }
     return sendError(res, { code: 500, message: 'Không tạo được đường dẫn (slug) duy nhất, vui lòng thử lại.' });
   } catch (err) {
     return sendError(res, { code: 500, message: 'Lỗi đăng tin: ' + err.message });
+  }
+});
+
+router.put('/jobs/:id', async (req, res) => {
+  try {
+    const jobId = Number(req.params.id);
+    if (!Number.isInteger(jobId) || jobId <= 0) {
+      return sendError(res, { code: 400, message: 'Mã tin tuyển dụng không hợp lệ.' });
+    }
+    const companyId = await getCompanyId(req.user.user_id);
+    if (!companyId) return sendError(res, NO_COMPANY);
+
+    const [existing] = await pool.query(
+      'SELECT job_id, status FROM jobs WHERE job_id = ? AND company_id = ? LIMIT 1',
+      [jobId, companyId]
+    );
+    if (!existing.length) {
+      return sendError(res, { code: 404, message: 'Không tìm thấy tin tuyển dụng.' });
+    }
+
+    const { errors, data: v } = await validateJobPayload(req.body || {});
+    if (errors.length) {
+      return sendError(res, { code: 400, message: 'Dữ liệu cập nhật không hợp lệ.', errors });
+    }
+
+    const nextStatus = await getInitialJobStatus();
+
+    await pool.query(
+      `UPDATE jobs
+       SET category_id = ?, location_id = ?, title = ?, description = ?, requirements = ?, benefits = ?,
+           salary_min = ?, salary_max = ?, employment_type = ?, experience_level = ?, deadline = ?,
+           status = ?, reject_reason = NULL
+       WHERE job_id = ? AND company_id = ?`,
+      [v.categoryId, v.locationId, v.title, v.description, v.requirements, v.benefits,
+       v.salaryMin, v.salaryMax, v.employmentType, v.experienceLevel, v.deadline,
+       nextStatus, jobId, companyId]
+    );
+
+    return sendSuccess(res, {
+      message: nextStatus === 'approved'
+        ? 'Đã cập nhật tin tuyển dụng thành công.'
+        : 'Đã cập nhật tin và gửi lại cho quản trị viên duyệt.',
+      data: { job_id: jobId, status: nextStatus }
+    });
+  } catch (err) {
+    return sendError(res, { code: 500, message: 'Lỗi cập nhật tin: ' + err.message });
+  }
+});
+
+router.patch('/jobs/:id/status', async (req, res) => {
+  try {
+    const jobId = Number(req.params.id);
+    const nextStatus = String((req.body || {}).status || '').trim();
+    if (!Number.isInteger(jobId) || jobId <= 0) {
+      return sendError(res, { code: 400, message: 'Mã tin tuyển dụng không hợp lệ.' });
+    }
+    if (!['closed', 'approved'].includes(nextStatus)) {
+      return sendError(res, { code: 400, message: 'Chỉ hỗ trợ đóng tin hoặc mở lại tin.' });
+    }
+    const companyId = await getCompanyId(req.user.user_id);
+    if (!companyId) return sendError(res, NO_COMPANY);
+
+    const [rows] = await pool.query(
+      'SELECT job_id, status FROM jobs WHERE job_id = ? AND company_id = ? LIMIT 1',
+      [jobId, companyId]
+    );
+    if (!rows.length) {
+      return sendError(res, { code: 404, message: 'Không tìm thấy tin tuyển dụng.' });
+    }
+    if (nextStatus === 'approved' && rows[0].status === 'rejected') {
+      return sendError(res, { code: 400, message: 'Tin bị từ chối cần chỉnh sửa nội dung trước khi gửi duyệt lại.' });
+    }
+
+    const finalStatus = nextStatus === 'approved' ? await getInitialJobStatus() : 'closed';
+    await pool.query(
+      'UPDATE jobs SET status = ? WHERE job_id = ? AND company_id = ?',
+      [finalStatus, jobId, companyId]
+    );
+
+    return sendSuccess(res, {
+      message: finalStatus === 'closed' ? 'Đã đóng tin tuyển dụng.' : 'Đã mở lại tin tuyển dụng.',
+      data: { job_id: jobId, status: finalStatus }
+    });
+  } catch (err) {
+    return sendError(res, { code: 500, message: 'Lỗi đổi trạng thái tin: ' + err.message });
+  }
+});
+
+router.delete('/jobs/:id', async (req, res) => {
+  try {
+    const jobId = Number(req.params.id);
+    if (!Number.isInteger(jobId) || jobId <= 0) {
+      return sendError(res, { code: 400, message: 'Mã tin tuyển dụng không hợp lệ.' });
+    }
+    const companyId = await getCompanyId(req.user.user_id);
+    if (!companyId) return sendError(res, NO_COMPANY);
+
+    const [result] = await pool.query(
+      'DELETE FROM jobs WHERE job_id = ? AND company_id = ?',
+      [jobId, companyId]
+    );
+    if (result.affectedRows === 0) {
+      return sendError(res, { code: 404, message: 'Không tìm thấy tin tuyển dụng để xóa.' });
+    }
+    return sendSuccess(res, { message: 'Đã xóa tin tuyển dụng.', data: { job_id: jobId } });
+  } catch (err) {
+    return sendError(res, { code: 500, message: 'Lỗi xóa tin tuyển dụng: ' + err.message });
+  }
+});
+
+/**
+ * 2B. HỒ SƠ DOANH NGHIỆP (Cập nhật thông tin công ty)
+ */
+router.get('/company', async (req, res) => {
+  try {
+    const companyId = await getCompanyId(req.user.user_id);
+    if (!companyId) return sendError(res, NO_COMPANY);
+    const [rows] = await pool.query(
+      `SELECT company_id, company_name, slug, tax_code, logo_url, website, address, description
+       FROM companies WHERE company_id = ? LIMIT 1`,
+      [companyId]
+    );
+    return sendSuccess(res, { message: 'Tải hồ sơ công ty thành công.', data: rows[0] || null });
+  } catch (err) {
+    return sendError(res, { code: 500, message: 'Lỗi tải hồ sơ công ty: ' + err.message });
+  }
+});
+
+router.put('/company', async (req, res) => {
+  try {
+    const companyId = await getCompanyId(req.user.user_id);
+    if (!companyId) return sendError(res, NO_COMPANY);
+
+    const b = req.body || {};
+    const companyName = String(b.company_name || '').trim();
+    if (companyName.length < 2 || companyName.length > 150) {
+      return sendError(res, { code: 400, message: 'Tên doanh nghiệp cần từ 2 đến 150 ký tự.' });
+    }
+
+    const taxCode = String(b.tax_code || '').trim().slice(0, 30) || null;
+    const website = String(b.website || '').trim().slice(0, 255) || null;
+    const address = String(b.address || '').trim().slice(0, 255) || null;
+    const logoUrl = String(b.logo_url || '').trim().slice(0, 500) || null;
+    const description = String(b.description || '').trim().slice(0, 5000) || null;
+
+    await pool.query(
+      `UPDATE companies
+       SET company_name = ?, tax_code = ?, website = ?, address = ?, logo_url = ?, description = ?
+       WHERE company_id = ?`,
+      [companyName, taxCode, website, address, logoUrl, description, companyId]
+    );
+
+    const [[updated]] = await pool.query(
+      `SELECT company_id, company_name, slug, tax_code, logo_url, website, address, description
+       FROM companies WHERE company_id = ? LIMIT 1`,
+      [companyId]
+    );
+
+    return sendSuccess(res, {
+      message: 'Đã cập nhật hồ sơ doanh nghiệp thành công.',
+      data: updated
+    });
+  } catch (err) {
+    if (err.code === 'ER_DUP_ENTRY') {
+      return sendError(res, { code: 400, message: 'Mã số thuế này đã được đăng ký bởi doanh nghiệp khác.' });
+    }
+    return sendError(res, { code: 500, message: 'Lỗi cập nhật hồ sơ doanh nghiệp: ' + err.message });
   }
 });
 

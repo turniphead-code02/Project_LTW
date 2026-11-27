@@ -612,11 +612,16 @@ function renderJobs() {
     if (emptyEl) emptyEl.hidden = filtered.length > 0;
 
     tbody.innerHTML = filtered.map(item => {
+        const ageLabel = item.ageDays === 0
+            ? "Đăng hôm nay"
+            : item.ageDays === 1
+                ? "Đăng hôm qua"
+                : `Đăng ${item.ageDays} ngày trước`;
         const ageBadge = item.isExpired
             ? `<span class="age-pill expired"><i class="fa-solid fa-clock"></i> Quá hạn nộp</span>`
             : item.ageDays >= 30
-                ? `<span class="age-pill stale"><i class="fa-regular fa-calendar"></i> Đăng ${item.ageDays} ngày</span>`
-                : `<span class="age-pill fresh">Đăng ${item.ageDays} ngày</span>`;
+                ? `<span class="age-pill stale"><i class="fa-regular fa-calendar"></i> ${ageLabel}</span>`
+                : `<span class="age-pill fresh">${ageLabel}</span>`;
 
         return `
             <tr>
